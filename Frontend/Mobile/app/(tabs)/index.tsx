@@ -9,7 +9,7 @@ export default function HomeScreen() {
   const router = useRouter();
   return (
     <SafeAreaView>
-      <Text>Home</Text>
+      <Text>Home Page</Text>
     </SafeAreaView>
   );
 }
