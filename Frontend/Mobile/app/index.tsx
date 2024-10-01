@@ -2,11 +2,16 @@
 import {Text, View, ScrollView,SafeAreaView} from 'react-native'
 import { useState } from 'react';
 import { Stack,useRouter } from 'expo-router';
+import { ThemeProvider } from '../assets/styles/ThemeContext';
+
+
 // import {Colors} from '../../constants';
 import Login from './Login'
 export default function HomeScreen() {
   return (
-    <Login/>
+    <ThemeProvider>
+            <Login />
+        </ThemeProvider>
   );
 }
 

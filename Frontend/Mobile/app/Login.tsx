@@ -1,67 +1,85 @@
-import React from 'react'
-import { useFonts } from 'expo-font';
-import { SafeAreaView, View, Text ,StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
+// src/components/Login.js
+
+import React, { useState } from 'react'; // Import useState
+import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Switch } from 'react-native';
+import { lightTheme, darkTheme } from '../assets/styles/themes'; // Ensure correct path
 
 export default function Login() {
+    const [isDarkMode, setIsDarkMode] = useState(false); // State for theme toggle
+    const theme = isDarkMode ? darkTheme : lightTheme; // Use selected theme
+    
+    const toggleSwitch = () => setIsDarkMode(previousState => !previousState); // Toggle function
+
     return (
-        <SafeAreaView style={styles.loginPage}>
-            <View style={styles.container}>  
+        <SafeAreaView style={[styles.loginPage, { backgroundColor: theme.loginPageBackground }]}>
+            <View style={[styles.container, { backgroundColor: theme.containerBackground }]}>  
                 <View style={styles.signLogo}>
-                    <Image style={styles.ImgLogo} source={require('../assets/images/logo.webp')}/>
-                    <Text style={styles.signText}><Text style={styles.jetakText}>Jetak - جيتك</Text></Text>
-                    {/* <Text style={styles.par}>Enter and search for the professional</Text> */}
+                    <Image style={styles.ImgLogo} source={require('../assets/images/logo.png')}/>
+                    <Text style={[styles.signText, { color: theme.textColor }]}>
+                        <Text style={[styles.jetakText, { color: '#c9492f' }]}>Jetak - جيتك</Text>
+                    </Text>
                 </View>
 
                 <View style={styles.form}>
                     <View style={styles.inputItem}>
-                        <Text style={styles.label}>Email or Username</Text>
+                        <Text style={[styles.label, { color: theme.labelColor }]}>Email or Username</Text>
                         <TextInput
-                            style={styles.input} 
+                            style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.textColor }]} 
                             placeholder="Enter your email or username" 
+                            placeholderTextColor={theme.placeholderTextColor}
                         />
                     </View>
                     <View style={styles.inputItem}>
-                        <Text style={styles.label}>Password</Text>
+                        <Text style={[styles.label, { color: theme.labelColor }]}>Password</Text>
                         <TextInput
-                            style={styles.input} 
+                            style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.textColor }]} 
                             placeholder="Enter your password"  
+                            placeholderTextColor={theme.placeholderTextColor}
                             secureTextEntry={true}
                         />
                     </View>
 
                     <TouchableOpacity style={styles.forgotButton} onPress={() => console.log('Forgot Password pressed')}>
-                        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+                        <Text style={[styles.forgotPasswordText, { color: theme.buttonBackground }]}>Forgot Password?</Text>
                     </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity style={styles.loginButton} onPress={() => console.log('Sign In pressed')}>
-                    <Text style={styles.buttonText}>Sign In</Text>
+                <TouchableOpacity style={[styles.loginButton, { backgroundColor: theme.buttonBackground }]} onPress={() => console.log('Sign In pressed')}>
+                    <Text style={[styles.buttonText, { color: theme.buttonText }]}>Sign In</Text>
                 </TouchableOpacity>
 
                 <View style={styles.signUpSection}>
-                    <Text style={styles.par}>Don't have an account?</Text>
+                    <Text style={[styles.par, { color: theme.textColor }]}>Don't have an account?</Text>
                     <TouchableOpacity onPress={() => console.log('Sign Up pressed')}>
-                        <Text style={styles.signUpText}>Sign Up</Text>
+                        <Text style={[styles.signUpText, { color: theme.buttonBackground }]}>Sign Up</Text>
                     </TouchableOpacity>
+                </View>
+
+                {/* Toggle Switch */}
+                <View style={styles.toggleContainer}>
+                    <Text style={[styles.toggleText, { color: theme.textColor }]}>Dark Mode</Text>
+                    <Switch
+                        value={isDarkMode}
+                        onValueChange={toggleSwitch}
+                        thumbColor={isDarkMode ? '#f4f3f4' : '#f4f3f4'}
+                        trackColor={{ false: '#767577', true: '#81b0ff' }}
+                    />
                 </View>
             </View>
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
     loginPage: {
         height: '100%',
         marginTop: -50,
-        marginBottom:-50,
-        backgroundColor: '#f0f4f7',
+        marginBottom: -50,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        
     },
     container: {
-        backgroundColor: '#ffffff',
         width: '85%',
         maxWidth: 500,
         padding: 20,
@@ -75,13 +93,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingBottom: 50,
         paddingTop: 50,
-        
     },
     signLogo: {
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 30,
-        gap: 10
+        gap: 10,
     },
     ImgLogo: {
         width: 200,
@@ -91,17 +108,13 @@ const styles = StyleSheet.create({
     signText: {
         fontSize: 28,
         fontWeight: 'bold',
-        color: '#333',
     },
     jetakText: {
-        color: '#c9492f', // Change this to your desired color
-        fontSize:40,
-        fontFamily: "Cairo", // Use the font family name
-
+        fontSize: 40,
+        fontFamily: "Cairo",
     },
     par: {
         fontSize: 14,
-        color: '#666',
     },
     form: {
         width: '100%',
@@ -112,34 +125,31 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 16,
         fontWeight: '600',
-        color: '#333',
         marginBottom: 8,
     },
     input: {
-        backgroundColor: '#f9f9f9',
         width: '100%',
         height: 45,
         paddingHorizontal: 15,
         borderRadius: 10,
-        borderColor: '#ddd',
         borderWidth: 1,
         fontSize: 16,
-        color: '#333',
+        borderColor: '#ccc',
+        marginBottom: 10,
+        backgroundColor:'white'
     },
     forgotPasswordText: {
         fontSize: 14,
-        color: '#c9492f',
         textAlign: 'right',
         marginTop: -10,
         marginBottom: 20,
     },
     forgotButton: {
-        alignSelf:'center',
+        alignSelf: 'center',
         marginTop: 20,
-        marginBottom:-10,
+        marginBottom: -10,
     },
     loginButton: {
-        backgroundColor: '#c9492f',
         paddingVertical: 15,
         paddingHorizontal: 30,
         borderRadius: 10,
@@ -148,7 +158,6 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     buttonText: {
-        color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
     },
@@ -159,8 +168,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     signUpText: {
-        color: '#c9492f',
         fontWeight: 'bold',
         marginLeft: 5,
     },
-})
+    // New styles for toggle switch
+    toggleContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 20,
+        width: '100%',
+    },
+    toggleText: {
+        fontSize: 16,
+        fontWeight: '600',
+    },
+});
