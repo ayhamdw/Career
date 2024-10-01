@@ -57,8 +57,9 @@ export default function Login() {
 
                 {/* Toggle Switch */}
                 <View style={styles.toggleContainer}>
-                    <Text style={[styles.toggleText, { color: theme.textColor }]}>Dark Mode</Text>
+                    <Text style={[styles.toggleText]}>Dark Mode</Text>
                     <Switch
+                        style={styles.toogleButton}
                         value={isDarkMode}
                         onValueChange={toggleSwitch}
                         thumbColor={isDarkMode ? '#f4f3f4' : '#f4f3f4'}
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
         height: 45,
         paddingHorizontal: 15,
         borderRadius: 10,
-        borderBottomWidth: 2,
+        borderBottomWidth: 1,
         fontSize: 16,
         borderColor: '#c9492f',
         marginBottom: 10,
@@ -174,6 +175,7 @@ const styles = StyleSheet.create({
     signUpText: {
         fontWeight: 'bold',
         marginLeft: 5,
+        color: '#99a3a4',
     },
     // New styles for toggle switch
     toggleContainer: {
@@ -186,5 +188,8 @@ const styles = StyleSheet.create({
     toggleText: {
         fontSize: 16,
         fontWeight: '600',
+        color: '#99a3a4'
+        
     },
+    
 });
