@@ -1,17 +1,14 @@
-import { Image, StyleSheet, Platform } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import Login from './Login';
+import {Text, View, ScrollView,SafeAreaView} from 'react-native'
+import { useState } from 'react';
+import { Stack,useRouter } from 'expo-router';
+// import {Colors} from '../../constants';
 
 export default function HomeScreen() {
   return (
-    <>
-      <Login/>
-    
-    </>
+    <SafeAreaView>
+      <Text>Home Page!!!!</Text>
+    </SafeAreaView>
   );
 }
 
