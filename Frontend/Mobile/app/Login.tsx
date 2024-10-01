@@ -22,15 +22,15 @@ export default function Login() {
 
                 <View style={styles.form}>
                     <View style={styles.inputItem}>
-                        <Text style={[styles.label, { color: theme.labelColor }]}>Email or Username</Text>
+                        {/* <Text style={[styles.label, { color: theme.labelColor }]}>Email or Username</Text> */}
                         <TextInput
                             style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.textColor }]} 
-                            placeholder="Enter your email or username" 
+                            placeholder="Email or Username" 
                             placeholderTextColor={theme.placeholderTextColor}
                         />
                     </View>
                     <View style={styles.inputItem}>
-                        <Text style={[styles.label, { color: theme.labelColor }]}>Password</Text>
+                        {/* <Text style={[styles.label, { color: theme.labelColor }]}>Password</Text> */}
                         <TextInput
                             style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.textColor }]} 
                             placeholder="Enter your password"  
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     },
     container: {
         width: '85%',
+        height:'85%',
         maxWidth: 500,
         padding: 20,
         borderRadius: 15,
@@ -89,10 +90,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 6,
         elevation: 5,
+        display:'flex',
+        gap: 25,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 50,
-        paddingTop: 50,
+        paddingBottom: 20,
+        paddingTop: 20,
     },
     signLogo: {
         justifyContent: 'center',
@@ -132,17 +135,18 @@ const styles = StyleSheet.create({
         height: 45,
         paddingHorizontal: 15,
         borderRadius: 10,
-        borderWidth: 1,
+        borderBottomWidth: 2,
         fontSize: 16,
-        borderColor: '#ccc',
+        borderColor: '#c9492f',
         marginBottom: 10,
         backgroundColor:'white'
     },
+
     forgotPasswordText: {
         fontSize: 14,
         textAlign: 'right',
-        marginTop: -10,
-        marginBottom: 20,
+        // marginTop: -10,
+        // marginBottom: 10,
     },
     forgotButton: {
         alignSelf: 'center',
