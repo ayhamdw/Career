@@ -1,4 +1,5 @@
 import React from 'react'
+import { useFonts } from 'expo-font';
 import { SafeAreaView, View, Text ,StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 
 export default function Login() {
@@ -6,7 +7,7 @@ export default function Login() {
         <SafeAreaView style={styles.loginPage}>
             <View style={styles.container}>  
                 <View style={styles.signLogo}>
-                    <Image style={styles.ImgLogo} source={require('../assets/images/logo.avif')}/>
+                    <Image style={styles.ImgLogo} source={require('../assets/images/logo.webp')}/>
                     <Text style={styles.signText}><Text style={styles.jetakText}>Jetak - جيتك</Text></Text>
                     {/* <Text style={styles.par}>Enter and search for the professional</Text> */}
                 </View>
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#ffffff',
         width: '85%',
+        maxWidth: 500,
         padding: 20,
         borderRadius: 15,
         shadowColor: '#000',
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
     jetakText: {
         color: '#c9492f', // Change this to your desired color
         fontSize:40,
-        fontFamily: "Cairo.ttf", // Use the font family name
+        fontFamily: "Cairo", // Use the font family name
 
     },
     par: {
