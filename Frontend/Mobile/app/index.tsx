@@ -3,12 +3,10 @@ import {Text, View, ScrollView,SafeAreaView} from 'react-native'
 import { useState } from 'react';
 import { Stack,useRouter } from 'expo-router';
 // import {Colors} from '../../constants';
-
+import Login from './Login'
 export default function HomeScreen() {
   return (
-    <SafeAreaView>
-      <Text>Home Page!!!!</Text>
-    </SafeAreaView>
+    <Login/>
   );
 }
 
