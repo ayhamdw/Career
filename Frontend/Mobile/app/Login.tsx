@@ -6,9 +6,9 @@ export default function Login() {
         <SafeAreaView style={styles.loginPage}>
             <View style={styles.container}>  
                 <View style={styles.signLogo}>
-                    <Image style={styles.ImgLogo} source={require('../assets/images/favicon.png')}/>
-                    <Text style={styles.signText}>Sign in To Jetak</Text>
-                    <Text style={styles.par}>Enter and search for the professional</Text>
+                    <Image style={styles.ImgLogo} source={require('../assets/images/logo.avif')}/>
+                    <Text style={styles.signText}><Text style={styles.jetakText}>Jetak - جيتك</Text></Text>
+                    {/* <Text style={styles.par}>Enter and search for the professional</Text> */}
                 </View>
 
                 <View style={styles.form}>
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        
     },
     container: {
         backgroundColor: '#ffffff',
@@ -70,6 +71,9 @@ const styles = StyleSheet.create({
         elevation: 5,
         justifyContent: 'center',
         alignItems: 'center',
+        paddingBottom: 50,
+        paddingTop: 50,
+        
     },
     signLogo: {
         justifyContent: 'center',
@@ -78,14 +82,20 @@ const styles = StyleSheet.create({
         gap: 10
     },
     ImgLogo: {
-        width: 70,
-        height: 70,
+        width: 200,
+        height: 100,
         marginBottom: 15,
     },
     signText: {
         fontSize: 28,
         fontWeight: 'bold',
         color: '#333',
+    },
+    jetakText: {
+        color: '#c9492f', // Change this to your desired color
+        fontSize:40,
+        fontFamily: "Cairo.ttf", // Use the font family name
+
     },
     par: {
         fontSize: 14,
