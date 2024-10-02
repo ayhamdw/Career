@@ -1,8 +1,10 @@
 // src/components/Login.js
 
 import React, { useState } from 'react'; // Import useState
-import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Switch } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Switch, Pressable } from 'react-native';
 import { lightTheme, darkTheme } from '../assets/styles/themes'; // Ensure correct path
+import facebook from '../assets/images/facebook.png';
+import gmail from '../assets/images/gmail.png';
 
 export default function Login() {
     const [isDarkMode, setIsDarkMode] = useState(false); // State for theme toggle
@@ -55,11 +57,26 @@ export default function Login() {
                     </TouchableOpacity>
                 </View>
 
+                <View>
+                    <Text style={{ color:theme.textColor}}>
+                     Or Login With ..
+                    </Text>
+                </View>
+
+                <View style={styles.loginWith} >
+                    <Pressable onPress={() => console.log("Gmail Pressed")}>
+                        <Image source={gmail} style={styles.loginWithIcons}></Image>
+                    </Pressable>
+                    <Pressable onPress={() => console.log("Facebook Pressed")}>
+                        <Image source={facebook} style={styles.loginWithIcons}></Image>
+                    </Pressable>
+                </View>
+
                 {/* Toggle Switch */}
                 <View style={styles.toggleContainer}>
                     <Text style={[styles.toggleText]}>Dark Mode</Text>
                     <Switch
-                        style={styles.toogleButton}
+                        // style={styles.toogleButton}
                         value={isDarkMode}
                         onValueChange={toggleSwitch}
                         thumbColor={isDarkMode ? '#f4f3f4' : '#f4f3f4'}
@@ -82,7 +99,7 @@ const styles = StyleSheet.create({
     },
     container: {
         width: '85%',
-        height:'85%',
+        // height:'85%',
         maxWidth: 500,
         padding: 20,
         borderRadius: 15,
@@ -189,7 +206,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
         color: '#99a3a4'
-        
     },
+    loginWith: {
+        flexDirection : "row",
+        gap : 15,
+        alignItems: "center",
+        justifyContent : "center",
+        marginBottom : 23
+    },
+    loginWithIcons:{
+        width:30,
+        height:30
+    }
     
 });
