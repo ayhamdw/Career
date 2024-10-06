@@ -3,8 +3,8 @@
 import React, { useState } from 'react'; // Import useState
 import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Switch, Pressable } from 'react-native';
 import { lightTheme, darkTheme } from '../assets/styles/themes'; // Ensure correct path
-import facebook from '../assets/images/facebook.png';
-import gmail from '../assets/images/gmail.png';
+import {facebook} from '../assets/images/facebook.png';
+import {gmail} from '../assets/images/gmail.png';
 
 export default function Login() {
     const [isDarkMode, setIsDarkMode] = useState(false); // State for theme toggle
