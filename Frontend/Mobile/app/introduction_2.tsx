@@ -1,5 +1,6 @@
 import { View, Text, Image, StyleSheet, SafeAreaView } from "react-native";
 import React, { useState } from "react";
+import { useFonts } from "expo-font";
 import AppIntroSlider from "react-native-app-intro-slider";
 import { SIZE } from "../assets/styles/Dimensions";
 import { COLORS } from "../assets/styles/Dimensions";
@@ -89,6 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
+    fontFamily: "NotoSerif Condensed-Black",
   },
   viewStyle: {
     flex: 1,
@@ -101,12 +103,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
     color: COLORS.title,
+    // fontFamily: "Cairo",
   },
   descriptionStyle: {
     fontSize: SIZE.h4,
     paddingTop: 10,
     color: COLORS.primary,
     textAlign: "center",
+    fontFamily: "Cairo Bold",
   },
   nextAndSkipButtonViewStyle: {
     padding: 12,
