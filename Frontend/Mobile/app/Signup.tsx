@@ -9,17 +9,11 @@ import {
 import React from "react";
 import signup from "../assets/images/Signup.png";
 import { SIZE } from "../assets/styles/Dimensions";
-import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
 const SignUp = () => {
   return (
     <SafeAreaView>
       <Image source={signup} style={styles.imageStyle} />
       <Text style={styles.titleStyle}>Sign up</Text>
-      <GoogleSigninButton
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Dark}
-      />
-      ;
     </SafeAreaView>
   );
 };
