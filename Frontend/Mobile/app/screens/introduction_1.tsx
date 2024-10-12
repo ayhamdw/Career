@@ -1,11 +1,18 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
+import React from "react";
+import { StyleSheet, Text, View, SafeAreaView, Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationProp } from "../types"; // Import your defined types
 
 export default function Introduction_1() {
+  const navigation = useNavigation<NavigationProp>(); // Use the typed navigation
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <Text style={styles.textStyle}>Career</Text>
+        <Pressable>
+          <Text>Go To Introduction Page</Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );

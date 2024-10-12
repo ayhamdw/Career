@@ -11,21 +11,21 @@ import {
   ScrollView,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import signup from "../assets/images/Signup.png";
-import { SIZE } from "../assets/styles/Dimensions";
-import google from "../assets/images/google.png";
-import facebook from "../assets/images/facebook.png";
+import signup from "../../assets/images/Signup.png";
+import { SIZE } from "../../assets/styles/Dimensions";
+import google from "../../assets/images/google.png";
+import facebook from "../../assets/images/facebook.png";
 
 const SignUp = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [gender, setGender] = useState(null);
+  const [gender, setGender] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   // Handle Date Picker change
-  const onChange = (event, selectedDate) => {
+  const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || dateOfBirth;
-    setShowDatePicker(true);
+    setShowDatePicker(false);
     setDateOfBirth(currentDate);
   };
 
