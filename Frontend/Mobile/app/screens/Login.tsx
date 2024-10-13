@@ -1,4 +1,4 @@
-import React, { useState } from "react"; // Import useState
+import React, { useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -10,15 +10,15 @@ import {
   Switch,
   Pressable,
 } from "react-native";
-import { lightTheme, darkTheme } from "../assets/styles/themes"; // Ensure correct path
-import facebook from "../assets/images/facebook.png";
-import gmail from "../assets/images/gmail.png";
+import { lightTheme, darkTheme } from "../../assets/styles/themes";
+import facebook from "../../assets/images/facebook.png";
+import gmail from "../../assets/images/gmail.png";
 
 export default function Login() {
-  const [isDarkMode, setIsDarkMode] = useState(false); // State for theme toggle
-  const theme = isDarkMode ? darkTheme : lightTheme; // Use selected theme
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const theme = isDarkMode ? darkTheme : lightTheme;
 
-  const toggleSwitch = () => setIsDarkMode((previousState) => !previousState); // Toggle function
+  const toggleSwitch = () => setIsDarkMode((previousState) => !previousState);
 
   return (
     <SafeAreaView
@@ -33,12 +33,10 @@ export default function Login() {
         <View style={styles.signLogo}>
           <Image
             style={styles.ImgLogo}
-            source={require("../assets/images/logo.png")}
+            source={require("../../assets/images/logo.png")}
           />
           <Text style={[styles.signText, { color: theme.textColor }]}>
-            <Text style={[styles.jetakText, { color: "#c9492f" }]}>
-              Jetak - جيتك
-            </Text>
+            <Text style={[styles.jetakText, { color: "#c9492f" }]}>Career</Text>
           </Text>
         </View>
 

@@ -2,8 +2,10 @@ import { View, Text, Image, StyleSheet, SafeAreaView } from "react-native";
 import React, { useState } from "react";
 import { useFonts } from "expo-font";
 import AppIntroSlider from "react-native-app-intro-slider";
-import { SIZE } from "../assets/styles/Dimensions";
-import { COLORS } from "../assets/styles/Dimensions";
+import { SIZE } from "../../assets/styles/Dimensions";
+import { COLORS } from "../../assets/styles/Dimensions";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationProp } from "../types";
 
 const data = [
   {
@@ -11,26 +13,27 @@ const data = [
     title: "Welcome to Career",
     description:
       "Career is a platform that connects you with skilled professionals in your area. Whether you need home repairs, cleaning, or other services, Career makes it easy to find trusted workers at your convenience.",
-    image: require("../assets/images/Intro_1.png"),
+    image: require("../../assets/images/Intro_1.png"),
   },
   {
     id: 2,
     title: "How It Works",
     description:
       "Simply browse through professional profiles, check their ratings and reviews, and request a service. With Career user-friendly interface, finding help has never been easier",
-    image: require("../assets/images/Intro_2.jpg"),
+    image: require("../../assets/images/Intro_2.jpg"),
   },
   {
     id: 3,
     title: "Secure and Reliable",
     description:
       "Your safety is our priority. All professionals on Career are verified, and your personal information is kept secure with the latest encryption and authentication methods",
-    image: require("../assets/images/Intro_3.png"),
+    image: require("../../assets/images/Intro_3.png"),
   },
 ];
 
 const Introduction_2 = () => {
   const [showHomePage, setShowHomePage] = useState(false);
+  const navigation = useNavigation<NavigationProp>();
 
   const labelButton = (label: string) => {
     return (
@@ -61,7 +64,6 @@ const Introduction_2 = () => {
         renderNextButton={() => labelButton("Next")}
         renderSkipButton={() => labelButton("Skip")}
         renderDoneButton={() => labelButton("Done")}
-        onDone={() => setShowHomePage(true)}
       />
     );
   } else {
@@ -103,7 +105,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
     color: COLORS.title,
-    // fontFamily: "Cairo",
   },
   descriptionStyle: {
     fontSize: SIZE.h4,
