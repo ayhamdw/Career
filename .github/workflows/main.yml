@@ -16,19 +16,25 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for better relevancy of analysis
 
-      # Install Node.js (make sure to use the correct version for your project)
+      # Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x' # Or the version you use in your project
+          node-version: '18.x' # Or the version you use in your project
+
+      # Change to the Mobile directory
+      - name: Change to Mobile directory
+        run: cd Frontend/Mobile
 
       # Install project dependencies
       - name: Install dependencies
         run: npm install
+        working-directory: Frontend/Mobile  # Set working directory to Mobile
 
       # Optionally run tests
       - name: Run Tests
-        run: npm test # Adjust if you don't have any tests or use a different command
+        run: npm test
+        working-directory: Frontend/Mobile  # Set working directory to Mobile
 
       # Run SonarQube scan
       - name: SonarQube Scan
@@ -36,6 +42,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        working-directory: Frontend/Mobile  # Set working directory to Mobile
 
       # If you wish to fail the job when the Quality Gate is red, uncomment the
       # following lines. This is typically used to fail a deployment.
