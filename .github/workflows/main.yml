@@ -20,7 +20,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x' # Or the version you use in your project
+          node-version: '18.x'  # Specify the Node.js version you want
+
+      # Verify Node.js and npm installation
+      - name: Verify Node.js and npm installation
+        run: |
+          node -v
+          npm -v
 
       # List files in Mobile directory for debugging
       - name: List files in Mobile directory
