@@ -1,4 +1,4 @@
-name: Build
+name: Build and Analyze
 
 on:
   push:
@@ -12,28 +12,35 @@ jobs:
 
     env:
       ACTIONS_STEP_DEBUG: true  # Enable debugging for more detailed logs
-    
+
     steps:
-      - uses: actions/checkout@v4
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      
-      # Set up Node.js
+          fetch-depth: 0  # Shallow clones should be disabled for better analysis
+
+      # Step 2: Set up Node.js (you can change the version if necessary)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.17.0'  # Specify your desired Node.js version
+          node-version: '20.17.0'  # Change this to another version if necessary
 
-      # Verify Node.js installation
+      # Step 3: Verify Node.js installation
       - name: Verify Node.js version
         run: node -v
 
-      # Install dependencies
+      # Step 4: Install dependencies (ensure the directory is correct)
       - name: Install dependencies
         run: npm install
+        working-directory: ./Frontend/Mobile/  # Ensure this is the correct path to the package.json
+
+      # Step 5: Run tests (optional, add this if you have test scripts)
+      - name: Run tests
+        run: npm test
         working-directory: Frontend/Mobile
 
-      # Run SonarQube scan
+      # Step 6: Run SonarQube scan (ensure the secrets are properly set in GitHub repository settings)
       - name: SonarQube Scan
         run: npm run sonar-scanner
         working-directory: Frontend/Mobile
@@ -41,9 +48,17 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      # Uncomment the following lines if you want to fail your job when the Quality Gate is red
+      # Step 7: Optional - Quality Gate Check (uncomment if needed)
       # - name: SonarQube Quality Gate Check
       #   uses: sonarsource/sonarqube-quality-gate-action@v2
       #   timeout-minutes: 5
       #   env:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      # Step 8: Upload test results or artifacts (optional)
+      # Uncomment and modify if you'd like to upload artifacts
+      # - name: Upload artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: test-results
+      #     path: path_to_test_results_folder
