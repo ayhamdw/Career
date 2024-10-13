@@ -9,10 +9,12 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const ProfileScreen = () => {
-  const insets = useSafeAreaInsets();
+import Profile_Info from "./Profile_Info";
 
+const ProfileScreen = ({ navigation }) => {
   return (
     <View style={[styles.container]}>
       <StatusBar barStyle="dark-content" backgroundColor="#CEEB43" />
@@ -52,7 +54,10 @@ const ProfileScreen = () => {
 
       <View style={styles.optionCenter}>
         <View style={styles.optionsContainer}>
-          <TouchableOpacity style={styles.option}>
+          <TouchableOpacity
+            style={styles.option}
+            onPress={() => navigation.navigate("Profile_Info")}
+          >
             <Ionicons name="person-outline" style={styles.iconStyle} />
             <Text style={styles.optionText}>Profile</Text>
           </TouchableOpacity>
@@ -83,6 +88,17 @@ const ProfileScreen = () => {
         </View>
       </View>
     </View>
+  );
+};
+
+const Stack = createNativeStackNavigator();
+const myStack = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Profile_Information" component={Profile_Info} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
