@@ -9,6 +9,9 @@ jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
+
+    env:
+      ACTIONS_STEP_DEBUG: true  # Enable debugging for more detailed logs
     
     steps:
       - uses: actions/checkout@v4
