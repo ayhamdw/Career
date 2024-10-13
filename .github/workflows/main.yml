@@ -22,27 +22,22 @@ jobs:
         with:
           node-version: '20.x' # Or the version you use in your project
 
-      # Change to the Mobile directory
-      - name: Change to Mobile directory
-        run: cd Frontend/Mobile
+      # List files in Mobile directory for debugging
+      - name: List files in Mobile directory
+        run: ls -R Frontend/Mobile
 
       # Install project dependencies
       - name: Install dependencies
         run: npm install
-        # working-directory: Frontend/Mobile  # Set working directory to Mobile
-
-      # Optionally run tests
-      - name: Run Tests
-        run: npm test
-        # working-directory: Frontend/Mobile  # Set working directory to Mobile
+        working-directory: Frontend/Mobile  # Set working directory to Mobile
 
       # Run SonarQube scan
       - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v3
+        run: npm run sonar-scanner
+        working-directory: Frontend/Mobile  # Set working directory to Mobile
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        # working-directory: Frontend/Mobile  # Set working directory to Mobile
 
       # If you wish to fail the job when the Quality Gate is red, uncomment the
       # following lines. This is typically used to fail a deployment.
