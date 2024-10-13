@@ -21,6 +21,10 @@ jobs:
         with:
           node-version: '20.17.0'  # Specify your desired Node.js version
 
+      # Verify Node.js installation
+      - name: Verify Node.js version
+        run: node -v
+
       # Install dependencies
       - name: Install dependencies
         run: npm install
