@@ -31,7 +31,7 @@ const data = [
   },
 ];
 
-const Introduction_2 = () => {
+const Introduction2 = () => {
   const [showHomePage, setShowHomePage] = useState(false);
   const navigation = useNavigation<NavigationProp>();
 
@@ -123,4 +123,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Introduction_2;
+export default Introduction2;
