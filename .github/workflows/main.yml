@@ -7,53 +7,48 @@ on:
 
 jobs:
   build:
-    name: Build and analyze
+    name: Build and Analyze
     runs-on: ubuntu-latest
 
     env:
-      ACTIONS_STEP_DEBUG: true  # Enable debugging for more detailed logs
+      ACTIONS_STEP_DEBUG: true # Enable detailed logs
 
     steps:
       # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Disable shallow clones for better analysis
+          fetch-depth: 0 # Disable shallow clones for better analysis
 
-      # Step 2: Set up Node.js (you can change the version if necessary)
+      # Step 2: Set up Node.js (use correct version if necessary)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.17.0'  # Change this if necessary
+          node-version: "20.17.0" # You can change this to another version if needed
 
-      # Step 3: Verify Node.js installation
-      - name: Verify Node.js version
-        run: node -v
-
-      # Step 4: Install dependencies (ensure the directory is correct)
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
-        working-directory: ./Frontend/Mobile/  # Ensure this is the correct path to the package.json
+        working-directory: ./Frontend/Mobile/ # Update with the correct path to package.json
 
-      # Step 5: Run SonarQube scan (ensure the secrets are properly set in GitHub repository settings)
+      # Step 4: Install SonarQube scanner as a dev dependency (if not already installed)
+      - name: Install SonarQube Scanner
+        run: npm install sonarqube-scanner --save-dev
+        working-directory: ./Frontend/Mobile/
+
+      # Step 5: Run SonarQube Scan
       - name: SonarQube Scan
-        run: npm run sonar-scanner
-        working-directory: ./Frontend/Mobile
+        run: |
+          npm run sonar-scanner
+        working-directory: ./Frontend/Mobile/
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Add the SonarQube token in GitHub Secrets
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  # Add the SonarQube server URL in GitHub Secrets
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      # Step 6: Optional - Quality Gate Check (uncomment if needed)
+      # Step 6: Optional - SonarQube Quality Gate Check
+      # Uncomment if you want to check the quality gate status
       # - name: SonarQube Quality Gate Check
       #   uses: sonarsource/sonarqube-quality-gate-action@v2
       #   timeout-minutes: 5
       #   env:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      # Step 7: Upload test results or artifacts (optional)
-      # Uncomment and modify if you'd like to upload artifacts
-      # - name: Upload artifacts
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: test-results
-      #     path: path_to_test_results_folder
