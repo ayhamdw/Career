@@ -18,13 +18,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for better analysis
+          fetch-depth: 0  # Disable shallow clones for better analysis
 
       # Step 2: Set up Node.js (you can change the version if necessary)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.17.0'  # Change this to another version if necessary
+          node-version: '20.17.0'  # Change this if necessary
 
       # Step 3: Verify Node.js installation
       - name: Verify Node.js version
@@ -38,10 +38,10 @@ jobs:
       # Step 5: Run SonarQube scan (ensure the secrets are properly set in GitHub repository settings)
       - name: SonarQube Scan
         run: npm run sonar-scanner
-        working-directory: Frontend/Mobile
+        working-directory: ./Frontend/Mobile
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Add the SonarQube token in GitHub Secrets
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  # Add the SonarQube server URL in GitHub Secrets
 
       # Step 6: Optional - Quality Gate Check (uncomment if needed)
       # - name: SonarQube Quality Gate Check
