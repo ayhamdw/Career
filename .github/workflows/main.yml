@@ -31,7 +31,7 @@ jobs:
         run: npm install
         working-directory: ./Frontend/Mobile/ # Update with the correct path to package.json
 
-      # Step 4: Install SonarQube scanner as a dev dependency (if not already installed)
+      # Step 4: Install SonarQube scanner as a dev dependency (If not Installed)
       - name: Install SonarQube Scanner
         run: npm install sonarqube-scanner --save-dev
         working-directory: ./Frontend/Mobile/
