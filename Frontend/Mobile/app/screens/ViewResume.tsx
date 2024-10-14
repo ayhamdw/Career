@@ -2,7 +2,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const View_Resume = () => {
+const ViewResume = () => {
   const qualifications = [
     "UI/UX Designer",
     "Graphic Designer",
@@ -132,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default View_Resume;
+export default ViewResume;

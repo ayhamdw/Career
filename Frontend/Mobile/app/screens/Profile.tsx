@@ -12,9 +12,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import Profile_Info from "./Profile_Info";
+import Profile_Info from "./ProfileInformation";
 
-const ProfileScreen = ({ navigation }) => {
+const ProfileScreen = ({ navigation }: { navigation: any }) => {
   return (
     <View style={[styles.container]}>
       <StatusBar barStyle="dark-content" backgroundColor="#CEEB43" />
