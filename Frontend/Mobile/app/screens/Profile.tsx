@@ -32,7 +32,7 @@ const ProfileScreen = ({ navigation }) => {
             source={{ uri: "https://via.placeholder.com/100" }}
             style={styles.profileImage}
           />
-          <Text style={styles.name}>Alexa Demain</Text>
+          <Text style={styles.name}>Alexa Demai</Text>
           <Text style={styles.jobTitle}>UI/UX Designer</Text>
 
           <View style={styles.statsContainer}>
