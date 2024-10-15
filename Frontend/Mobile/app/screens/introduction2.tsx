@@ -5,7 +5,7 @@ import AppIntroSlider from "react-native-app-intro-slider";
 import { SIZE } from "../../assets/styles/Dimensions";
 import { COLORS } from "../../assets/styles/Dimensions";
 import { useNavigation } from "@react-navigation/native";
-import { NavigationProp } from "../types";
+import { createStackNavigator } from "@react-navigation/stack";
 
 const data = [
   {
@@ -32,8 +32,11 @@ const data = [
 ];
 
 const Introduction2 = () => {
+  // const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<{ route: {} }>>();
+  // const navigation = createStackNavigator<RootStackParamList>();
+
   const [showHomePage, setShowHomePage] = useState(false);
-  const navigation = useNavigation<NavigationProp>();
 
   const labelButton = (label: string) => {
     return (
@@ -64,6 +67,7 @@ const Introduction2 = () => {
         renderNextButton={() => labelButton("Next")}
         renderSkipButton={() => labelButton("Skip")}
         renderDoneButton={() => labelButton("Done")}
+        onDone={() => navigation.navigate("Login")}
       />
     );
   } else {

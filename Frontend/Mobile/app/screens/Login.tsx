@@ -10,11 +10,12 @@ import {
   Switch,
   Pressable,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { lightTheme, darkTheme } from "../../assets/styles/themes";
 import facebook from "../../assets/images/facebook.png";
 import gmail from "../../assets/images/gmail.png";
-
 export default function Login() {
+  const navigation = useNavigation();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const theme = isDarkMode ? darkTheme : lightTheme;
 
@@ -73,7 +74,7 @@ export default function Login() {
 
           <TouchableOpacity
             style={styles.forgotButton}
-            onPress={() => console.log("Forgot Password pressed")}
+            onPress={() => navigation.navigate("ForgotPassword")}
           >
             <Text
               style={[
@@ -102,7 +103,7 @@ export default function Login() {
           <Text style={[styles.par, { color: theme.textColor }]}>
             Don't have an account?
           </Text>
-          <TouchableOpacity onPress={() => console.log("Sign Up pressed")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
             <Text
               style={[styles.signUpText, { color: theme.buttonBackground }]}
             >
