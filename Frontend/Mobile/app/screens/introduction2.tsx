@@ -1,12 +1,8 @@
 import { View, Text, Image, StyleSheet, SafeAreaView } from "react-native";
-import React, { useState } from "react";
-import { useFonts } from "expo-font";
 import AppIntroSlider from "react-native-app-intro-slider";
 import { SIZE } from "../../assets/styles/Dimensions";
 import { COLORS } from "../../assets/styles/Dimensions";
 import { useNavigation } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-
 const data = [
   {
     id: 1,
@@ -32,11 +28,7 @@ const data = [
 ];
 
 const Introduction2 = () => {
-  // const navigation = useNavigation();
-  const navigation = useNavigation<StackNavigationProp<{ route: {} }>>();
-  // const navigation = createStackNavigator<RootStackParamList>();
-
-  const [showHomePage, setShowHomePage] = useState(false);
+  const navigation = useNavigation();
 
   const labelButton = (label: string) => {
     return (
@@ -46,37 +38,29 @@ const Introduction2 = () => {
     );
   };
 
-  if (!showHomePage) {
-    return (
-      <AppIntroSlider
-        data={data}
-        renderItem={({ item }) => {
-          return (
-            <View style={styles.viewStyle}>
-              <Image source={item.image} style={styles.imageStyle} />
-              <Text style={styles.titleStyle}>{item.title}</Text>
-              <Text style={styles.descriptionStyle}>{item.description}</Text>
-            </View>
-          );
-        }}
-        activeDotStyle={{
-          backgroundColor: COLORS.activeDot,
-          width: 30,
-        }}
-        showSkipButton
-        renderNextButton={() => labelButton("Next")}
-        renderSkipButton={() => labelButton("Skip")}
-        renderDoneButton={() => labelButton("Done")}
-        onDone={() => navigation.navigate("Login")}
-      />
-    );
-  } else {
-    return (
-      <SafeAreaView style={styles.containerStyle}>
-        <Text style={{ fontSize: 30 }}>Welcome to Career</Text>
-      </SafeAreaView>
-    );
-  }
+  return (
+    <AppIntroSlider
+      data={data}
+      renderItem={({ item }) => {
+        return (
+          <View style={styles.viewStyle}>
+            <Image source={item.image} style={styles.imageStyle} />
+            <Text style={styles.titleStyle}>{item.title}</Text>
+            <Text style={styles.descriptionStyle}>{item.description}</Text>
+          </View>
+        );
+      }}
+      activeDotStyle={{
+        backgroundColor: COLORS.activeDot,
+        width: 30,
+      }}
+      showSkipButton
+      renderNextButton={() => labelButton("Next")}
+      renderSkipButton={() => labelButton("Skip")}
+      renderDoneButton={() => labelButton("Done")}
+      onDone={() => navigation.navigate("Login")}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
@@ -103,6 +87,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 15,
     paddingTop: 90,
+    backgroundColor: "white",
   },
   titleStyle: {
     fontSize: SIZE.h1,
