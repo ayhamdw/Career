@@ -1,6 +1,6 @@
 import React from "react";
-import { StatusBar, SafeAreaView, StyleSheet } from "react-native";
-import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
+import { StatusBar } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Introduction1 from "./screens/introduction1";
 import Introduction2 from "./screens/introduction2";
