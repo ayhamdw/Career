@@ -1,7 +1,6 @@
 import { View, Text, Image, StyleSheet } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
-import { SIZE } from "../../assets/styles/Dimensions";
-import { COLORS } from "../../assets/styles/Dimensions";
+import { SIZE, COLORS } from "../../assets/styles/Dimensions";
 import { useNavigation } from "@react-navigation/native";
 const data = [
   {
