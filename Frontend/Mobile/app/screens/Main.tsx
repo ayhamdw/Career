@@ -3,30 +3,15 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import Profile from "./Profile";
+import Messages from "./Messages";
+import Requests from "./Requests";
 
 const Tab = createBottomTabNavigator();
 
 const MainPage = () => (
   <View style={styles.center}>
     <Text>Main Page</Text>
-  </View>
-);
-
-const SettingPage = () => (
-  <View style={styles.center}>
-    <Text>Setting Page</Text>
-  </View>
-);
-
-const AppliedRequestsPage = () => (
-  <View style={styles.center}>
-    <Text>Applied Requests Page</Text>
-  </View>
-);
-
-const MessagesPage = () => (
-  <View style={styles.center}>
-    <Text>Messages Page</Text>
   </View>
 );
 
@@ -43,7 +28,7 @@ const Main = () => {
             } else if (route.name === "Setting") {
               iconName = "settings";
               return <Ionicons name={iconName} size={size} color={color} />;
-            } else if (route.name === "Applied Requests") {
+            } else if (route.name === "Requests") {
               iconName = "check-box";
               return (
                 <MaterialIcons name={iconName} size={size} color={color} />
@@ -54,12 +39,14 @@ const Main = () => {
             }
           },
           tabBarShowLabel: true,
-          tabBarLabelStyle: { fontSize: 12, fontWeight: "bold" },
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: "bold",
+          },
           tabBarStyle: {
             backgroundColor: "#fff",
             paddingBottom: 5,
             borderTopWidth: 0,
-            borderBottomWidth: 0,
           },
           tabBarActiveTintColor: "#CEEB43",
           tabBarInactiveTintColor: "#666",
@@ -71,18 +58,18 @@ const Main = () => {
           options={{ headerShown: false }}
         />
         <Tab.Screen
-          name="Applied Requests"
-          component={AppliedRequestsPage}
+          name="Requests"
+          component={Requests}
           options={{ headerShown: false }}
         />
         <Tab.Screen
           name="Messages"
-          component={MessagesPage}
+          component={Messages}
           options={{ headerShown: false }}
         />
         <Tab.Screen
           name="Setting"
-          component={SettingPage}
+          component={Profile}
           options={{ headerShown: false }}
         />
       </Tab.Navigator>

@@ -92,7 +92,7 @@ export default function Login() {
             styles.loginButton,
             { backgroundColor: theme.buttonBackground },
           ]}
-          onPress={() => console.log("Sign In pressed")}
+          onPress={() => navigation.navigate("Main")}
         >
           <Text style={[styles.buttonText, { color: theme.buttonText }]}>
             Sign In

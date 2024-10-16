@@ -12,30 +12,34 @@ export default function HomeScreen() {
   const Stack = createNativeStackNavigator();
 
   return (
-    // <>
-    //   <StatusBar barStyle={"dark-content"} backgroundColor={"red"} />
-    //   <NavigationContainer independent={true}>
-    //     <Stack.Navigator initialRouteName="Introduction1">
-    //       <Stack.Screen
-    //         name="Introduction1"
-    //         component={Introduction1}
-    //         options={{ headerShown: false }}
-    //       />
-    //       <Stack.Screen
-    //         name="Introduction2"
-    //         component={Introduction2}
-    //         options={{ headerShown: false }}
-    //       />
-    //       <Stack.Screen
-    //         name="Login"
-    //         component={Login}
-    //         options={{ headerShown: false }}
-    //       />
-    //       <Stack.Screen name="Signup" component={Signup} />
-    //       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-    //     </Stack.Navigator>
-    //   </NavigationContainer>
-    // </>
-    <Main />
+    <>
+      <StatusBar barStyle={"dark-content"} backgroundColor={"red"} />
+      <NavigationContainer independent={true}>
+        <Stack.Navigator initialRouteName="Introduction1">
+          <Stack.Screen
+            name="Introduction1"
+            component={Introduction1}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Introduction2"
+            component={Introduction2}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="Signup" component={Signup} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+          <Stack.Screen
+            name="Main"
+            component={Main}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }

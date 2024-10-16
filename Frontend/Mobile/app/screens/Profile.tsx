@@ -14,7 +14,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Profile_Info from "./ProfileInformation";
 
-const ProfileScreen = ({ navigation }: { navigation: any }) => {
+const Profile = ({ navigation }: { navigation: any }) => {
   return (
     <View style={[styles.container]}>
       <StatusBar barStyle="dark-content" backgroundColor="#CEEB43" />
@@ -212,4 +212,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default Profile;
