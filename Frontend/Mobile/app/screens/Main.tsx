@@ -3,9 +3,10 @@ import Requests from "./Requests";
 import Messages from "./Messages";
 import Profile from "./Profile"; // Settings page component
 import CustomTabNavigator from "./CustomTabNavigator"; // Import the navigator
+import HomePage from "./HomePage";
 
 const screenData = {
-  Main: Requests,
+  Main: HomePage,
   Requests: Requests,
   Messages: Messages,
   Setting: Profile,
