@@ -43,7 +43,6 @@ export default function Login() {
 
         <View style={styles.form}>
           <View style={styles.inputItem}>
-            {/* <Text style={[styles.label, { color: theme.labelColor }]}>Email or Username</Text> */}
             <TextInput
               style={[
                 styles.input,
