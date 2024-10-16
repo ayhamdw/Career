@@ -56,7 +56,7 @@ export default function ForgotPassword() {
             placeholder="Enter your username"
           />
 
-          <TouchableOpacity style={styles.button} onPress={handleSendCode}>
+          <TouchableOpacity style={styles.buttonSmall} onPress={handleSendCode}>
             <Text style={styles.buttonText}>Send Code</Text>
           </TouchableOpacity>
 
@@ -88,7 +88,10 @@ export default function ForgotPassword() {
             secureTextEntry
           />
 
-          <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
+          <TouchableOpacity
+            style={styles.buttonSmall}
+            onPress={handleResetPassword}
+          >
             <Text style={styles.buttonText}>Reset Password</Text>
           </TouchableOpacity>
         </ScrollView>
@@ -100,56 +103,65 @@ export default function ForgotPassword() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F0F0F0",
+    backgroundColor: "#fff", // Set the background to white
   },
   inner: {
-    padding: 24,
+    padding: 20,
     justifyContent: "center",
     alignItems: "center",
+    flexGrow: 1, // Ensures content stays centered
   },
   image: {
-    width: 150,
-    height: 150,
+    width: 120,
+    height: 120,
     marginBottom: 20,
+    borderRadius: 60, // Makes the image circular
   },
   headerText: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
-    marginBottom: 20,
     color: "#333",
+    marginBottom: 30,
+    textAlign: "center", // Center the header
   },
   label: {
     alignSelf: "flex-start",
     marginLeft: 10,
     fontSize: 16,
-    color: "#333",
+    color: "#555",
     marginTop: 10,
+    marginBottom: 5,
   },
   input: {
     width: "100%",
-    padding: 10,
-    backgroundColor: "#fff",
-    borderRadius: 8,
+    padding: 12,
+    backgroundColor: "#f9f9f9", // Soft background for input fields
+    borderRadius: 10,
     marginVertical: 10,
-    borderColor: "#ccc",
+    borderColor: "#ddd",
     borderWidth: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2, // Small shadow effect
   },
-  button: {
-    width: "100%",
-    backgroundColor: "#CEEB43",
-    padding: 15,
-    borderRadius: 25,
+  buttonSmall: {
+    width: "60%", // Reduce the button size
+    backgroundColor: "#CEEB43", // Button color you mentioned
+    padding: 12, // Reduce padding for smaller button
+    borderRadius: 20,
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: 15,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    elevation: 5,
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5, // Slightly higher elevation for buttons
   },
   buttonText: {
     color: "#333",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600", // Slightly bolder text
   },
 });
