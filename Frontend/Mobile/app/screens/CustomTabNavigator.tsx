@@ -3,7 +3,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-// Create Tab Navigator
+import { COLORS } from "../../assets/styles/Dimensions";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -42,12 +42,12 @@ const CustomTabNavigator = ({ screenData }: { screenData: any }) => {
             fontWeight: "bold",
           },
           tabBarStyle: {
-            backgroundColor: "#fff",
+            backgroundColor: COLORS.tabBarBackgroundColor,
             paddingBottom: 5,
             borderTopWidth: 0,
           },
-          tabBarActiveTintColor: "#CEEB43",
-          tabBarInactiveTintColor: "#666",
+          tabBarActiveTintColor: COLORS.tabBarActiveTintColor,
+          tabBarInactiveTintColor: COLORS.tabBarInActiveTintColor,
         })}
       >
         <Tab.Screen
