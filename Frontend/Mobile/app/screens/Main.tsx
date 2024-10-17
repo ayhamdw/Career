@@ -1,15 +1,15 @@
 import React from "react";
 import Requests from "./Requests";
 import Messages from "./Messages";
-import Profile from "./Profile"; // Settings page component
 import CustomTabNavigator from "./CustomTabNavigator"; // Import the navigator
 import HomePage from "./HomePage";
+import ProfileNavigator from "./ProfileNavigator";
 
 const screenData = {
   Main: HomePage,
   Requests: Requests,
   Messages: Messages,
-  Setting: Profile,
+  Setting: ProfileNavigator,
 };
 
 const Main = () => {

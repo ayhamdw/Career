@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { COLORS } from "../../assets/styles/Dimensions";
 
 export default function Introduction1() {
   const navigation = useNavigation();
@@ -25,7 +26,7 @@ export default function Introduction1() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#CEEB43",
+    backgroundColor: COLORS.introductionColor,
     marginTop: -100,
     marginBottom: -100,
   },
@@ -33,13 +34,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#CEEB43",
+    backgroundColor: COLORS.introductionColor,
     marginTop: -100,
     marginBottom: -100,
   },
   textStyle: {
     fontSize: 40,
     fontWeight: "bold",
-    color: "#000",
+    color: COLORS.textColor,
   },
 });

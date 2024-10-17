@@ -6,101 +6,105 @@ import {
   Image,
   TouchableOpacity,
   StatusBar,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
 
-import Profile_Info from "./ProfileInformation";
+const Profile = () => {
+  const navigation = useNavigation();
 
-const Profile = ({ navigation }: { navigation: any }) => {
   return (
-    <View style={[styles.container]}>
-      <StatusBar barStyle="dark-content" backgroundColor="#CEEB43" />
+    <ScrollView>
+      <View style={[styles.container]}>
+        <StatusBar barStyle="dark-content" backgroundColor="#CEEB43" />
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Profile</Text>
+          <TouchableOpacity>
+            <Ionicons name="settings-outline" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Profile</Text>
-        <TouchableOpacity>
-          <Ionicons name="settings-outline" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+        <View style={styles.profileCenter}>
+          <View style={styles.profileContainer}>
+            <Image
+              source={{ uri: "https://via.placeholder.com/100" }}
+              style={styles.profileImage}
+            />
+            <Text style={styles.name}>Alexa Demai</Text>
+            <Text style={styles.jobTitle}>UI/UX Designer</Text>
 
-      <View style={styles.profileCenter}>
-        <View style={styles.profileContainer}>
-          <Image
-            source={{ uri: "https://via.placeholder.com/100" }}
-            style={styles.profileImage}
-          />
-          <Text style={styles.name}>Alexa Demai</Text>
-          <Text style={styles.jobTitle}>UI/UX Designer</Text>
-
-          <View style={styles.statsContainer}>
-            <View style={styles.stats}>
-              <Text style={styles.statsCount}>25</Text>
-              <Text style={styles.statsLabel}>Applied</Text>
-            </View>
-            <View style={styles.stats}>
-              <Text style={styles.statsCount}>10</Text>
-              <Text style={styles.statsLabel}>Interview</Text>
-            </View>
-            <View style={styles.stats}>
-              <Text style={styles.statsCount}>16</Text>
-              <Text style={styles.statsLabel}>Bookmark</Text>
+            <View style={styles.statsContainer}>
+              <View style={styles.stats}>
+                <Text style={styles.statsCount}>25</Text>
+                <Text style={styles.statsLabel}>Applied</Text>
+              </View>
+              <View style={styles.stats}>
+                <Text style={styles.statsCount}>10</Text>
+                <Text style={styles.statsLabel}>Interview</Text>
+              </View>
+              <View style={styles.stats}>
+                <Text style={styles.statsCount}>16</Text>
+                <Text style={styles.statsLabel}>Bookmark</Text>
+              </View>
             </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.optionCenter}>
-        <View style={styles.optionsContainer}>
-          <TouchableOpacity
-            style={styles.option}
-            onPress={() => navigation.navigate("Profile_Info")}
-          >
-            <Ionicons name="person-outline" style={styles.iconStyle} />
-            <Text style={styles.optionText}>Profile</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.option}>
-            <Ionicons name="briefcase-outline" style={styles.iconStyle} />
-            <Text style={styles.optionText}>Applied Jobs</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.option}>
-            <Ionicons name="bookmark-outline" style={styles.iconStyle} />
-            <Text style={styles.optionText}>Bookmark Jobs</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.option}>
-            <Ionicons name="document-text-outline" style={styles.iconStyle} />
-            <Text style={styles.optionText}>View Resume</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.option}>
-            <Ionicons name="notifications-outline" style={styles.iconStyle} />
-            <Text style={styles.optionText}>Notification</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.option}>
-            <Ionicons name="lock-closed-outline" style={styles.iconStyle} />
-            <Text style={styles.optionText}>Change Password</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.option}>
-            <Ionicons name="log-out-outline" style={styles.iconStyle} />
-            <Text style={styles.optionText}>Logout</Text>
-          </TouchableOpacity>
+        <View style={styles.optionCenter}>
+          <View style={styles.optionsContainer}>
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => navigation.navigate("ProfileInfo")}
+            >
+              <Ionicons name="person-outline" style={styles.iconStyle} />
+              <Text style={styles.optionText}>Profile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => navigation.navigate("AppliedJobs")}
+            >
+              <Ionicons name="briefcase-outline" style={styles.iconStyle} />
+              <Text style={styles.optionText}>Applied Jobs</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => navigation.navigate("BookmarkJobs")}
+            >
+              <Ionicons name="bookmark-outline" style={styles.iconStyle} />
+              <Text style={styles.optionText}>Bookmark Jobs</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => navigation.navigate("ViewResume")}
+            >
+              <Ionicons name="document-text-outline" style={styles.iconStyle} />
+              <Text style={styles.optionText}>View Resume</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => navigation.navigate("Notification")}
+            >
+              <Ionicons name="notifications-outline" style={styles.iconStyle} />
+              <Text style={styles.optionText}>Notification</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => navigation.navigate("ChangePassword")}
+            >
+              <Ionicons name="lock-closed-outline" style={styles.iconStyle} />
+              <Text style={styles.optionText}>Change Password</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.option}>
+              <Ionicons name="log-out-outline" style={styles.iconStyle} />
+              <Text style={styles.optionText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
-
-const Stack = createNativeStackNavigator();
-const myStack = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Profile_Information" component={Profile_Info} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -113,7 +117,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 16,
     backgroundColor: "#CEEB43",
-    height: 250, // Adjust height as needed
+    height: 250,
     marginBottom: -100,
     marginTop: -100,
   },
@@ -126,7 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    top: 50, // Adjust based on header height
+    top: 50,
     left: 0,
     right: 0,
   },
@@ -134,10 +138,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     backgroundColor: "white",
-    borderRadius: 30,
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
     width: "90%",
-    elevation: 5, // For Android shadow
-    shadowColor: "#000", // For iOS shadow
+    elevation: 5,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
@@ -179,7 +186,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   optionsContainer: {
-    marginTop: 280, // Adjust as needed to avoid overlap
+    marginTop: 265,
     paddingHorizontal: 20,
     width: "90%",
     backgroundColor: "white",
@@ -187,7 +194,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    shadowColor: "#000", // For iOS shadow
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
