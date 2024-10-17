@@ -6,6 +6,8 @@ import Introduction2 from "./introduction2";
 import Login from "./Login";
 import Signup from "./Signup";
 import ForgotPassword from "./ForgetPassword";
+import ProfileNavigator from "./ProfileNavigator";
+import Profile from "./Profile";
 const Stack = createNativeStackNavigator();
 const IntroductionNavigation2 = () => {
   return (
@@ -27,6 +29,16 @@ const IntroductionNavigation2 = () => {
       />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ProfileNavigator"
+        component={ProfileNavigator}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };

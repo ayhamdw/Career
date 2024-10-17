@@ -102,26 +102,26 @@ export default function ForgotPassword() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff", // Set the background to white
+    backgroundColor: "#fff",
   },
   inner: {
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
-    flexGrow: 1, // Ensures content stays centered
+    flexGrow: 1,
   },
   image: {
     width: 120,
     height: 120,
     marginBottom: 20,
-    borderRadius: 60, // Makes the image circular
+    borderRadius: 60,
   },
   headerText: {
     fontSize: 26,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 30,
-    textAlign: "center", // Center the header
+    textAlign: "center",
   },
   label: {
     alignSelf: "flex-start",
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     padding: 12,
-    backgroundColor: "#f9f9f9", // Soft background for input fields
+    backgroundColor: "#f9f9f9",
     borderRadius: 10,
     marginVertical: 10,
     borderColor: "#ddd",
@@ -143,24 +143,26 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
-    elevation: 2, // Small shadow effect
+    elevation: 2,
   },
   buttonSmall: {
-    width: "60%", // Reduce the button size
-    backgroundColor: "#CEEB43", // Button color you mentioned
-    padding: 12, // Reduce padding for smaller button
-    borderRadius: 20,
+    backgroundColor: "#CEEB43",
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    marginBottom: 20,
+    alignSelf: "center",
+    justifyContent: "center",
     alignItems: "center",
-    marginVertical: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5, // Slightly higher elevation for buttons
+    width: "80%",
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 1.5 },
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
   },
   buttonText: {
     color: "#333",
     fontSize: 16,
-    fontWeight: "600", // Slightly bolder text
+    fontWeight: "600",
   },
 });
