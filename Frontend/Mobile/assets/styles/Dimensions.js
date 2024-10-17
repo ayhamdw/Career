@@ -2,17 +2,19 @@ import { Dimensions } from "react-native";
 const { width, height } = Dimensions.get("screen");
 
 export const COLORS = {
-  introductionColor: "#CEEB43",
+  introductionColor: "#3EB489",
   textColor: "#000",
   inputLabelColor: "#aaa",
   tabBarInActiveTintColor: "#666",
   tabBarBackgroundColor: "#fff",
-  tabBarActiveTintColor: "#CEEB43",
+  tabBarActiveTintColor: "#3EB489",
   pageBackgroundColor: "#fff",
-  buttonBackgroundColor: "#CEEB43",
+  buttonBackgroundColor: "#3EB489",
   textInputBorderColor: "#ddd",
   forgetPasswordLabelColor: "#555",
   shadowColor: "#000",
+  introductionButtonColor: "#000000",
+  jobTitleTextColor: "#999",
 };
 
 export const SIZE = {

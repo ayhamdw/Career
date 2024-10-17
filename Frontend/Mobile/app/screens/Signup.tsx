@@ -166,7 +166,7 @@ export default SignUp;
 const styles = StyleSheet.create({
   safeAreaStyle: {
     flex: 1,
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "white",
   },
   scrollContainer: {
     justifyContent: "center",

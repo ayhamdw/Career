@@ -50,7 +50,7 @@ const Introduction2 = () => {
         );
       }}
       activeDotStyle={{
-        backgroundColor: COLORS.activeDot,
+        backgroundColor: COLORS.introductionButtonColor,
         width: 30,
       }}
       showSkipButton
@@ -92,12 +92,12 @@ const styles = StyleSheet.create({
     fontSize: SIZE.h1,
     fontWeight: "bold",
     marginBottom: 10,
-    color: COLORS.title,
+    color: COLORS.introductionButtonColor,
   },
   descriptionStyle: {
     fontSize: SIZE.h4,
     paddingTop: 10,
-    color: COLORS.primary,
+    color: COLORS.introductionButtonColor,
     textAlign: "center",
     fontFamily: "Cairo Bold",
   },
