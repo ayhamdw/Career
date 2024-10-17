@@ -33,7 +33,7 @@ const IntroductionNavigation2 = () => {
         options={{
           headerTitle: "",
           headerStyle: {
-            backgroundColor: "transparent",
+            backgroundColor: "white",
           },
           headerShadowVisible: false,
         }}

@@ -25,7 +25,7 @@ const ProfileNavigator = () => {
         options={{
           headerTitle: "",
           headerStyle: {
-            backgroundColor: "transparent",
+            backgroundColor: "white",
           },
         }}
       />
@@ -35,7 +35,7 @@ const ProfileNavigator = () => {
         options={{
           headerTitle: "",
           headerStyle: {
-            backgroundColor: "transparent",
+            backgroundColor: "white",
           },
         }}
       />
@@ -45,7 +45,7 @@ const ProfileNavigator = () => {
         options={{
           headerTitle: "",
           headerStyle: {
-            backgroundColor: "transparent",
+            backgroundColor: "white",
           },
         }}
       />
@@ -55,7 +55,7 @@ const ProfileNavigator = () => {
         options={{
           headerTitle: "",
           headerStyle: {
-            backgroundColor: "transparent",
+            backgroundColor: "white",
           },
         }}
       />
@@ -65,7 +65,7 @@ const ProfileNavigator = () => {
         options={{
           headerTitle: "",
           headerStyle: {
-            backgroundColor: "transparent",
+            backgroundColor: "white",
           },
         }}
       />
@@ -75,7 +75,7 @@ const ProfileNavigator = () => {
         options={{
           headerTitle: "",
           headerStyle: {
-            backgroundColor: "transparent",
+            backgroundColor: "white",
           },
         }}
       />

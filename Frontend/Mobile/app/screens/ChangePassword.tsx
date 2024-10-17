@@ -6,10 +6,13 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { COLORS } from "../../assets/styles/Dimensions";
 
 const ChangePassword = () => {
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   return (
     <SafeAreaView>
       <Text style={styles.textStyle}>Change Password</Text>
@@ -19,18 +22,21 @@ const ChangePassword = () => {
           secureTextEntry={true}
           placeholder="Old Password"
           style={styles.textInputStyle}
+          value={oldPassword}
         />
         <Text style={styles.inputLabelStyle}>ENTER NEW PASSWORD</Text>
         <TextInput
           secureTextEntry={true}
           placeholder="New Password"
           style={styles.textInputStyle}
+          value={newPassword}
         />
         <Text style={styles.inputLabelStyle}>CONFIRM NEW PASSWORD</Text>
         <TextInput
           secureTextEntry={true}
           placeholder="Confirm Password"
           style={styles.textInputStyle}
+          value={confirmPassword}
         />
         <TouchableOpacity
           onPress={() => console.log("Password Changed")}

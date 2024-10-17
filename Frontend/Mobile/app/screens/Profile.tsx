@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { COLORS } from "@/assets/styles/Dimensions";
 
 const Profile = () => {
   const navigation = useNavigation();
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 16,
     paddingBottom: 16,
-    backgroundColor: "#CEEB43",
+    backgroundColor: COLORS.introductionColor,
     height: 250,
     marginBottom: -100,
     marginTop: -100,
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 15,
     width: "90%",
     elevation: 5,
-    shadowColor: "#000",
+    shadowColor: COLORS.shadowColor,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
@@ -158,11 +159,11 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#333",
+    color: COLORS.textColor,
   },
   jobTitle: {
     fontSize: 16,
-    color: "#999",
+    color: COLORS.jobTitleTextColor,
   },
   statsContainer: {
     flexDirection: "row",
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   statsLabel: {
-    color: "#666",
+    color: COLORS.forgetPasswordLabelColor,
   },
   optionCenter: {
     justifyContent: "center",
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    shadowColor: "#000",
+    shadowColor: COLORS.shadowColor,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
@@ -209,12 +210,11 @@ const styles = StyleSheet.create({
   optionText: {
     marginLeft: 10,
     fontSize: 16,
-    color: "#333",
+    color: COLORS.textColor,
   },
   iconStyle: {
     fontSize: 24,
     color: "black",
-    // marginLeft: 10/,
   },
 });
 
