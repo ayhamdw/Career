@@ -1,10 +1,10 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import MainNavigation from "./screens/MainNavigation";
+import HomePage from "./screens/HomePage";
 export default function HomeScreen() {
   return (
     <NavigationContainer independent={true}>
-      <MainNavigation />
+      <HomePage/>
     </NavigationContainer>
     // <ChangePassword />
   );
