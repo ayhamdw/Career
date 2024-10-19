@@ -1,30 +1,71 @@
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity,TextInput } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, StatusBar } from "react-native";
 import React from "react";
 import { COLORS } from "@/assets/styles/Dimensions";
 
 const HomePage = () => {
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.infoNav}>
-          <View style={styles.info}>
-            <Text>Username</Text>
-            <Text>Another information</Text>
-          </View>
-
-          <Image source={require('../../assets/images/HomePage/userIcon.png')} style={{width:50,height:50}}></Image>
-        </View>
-        <View style={styles.filterSection}>
-          <View style={styles.searchSection}>
-            <Image source={require('../../assets/images/HomePage/searchIcon.png')} style={{width:20,height:20}}></Image>
-            <TextInput style={styles.Input} placeholder="Search"/>
-          </View>
-          
-          <TouchableOpacity style={styles.filterButton} >
-            <Image source={require('../../assets/images/HomePage/filterSearchIcon.png')} style={{width:45,height:45,borderRadius:13}}></Image>
-          </TouchableOpacity>
-        </View>
+    
+    <ScrollView contentContainerStyle={styles.container}>
       
+      <View style={styles.infoNav}>
+        <View style={styles.info}>
+          <Text style={styles.username}>Username</Text>
+          <Text style={styles.additionalInfo}>Another information</Text>
+        </View>
+        <Image source={require('../../assets/images/HomePage/userIcon.png')} style={styles.userIcon} />
+      </View>
+
+      <View style={styles.filterSection}>
+        <View style={styles.searchSection}>
+          <Image source={require('../../assets/images/HomePage/searchIcon.png')} style={styles.searchIcon} />
+          <TextInput style={styles.input} placeholder="Search" placeholderTextColor="#999" />
+        </View>
+        <TouchableOpacity>
+          <Image source={require('../../assets/images/HomePage/filterSearchIcon.png')} style={styles.filterIcon} />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.catList}>
+          <View style={styles.cat}>
+            <Image source={require('../../assets/images/HomePage/DoctorIcon.png')} style={styles.catImage}></Image>
+            <Text style={styles.catDescription}>Doctor</Text>
+            <Text style={styles.catItemsCount}>Number Of itemss</Text>
+          </View>
+          <View style={styles.cat}>
+            <Image source={require('../../assets/images/HomePage/EngIcon.png')} style={styles.catImage}></Image>
+            <Text style={styles.catDescription}>Engineer</Text>
+            <Text style={styles.catItemsCount}>Number Of itemss</Text>
+          </View>
+          <View style={styles.cat}>
+            <Image source={require('../../assets/images/HomePage/LawyerIcon.png')} style={styles.catImage}></Image>
+            <Text style={styles.catDescription}>Lawyer</Text>
+            <Text style={styles.catItemsCount}>Number Of itemss</Text>
+          </View>
+          <View style={styles.cat}>
+            <Image source={require('../../assets/images/HomePage/ArtistIcon.png')} style={styles.catImage}></Image>
+            <Text style={styles.catDescription}>Artist</Text>
+            <Text style={styles.catItemsCount}>Number Of itemss</Text>
+          </View>
+          <View style={styles.cat}>
+            <Image source={require('../../assets/images/HomePage/DoctorIcon.png')} style={styles.catImage}></Image>
+            <Text style={styles.catDescription}>Doctor</Text>
+            <Text style={styles.catItemsCount}>Number Of itemss</Text>
+          </View>
+          <View style={styles.cat}>
+            <Image source={require('../../assets/images/HomePage/EngIcon.png')} style={styles.catImage}></Image>
+            <Text style={styles.catDescription}>Engineer</Text>
+            <Text style={styles.catItemsCount}>Number Of itemss</Text>
+          </View>
+          <View style={styles.cat}>
+            <Image source={require('../../assets/images/HomePage/LawyerIcon.png')} style={styles.catImage}></Image>
+            <Text style={styles.catDescription}>Lawyer</Text>
+            <Text style={styles.catItemsCount}>Number Of itemss</Text>
+          </View>
+          <View style={styles.cat}>
+            <Image source={require('../../assets/images/HomePage/ArtistIcon.png')} style={styles.catImage}></Image>
+            <Text style={styles.catDescription}>Artist</Text>
+            <Text style={styles.catItemsCount}>Number Of itemss</Text>
+          </View>
       </View>
     </ScrollView>
   );
@@ -33,72 +74,121 @@ const HomePage = () => {
 export default HomePage;
 
 const styles = StyleSheet.create({
-  container:{
-    marginTop:10,
-    width:"95%",
-    // backgroundColor:"red",
-    margin:"auto",
-    maxWidth:500
-  },
-  infoNav:{
-    flex:1,
-    flexDirection:"row",
-    justifyContent:"space-between"
-
-  },
-  info:{
-    flex:1,
-    gap:10,
-  },
-
-
-  filterSection:{
-    width:"100%",
-    // flex:1,
-    flexDirection:"row",
-    marginTop:40,
-    justifyContent:"space-between",
-    alignItems:"center",
-    height:45,
-    // backgroundColor:"teal"
-
-  },
-  searchSection:{
-    // flex:1,
-    // backgroundColor:"green",
-    display:"flex",
-    justifyContent:"center",
-    alignItems:"center",
-    flexDirection:"row",
-    width:"85%",
-    gap:10,
-    // height:45,
-  },
-  Input:{
-    width:"90%",
-    height:39,
-    borderBottomWidth:0,
-    borderTopWidth:0,
-    borderLeftWidth:0,
-    borderRightWidth:0,
-    borderBottomColor:COLORS.introductionColor,
-    backgroundColor:"#f0f0f0",
-    paddingLeft:15
-  },
-
-  filterButton:{
-    // backgroundColor:"red",
-    // width:45,
-    // display:"flex",
-    // justifyContent:"center",
-    // alignItems:"center",
-    // alignContent:"center",
-    // gap:-5,
-    // height:"100%",
+  container: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+    // marginTop:-100
     
-    // borderRadius:5
+  },
+  infoNav: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 20,
+  },
+  info: {
+    flex: 1,
+  },
+  username: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+  },
+  additionalInfo: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 5,
+  },
+  userIcon: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  filterSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginVertical: 20,
+  },
+  searchSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    flex: 1,
+    marginRight: 10,
+    elevation: 5,
+  },
+  searchIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: '#333',
+    height:35
+  },
+  filterIcon: {
+    width: 45,
+    height: 45,
+    borderRadius: 13,
   },
 
 
 
+  catList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 30,
+    gap:10
+    
+  },
+  cat: {
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    width: '48%',
+    marginBottom: 20,
+    padding: 15,
+    alignItems: 'center',
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    maxWidth:200
+    
+  },
+  catImage: {
+    width: '100%',
+    height: 160,
+    borderRadius: 10,
+    marginBottom: 10,
+    resizeMode: 'contain',
+  },
+  catDescription: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+    
+  },
+  catItemsCount: {
+    fontSize: 14,
+    color: '#777',
+    marginTop: 5,
+    backgroundColor: '#f8f8f8',
+    paddingVertical: 3,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
 });
