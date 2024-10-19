@@ -16,7 +16,7 @@ const Profile = () => {
   const navigation = useNavigation();
 
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: "white" }}>
       <View style={[styles.container]}>
         <StatusBar barStyle="dark-content" backgroundColor="#CEEB43" />
         <View style={styles.header}>
@@ -63,20 +63,6 @@ const Profile = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.option}
-              onPress={() => navigation.navigate("AppliedJobs")}
-            >
-              <Ionicons name="briefcase-outline" style={styles.iconStyle} />
-              <Text style={styles.optionText}>Applied Jobs</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.option}
-              onPress={() => navigation.navigate("BookmarkJobs")}
-            >
-              <Ionicons name="bookmark-outline" style={styles.iconStyle} />
-              <Text style={styles.optionText}>Bookmark Jobs</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.option}
               onPress={() => navigation.navigate("ViewResume")}
             >
               <Ionicons name="document-text-outline" style={styles.iconStyle} />
@@ -84,7 +70,7 @@ const Profile = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.option}
-              onPress={() => navigation.navigate("Notification")}
+              onPress={() => navigation.navigate("Notifications")}
             >
               <Ionicons name="notifications-outline" style={styles.iconStyle} />
               <Text style={styles.optionText}>Notification</Text>

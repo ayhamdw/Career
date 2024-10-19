@@ -7,7 +7,6 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
   StatusBar,
 } from "react-native";
 
@@ -19,7 +18,6 @@ const ProfileInfo = () => {
   ]);
   const [newQualification, setNewQualification] = useState("");
 
-  // Add new qualification to the list
   const addQualification = () => {
     if (newQualification.trim() !== "") {
       setQualifications([...qualifications, newQualification]);
@@ -27,8 +25,7 @@ const ProfileInfo = () => {
     }
   };
 
-  // Remove a qualification by index
-  const removeQualification = (index) => {
+  const removeQualification = (index: number) => {
     const updatedQualifications = qualifications.filter((_, i) => i !== index);
     setQualifications(updatedQualifications);
   };
