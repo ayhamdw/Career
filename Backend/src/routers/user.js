@@ -15,7 +15,12 @@ const {
 const router = new express.Router();
 
 // sign up new users with rate limit
-router.post("/users", createAccountLimiter, async (req, res) => {
+
+router.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
+router.post("/user/signup", async (req, res) => {
   const { error } = signupValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -33,7 +38,7 @@ router.post("/users", createAccountLimiter, async (req, res) => {
 
 // login route with custom error handling
 
-router.post("/users/login", async (req, res, next) => {
+router.post("/user/login", async (req, res, next) => {
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -50,20 +55,20 @@ router.post("/users/login", async (req, res, next) => {
   }
 });
 
-router.post("/users/logout", Auth, async (req, res) => {
+router.post("/user/logout", Auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;
     });
     await req.user.save();
 
-    res.send({ message: "successfully loggedout" });
+    res.send({ message: "successfully logged out" });
   } catch (error) {
     res.status(500).send();
   }
 });
 
-router.post("/users/logoutAll", Auth, async (req, res) => {
+router.post("/user/logoutAll", Auth, async (req, res) => {
   try {
     req.user.tokens = [];
 
@@ -75,92 +80,92 @@ router.post("/users/logoutAll", Auth, async (req, res) => {
   }
 });
 
-router.get("/users/me", Auth, async (req, res) => {
-  res.send(req.user);
-});
+// router.get("/users/me", Auth, async (req, res) => {
+//   res.send(req.user);
+// });
 
-router.patch("/users/me", Auth, async (req, res) => {
-  const updates = Object.keys(req.body);
-  const allowedUpdates = ["name", "password", "age"];
+// router.patch("/users/me", Auth, async (req, res) => {
+//   const updates = Object.keys(req.body);
+//   const allowedUpdates = ["name", "password", "age"];
 
-  const isValidOperation = updates.every((update) =>
-    allowedUpdates.includes(update)
-  );
+//   const isValidOperation = updates.every((update) =>
+//     allowedUpdates.includes(update)
+//   );
 
-  if (!isValidOperation) {
-    return res.status(400).send({ error: "invalid updates" });
-  }
-  try {
-    const user = req.user;
+//   if (!isValidOperation) {
+//     return res.status(400).send({ error: "invalid updates" });
+//   }
+//   try {
+//     const user = req.user;
 
-    updates.forEach((update) => (user[update] = req.body[update]));
+//     updates.forEach((update) => (user[update] = req.body[update]));
 
-    await user.save();
-    res.send(user);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
+//     await user.save();
+//     res.send(user);
+//   } catch (error) {
+//     res.status(400).send(error);
+//   }
+// });
 
-router.delete("/users/me", Auth, async (req, res) => {
-  try {
-    await req.user.remove();
-    //sendCancellationEmail(req.user.email, req.user.name)
-    res.send(req.user);
-  } catch (error) {
-    res.status(400).send();
-  }
-});
+// router.delete("/users/me", Auth, async (req, res) => {
+//   try {
+//     await req.user.remove();
+//     //sendCancellationEmail(req.user.email, req.user.name)
+//     res.send(req.user);
+//   } catch (error) {
+//     res.status(400).send();
+//   }
+// });
 
-const upload = multer({
-  limits: {
-    fileSize: 1000000,
-  },
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-      return cb(new Error("Please upload a valid image file"));
-    }
-    cb(undefined, true);
-  },
-});
+// const upload = multer({
+//   limits: {
+//     fileSize: 1000000,
+//   },
+//   fileFilter(req, file, cb) {
+//     if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+//       return cb(new Error("Please upload a valid image file"));
+//     }
+//     cb(undefined, true);
+//   },
+// });
 
-router.post(
-  "/users/me/avatar",
-  Auth,
-  upload.single("upload"),
-  async (req, res) => {
-    const buffer = await sharp(req.file.buffer)
-      .resize({ width: 250, height: 250 })
-      .png()
-      .toBuffer();
-    req.user.avatar = buffer;
-    await req.user.save();
-    res.send({ message: "successfully uploaded" });
-  },
-  (error, req, res, next) => {
-    res.status(400).send({ error: error.message });
-  }
-);
+// router.post(
+//   "/users/me/avatar",
+//   Auth,
+//   upload.single("upload"),
+//   async (req, res) => {
+//     const buffer = await sharp(req.file.buffer)
+//       .resize({ width: 250, height: 250 })
+//       .png()
+//       .toBuffer();
+//     req.user.avatar = buffer;
+//     await req.user.save();
+//     res.send({ message: "successfully uploaded" });
+//   },
+//   (error, req, res, next) => {
+//     res.status(400).send({ error: error.message });
+//   }
+// );
 
-router.delete("/users/me/avatar", Auth, async (req, res) => {
-  req.user.avatar = undefined;
-  await req.user.save();
-  res.send({ message: "successfully deleted" });
-});
+// router.delete("/users/me/avatar", Auth, async (req, res) => {
+//   req.user.avatar = undefined;
+//   await req.user.save();
+//   res.send({ message: "successfully deleted" });
+// });
 
-router.get("/users/me/avatar", Auth, async (req, res) => {
-  try {
-    const user = req.user;
+// router.get("/users/me/avatar", Auth, async (req, res) => {
+//   try {
+//     const user = req.user;
 
-    if (!user.avatar) {
-      throw new Error({ error: "no avatar found" });
-    }
+//     if (!user.avatar) {
+//       throw new Error({ error: "no avatar found" });
+//     }
 
-    res.set("content-type", "image/png");
-    res.send(user.avatar);
-  } catch (error) {
-    res.status(404).send();
-  }
-});
+//     res.set("content-type", "image/png");
+//     res.send(user.avatar);
+//   } catch (error) {
+//     res.status(404).send();
+//   }
+// });
 
 module.exports = router;
