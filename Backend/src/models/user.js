@@ -6,7 +6,13 @@ const customError = require("../middleware/error/customError");
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+    },
+    lastName: {
       type: String,
       required: true,
       trim: true,
@@ -31,7 +37,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       validate(value) {
         if (value.toLowerCase().includes("password")) {
-          throw new Error("Password musn't contain password");
+          throw new Error("Password mustn't contain password");
         }
       },
     },
@@ -61,6 +67,8 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+//! This Method Use To Remove The Sensitive Data, Like Password, Token and The Picture
+//! So When u retrieve the data u will not got it
 userSchema.methods.toJSON = function () {
   const user = this;
   const userObject = user.toObject();
