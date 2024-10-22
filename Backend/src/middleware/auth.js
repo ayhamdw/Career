@@ -13,11 +13,16 @@ const auth = async (req, res, next) => {
     if (!user) {
       throw new Error();
     }
+
     req.token = token;
     req.user = user;
     next();
   } catch (error) {
-    res.status(401).send({ error: "Authentication required" });
+    if (error.name === "TokenExpiredError") {
+      res.status(401).send({ error: "Session expired. Please sign in again." });
+    } else {
+      res.status(401).send({ error: "Authentication required" });
+    }
   }
 };
 

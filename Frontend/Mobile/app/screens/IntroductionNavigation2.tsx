@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Introduction1 from "./introduction1";
@@ -7,62 +6,31 @@ import Login from "./Login";
 import Signup from "./Signup";
 import ForgotPassword from "./ForgetPassword";
 import ProfileNavigator from "./ProfileNavigator";
-import Profile from "./Profile";
+import Main from "./Main";
+
 const Stack = createNativeStackNavigator();
-const IntroductionNavigation2 = () => {
-  return (
-    <Stack.Navigator initialRouteName="Introduction1">
-      <Stack.Screen
-        name="Introduction1"
-        component={Introduction1}
-        options={{ headerShown: false, headerShadowVisible: false }}
-      />
-      <Stack.Screen
-        name="Introduction2"
-        component={Introduction2}
-        options={{ headerShown: false, headerShadowVisible: false }}
-      />
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ headerShown: false, headerShadowVisible: false }}
-      />
-      <Stack.Screen
-        name="Signup"
-        component={Signup}
-        options={{
-          headerTitle: "",
-          headerStyle: {
-            backgroundColor: "white",
-          },
-          headerShadowVisible: false,
-        }}
-      />
-      <Stack.Screen
-        name="ForgotPassword"
-        component={ForgotPassword}
-        options={{
-          headerTitle: "",
-          headerStyle: {
-            backgroundColor: "white",
-          },
-          headerShadowVisible: false,
-        }}
-      />
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{ headerShown: false, headerShadowVisible: false }}
-      />
-      <Stack.Screen
-        name="ProfileNavigator"
-        component={ProfileNavigator}
-        options={{ headerShown: false, headerShadowVisible: false }}
-      />
-    </Stack.Navigator>
-  );
-};
 
-export default IntroductionNavigation2;
+const IntroductionNavigation = () => (
+  <Stack.Navigator
+    initialRouteName="Introduction1"
+    screenOptions={{ headerShown: false }}
+  >
+    <Stack.Screen name="Introduction1" component={Introduction1} />
+    <Stack.Screen name="Introduction2" component={Introduction2} />
+    <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen
+      name="Signup"
+      component={Signup}
+      options={{ headerStyle: { backgroundColor: "white" } }}
+    />
+    <Stack.Screen
+      name="ForgotPassword"
+      component={ForgotPassword}
+      options={{ headerStyle: { backgroundColor: "white" } }}
+    />
+    <Stack.Screen name="Main" component={Main} />
+    <Stack.Screen name="ProfileNavigator" component={ProfileNavigator} />
+  </Stack.Navigator>
+);
 
-const styles = StyleSheet.create({});
+export default IntroductionNavigation;

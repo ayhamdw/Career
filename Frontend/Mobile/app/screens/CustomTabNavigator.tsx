@@ -1,78 +1,78 @@
 import React from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { COLORS } from "../../assets/styles/Dimensions";
-const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
 
-// Define the function outside that handles the icons based on route
-const getTabBarIcon = (route: any, color: string, size: number) => {
+const Tab = createBottomTabNavigator();
+
+const TabIcon = ({ route, color, size }) => {
   let iconName;
   let IconComponent;
 
-  if (route.name === "Main") {
-    iconName = "home";
-    IconComponent = Ionicons;
-  } else if (route.name === "Setting") {
-    iconName = "settings";
-    IconComponent = Ionicons;
-  } else if (route.name === "Requests") {
-    iconName = "check-box";
-    IconComponent = MaterialIcons;
-  } else if (route.name === "Messages") {
-    iconName = "chatbubbles";
-    IconComponent = Ionicons;
+  switch (route.name) {
+    case "Main":
+      iconName = "home";
+      IconComponent = Ionicons;
+      break;
+    case "Setting":
+      iconName = "settings";
+      IconComponent = Ionicons;
+      break;
+    case "Requests":
+      iconName = "check-box";
+      IconComponent = MaterialIcons;
+      break;
+    case "Messages":
+      iconName = "chatbubbles";
+      IconComponent = Ionicons;
+      break;
+    default:
+      break;
   }
 
   return <IconComponent name={iconName} size={size} color={color} />;
 };
 
-// Define the CustomTabNavigator component
-const CustomTabNavigator = ({ screenData }: { screenData: any }) => {
-  return (
-    <NavigationContainer independent={true}>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => getTabBarIcon(route, color, size),
-          tabBarShowLabel: true,
-          tabBarLabelStyle: {
-            fontSize: 12,
-            fontWeight: "bold",
-          },
-          tabBarStyle: {
-            backgroundColor: COLORS.tabBarBackgroundColor,
-            paddingBottom: 5,
-            borderTopWidth: 0,
-          },
-          tabBarActiveTintColor: COLORS.tabBarActiveTintColor,
-          tabBarInactiveTintColor: COLORS.tabBarInActiveTintColor,
-        })}
-      >
-        <Tab.Screen
-          name="Main"
-          component={screenData.Main}
-          options={{ headerShown: false }}
-        />
-        <Tab.Screen
-          name="Requests"
-          component={screenData.Requests}
-          options={{ headerShown: false }}
-        />
-        <Tab.Screen
-          name="Messages"
-          component={screenData.Messages}
-          options={{ headerShown: false }}
-        />
-        <Tab.Screen
-          name="Setting"
-          component={screenData.Setting}
-          options={{ headerShown: false }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
-};
+const CustomTabNavigator = ({ screenData }) => (
+  <Tab.Navigator
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size }) => (
+        <TabIcon route={route} color={color} size={size} />
+      ),
+      tabBarLabelStyle: {
+        fontSize: 12,
+        fontWeight: "bold",
+      },
+      tabBarStyle: {
+        backgroundColor: COLORS.tabBarBackgroundColor,
+        paddingBottom: 5,
+        borderTopWidth: 0,
+      },
+      tabBarActiveTintColor: COLORS.tabBarActiveTintColor,
+      tabBarInactiveTintColor: COLORS.tabBarInActiveTintColor,
+    })}
+  >
+    <Tab.Screen
+      name="Main"
+      component={screenData.Main}
+      options={{ headerShown: false }}
+    />
+    <Tab.Screen
+      name="Requests"
+      component={screenData.Requests}
+      options={{ headerShown: false }}
+    />
+    <Tab.Screen
+      name="Messages"
+      component={screenData.Messages}
+      options={{ headerShown: false }}
+    />
+    <Tab.Screen
+      name="Setting"
+      component={screenData.Setting}
+      options={{ headerShown: false }}
+    />
+  </Tab.Navigator>
+);
 
 export default CustomTabNavigator;

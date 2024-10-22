@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-router.post("/user/signup", async (req, res) => {
+router.post("/signup", async (req, res) => {
   const { error } = signupValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -38,7 +38,8 @@ router.post("/user/signup", async (req, res) => {
 
 // login route with custom error handling
 
-router.post("/user/login", async (req, res, next) => {
+router.post("/login", async (req, res, next) => {
+  console.log("Inside Login");
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -55,7 +56,7 @@ router.post("/user/login", async (req, res, next) => {
   }
 });
 
-router.post("/user/logout", Auth, async (req, res) => {
+router.post("/logout", Auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;
@@ -68,7 +69,7 @@ router.post("/user/logout", Auth, async (req, res) => {
   }
 });
 
-router.post("/user/logoutAll", Auth, async (req, res) => {
+router.post("/logoutAll", Auth, async (req, res) => {
   try {
     req.user.tokens = [];
 
