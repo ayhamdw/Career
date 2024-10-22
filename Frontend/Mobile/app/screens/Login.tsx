@@ -14,13 +14,33 @@ import { useNavigation } from "@react-navigation/native";
 import { lightTheme, darkTheme } from "../../assets/styles/themes";
 import facebook from "../../assets/images/facebook.png";
 import gmail from "../../assets/images/gmail.png";
-export default function Login() {
-  const navigation = useNavigation();
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import Main from "./Main";
+
+export default function Login({ navigation }: { navigation: any }) {
+  // const navigation = useNavigation();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const theme = isDarkMode ? darkTheme : lightTheme;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const toggleSwitch = () => setIsDarkMode((previousState) => !previousState);
-
+  const signInButton = async () => {
+    try {
+      const response = await axios.post("http://192.168.1.21:7777/user/login", {
+        email,
+        password,
+      });
+      const { token, user } = response.data;
+      await AsyncStorage.setItem("token", token);
+      await AsyncStorage.setItem("user", JSON.stringify(user));
+      console.log("test successful");
+      navigation.replace("Main"); // This will work because navigation is passed in as a prop
+    } catch (error) {
+      console.log("Login failed:", error);
+    }
+  };
   return (
     <SafeAreaView
       style={[styles.loginPage, { backgroundColor: theme.loginPageBackground }]}
@@ -53,6 +73,8 @@ export default function Login() {
               ]}
               placeholder="Email or Username"
               placeholderTextColor={theme.placeholderTextColor}
+              value={email}
+              onChangeText={(text) => setEmail(text)}
             />
           </View>
           <View style={styles.inputItem}>
@@ -68,6 +90,8 @@ export default function Login() {
               placeholder="Enter your password"
               placeholderTextColor={theme.placeholderTextColor}
               secureTextEntry={true}
+              value={password}
+              onChangeText={(text) => setPassword(text)}
             />
           </View>
 
@@ -91,7 +115,7 @@ export default function Login() {
             styles.loginButton,
             { backgroundColor: theme.buttonBackground },
           ]}
-          onPress={() => navigation.navigate("Main")}
+          onPress={() => signInButton(email, password)}
         >
           <Text style={[styles.buttonText, { color: theme.buttonText }]}>
             Sign In

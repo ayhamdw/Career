@@ -9,11 +9,41 @@ import {
   ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { COLORS } from "@/assets/styles/Dimensions";
-
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Profile = () => {
   const navigation = useNavigation();
+  const logoutFunction = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+
+      const response = await axios.post(
+        "http://192.168.1.21:7777/user/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        await AsyncStorage.removeItem("token");
+        await AsyncStorage.removeItem("user");
+        console.log("Test successful");
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{ name: "Login" }],
+          })
+        );
+      }
+    } catch (err) {
+      console.log("Logout failed:", err);
+    }
+  };
 
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
@@ -82,7 +112,7 @@ const Profile = () => {
               <Ionicons name="lock-closed-outline" style={styles.iconStyle} />
               <Text style={styles.optionText}>Change Password</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.option}>
+            <TouchableOpacity style={styles.option} onPress={logoutFunction}>
               <Ionicons name="log-out-outline" style={styles.iconStyle} />
               <Text style={styles.optionText}>Logout</Text>
             </TouchableOpacity>
