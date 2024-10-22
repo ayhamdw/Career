@@ -10,7 +10,9 @@ import {
   StatusBar,
 } from "react-native";
 
-const ProfileInfo = () => {
+const ProfileInfo = ({ route }) => {
+  const user = route.params;
+  console.log(user.firstName);
   const [qualifications, setQualifications] = useState([
     "Great communication skills",
     "Teamwork",

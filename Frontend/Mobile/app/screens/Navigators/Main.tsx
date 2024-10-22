@@ -1,18 +1,23 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Requests from "../Requests";
 import Messages from "../Messages";
-import CustomTabNavigator from "./CustomTabNavigator"; // Import the navigator
+import CustomTabNavigator from "./CustomTabNavigator";
 import HomePage from "../HomePage";
 import ProfileNavigator from "./ProfileNavigator";
 
-const screenData = {
-  Main: HomePage,
-  Requests: Requests,
-  Messages: Messages,
-  Setting: ProfileNavigator,
-};
+const Main = ({ route }) => {
+  const { user } = route.params;
 
-const Main = () => {
+  const screenData = useMemo(
+    () => ({
+      Main: (props) => <HomePage {...props} user={user} />,
+      Requests: (props) => <Requests {...props} user={user} />,
+      Messages: (props) => <Messages {...props} user={user} />,
+      Setting: (props) => <ProfileNavigator {...props} user={user} />, // No need to pass user here
+    }),
+    [user]
+  );
+
   return <CustomTabNavigator screenData={screenData} />;
 };
 

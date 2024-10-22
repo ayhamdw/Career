@@ -1,31 +1,50 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React, { useMemo } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import Profile from "../Profile";
 import ProfileInfo from "../ProfileInformation";
 import AppliedJobs from "../AppliedJobs";
 import BookmarkJobs from "../BookmarkJobs";
 import ViewResume from "../ViewResume";
 import Notifications from "../Notifications";
 import ChangePassword from "../ChangePassword";
-import Profile from "../Profile";
 import Login from "../Login";
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
-const ProfileNavigator = () => (
-  <Stack.Navigator initialRouteName="Profile">
-    <Stack.Screen
-      name="Profile"
-      component={Profile}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen name="ProfileInfo" component={ProfileInfo} />
-    <Stack.Screen name="AppliedJobs" component={AppliedJobs} />
-    <Stack.Screen name="BookmarkJobs" component={BookmarkJobs} />
-    <Stack.Screen name="ViewResume" component={ViewResume} />
-    <Stack.Screen name="Notifications" component={Notifications} />
-    <Stack.Screen name="ChangePassword" component={ChangePassword} />
-    <Stack.Screen name="Logout" component={Login} />
-  </Stack.Navigator>
-);
+const ProfileNavigator = ({ user }) => {
+  const screenData = useMemo(
+    () => ({
+      Profile: (props) => <Profile {...props} user={user} />,
+      ProfileInfo: (props) => <ProfileInfo {...props} user={user} />,
+      AppliedJobs: (props) => <AppliedJobs {...props} user={user} />,
+      BookmarkJobs: (props) => <BookmarkJobs {...props} user={user} />,
+      ViewResume: (props) => <ViewResume {...props} user={user} />,
+      Notifications: (props) => <Notifications {...props} user={user} />,
+      ChangePassword: (props) => <ChangePassword {...props} user={user} />,
+      Logout: (props) => <Login {...props} />,
+    }),
+    [user]
+  );
+
+  return (
+    <Stack.Navigator initialRouteName="Profile">
+      <Stack.Screen
+        name="Profile"
+        component={screenData.Profile}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="ProfileInfo" component={screenData.ProfileInfo} />
+      <Stack.Screen name="AppliedJobs" component={screenData.AppliedJobs} />
+      <Stack.Screen name="BookmarkJobs" component={screenData.BookmarkJobs} />
+      <Stack.Screen name="ViewResume" component={screenData.ViewResume} />
+      <Stack.Screen name="Notifications" component={screenData.Notifications} />
+      <Stack.Screen
+        name="ChangePassword"
+        component={screenData.ChangePassword}
+      />
+      <Stack.Screen name="Logout" component={screenData.Logout} />
+    </Stack.Navigator>
+  );
+};
 
 export default ProfileNavigator;

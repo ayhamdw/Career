@@ -13,7 +13,8 @@ import { CommonActions, useNavigation } from "@react-navigation/native";
 import { COLORS } from "@/assets/styles/Dimensions";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const Profile = () => {
+const Profile = ({ user }) => {
+  // console.log(user.firstName, user.lastName);
   const navigation = useNavigation();
   const logoutFunction = async () => {
     try {
@@ -35,7 +36,7 @@ const Profile = () => {
         console.log("Test successful");
         navigation.dispatch(
           CommonActions.reset({
-            index: 1,
+            index: 0,
             routes: [{ name: "Login" }],
           })
         );
@@ -62,7 +63,7 @@ const Profile = () => {
               source={{ uri: "https://via.placeholder.com/100" }}
               style={styles.profileImage}
             />
-            <Text style={styles.name}>Alexa Demai</Text>
+            <Text style={styles.name}>{user.firstName}</Text>
             <Text style={styles.jobTitle}>UI/UX Designer</Text>
 
             <View style={styles.statsContainer}>

@@ -18,7 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Main from "./Navigators/Main";
 
-export default function Login({ navigation }: { navigation: any }) {
+export default function Login({ navigation }) {
   // const navigation = useNavigation();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const theme = isDarkMode ? darkTheme : lightTheme;
@@ -36,7 +36,7 @@ export default function Login({ navigation }: { navigation: any }) {
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", JSON.stringify(user));
       console.log("test successful");
-      navigation.replace("Main");
+      navigation.replace("Main", { user });
     } catch (error) {
       console.log("Login failed:", error);
     }
@@ -115,7 +115,7 @@ export default function Login({ navigation }: { navigation: any }) {
             styles.loginButton,
             { backgroundColor: theme.buttonBackground },
           ]}
-          onPress={() => signInButton(email, password)}
+          onPress={() => signInButton()}
         >
           <Text style={[styles.buttonText, { color: theme.buttonText }]}>
             Sign In
