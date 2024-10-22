@@ -1,7 +1,7 @@
 import React from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { COLORS } from "../../assets/styles/Dimensions";
+import { COLORS } from "../../../assets/styles/Dimensions";
 
 const Tab = createBottomTabNavigator();
 

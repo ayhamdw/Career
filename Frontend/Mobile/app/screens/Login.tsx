@@ -16,7 +16,7 @@ import facebook from "../../assets/images/facebook.png";
 import gmail from "../../assets/images/gmail.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import Main from "./Main";
+import Main from "./Navigators/Main";
 
 export default function Login({ navigation }: { navigation: any }) {
   // const navigation = useNavigation();
@@ -36,7 +36,7 @@ export default function Login({ navigation }: { navigation: any }) {
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", JSON.stringify(user));
       console.log("test successful");
-      navigation.replace("Main"); // This will work because navigation is passed in as a prop
+      navigation.replace("Main");
     } catch (error) {
       console.log("Login failed:", error);
     }
