@@ -1,10 +1,10 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Introduction1 from "./introduction1";
-import Introduction2 from "./introduction2";
-import Login from "./Login";
-import Signup from "./Signup";
-import ForgotPassword from "./ForgetPassword";
+import Introduction1 from "../introduction1";
+import Introduction2 from "../introduction2";
+import Login from "../Login";
+import Signup from "../Signup";
+import ForgotPassword from "../ForgetPassword";
 import ProfileNavigator from "./ProfileNavigator";
 import Main from "./Main";
 

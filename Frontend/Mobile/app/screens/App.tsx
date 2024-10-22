@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import IntroductionNavigation from "./IntroductionNavigation2";
-import MainNavigation from "./MainNavigation";
+import IntroductionNavigation from "./Navigators/IntroductionNavigation2";
+import MainNavigation from "./Navigators/MainNavigation";
 import Login from "./Login";
 import { checkAuthState } from "./CheckLogIn"; // Import the refactored logic
 

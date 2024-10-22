@@ -1,13 +1,13 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import ProfileInfo from "./ProfileInformation";
-import AppliedJobs from "./AppliedJobs";
-import BookmarkJobs from "./BookmarkJobs";
-import ViewResume from "./ViewResume";
-import Notifications from "./Notifications";
-import ChangePassword from "./ChangePassword";
-import Profile from "./Profile";
-import Login from "./Login";
+import ProfileInfo from "../ProfileInformation";
+import AppliedJobs from "../AppliedJobs";
+import BookmarkJobs from "../BookmarkJobs";
+import ViewResume from "../ViewResume";
+import Notifications from "../Notifications";
+import ChangePassword from "../ChangePassword";
+import Profile from "../Profile";
+import Login from "../Login";
 
 const Stack = createNativeStackNavigator();
 
