@@ -28,7 +28,7 @@
         "nodemailer-sendinblue-transport": "^2.0.1",
         "passport": "^0.7.0",
         "passport-local": "^1.0.0",
-        "sharp": "^0.32.2",
+        "sharp": "^0.32.6",
         "validator": "^13.9.0"
     },
     "devDependencies": {
