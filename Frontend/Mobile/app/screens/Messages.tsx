@@ -13,7 +13,7 @@ import Man1 from "../../assets/images/Messages/Man1.png";
 import Man2 from "../../assets/images/Messages/Man2.png";
 import Man3 from "../../assets/images/Messages/Man3.png";
 
-const Messages = () => {
+const Messages = ({ user }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <Text style={styles.chatTextStyle}>Chat</Text>
@@ -26,7 +26,7 @@ const Messages = () => {
           <Image source={Man1} style={styles.imageStyle} />
           <View style={styles.messageBubble}>
             <View style={styles.messageHeader}>
-              <Text style={styles.userName}>John Doe</Text>
+              <Text style={styles.userName}>{user.firstName}</Text>
               <Text style={styles.numberOfMessages}>+7</Text>
             </View>
             <Text style={styles.messageText}>
