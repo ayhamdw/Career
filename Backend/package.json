@@ -11,7 +11,7 @@
     "author": "",
     "license": "",
     "dependencies": {
-        "@sendgrid/mail": "^7.7.0",
+        "@sendgrid/mail": "^8.1.4",
         "axois": "^0.0.1-security",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.20.3",
