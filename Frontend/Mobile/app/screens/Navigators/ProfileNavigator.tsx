@@ -33,14 +33,59 @@ const ProfileNavigator = ({ user }) => {
         component={screenData.Profile}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="ProfileInfo" component={screenData.ProfileInfo} />
-      <Stack.Screen name="AppliedJobs" component={screenData.AppliedJobs} />
-      <Stack.Screen name="BookmarkJobs" component={screenData.BookmarkJobs} />
-      <Stack.Screen name="ViewResume" component={screenData.ViewResume} />
-      <Stack.Screen name="Notifications" component={screenData.Notifications} />
+      <Stack.Screen
+        name="ProfileInfo"
+        component={screenData.ProfileInfo}
+        options={{
+          headerStyle: { backgroundColor: "white" },
+          headerTitle: "",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AppliedJobs"
+        component={screenData.AppliedJobs}
+        options={{
+          headerStyle: { backgroundColor: "white" },
+          headerTitle: "",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="BookmarkJobs"
+        component={screenData.BookmarkJobs}
+        options={{
+          headerStyle: { backgroundColor: "white" },
+          headerTitle: "",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ViewResume"
+        component={screenData.ViewResume}
+        options={{
+          headerStyle: { backgroundColor: "white" },
+          headerTitle: "",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Notifications"
+        component={screenData.Notifications}
+        options={{
+          headerStyle: { backgroundColor: "white" },
+          headerTitle: "",
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="ChangePassword"
         component={screenData.ChangePassword}
+        options={{
+          headerStyle: { backgroundColor: "white" },
+          headerTitle: "",
+          headerShown: false,
+        }}
       />
       <Stack.Screen name="Logout" component={screenData.Logout} />
     </Stack.Navigator>

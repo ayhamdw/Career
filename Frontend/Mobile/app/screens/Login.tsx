@@ -28,10 +28,13 @@ export default function Login({ navigation }) {
   const toggleSwitch = () => setIsDarkMode((previousState) => !previousState);
   const signInButton = async () => {
     try {
-      const response = await axios.post("http://192.168.1.21:7777/user/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://192.168.1.21:7777/api/user/login",
+        {
+          email,
+          password,
+        }
+      );
       const { token, user } = response.data;
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", JSON.stringify(user));

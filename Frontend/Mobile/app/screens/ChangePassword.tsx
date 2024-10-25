@@ -14,7 +14,7 @@ const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ backgroundColor: COLORS.pageBackgroundColor }}>
       <Text style={styles.textStyle}>Change Password</Text>
       <View style={styles.viewStyle}>
         <Text style={styles.inputLabelStyle}>ENTER OLD PASSWORD</Text>
@@ -23,6 +23,7 @@ const ChangePassword = () => {
           placeholder="Old Password"
           style={styles.textInputStyle}
           value={oldPassword}
+          onChangeText={(text) => setOldPassword(text)}
         />
         <Text style={styles.inputLabelStyle}>ENTER NEW PASSWORD</Text>
         <TextInput
@@ -30,6 +31,7 @@ const ChangePassword = () => {
           placeholder="New Password"
           style={styles.textInputStyle}
           value={newPassword}
+          onChangeText={(text) => setNewPassword(text)}
         />
         <Text style={styles.inputLabelStyle}>CONFIRM NEW PASSWORD</Text>
         <TextInput
@@ -37,6 +39,7 @@ const ChangePassword = () => {
           placeholder="Confirm Password"
           style={styles.textInputStyle}
           value={confirmPassword}
+          onChangeText={(text) => setConfirmPassword(text)}
         />
         <TouchableOpacity
           onPress={() => console.log("Password Changed")}
@@ -63,6 +66,8 @@ const styles = StyleSheet.create({
   viewStyle: {
     marginVertical: 20,
     flexDirection: "column",
+    backgroundColor: COLORS.pageBackgroundColor,
+    height: "100%",
   },
   inputLabelStyle: {
     fontSize: 14,

@@ -1,17 +1,15 @@
 const express = require("express");
-const User = require("../models/user");
 const Auth = require("../middleware/auth");
-const multer = require("multer");
-const sharp = require("sharp");
-const { createAccountLimiter } = require("../utils/rateLimiters");
+const {
+  signInController,
+  signUpController,
+  logoutController,
+  logoutAllController,
+} = require("../controllers/userController");
 const {
   sendWelcomeEmail,
   sendCancellationEmail,
 } = require("../emails/account");
-const {
-  signupValidation,
-  loginValidation,
-} = require("../utils/validations/validation");
 const router = new express.Router();
 
 // sign up new users with rate limit
@@ -20,66 +18,15 @@ router.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-router.post("/signup", async (req, res) => {
-  const { error } = signupValidation(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  const user = new User(req.body);
-
-  try {
-    await user.save();
-    // sendWelcomeEmail(user.email, user.name)
-    const token = await user.generateAuthToken();
-    res.status(201).send({ user, token });
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
+router.post("/signup", signUpController);
 
 // login route with custom error handling
 
-router.post("/login", async (req, res, next) => {
-  console.log("Inside Login");
-  const { error } = loginValidation(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+router.post("/login", signInController);
 
-  try {
-    const user = await User.findByCredentials(
-      req.body.email,
-      req.body.password
-    );
-    const token = await user.generateAuthToken();
-    res.send({ user, token });
-  } catch (error) {
-    //pass error
-    next(error);
-  }
-});
+router.post("/logout", Auth, logoutController);
 
-router.post("/logout", Auth, async (req, res) => {
-  try {
-    req.user.tokens = req.user.tokens.filter((token) => {
-      return token.token !== req.token;
-    });
-    await req.user.save();
-
-    res.send({ message: "successfully logged out" });
-  } catch (error) {
-    res.status(500).send();
-  }
-});
-
-router.post("/logoutAll", Auth, async (req, res) => {
-  try {
-    req.user.tokens = [];
-
-    await req.user.save();
-
-    res.send({ message: "successfully logged out all sessions" });
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
+router.post("/logoutAll", Auth, logoutAllController);
 
 // router.get("/users/me", Auth, async (req, res) => {
 //   res.send(req.user);

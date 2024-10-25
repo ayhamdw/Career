@@ -15,7 +15,7 @@ app.use(generalRateLimiter);
 app.use(userRouter);
 app.use(cors({ origin: true, credentials: true }));
 
-app.use("/user", userRouter);
+app.use("/api/user", userRouter);
 
 app.use(errorHandler);
 module.exports = app;
