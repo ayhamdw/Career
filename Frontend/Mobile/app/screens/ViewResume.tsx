@@ -18,7 +18,7 @@ const ViewResume = () => {
             style={styles.imageStyle}
           />
 
-          <Text style={styles.nameStyle}>Alexa Demain</Text>
+          <Text style={styles.nameStyle}>Ayham Dw</Text>
           <Text style={styles.emailAndAddressStyle}>
             Email: example@gmail.com
           </Text>
