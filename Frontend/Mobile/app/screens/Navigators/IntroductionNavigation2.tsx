@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Introduction1 from "../introduction1";
 import Introduction2 from "../introduction2";
 import Login from "../Login";
-import Signup from "../Signup";
+import SignUp from "../Signup";
 import ForgotPassword from "../ForgetPassword";
 import ProfileNavigator from "./ProfileNavigator";
 import Main from "./Main";
@@ -19,8 +19,8 @@ const IntroductionNavigation = () => (
     <Stack.Screen name="Introduction2" component={Introduction2} />
     <Stack.Screen name="Login" component={Login} />
     <Stack.Screen
-      name="Signup"
-      component={Signup}
+      name="SignUp"
+      component={SignUp}
       options={{ headerStyle: { backgroundColor: "white" } }}
     />
     <Stack.Screen

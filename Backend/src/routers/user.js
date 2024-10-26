@@ -1,8 +1,8 @@
 const express = require("express");
 const Auth = require("../middleware/auth");
 const {
-  signInController,
-  signUpController,
+  signinController,
+  signupController,
   logoutController,
   logoutAllController,
 } = require("../controllers/userController");
@@ -12,17 +12,13 @@ const {
 } = require("../emails/account");
 const router = new express.Router();
 
-// sign up new users with rate limit
-
 router.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-router.post("/signup", signUpController);
+router.post("/signup", signupController);
 
-// login route with custom error handling
-
-router.post("/login", signInController);
+router.post("/login", signinController);
 
 router.post("/logout", Auth, logoutController);
 
