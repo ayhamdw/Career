@@ -29,7 +29,7 @@ export default function Login({ navigation }) {
   const signInButton = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.1.21:7777/api/user/login",
+        "http://192.168.1.11:7777/api/user/login",
         {
           email,
           password,
@@ -100,7 +100,11 @@ export default function Login({ navigation }) {
 
           <TouchableOpacity
             style={styles.forgotButton}
-            onPress={() => navigation.navigate("ForgotPassword")}
+            onPress={() =>
+              navigation.navigate("ForgotPassword", {
+                screen: "IntroductionNavigation",
+              })
+            }
           >
             <Text
               style={[
@@ -129,7 +133,13 @@ export default function Login({ navigation }) {
           <Text style={[styles.par, { color: theme.textColor }]}>
             Don't have an account?
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("SignUp", {
+                screen: "IntroductionNavigation",
+              })
+            }
+          >
             <Text
               style={[styles.signUpText, { color: theme.buttonBackground }]}
             >

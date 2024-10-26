@@ -4,7 +4,7 @@ const {
 } = require("../utils/validations/validation");
 
 const User = require("../models/user");
-const signUpController = async (req, res) => {
+const signupController = async (req, res) => {
   const { error } = signupValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -20,7 +20,7 @@ const signUpController = async (req, res) => {
   }
 };
 
-const signInController = async (req, res, next) => {
+const signinController = async (req, res, next) => {
   console.log("Inside Login");
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -33,7 +33,7 @@ const signInController = async (req, res, next) => {
     const token = await user.generateAuthToken();
     res.send({ user, token });
   } catch (error) {
-    //pass error
+    console.log("Error", error);
     next(error);
   }
 };
@@ -64,8 +64,8 @@ const logoutAllController = async (req, res) => {
 };
 
 module.exports = {
-  signInController,
-  signUpController,
+  signinController,
+  signupController,
   logoutController,
   logoutAllController,
 };
