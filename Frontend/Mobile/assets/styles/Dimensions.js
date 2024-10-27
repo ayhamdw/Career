@@ -29,4 +29,5 @@ export const SIZE = {
 
   width,
   height,
+  sideBarWidth:0,
 };
