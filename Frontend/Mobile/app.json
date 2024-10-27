@@ -12,12 +12,15 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.shareefmwafy.Mobile"
+
+      "bundleIdentifier": "com.career.mobile"
+
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.career.mobile"
     },
     "web": {
       "bundler": "metro",
@@ -26,14 +29,20 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-asset"
-    ],
+      "expo-asset",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.155720957457-buoh0r927fjprq0j9pf9cckbof2gu2g2"
+        }
+      ]
+   ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
       "eas": {
-        "projectId": "b94e4a52-fa37-4bab-904c-971a44a1e96b"
+        "projectId": "71fd3940-bc9f-4976-ac6c-e67805ab4945"
       }
     }
   }
