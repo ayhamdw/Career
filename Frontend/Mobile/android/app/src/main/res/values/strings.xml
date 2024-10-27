@@ -1,0 +1,7 @@
+<resources>
+  <string name="app_name">Mobile</string>
+  <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
+  <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
+  <string name="expo_system_ui_user_interface_style" translatable="false">automatic</string>
+  <string name="server_client_id">155720957457-88t3cu612vmhmaa944lb2f2l85odh0ia.apps.googleusercontent.com</string>
+</resources>
