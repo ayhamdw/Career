@@ -11,7 +11,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shareefmwafy.Mobile"
     },
     "android": {
       "adaptiveIcon": {
@@ -29,6 +30,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b94e4a52-fa37-4bab-904c-971a44a1e96b"
+      }
     }
   }
 }

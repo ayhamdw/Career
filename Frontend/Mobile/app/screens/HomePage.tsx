@@ -28,6 +28,11 @@ const HomePage = ({ user }) => {
     { id: 3, title: "Lawyer", image: require("../../assets/images/HomePage/LawyerIcon.png") },
     { id: 4, title: "Artist", image: require("../../assets/images/HomePage/ArtistIcon.png") },
     { id: 5, title: "Artist", image: require("../../assets/images/HomePage/ArtistIcon.png") },
+    { id: 6, title: "Doctor", image: require("../../assets/images/HomePage/DoctorIcon.png") },
+    { id: 7, title: "Engineer", image: require("../../assets/images/HomePage/EngIcon.png") },
+    { id: 8, title: "Lawyer", image: require("../../assets/images/HomePage/LawyerIcon.png") },
+    { id: 9, title: "Artist", image: require("../../assets/images/HomePage/ArtistIcon.png") },
+    { id: 10, title: "Artist", image: require("../../assets/images/HomePage/ArtistIcon.png") },
   ];
 
 
@@ -71,14 +76,13 @@ const HomePage = ({ user }) => {
 
 
       <View style={styles.categoriesSection}>
-        <Text style={styles.categoriesTitle}>Categories</Text>
+        <Text style={styles.categoriesTitle}>Industrial Department</Text>
         <FlatList
-          // ref={flatListRef}
           data={categories}
           keyExtractor={(item) => item.id.toString()}
-          horizontal={true} 
+          horizontal={true}
           showsHorizontalScrollIndicator={false}
-          pagingEnabled={true} 
+          pagingEnabled={true}
           style={styles.flatList}
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.categoryCard}>
@@ -86,7 +90,7 @@ const HomePage = ({ user }) => {
               <Text style={styles.categoryTitle}>{item.title}</Text>
             </TouchableOpacity>
           )}
-          // contentContainerStyle={{ paddingHorizontal: 10 }}
+          contentContainerStyle={styles.flatListContent} // Apply custom style here
         />
       </View>
 
@@ -111,6 +115,13 @@ const HomePage = ({ user }) => {
           </View>
         </View>
       </Modal>
+
+      <View style={styles.ReservationDepartment}>
+        <Text style={styles.categoriesTitle}>Reservation Department</Text>
+      </View>
+
+
+
     </ScrollView>
   );
 };
@@ -123,13 +134,15 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.pageBackgroundColor,
     alignItems: "center",
     flex: 1,
+    width:"100%",
+    // backgroundColor:"red"
   },
   infoNav: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    marginBottom: 20,
+    marginBottom: 5,
     backgroundColor: COLORS.tabBarBackgroundColor,
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -163,7 +176,7 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 15,
     overflow: "hidden",
-    marginTop: 30,
+    marginTop: 5,
   },
   heroImage: {
     width: "100%",
@@ -171,39 +184,53 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   categoriesSection: {
-    backgroundColor: "#f0f0f0",
+    // backgroundColor: "#f0f0f0",
     width: "100%",
-    display: "flex",
-    paddingTop: 10,
-    paddingBottom: 10,
-    borderRadius: 10,
-    marginTop: 20,
+    paddingVertical: 15,
+    borderRadius: 15,
+    marginTop: 15,
+    marginBottom:15,
     alignItems: "center",
     overflow: "hidden",
-    boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.2)",
+    backgroundColor:COLORS.containerColor
+    
+
   },
-  
+
 
   categoriesTitle: {
     fontSize: SIZE.h2,
     fontWeight: "bold",
-    color: COLORS.textColor,
-    marginBottom: 10,
+    color: COLORS.grayTextColor,
+    marginBottom: 15,
+    textAlign: 'center',
+    alignSelf:"flex-start",
+    paddingLeft:8
+    
   },
-  flatList:{
-    display:"flex",
-    width:400,
-    overflow:"scroll",
-    // backgroundColor:"red"
+  flatList: {
+    width: "100%",
+    paddingBottom:10,
+  },
+  flatListContent: {
+    paddingHorizontal: 15,
   },
   categoryCard: {
     justifyContent: "center",
     alignItems: "center",
-    padding: 10,
+    padding: 15,
     backgroundColor: "#fff",
-    borderRadius: 10,
-    // elevation: 2,
+    borderRadius: 15,
     marginHorizontal: 10,
+    shadowColor: COLORS.shadowColor,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 3,
+    // transition: "transform 0.2s",
   },
   categoryImage: {
     width: 80,
@@ -217,6 +244,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#333",
   },
+
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
@@ -246,4 +274,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: COLORS.textInputBorderColor,
   },
+  ReservationDepartment:{
+    // backgroundColor:"red",
+    width: "100%",
+    paddingVertical: 15,
+    borderRadius: 15,
+    marginBottom:15,
+    alignItems: "center",
+    overflow: "hidden",
+    backgroundColor:COLORS.containerColor
+  }
 });

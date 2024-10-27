@@ -15,6 +15,8 @@ export const COLORS = {
   shadowColor: "#000",
   introductionButtonColor: "#000000",
   jobTitleTextColor: "#999",
+  grayTextColor:"#424949",
+  containerColor:"#f4f6f6"
 };
 
 export const SIZE = {
