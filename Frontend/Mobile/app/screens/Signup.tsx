@@ -1,4 +1,10 @@
-import React, { useState } from "react";
+/*
+web id client: 155720957457-23gr289iqt06a9vmmsvort1ogca3iiph.apps.googleusercontent.com
+IOS client: 155720957457-buoh0r927fjprq0j9pf9cckbof2gu2g2.apps.googleusercontent.com
+android client: 155720957457-s5ikis9f80bfbf11eupfn98jjb3nfde9.apps.googleusercontent.com
+
+*/
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,17 +16,47 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import signup from "../../assets/images/Signup.png";
 import { SIZE } from "../../assets/styles/Dimensions";
 import google from "../../assets/images/google.png";
 import facebook from "../../assets/images/facebook.png";
 
+const webClientId =
+  "155720957457-23gr289iqt06a9vmmsvort1ogca3iiph.apps.googleusercontent.com";
+const iosClientId =
+  "155720957457-buoh0r927fjprq0j9pf9cckbof2gu2g2.apps.googleusercontent.com";
+const androidClientId =
+  "155720957457-s5ikis9f80bfbf11eupfn98jjb3nfde9.apps.googleusercontent.com";
+
+WebBrowser.maybeCompleteAuthSession();
+
 const SignUp = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [gender, setGender] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const config = {
+    webClientId,
+    iosClientId,
+    androidClientId,
+  };
+  const [request, response, promptAsync] = Google.useAuthRequest(config);
+
+  const handleToken = () => {
+    console.log("In Handle Token");
+    if (response?.type == "success") {
+      const { authentication } = response;
+      const token = authentication?.accessToken;
+      console.log("Google Token ", token);
+    }
+  };
+  useEffect(() => {
+    handleToken();
+  }, [response]);
 
   // Handle Date Picker change
   const onChange = (event: any, selectedDate: any) => {
@@ -36,10 +72,7 @@ const SignUp = () => {
         <Text style={styles.titleStyle}>Create Account</Text>
 
         <View style={styles.viewButtonStyle}>
-          <Pressable
-            style={styles.buttonStyle}
-            onPress={() => console.log("Google Signup")}
-          >
+          <Pressable style={styles.buttonStyle} onPress={() => promptAsync()}>
             <Image source={google} style={styles.iconSignupStyle}></Image>
             <Text style={styles.buttonTextStyle}>Continue with Google</Text>
           </Pressable>
