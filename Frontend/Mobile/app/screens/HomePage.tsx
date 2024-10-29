@@ -12,7 +12,7 @@ import {
 import React, { useState, useRef } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { COLORS, SIZE } from "@/assets/styles/Dimensions";
-import styles from './HomePageStyle'
+import styles from "../../assets/styles/HomePageStyle";
 
 const HomePage = ({ user }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -22,21 +22,35 @@ const HomePage = ({ user }) => {
   // const [sideBarWidth,setSideBarWidth] = useState(0);
   const cities = ["Qalqila", "Nablus", "Tulkarm", "Jerusalem", "Jenin"];
   const categories = [
-    { id: 1, title: "Doctor", image: require("../../../assets/images/HomePage/DoctorIcon.png") },
-    { id: 2, title: "Engineer", image: require("../../../assets/images/HomePage/EngIcon.png") },
-    { id: 3, title: "Lawyer", image: require("../../../assets/images/HomePage/LawyerIcon.png") },
-    { id: 4, title: "Artist", image: require("../../../assets/images/HomePage/ArtistIcon.png") },
+    {
+      id: 1,
+      title: "Doctor",
+      image: require("../../assets/images/HomePage/DoctorIcon.png"),
+    },
+    {
+      id: 2,
+      title: "Engineer",
+      image: require("../../assets/images/HomePage/EngIcon.png"),
+    },
+    {
+      id: 3,
+      title: "Lawyer",
+      image: require("../../assets/images/HomePage/LawyerIcon.png"),
+    },
+    {
+      id: 4,
+      title: "Artist",
+      image: require("../../assets/images/HomePage/ArtistIcon.png"),
+    },
     // Add more categories as needed
   ];
-
 
   const handleCitySelect = (city) => {
     setSelectedCity(city);
     setModalVisible(false);
   };
-  const [sideBarStyle,setSideBarStyle] = useState({});
-  
-  
+  const [sideBarStyle, setSideBarStyle] = useState({});
+
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
 
@@ -73,7 +87,7 @@ const HomePage = ({ user }) => {
 
       <View style={styles.heroSection}>
         <Image
-          source={require("../../../assets/images/HomePage/heroImage.png")}
+          source={require("../../assets/images/HomePage/heroImage.png")}
           style={styles.heroImage}
         />
       </View>
@@ -119,15 +133,17 @@ const HomePage = ({ user }) => {
           </View>
         </View>
       </Modal>
-      
-      
-      <Animated.View style={[sidebarVisible ? styles.sidebarContainer1 : styles.sidebarContainer, { transform: [{ translateX: sidebarAnimation }] }]}>
+
+      <Animated.View
+        style={[
+          sidebarVisible ? styles.sidebarContainer1 : styles.sidebarContainer,
+          { transform: [{ translateX: sidebarAnimation }] },
+        ]}
+      >
         <TouchableOpacity onPress={toggleSidebar}>
           <Text>Hello</Text>
         </TouchableOpacity>
       </Animated.View>
-
-
 
       <View style={styles.ReservationDepartment}>
         <Text style={styles.categoriesTitle}>Reservation Department</Text>
@@ -137,4 +153,3 @@ const HomePage = ({ user }) => {
 };
 
 export default HomePage;
-

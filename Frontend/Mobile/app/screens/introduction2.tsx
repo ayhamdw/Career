@@ -2,6 +2,8 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 import { SIZE, COLORS } from "../../assets/styles/Dimensions";
 import { useNavigation } from "@react-navigation/native";
+
+import styles from "../../assets/styles/Introduction2Style";
 const data = [
   {
     id: 1,
@@ -61,54 +63,5 @@ const Introduction2 = () => {
     />
   );
 };
-
-const styles = StyleSheet.create({
-  imageStyle: {
-    width: SIZE.width - 80,
-    height: 400,
-    resizeMode: "contain",
-    justifyContent: "center",
-  },
-  containerStyle: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-  },
-  textStyle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
-    fontFamily: "NotoSerif Condensed-Black",
-  },
-  viewStyle: {
-    flex: 1,
-    alignItems: "center",
-    padding: 15,
-    paddingTop: 90,
-    backgroundColor: "white",
-  },
-  titleStyle: {
-    fontSize: SIZE.h1,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: COLORS.introductionButtonColor,
-  },
-  descriptionStyle: {
-    fontSize: SIZE.h4,
-    paddingTop: 10,
-    color: COLORS.introductionButtonColor,
-    textAlign: "center",
-    fontFamily: "Cairo Bold",
-  },
-  nextAndSkipButtonViewStyle: {
-    padding: 12,
-  },
-  nextAndSkipButtonStyle: {
-    color: "#000",
-    fontWeight: "bold",
-    fontSize: SIZE.h4,
-  },
-});
 
 export default Introduction2;
