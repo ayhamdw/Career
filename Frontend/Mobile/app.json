@@ -12,7 +12,9 @@
     },
     "ios": {
       "supportsTablet": true,
+
       "bundleIdentifier": "com.career.mobile"
+
     },
     "android": {
       "adaptiveIcon": {
