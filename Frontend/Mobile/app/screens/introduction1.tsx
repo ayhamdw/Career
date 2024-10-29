@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { Text, View, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { COLORS } from "../../assets/styles/Dimensions";
+import styles from "../../assets/styles/Introduction1Style";
 
 export default function Introduction1() {
   const navigation = useNavigation();
@@ -22,25 +22,3 @@ export default function Introduction1() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.introductionColor,
-    marginTop: -100,
-    marginBottom: -100,
-  },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: COLORS.introductionColor,
-    marginTop: -100,
-    marginBottom: -100,
-  },
-  textStyle: {
-    fontSize: 40,
-    fontWeight: "bold",
-    color: COLORS.textColor,
-  },
-});

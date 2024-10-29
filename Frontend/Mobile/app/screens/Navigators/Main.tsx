@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import Requests from "../Requests";
 import Messages from "../Messages";
 import CustomTabNavigator from "./CustomTabNavigator";
-import HomePage from "../HomePage/HomePage";
+import HomePage from "../HomePage";
 import ProfileNavigator from "./ProfileNavigator";
 
 const Main = ({ route }) => {

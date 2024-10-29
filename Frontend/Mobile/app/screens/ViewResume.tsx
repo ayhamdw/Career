@@ -1,7 +1,7 @@
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import styles from "../../assets/styles/ViewResumeStyle";
 const ViewResume = () => {
   const qualifications = [
     "UI/UX Designer",
@@ -54,84 +54,5 @@ const ViewResume = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  firstPartContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 10,
-    borderWidth: 1,
-    borderColor: "#e4e4e0",
-    paddingBottom: 10,
-    borderRadius: 5,
-  },
-  imageStyle: {
-    marginTop: 15,
-    width: 100,
-    height: 100,
-  },
-  nameStyle: {
-    marginTop: 10,
-    marginBottom: 5,
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  emailAndAddressStyle: {
-    fontSize: 15,
-    marginTop: 5,
-  },
-  secondPartContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    margin: 10,
-    borderWidth: 1,
-    borderColor: "#e4e4e0",
-    paddingBottom: 10,
-    borderRadius: 5,
-  },
-  careerObjectiveStyle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft: 15,
-    marginTop: 15,
-    marginBottom: 5,
-    padding: 5,
-  },
-  careerObjectiveDescriptionStyle: {
-    fontSize: 18,
-    color: "#202020",
-    marginLeft: 20,
-    marginRight: 30,
-    marginTop: 15,
-  },
-  lineStyle: {
-    borderWidth: 0.5,
-    borderColor: "#e4e4e0",
-    // margin: 10,
-    width: "95%",
-    alignSelf: "center",
-    marginTop: 5,
-  },
-  thirdPartContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    margin: 10,
-    borderWidth: 1,
-    borderColor: "#e4e4e0",
-    paddingBottom: 10,
-    borderRadius: 5,
-  },
-  specialQualificationStyle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft: 15,
-    marginTop: 15,
-    marginBottom: 5,
-    padding: 5,
-  },
-});
 
 export default ViewResume;
