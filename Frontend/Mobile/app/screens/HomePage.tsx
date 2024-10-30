@@ -135,35 +135,35 @@ const HomePage = ({ user }) => {
       </Modal>
 
       <Animated.View
-  style={[
-    sidebarVisible ? styles.sidebarContainer1 : styles.sidebarContainer,
-    { transform: [{ translateX: sidebarAnimation }] },
-  ]}
->
-  <TouchableOpacity onPress={toggleSidebar} style={styles.closeButton}>
-    <Text style={styles.closeButtonText}>Close</Text>
-  </TouchableOpacity>
+        style={[
+          sidebarVisible ? styles.sidebarContainer1 : styles.sidebarContainer,
+          { transform: [{ translateX: sidebarAnimation }] },
+        ]}
+      >
+        <TouchableOpacity onPress={toggleSidebar} style={styles.closeButton}>
+          <Text style={styles.closeButtonText}>Close</Text>
+        </TouchableOpacity>
 
-  <View style={styles.sidebarContent}>
-    <Text style={styles.sidebarTitle}>Career's Menu</Text>
-    
-    <TouchableOpacity style={styles.sidebarItem} onPress={() => handleNavigation('Home')}>
-      <Text style={styles.sidebarItemText}>Home</Text>
-    </TouchableOpacity>
-    
-    <TouchableOpacity style={styles.sidebarItem} onPress={() => handleNavigation('Profile')}>
-      <Text style={styles.sidebarItemText}>Profile</Text>
-    </TouchableOpacity>
-    
-    <TouchableOpacity style={styles.sidebarItem} onPress={() => handleNavigation('Settings')}>
-      <Text style={styles.sidebarItemText}>Settings</Text>
-    </TouchableOpacity>
-    
-    <TouchableOpacity style={styles.sidebarItem} onPress={() => handleNavigation('Help')}>
-      <Text style={styles.sidebarItemText}>Help</Text>
-    </TouchableOpacity>
-  </View>
-</Animated.View>
+        <View style={styles.sidebarContent}>
+          <Text style={styles.sidebarTitle}>Career's Menu</Text>
+
+          <TouchableOpacity style={styles.sidebarItem}>
+            <Text style={styles.sidebarItemText}>Home</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.sidebarItem}>
+            <Text style={styles.sidebarItemText}>Profile</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.sidebarItem}>
+            <Text style={styles.sidebarItemText}>Settings</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.sidebarItem}>
+            <Text style={styles.sidebarItemText}>Help</Text>
+          </TouchableOpacity>
+        </View>
+      </Animated.View>
 
 
       <View style={styles.ReservationDepartment}>
