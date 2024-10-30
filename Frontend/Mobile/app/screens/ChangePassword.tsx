@@ -14,7 +14,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ChangePassword = ({ user }) => {
-  const checkOldPassword = async (oldPassword) => {
+  const checkOldPassword = async (oldPassword: string) => {
     try {
       const token = await AsyncStorage.getItem("token"); // get the token to send it in the header
       const response = await axios.get(
@@ -32,7 +32,6 @@ const ChangePassword = ({ user }) => {
       return "false";
     }
   };
-  console.log(JSON.stringify(user));
 
   const checkPassword = async (
     oldPassword: string,

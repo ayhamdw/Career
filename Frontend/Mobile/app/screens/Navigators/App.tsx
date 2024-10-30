@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import IntroductionNavigation from "./IntroductionNavigation2";
 import MainNavigation from "./MainNavigation";
 import Login from "../Login";
-import { View, Text } from "react-native";
+import { SafeAreaView } from "react-native";
 
 const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);
