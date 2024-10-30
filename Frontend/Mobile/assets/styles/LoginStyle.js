@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",
+    
   },
   signUpSection: {
     flexDirection: "row",
