@@ -18,6 +18,7 @@ import {
 } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
+import * as AuthSession from "expo-auth-session";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import signup from "../../assets/images/Signup.png";
 import styles from "../../assets/styles/SignupStyle";

@@ -5,6 +5,7 @@ const {
   signupController,
   logoutController,
   logoutAllController,
+  oldPasswordChecker,
 } = require("../controllers/userController");
 const {
   sendWelcomeEmail,
@@ -23,6 +24,8 @@ router.post("/login", signinController);
 router.post("/logout", Auth, logoutController);
 
 router.post("/logoutAll", Auth, logoutAllController);
+
+router.get("/oldPassword", Auth, oldPasswordChecker);
 
 // router.get("/users/me", Auth, async (req, res) => {
 //   res.send(req.user);

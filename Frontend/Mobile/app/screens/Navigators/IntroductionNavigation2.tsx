@@ -7,30 +7,33 @@ import SignUp from "../Signup";
 import ForgotPassword from "../ForgetPassword";
 import ProfileNavigator from "./ProfileNavigator";
 import Main from "./Main";
+import { SafeAreaView } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
 const IntroductionNavigation = () => (
-  <Stack.Navigator
-    initialRouteName="Introduction1"
-    screenOptions={{ headerShown: false }}
-  >
-    <Stack.Screen name="Introduction1" component={Introduction1} />
-    <Stack.Screen name="Introduction2" component={Introduction2} />
-    <Stack.Screen name="Login" component={Login} />
-    <Stack.Screen
-      name="SignUp"
-      component={SignUp}
-      options={{ headerStyle: { backgroundColor: "white" } }}
-    />
-    <Stack.Screen
-      name="ForgotPassword"
-      component={ForgotPassword}
-      options={{ headerStyle: { backgroundColor: "white" } }}
-    />
-    <Stack.Screen name="Main" component={Main} />
-    <Stack.Screen name="ProfileNavigator" component={ProfileNavigator} />
-  </Stack.Navigator>
+  <SafeAreaView style={{ marginBottom: -50, marginTop: -50 }}>
+    <Stack.Navigator
+      initialRouteName="Introduction1"
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="Introduction1" component={Introduction1} />
+      <Stack.Screen name="Introduction2" component={Introduction2} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{ headerStyle: { backgroundColor: "white" } }}
+      />
+      <Stack.Screen
+        name="ForgotPassword"
+        component={ForgotPassword}
+        options={{ headerStyle: { backgroundColor: "white" } }}
+      />
+      <Stack.Screen name="Main" component={Main} />
+      <Stack.Screen name="ProfileNavigator" component={ProfileNavigator} />
+    </Stack.Navigator>
+  </SafeAreaView>
 );
 
 export default IntroductionNavigation;

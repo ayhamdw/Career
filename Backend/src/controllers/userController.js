@@ -63,9 +63,34 @@ const logoutAllController = async (req, res) => {
   }
 };
 
+const oldPasswordChecker = async (req, res) => {
+  console.log("inside old password checker");
+
+  if (!req.user || !req.user.email) {
+    console.log("User not authenticated");
+    return res.status(401).send("User not authenticated");
+  }
+
+  console.log("User email:", req.user.email);
+  console.log("Old Password:", req.query.oldPassword);
+
+  try {
+    const user = await User.findByCredentials(
+      req.user.email,
+      req.query.oldPassword
+    );
+    console.log("User authenticated successfully");
+    res.send("true");
+  } catch (error) {
+    res.status(400).send("false");
+    console.log("Inside error:", error);
+  }
+};
+
 module.exports = {
   signinController,
   signupController,
   logoutController,
   logoutAllController,
+  oldPasswordChecker,
 };
