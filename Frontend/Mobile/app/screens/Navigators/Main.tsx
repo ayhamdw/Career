@@ -4,6 +4,8 @@ import Messages from "../Messages";
 import CustomTabNavigator from "./CustomTabNavigator";
 import HomePage from "../HomePage";
 import ProfileNavigator from "./ProfileNavigator";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
 
 const Main = ({ route }) => {
   const { user } = route.params;
