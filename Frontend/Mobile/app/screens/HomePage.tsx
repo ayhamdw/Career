@@ -18,8 +18,7 @@ const HomePage = ({ user }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCity, setSelectedCity] = useState("Your Location");
   const [sidebarVisible, setSidebarVisible] = useState(false);
-  const sidebarAnimation = useRef(new Animated.Value(300)).current; // Start off-screen
-  // const [sideBarWidth,setSideBarWidth] = useState(0);
+  const sidebarAnimation = useRef(new Animated.Value(300)).current; 
   const cities = ["Qalqila", "Nablus", "Tulkarm", "Jerusalem", "Jenin"];
   const categories = [
     {
@@ -42,7 +41,6 @@ const HomePage = ({ user }) => {
       title: "Artist",
       image: require("../../assets/images/HomePage/ArtistIcon.png"),
     },
-    // Add more categories as needed
   ];
 
   const handleCitySelect = (city) => {
@@ -55,9 +53,9 @@ const HomePage = ({ user }) => {
     setSidebarVisible(!sidebarVisible);
 
     Animated.timing(sidebarAnimation, {
-      toValue: sidebarVisible ? 300 : 0, // Move to 300 when opening, 0 when closing
-      duration: 300, // Duration of the animation
-      useNativeDriver: false, // Use native driver for better performance
+      toValue: sidebarVisible ? 300 : 0, 
+      duration: 300, 
+      useNativeDriver: false, 
     }).start();
   };
 
@@ -111,7 +109,6 @@ const HomePage = ({ user }) => {
         />
       </View>
 
-      {/* Modal for city selection */}
       <Modal
         transparent={true}
         visible={modalVisible}
