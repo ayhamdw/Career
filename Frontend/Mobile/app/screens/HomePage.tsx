@@ -1,5 +1,4 @@
 import {
-  StyleSheet,
   Text,
   View,
   ScrollView,
@@ -47,8 +46,6 @@ const HomePage = ({ user }) => {
     setSelectedCity(city);
     setModalVisible(false);
   };
-  const [sideBarStyle, setSideBarStyle] = useState({});
-
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
 
