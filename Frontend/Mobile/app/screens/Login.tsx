@@ -102,11 +102,9 @@ export default function Login() {
 
           <TouchableOpacity
             style={styles.forgotButton}
-            onPress={() =>
-              navigation.navigate("ForgotPassword", {
-                screen: "IntroductionNavigation",
-              })
-            }
+            // onPress={() =>
+            //   navigation.navigate("ForgotPassword", {screen: "IntroductionNavigation",})
+            // }
           >
             <Text
               style={[
@@ -136,11 +134,9 @@ export default function Login() {
             Don't have an account?
           </Text>
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("SignUp", {
-                screen: "IntroductionNavigation",
-              })
-            }
+            // onPress={() =>
+            //   navigation.navigate("SignUp", {screen: "IntroductionNavigation",})
+            // }
           >
             <Text
               style={[styles.signUpText, { color: COLORS.buttonBackgroundColor }]}
