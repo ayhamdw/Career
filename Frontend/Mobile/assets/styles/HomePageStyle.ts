@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     right: 0,
     width: 0,
     height: "100%",
-    backgroundColor: "red",
+    // backgroundColor: "red",
     zIndex: 1,
   },
   sidebarContainer1: {
@@ -150,29 +150,44 @@ const styles = StyleSheet.create({
     right: 0,
     width: "70%",
     height: "100%",
-    backgroundColor: "red",
+    backgroundColor:COLORS.containerColor,
     zIndex: 1,
   },
-  // sidebarContent: {
-  //   flex: 1,
-  //   padding: 20,
-  //   justifyContent: "flex-start",
-  //   elevation: 5,
-  // },
-  // sidebarTitle: {
-  //   fontSize: SIZE.h2,
-  //   fontWeight: "bold",
-  //   color: COLORS.introductionColor,
-  //   marginBottom: 20,
-  // },
-  // sidebarItem: {
-  //   fontSize: SIZE.h3,
-  //   color: COLORS.textColor,
-  //   paddingVertical: 10,
-  //   borderBottomWidth: 1,
-  //   borderBottomColor: COLORS.textInputBorderColor,
+  sidebarContent: {
+    flex: 1,
+    padding: 20,
+    justifyContent: "flex-start",
+    elevation: 5,
+  },
+  sidebarTitle: {
+    fontSize: SIZE.h2,
+    fontWeight: "bold",
+    color: COLORS.introductionColor,
+    marginBottom: 20,
+  },
+  sidebarItem: {
+    fontSize: SIZE.h3,
+    color: COLORS.textColor,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.textInputBorderColor,
 
-  // },
+  },
+  closeButton: {
+    alignSelf: 'flex-end',
+    padding: 10,
+  },
+  closeButtonText: {
+    fontSize: SIZE.h3,
+    color: COLORS.textColor,
+  },
+  sidebarItemText: {
+    fontSize: SIZE.h3,
+    color: COLORS.textColor,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  
   ReservationDepartment: {
     width: "100%",
     padding: 20,

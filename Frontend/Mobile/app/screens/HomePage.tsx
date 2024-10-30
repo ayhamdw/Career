@@ -1,5 +1,4 @@
 import {
-  StyleSheet,
   Text,
   View,
   ScrollView,
@@ -18,8 +17,7 @@ const HomePage = ({ user }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCity, setSelectedCity] = useState("Your Location");
   const [sidebarVisible, setSidebarVisible] = useState(false);
-  const sidebarAnimation = useRef(new Animated.Value(300)).current; // Start off-screen
-  // const [sideBarWidth,setSideBarWidth] = useState(0);
+  const sidebarAnimation = useRef(new Animated.Value(300)).current; 
   const cities = ["Qalqila", "Nablus", "Tulkarm", "Jerusalem", "Jenin"];
   const categories = [
     {
@@ -42,22 +40,19 @@ const HomePage = ({ user }) => {
       title: "Artist",
       image: require("../../assets/images/HomePage/ArtistIcon.png"),
     },
-    // Add more categories as needed
   ];
 
   const handleCitySelect = (city) => {
     setSelectedCity(city);
     setModalVisible(false);
   };
-  const [sideBarStyle, setSideBarStyle] = useState({});
-
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
 
     Animated.timing(sidebarAnimation, {
-      toValue: sidebarVisible ? 300 : 0, // Move to 300 when opening, 0 when closing
-      duration: 300, // Duration of the animation
-      useNativeDriver: false, // Use native driver for better performance
+      toValue: sidebarVisible ? 300 : 0, 
+      duration: 300, 
+      useNativeDriver: false, 
     }).start();
   };
 
@@ -111,7 +106,6 @@ const HomePage = ({ user }) => {
         />
       </View>
 
-      {/* Modal for city selection */}
       <Modal
         transparent={true}
         visible={modalVisible}
@@ -140,10 +134,31 @@ const HomePage = ({ user }) => {
           { transform: [{ translateX: sidebarAnimation }] },
         ]}
       >
-        <TouchableOpacity onPress={toggleSidebar}>
-          <Text>Hello</Text>
+        <TouchableOpacity onPress={toggleSidebar} style={styles.closeButton}>
+          <Text style={styles.closeButtonText}>Close</Text>
         </TouchableOpacity>
+
+        <View style={styles.sidebarContent}>
+          <Text style={styles.sidebarTitle}>Career's Menu</Text>
+
+          <TouchableOpacity style={styles.sidebarItem}>
+            <Text style={styles.sidebarItemText}>Home</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.sidebarItem}>
+            <Text style={styles.sidebarItemText}>Profile</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.sidebarItem}>
+            <Text style={styles.sidebarItemText}>Settings</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.sidebarItem}>
+            <Text style={styles.sidebarItemText}>Help</Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
+
 
       <View style={styles.ReservationDepartment}>
         <Text style={styles.categoriesTitle}>Reservation Department</Text>

@@ -17,6 +17,7 @@ import gmail from "../../assets/images/gmail.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import styles from "../../assets/styles/LoginStyle";
+import { COLORS } from "@/assets/styles/Dimensions";
 export default function Login() {
   const navigation = useNavigation();
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -59,7 +60,7 @@ export default function Login() {
             source={require("../../assets/images/logo.png")}
           />
           <Text style={[styles.signText, { color: theme.textColor }]}>
-            <Text style={[styles.jetakText, { color: "#c9492f" }]}>Career</Text>
+            <Text style={[styles.jetakText, { color: COLORS.buttonBackgroundColor }]}>Career</Text>
           </Text>
         </View>
 
@@ -71,6 +72,7 @@ export default function Login() {
                 {
                   backgroundColor: theme.inputBackground,
                   color: theme.textColor,
+                  borderColor: COLORS.buttonBackgroundColor,
                 },
               ]}
               placeholder="Email or Username"
@@ -87,6 +89,7 @@ export default function Login() {
                 {
                   backgroundColor: theme.inputBackground,
                   color: theme.textColor,
+                  borderColor: COLORS.buttonBackgroundColor,
                 },
               ]}
               placeholder="Enter your password"
@@ -99,16 +102,14 @@ export default function Login() {
 
           <TouchableOpacity
             style={styles.forgotButton}
-            onPress={() =>
-              navigation.navigate("ForgotPassword", {
-                screen: "IntroductionNavigation",
-              })
-            }
+          // onPress={() =>
+          //   navigation.navigate("ForgotPassword", {screen: "IntroductionNavigation",})
+          // }
           >
             <Text
               style={[
                 styles.forgotPasswordText,
-                { color: theme.buttonBackground },
+                { color: COLORS.buttonBackgroundColor },
               ]}
             >
               Forgot Password?
@@ -119,7 +120,7 @@ export default function Login() {
         <TouchableOpacity
           style={[
             styles.loginButton,
-            { backgroundColor: theme.buttonBackground },
+            { backgroundColor: COLORS.buttonBackgroundColor },
           ]}
           onPress={() => signInButton()}
         >
@@ -133,14 +134,12 @@ export default function Login() {
             Don't have an account?
           </Text>
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("SignUp", {
-                screen: "IntroductionNavigation",
-              })
-            }
+          // onPress={() =>
+          //   navigation.navigate("SignUp", {screen: "IntroductionNavigation",})
+          // }
           >
             <Text
-              style={[styles.signUpText, { color: theme.buttonBackground }]}
+              style={[styles.signUpText, { color: COLORS.buttonBackgroundColor }]}
             >
               Sign Up
             </Text>
