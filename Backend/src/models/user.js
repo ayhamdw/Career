@@ -10,20 +10,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      lowercase: true,
     },
     lastName: {
       type: String,
       required: true,
       trim: true,
-      lowercase: true,
     },
     email: {
       type: String,
       unique: true,
       required: true,
       trim: true,
-      lowercase: true,
       validate(value) {
         if (!validator.isEmail(value)) {
           throw new Error("Email is invalid");
@@ -58,9 +55,27 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
-    avatar: {
-      type: Buffer,
+    image: {
+      type: String,
     },
+    friendRequests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    friends: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    sendRequests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,

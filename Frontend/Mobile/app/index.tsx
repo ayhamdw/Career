@@ -3,5 +3,5 @@ import { NavigationContainer } from "@react-navigation/native";
 import App from "./screens/Navigators/App";
 import Login from "./screens/Login";
 export default function HomeScreen() {
-  return <Login/>;
+  return <App />;
 }
