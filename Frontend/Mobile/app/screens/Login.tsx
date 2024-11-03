@@ -60,7 +60,14 @@ export default function Login() {
             source={require("../../assets/images/logo.png")}
           />
           <Text style={[styles.signText, { color: theme.textColor }]}>
-            <Text style={[styles.jetakText, { color: COLORS.buttonBackgroundColor }]}>Career</Text>
+            <Text
+              style={[
+                styles.jetakText,
+                { color: COLORS.buttonBackgroundColor },
+              ]}
+            >
+              Career
+            </Text>
           </Text>
         </View>
 
@@ -102,9 +109,7 @@ export default function Login() {
 
           <TouchableOpacity
             style={styles.forgotButton}
-          // onPress={() =>
-          //   navigation.navigate("ForgotPassword", {screen: "IntroductionNavigation",})
-          // }
+            onPress={() => navigation.navigate("ForgotPassword")}
           >
             <Text
               style={[
@@ -134,12 +139,17 @@ export default function Login() {
             Don't have an account?
           </Text>
           <TouchableOpacity
-          // onPress={() =>
-          //   navigation.navigate("SignUp", {screen: "IntroductionNavigation",})
-          // }
+            onPress={() =>
+              navigation.navigate("SignUp", {
+                screen: "IntroductionNavigation",
+              })
+            }
           >
             <Text
-              style={[styles.signUpText, { color: COLORS.buttonBackgroundColor }]}
+              style={[
+                styles.signUpText,
+                { color: COLORS.buttonBackgroundColor },
+              ]}
             >
               Sign Up
             </Text>

@@ -5,7 +5,7 @@ module.exports = {
   },
   USER_NOT_FOUND: {
     statusCode: 404, // Not Found
-    message: "User not found",
+    message: "User not Found",
   },
   INVALID_UPDATES: {
     statusCode: 400, // Bad Request

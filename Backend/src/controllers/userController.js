@@ -1,9 +1,8 @@
 const {
   signupValidation,
   loginValidation,
-} = require("../utils/validations/validation");
-
-const User = require("../models/user");
+} = require("../utils/validations/validation"); //! Validation Functions
+const User = require("../models/user"); //! User Model Object
 const signupController = async (req, res) => {
   const { error } = signupValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -24,7 +23,7 @@ const signinController = async (req, res, next) => {
   console.log("Inside Login");
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-
+  console.log(req.body.email, req.body.password);
   try {
     const user = await User.findByCredentials(
       req.body.email,
