@@ -3,7 +3,6 @@ import {
   SafeAreaView,
   View,
   Text,
-  StyleSheet,
   Image,
   TextInput,
   TouchableOpacity,
@@ -176,7 +175,7 @@ export default function Login() {
             // style={styles.toogleButton}
             value={isDarkMode}
             onValueChange={toggleSwitch}
-            thumbColor={isDarkMode ? "#f4f3f4" : "#f4f3f4"}
+            thumbColor="#f4f3f4"
             trackColor={{ false: "#767577", true: "#81b0ff" }}
           />
         </View>
