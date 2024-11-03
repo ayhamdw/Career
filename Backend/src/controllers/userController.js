@@ -86,10 +86,23 @@ const oldPasswordChecker = async (req, res) => {
   }
 };
 
+const logInUsers = async (req, res) => {
+  const loggedInUsers = req.params.userId;
+  console.log(`id , ${loggedInUsers}`);
+  //* Get All users Except Me (My Account)
+  User.findOne({ _id: { $ne: loggedInUsers } })
+    .then((users) => {
+      res.status(200).json(users);
+    })
+    .catch((error) => {
+      res.status(500).json({ Error: error });
+    });
+};
 module.exports = {
   signinController,
   signupController,
   logoutController,
   logoutAllController,
   oldPasswordChecker,
+  logInUsers,
 };
