@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
-import { COLORS } from "../../assets/styles/Dimensions";
+import { Text, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "../../assets/styles/ForgotPasswordStyle";
 export default function ForgotPassword() {

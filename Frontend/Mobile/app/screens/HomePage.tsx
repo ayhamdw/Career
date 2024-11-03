@@ -10,14 +10,14 @@ import {
 } from "react-native";
 import React, { useState, useRef } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { COLORS, SIZE } from "@/assets/styles/Dimensions";
+import { COLORS } from "@/assets/styles/Dimensions";
 import styles from "../../assets/styles/HomePageStyle";
 
 const HomePage = ({ user }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCity, setSelectedCity] = useState("Your Location");
   const [sidebarVisible, setSidebarVisible] = useState(false);
-  const sidebarAnimation = useRef(new Animated.Value(300)).current; 
+  const sidebarAnimation = useRef(new Animated.Value(300)).current;
   const cities = ["Qalqila", "Nablus", "Tulkarm", "Jerusalem", "Jenin"];
   const categories = [
     {
@@ -50,9 +50,9 @@ const HomePage = ({ user }) => {
     setSidebarVisible(!sidebarVisible);
 
     Animated.timing(sidebarAnimation, {
-      toValue: sidebarVisible ? 300 : 0, 
-      duration: 300, 
-      useNativeDriver: false, 
+      toValue: sidebarVisible ? 300 : 0,
+      duration: 300,
+      useNativeDriver: false,
     }).start();
   };
 
@@ -158,7 +158,6 @@ const HomePage = ({ user }) => {
           </TouchableOpacity>
         </View>
       </Animated.View>
-
 
       <View style={styles.ReservationDepartment}>
         <Text style={styles.categoriesTitle}>Reservation Department</Text>
