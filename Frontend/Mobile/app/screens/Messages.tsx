@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -13,8 +13,32 @@ import Man2 from "../../assets/images/Messages/Man2.png";
 import Man3 from "../../assets/images/Messages/Man3.png";
 
 import styles from "../../assets/styles/MessagesStyle";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Messages = ({ user }) => {
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        const id = user._id;
+        const response = await axios.get(
+          `http://192.168.1.21:7777/api/user/logInUsers/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setUsers(response.data); //* Save The Users in the State
+        console.log("Users fetched:", users); // Log response data directly
+      } catch (error) {
+        console.log("Error fetching users:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
   return (
     <SafeAreaView style={styles.safeArea}>
       <Text style={styles.chatTextStyle}>Chat</Text>
