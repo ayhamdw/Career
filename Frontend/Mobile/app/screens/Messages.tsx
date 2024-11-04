@@ -16,8 +16,23 @@ import styles from "../../assets/styles/MessagesStyle";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Messages = ({ user }) => {
-  const [users, setUsers] = useState([]);
+interface User {
+  _id: string; // Include _id as it's used in the fetch call
+  firstName: string;
+  lastName: string;
+  profileImage?: string;
+  unreadMessages?: string;
+  lastMessage?: string;
+}
+
+// Define the component props interface
+interface MessagesProps {
+  user: User; // Type the `user` prop with `User` interface
+}
+
+const Messages: React.FC<MessagesProps> = ({ user }) => {
+  const [users, setUsers] = useState<User[]>([]); // Type users as an array of User
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -31,93 +46,44 @@ const Messages = ({ user }) => {
             },
           }
         );
-        setUsers(response.data); //* Save The Users in the State
-        console.log("Users fetched:", users); // Log response data directly
+        setUsers(response.data); // Save the users in the state
       } catch (error) {
         console.log("Error fetching users:", error);
       }
     };
     fetchUsers();
-  }, []);
+  }, [user._id]);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <Text style={styles.chatTextStyle}>Chat</Text>
       <StatusBar backgroundColor={"red"} />
       <ScrollView style={styles.scrollView}>
-        <TouchableOpacity
-          onPress={() => console.log("Chat 1")}
-          style={styles.messageContainer}
-        >
-          <Image source={Man1} style={styles.imageStyle} />
-          <View style={styles.messageBubble}>
-            <View style={styles.messageHeader}>
-              <Text style={styles.userName}>{user.firstName}</Text>
-              <Text style={styles.numberOfMessages}>+7</Text>
+        {users.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => console.log("Chat with", item.firstName)}
+            style={styles.messageContainer}
+          >
+            <Image
+              source={item.profileImage ? { uri: item.profileImage } : Man1}
+              style={styles.imageStyle}
+            />
+            <View style={styles.messageBubble}>
+              <View style={styles.messageHeader}>
+                <Text style={styles.userName}>
+                  {`${item.firstName} ${item.lastName}`}
+                </Text>
+                <Text style={styles.numberOfMessages}>
+                  {item.unreadMessages || "+0"}
+                </Text>
+              </View>
+              <Text style={styles.messageText}>
+                {item.lastMessage || "No recent messages"}
+              </Text>
             </View>
-            <Text style={styles.messageText}>
-              Hey there, I'm interested in your...
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => console.log("Chat 2")}
-          style={styles.messageContainer}
-        >
-          <Image source={Man2} style={styles.imageStyle} />
-          <View style={styles.messageBubble}>
-            <View style={styles.messageHeader}>
-              <Text style={styles.userName}>John Doe</Text>
-              <Text style={styles.numberOfMessages}>+3</Text>
-            </View>
-            <Text style={styles.messageText}>Can we schedule a meeting?</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => console.log("Chat 3")}
-          style={styles.messageContainer}
-        >
-          <Image source={Man3} style={styles.imageStyle} />
-          <View style={styles.messageBubble}>
-            <View style={styles.messageHeader}>
-              <Text style={styles.userName}>John Doe</Text>
-              <Text style={styles.numberOfMessages}>+5</Text>
-            </View>
-            <Text style={styles.messageText}>
-              Let me know if you're available.
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => console.log("Chat 4")}
-          style={styles.messageContainer}
-        >
-          <Image source={Man1} style={styles.imageStyle} />
-          <View style={styles.messageBubble}>
-            <View style={styles.messageHeader}>
-              <Text style={styles.userName}>John Doe</Text>
-              <Text style={styles.numberOfMessages}>+2</Text>
-            </View>
-            <Text style={styles.messageText}>
-              Follow up on the last meeting.
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => console.log("Chat 5")}
-          style={styles.messageContainer}
-        >
-          <Image source={Man2} style={styles.imageStyle} />
-          <View style={styles.messageBubble}>
-            <Text style={styles.userName}>John Doe</Text>
-            <Text style={styles.messageText}>
-              Would love to hear back from you soon.
-            </Text>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

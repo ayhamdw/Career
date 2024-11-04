@@ -7,6 +7,7 @@ const {
   logoutAllController,
   oldPasswordChecker,
   logInUsers,
+  sendFiendRequestController,
 } = require("../controllers/userController");
 const {
   sendWelcomeEmail,
@@ -29,6 +30,8 @@ router.post("/logoutAll", Auth, logoutAllController);
 router.get("/oldPassword", Auth, oldPasswordChecker);
 
 router.get("/logInUsers/:userId", Auth, logInUsers);
+
+router.post("/send-friend-request", Auth, sendFiendRequestController);
 
 // router.get("/users/me", Auth, async (req, res) => {
 //   res.send(req.user);
