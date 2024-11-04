@@ -77,10 +77,6 @@ const Request: React.FC<FriendRequestPageProps> = ({ user }) => {
     fetchUsers();
   }, [user._id]);
 
-  const sendFriendRequest = async (targetUserId: string) => {
-    console.log(`Friend request sent to user with ID: ${targetUserId}`);
-  };
-
   if (loading) {
     return (
       <ActivityIndicator style={styles.loader} size="large" color="#58d68d" />
@@ -116,11 +112,15 @@ const Request: React.FC<FriendRequestPageProps> = ({ user }) => {
               <Text style={styles.userEmail}>{item.email}</Text>
             </View>
             <TouchableOpacity
-              style={styles.requestButton}
+              style={
+                requestSend ? styles.sendRequestStatus : styles.requestButton
+              }
               onPress={() => sendFriendsRequest(user._id, item._id)}
             >
               <AntDesign name="adduser" size={20} color="white" />
-              <Text style={styles.buttonText}>Request</Text>
+              <Text style={styles.buttonText}>
+                {requestSend ? "Pending" : "Request"}
+              </Text>
             </TouchableOpacity>
           </Animatable.View>
         ))}

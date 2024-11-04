@@ -60,6 +60,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 20,
   },
+  sendRequestStatus: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#aba5a5",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+  },
   buttonText: {
     color: "#ffffff",
     fontWeight: "bold",
