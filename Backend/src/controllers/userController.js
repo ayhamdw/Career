@@ -90,13 +90,33 @@ const logInUsers = async (req, res) => {
   const loggedInUsers = req.params.userId;
   console.log(`id , ${loggedInUsers}`);
   //* Get All users Except Me (My Account)
-  User.findOne({ _id: { $ne: loggedInUsers } })
+  User.find({ _id: { $ne: loggedInUsers } })
     .then((users) => {
+      // console.log(users);
       res.status(200).json(users);
     })
     .catch((error) => {
       res.status(500).json({ Error: error });
     });
+};
+
+const sendFiendRequestController = async (req, res) => {
+  const { currentUserId, selectedUserId } = JSON.parse(req.body.ids);
+  try {
+    await User.findByIdAndUpdate(selectedUserId, {
+      $push: {
+        friendRequests: currentUserId,
+      },
+    });
+
+    await User.findByIdAndUpdate(currentUserId, {
+      $push: {
+        sendRequests: selectedUserId,
+      },
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 module.exports = {
   signinController,
@@ -105,4 +125,5 @@ module.exports = {
   logoutAllController,
   oldPasswordChecker,
   logInUsers,
+  sendFiendRequestController,
 };
