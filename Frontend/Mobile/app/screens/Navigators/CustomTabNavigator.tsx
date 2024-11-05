@@ -2,6 +2,8 @@ import React from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { COLORS } from "../../../assets/styles/Dimensions";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import MessageNavigator from "./MessageNavigator"; // Import MessageNavigator
 
 const Tab = createBottomTabNavigator();
 
@@ -37,24 +39,28 @@ const TabIcon = ({ route, color, size }) => {
   return <IconComponent name={iconName} size={size} color={color} />;
 };
 
-const CustomTabNavigator = ({ screenData }) => (
+const CustomTabNavigator = ({ screenData, user }) => (
   <Tab.Navigator
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ color, size }) => (
-        <TabIcon route={route} color={color} size={size} />
-      ),
-      tabBarLabelStyle: {
-        fontSize: 12,
-        fontWeight: "bold",
-      },
-      tabBarStyle: {
-        backgroundColor: COLORS.tabBarBackgroundColor,
-        paddingBottom: 5,
-        borderTopWidth: 0,
-      },
-      tabBarActiveTintColor: COLORS.tabBarActiveTintColor,
-      tabBarInactiveTintColor: COLORS.tabBarInActiveTintColor,
-    })}
+    screenOptions={({ route }) => {
+      const routeName = getFocusedRouteNameFromRoute(route) ?? route.name;
+      return {
+        tabBarIcon: ({ color, size }) => (
+          <TabIcon route={route} color={color} size={size} />
+        ),
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "bold",
+        },
+        tabBarStyle: {
+          backgroundColor: COLORS.tabBarBackgroundColor,
+          paddingBottom: 5,
+          borderTopWidth: 0,
+          display: routeName === "ChatUser" ? "none" : "flex",
+        },
+        tabBarActiveTintColor: COLORS.tabBarActiveTintColor,
+        tabBarInactiveTintColor: COLORS.tabBarInActiveTintColor,
+      };
+    }}
   >
     <Tab.Screen
       name="Main"
@@ -66,11 +72,9 @@ const CustomTabNavigator = ({ screenData }) => (
       component={screenData.Requests}
       options={{ headerShown: false }}
     />
-    <Tab.Screen
-      name="Messages"
-      component={screenData.Messages}
-      options={{ headerShown: false }}
-    />
+    <Tab.Screen name="Messages" options={{ headerShown: false }}>
+      {() => <MessageNavigator user={user} />}
+    </Tab.Screen>
     <Tab.Screen
       name="FriendRequests"
       component={screenData.FriendRequests}

@@ -22,7 +22,7 @@ const Main = ({ route }) => {
     [user]
   );
 
-  return <CustomTabNavigator screenData={screenData} />;
+  return <CustomTabNavigator screenData={screenData} user={user} />;
 };
 
 export default Main;

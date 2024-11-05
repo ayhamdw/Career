@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const ChatUser = () => {
+const ChatUser = ({ user }) => {
   return (
-    <View>
-      <Text>ChatUser</Text>
-    </View>
+    <KeyboardAvoidingView>
+      <Text>Chat With {user.firstName}</Text>
+    </KeyboardAvoidingView>
   );
 };
 
