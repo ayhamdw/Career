@@ -2,7 +2,9 @@ import React, { useMemo } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Messages from "../Messages";
 import ChatUser from "../ChatUser";
+
 const Stack = createNativeStackNavigator();
+
 const MessageNavigator = ({ user }) => {
   const screenData = useMemo(
     () => ({
@@ -21,7 +23,13 @@ const MessageNavigator = ({ user }) => {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="ChatUser" component={screenData.ChatUser} />
+      <Stack.Screen
+        name="ChatUser"
+        component={screenData.ChatUser}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 };

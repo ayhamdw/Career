@@ -38,7 +38,7 @@ export default function Login() {
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", JSON.stringify(user));
       console.log("test successful");
-      navigation.navigate("Main", { user });
+      navigation.replace("Main", { user });
     } catch (error) {
       console.log("Login failed:", error);
     }
