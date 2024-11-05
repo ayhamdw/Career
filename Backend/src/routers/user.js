@@ -8,6 +8,8 @@ const {
   oldPasswordChecker,
   logInUsers,
   sendFiendRequestController,
+  getFriendsRequest,
+  acceptFriendRequestController,
 } = require("../controllers/userController");
 const {
   sendWelcomeEmail,
@@ -32,6 +34,10 @@ router.get("/oldPassword", Auth, oldPasswordChecker);
 router.get("/logInUsers/:userId", Auth, logInUsers);
 
 router.post("/send-friend-request", Auth, sendFiendRequestController);
+
+router.get("/getFriendsRequest/:userId", Auth, getFriendsRequest);
+
+router.post("/acceptFriendRequest", Auth, acceptFriendRequestController);
 
 // router.get("/users/me", Auth, async (req, res) => {
 //   res.send(req.user);

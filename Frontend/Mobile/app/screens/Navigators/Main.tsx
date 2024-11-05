@@ -4,8 +4,7 @@ import Messages from "../Messages";
 import CustomTabNavigator from "./CustomTabNavigator";
 import HomePage from "../HomePage";
 import ProfileNavigator from "./ProfileNavigator";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { View } from "react-native";
+import FriendRequests from "../FriendRequests";
 
 const Main = ({ route }) => {
   const { user } = route.params;
@@ -15,7 +14,8 @@ const Main = ({ route }) => {
       Main: (props) => <HomePage {...props} user={user} />,
       Requests: (props) => <Requests {...props} user={user} />,
       Messages: (props) => <Messages {...props} user={user} />,
-      Setting: (props) => <ProfileNavigator {...props} user={user} />, // No need to pass user here
+      Setting: (props) => <ProfileNavigator {...props} user={user} />,
+      FriendRequests: (props) => <FriendRequests {...props} user={user} />,
     }),
     [user]
   );

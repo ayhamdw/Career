@@ -3,6 +3,7 @@ const {
   loginValidation,
 } = require("../utils/validations/validation"); //! Validation Functions
 const User = require("../models/user"); //! User Model Object
+const { json } = require("express");
 const signupController = async (req, res) => {
   const { error } = signupValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -92,7 +93,6 @@ const logInUsers = async (req, res) => {
   //* Get All users Except Me (My Account)
   User.find({ _id: { $ne: loggedInUsers } })
     .then((users) => {
-      // console.log(users);
       res.status(200).json(users);
     })
     .catch((error) => {
@@ -118,6 +118,50 @@ const sendFiendRequestController = async (req, res) => {
     console.log("error", error);
   }
 };
+
+const getFriendsRequest = async (req, res) => {
+  const userId = req.params.userId;
+  console.log("inside Get Friends Request", userId);
+  try {
+    const user = await User.findById(userId)
+      .populate("friendRequests", "firstName lastName email image")
+      .lean();
+    const friendRequests = user.friendRequests;
+    res.status(200).json(friendRequests);
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+const acceptFriendRequestController = async (req, res) => {
+  try {
+    const { senderId, receiverId } = json.parse(req.body.ids);
+    console.log("senderId", senderId);
+    console.log("receiverId", receiverId);
+    console.log("inside Accept Friend Request");
+    // const sender = User.findById(senderId);
+    // const receiver = User.findById(receiverId);
+
+    // sender.friends.push(receiverId);
+    // receiver.friends.push(senderId);
+
+    // sender.sendRequests = sender.sendRequests.filter(
+    //   (request) => request !== receiverId
+    // );
+
+    // receiver.friendRequests = receiver.friendRequests.filter(
+    //   (request) => request !== senderId
+    // );
+
+    // await sender.save();
+    // await receiver.save();
+
+    res.status(200).json({ message: "Friend Request Accepted" });
+  } catch (error) {
+    res.status(500).json({ Error: error });
+  }
+};
+
 module.exports = {
   signinController,
   signupController,
@@ -126,4 +170,6 @@ module.exports = {
   oldPasswordChecker,
   logInUsers,
   sendFiendRequestController,
+  getFriendsRequest,
+  acceptFriendRequestController,
 };
