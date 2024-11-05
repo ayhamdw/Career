@@ -15,31 +15,32 @@ import Man3 from "../../assets/images/Messages/Man3.png";
 import styles from "../../assets/styles/MessagesStyle";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "expo-router";
 
 interface User {
   _id: string; // Include _id as it's used in the fetch call
   firstName: string;
   lastName: string;
+  email: string;
   profileImage?: string;
   unreadMessages?: string;
   lastMessage?: string;
 }
 
-// Define the component props interface
 interface MessagesProps {
-  user: User; // Type the `user` prop with `User` interface
+  user: User;
 }
 
 const Messages: React.FC<MessagesProps> = ({ user }) => {
-  const [users, setUsers] = useState<User[]>([]); // Type users as an array of User
-
+  const [users, setUsers] = useState<User[]>([]);
+  const navigation = useNavigation();
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const token = await AsyncStorage.getItem("token");
         const id = user._id;
         const response = await axios.get(
-          `http://192.168.1.21:7777/api/user/logInUsers/${id}`,
+          `http://192.168.1.21:7777/api/user/acceptedFriends/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -62,7 +63,7 @@ const Messages: React.FC<MessagesProps> = ({ user }) => {
         {users.map((item, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() => console.log("Chat with", item.firstName)}
+            onPress={() => navigation.navigate("ChatUser", { user: item })}
             style={styles.messageContainer}
           >
             <Image
