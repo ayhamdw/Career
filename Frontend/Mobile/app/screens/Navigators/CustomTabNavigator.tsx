@@ -26,6 +26,10 @@ const TabIcon = ({ route, color, size }) => {
       iconName = "chatbubbles";
       IconComponent = Ionicons;
       break;
+    case "FriendRequests":
+      iconName = "people";
+      IconComponent = MaterialIcons;
+      break;
     default:
       break;
   }
@@ -65,6 +69,11 @@ const CustomTabNavigator = ({ screenData }) => (
     <Tab.Screen
       name="Messages"
       component={screenData.Messages}
+      options={{ headerShown: false }}
+    />
+    <Tab.Screen
+      name="FriendRequests"
+      component={screenData.FriendRequests}
       options={{ headerShown: false }}
     />
     <Tab.Screen

@@ -48,7 +48,7 @@ const Request: React.FC<FriendRequestPageProps> = ({ user }) => {
           },
         }
       );
-      setRequestSend(true);
+      if (response.status === 200) setRequestSend(true);
     } catch (error) {
       console.log("Error", error);
     }
