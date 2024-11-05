@@ -10,6 +10,7 @@ const {
   sendFiendRequestController,
   getFriendsRequest,
   acceptFriendRequestController,
+  acceptedFriendsController,
 } = require("../controllers/userController");
 const {
   sendWelcomeEmail,
@@ -38,6 +39,8 @@ router.post("/send-friend-request", Auth, sendFiendRequestController);
 router.get("/getFriendsRequest/:userId", Auth, getFriendsRequest);
 
 router.post("/acceptFriendRequest", Auth, acceptFriendRequestController);
+
+router.get("/acceptedFriends/:userId", Auth, acceptedFriendsController);
 
 // router.get("/users/me", Auth, async (req, res) => {
 //   res.send(req.user);

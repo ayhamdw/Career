@@ -161,6 +161,19 @@ const acceptFriendRequestController = async (req, res) => {
   }
 };
 
+const acceptedFriendsController = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId)
+      .populate("friends", "firstName lastName email image")
+      .lean();
+    const friends = user.friends;
+    res.status(200).json(friends);
+  } catch (error) {
+    res.status(500).json({ Error: error });
+  }
+};
+
 module.exports = {
   signinController,
   signupController,
@@ -171,4 +184,5 @@ module.exports = {
   sendFiendRequestController,
   getFriendsRequest,
   acceptFriendRequestController,
+  acceptedFriendsController,
 };
