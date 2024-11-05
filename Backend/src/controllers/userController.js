@@ -135,26 +135,25 @@ const getFriendsRequest = async (req, res) => {
 
 const acceptFriendRequestController = async (req, res) => {
   try {
-    const { senderId, receiverId } = json.parse(req.body.ids);
-    console.log("senderId", senderId);
-    console.log("receiverId", receiverId);
-    console.log("inside Accept Friend Request");
-    // const sender = User.findById(senderId);
-    // const receiver = User.findById(receiverId);
+    const { senderId, receiverId } = JSON.parse(req.body.ids);
+    // console.log("senderId", senderId);
+    // console.log("receiverId", receiverId);
+    const sender = await User.findById(senderId);
+    const receiver = await User.findById(receiverId);
+    sender.friends.push(receiverId);
+    receiver.friends.push(senderId);
+    console.log("test");
 
-    // sender.friends.push(receiverId);
-    // receiver.friends.push(senderId);
+    sender.sendRequests = sender.sendRequests.filter(
+      (request) => request.toString() !== receiverId.toString()
+    );
 
-    // sender.sendRequests = sender.sendRequests.filter(
-    //   (request) => request !== receiverId
-    // );
+    receiver.friendRequests = receiver.friendRequests.filter(
+      (request) => request.toString() !== senderId.toString()
+    );
 
-    // receiver.friendRequests = receiver.friendRequests.filter(
-    //   (request) => request !== senderId
-    // );
-
-    // await sender.save();
-    // await receiver.save();
+    await sender.save();
+    await receiver.save();
 
     res.status(200).json({ message: "Friend Request Accepted" });
   } catch (error) {
