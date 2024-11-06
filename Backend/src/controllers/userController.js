@@ -210,7 +210,7 @@ const messageController = async (req, res) => {
 };
 
 const getChatUserDetails = async (req, res) => {
-  console.log("inside get chat user details");
+  // console.log("inside get chat user details");
   try {
     const userId = req.params.userId;
     await User.findById(userId)
@@ -229,7 +229,7 @@ const getChatUserDetails = async (req, res) => {
 const getMessageBetweenUsersController = async (req, res) => {
   try {
     const { senderId, receiverId } = req.params;
-    const message = await Message.findOne({
+    const message = await Message.find({
       $or: [
         { senderId: receiverId, receiverId: senderId },
         { senderId: senderId, receiverId: receiverId },
