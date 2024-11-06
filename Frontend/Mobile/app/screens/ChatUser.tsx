@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Pressable,
 } from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
@@ -22,6 +23,7 @@ const ChatUser = ({ user }) => {
   const [message, setMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const [receiverDetails, setReceiverDetails] = useState();
+  const [messages, setMessages] = useState([]);
 
   const senderId = user._id;
   const route = useRoute();
@@ -91,6 +93,31 @@ const ChatUser = ({ user }) => {
     }
   };
 
+  const fetchMessages = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(
+        `http://192.168.1.21:7777/api/user/messages/${senderId}/${receiverId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log("Messages fetched successfully");
+        setMessages(response.data);
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "",
@@ -115,11 +142,36 @@ const ChatUser = ({ user }) => {
       ),
     });
   }, [receiverDetails]);
+
+  const formatTime = (timeStamp: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      hour: "numeric",
+      minute: "numeric",
+    };
+    return new Date(timeStamp).toLocaleString("en-US", options);
+  };
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <ScrollView>
-        <Text>{user.firstName}</Text>
-        <Text>{route.params.user.firstName}</Text>
+        {messages.map((item, index) => {
+          if (item.messageType === "text") {
+            return (
+              <Pressable
+                key={index}
+                style={[
+                  item?.senderId?._id === senderId
+                    ? styles.senderMessageStyle
+                    : styles.receiverMessageStyle,
+                ]}
+              >
+                <Text style={styles.messageStyle}>{item.messageText}</Text>
+                <Text style={styles.messageTimeStyle}>
+                  {formatTime(item.timeStamp)}
+                </Text>
+              </Pressable>
+            );
+          }
+        })}
       </ScrollView>
       <View style={styles.parentStyle}>
         <View style={styles.emojiWithTextInputStyle}>
@@ -232,5 +284,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
+  },
+  senderMessageStyle: {
+    alignSelf: "flex-end",
+    backgroundColor: "#58D68D",
+    padding: 10,
+    margin: 10,
+    borderRadius: 10,
+    maxWidth: "60%",
+  },
+  receiverMessageStyle: {
+    alignSelf: "flex-start",
+    backgroundColor: "#F3F4F6",
+    padding: 10,
+    margin: 10,
+    maxWidth: "60%",
+    borderRadius: 10,
+  },
+  messageStyle: {
+    color: "black",
+    fontSize: 16,
+  },
+  messageTimeStyle: {
+    color: "grey",
+    fontSize: 12,
   },
 });
