@@ -6,6 +6,7 @@ import {
   View,
   Image,
   Pressable,
+  StatusBar,
 } from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
@@ -17,6 +18,7 @@ import EmojiSelector from "react-native-emoji-selector";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
 
 const ChatUser = ({ user }) => {
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
@@ -63,22 +65,28 @@ const ChatUser = ({ user }) => {
       formData.append("receiverId", receiverId); //* Append receiverId to the form data
 
       if (messageType === "image") {
+        console.log("Image uri", imageUri);
         formData.append("messageType", "image");
         formData.append("imageFile", {
-          uri: imageUri,
+          uri: imageUri, // Remove "file://" prefix if needed
           name: "image.jpg",
-          type: "image/jpg ",
+          type: "image/jpeg", // Ensure the correct MIME type
         });
       } else {
         formData.append("messageType", "text");
         formData.append("messageText", message);
       }
+
+      console.log("Sender ID:", formData.getAll("senderId"));
+      console.log("Receiver ID:", formData.getAll("receiverId"));
+      console.log("Message Type:", formData.getAll("messageType"));
+      console.log("Image File:", formData.getAll("imageFile"));
       const response = await axios.post(
         "http://192.168.1.21:7777/api/user/messages",
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            // "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         }
@@ -87,6 +95,7 @@ const ChatUser = ({ user }) => {
         console.log("Message sent successfully");
         setMessage("");
         setSelectedImage("");
+        fetchMessages();
       }
     } catch (error) {
       console.log("error", error);
@@ -107,7 +116,7 @@ const ChatUser = ({ user }) => {
       if (response.status === 200) {
         console.log("Messages fetched successfully");
         setMessages(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       }
     } catch (error) {
       console.log("Error", error);
@@ -150,8 +159,22 @@ const ChatUser = ({ user }) => {
     };
     return new Date(timeStamp).toLocaleString("en-US", options);
   };
+
+  const handleImageSelect = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      handleSendMessage("image", result.assets[0].uri);
+    }
+  };
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
+      <StatusBar barStyle="dark-content" />
       <ScrollView>
         {messages.map((item, index) => {
           if (item.messageType === "text") {
@@ -189,7 +212,12 @@ const ChatUser = ({ user }) => {
           />
         </View>
         <View style={styles.cameraWithMicAndSendButtonStyle}>
-          <Feather name="camera" size={24} color="black" />
+          <Feather
+            name="camera"
+            size={24}
+            color="black"
+            onPress={() => handleImageSelect()}
+          />
           <SimpleLineIcons name="microphone" size={24} color="black" />
           <TouchableOpacity
             style={styles.sendButton}
@@ -289,7 +317,8 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     backgroundColor: "#58D68D",
     padding: 10,
-    margin: 10,
+    marginVertical: 5,
+    marginHorizontal: 10,
     borderRadius: 10,
     maxWidth: "60%",
   },
@@ -297,7 +326,8 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     backgroundColor: "#F3F4F6",
     padding: 10,
-    margin: 10,
+    marginVertical: 5,
+    marginHorizontal: 10,
     maxWidth: "60%",
     borderRadius: 10,
   },
@@ -306,7 +336,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   messageTimeStyle: {
-    color: "grey",
-    fontSize: 12,
+    marginTop: 5,
+    color: "#5e5353 ",
+    fontSize: 10,
+    textAlign: "right",
   },
 });
