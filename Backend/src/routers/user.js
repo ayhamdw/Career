@@ -1,5 +1,6 @@
 const express = require("express");
 const Auth = require("../middleware/auth");
+const multer = require("multer");
 const {
   signinController,
   signupController,
@@ -11,7 +12,21 @@ const {
   getFriendsRequest,
   acceptFriendRequestController,
   acceptedFriendsController,
+  messageController,
+  getChatUserDetails,
+  getMessageBetweenUsersController,
 } = require("../controllers/userController");
+const storage = multer.diskStorage({
+  destination: function (req, file, cp) {
+    cb(null, "files/");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 const {
   sendWelcomeEmail,
   sendCancellationEmail,
@@ -41,6 +56,16 @@ router.get("/getFriendsRequest/:userId", Auth, getFriendsRequest);
 router.post("/acceptFriendRequest", Auth, acceptFriendRequestController);
 
 router.get("/acceptedFriends/:userId", Auth, acceptedFriendsController);
+
+router.post("/messages", upload.single("imageFile"), Auth, messageController);
+
+router.get("/getChatUserDetails/:userId", Auth, getChatUserDetails);
+
+router.get(
+  "/messages/:senderId/:receiverId",
+  Auth,
+  getMessageBetweenUsersController
+);
 
 // router.get("/users/me", Auth, async (req, res) => {
 //   res.send(req.user);

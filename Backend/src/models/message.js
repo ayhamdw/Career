@@ -5,7 +5,7 @@ const messageSchema = mongoose.Schema({
     ref: "User",
     required: true,
   },
-  receptionId: {
+  receiverId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -15,7 +15,7 @@ const messageSchema = mongoose.Schema({
     required: true,
     enum: ["text", "image"],
   },
-  message: String,
+  messageText: String,
   messageUrl: String,
   timeStamp: {
     type: Date,

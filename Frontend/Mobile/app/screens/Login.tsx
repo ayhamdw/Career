@@ -34,6 +34,7 @@ export default function Login() {
           password,
         }
       );
+      console.log("test");
       const { token, user } = response.data;
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", JSON.stringify(user));
