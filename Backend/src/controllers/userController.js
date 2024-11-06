@@ -5,6 +5,7 @@ const {
 const User = require("../models/user"); //! User Model Object
 const Message = require("../models/message"); //! Message Model Object
 const { json } = require("express");
+
 const signupController = async (req, res) => {
   const { error } = signupValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -174,13 +175,14 @@ const acceptedFriendsController = async (req, res) => {
 };
 const messageController = async (req, res) => {
   try {
-    // console.log(req.body);
+    console.log("inside message controller");
+    console.log(req.body);
     const { senderId, receiverId, messageType, messageText } = req.body;
 
-    console.log(senderId);
-    console.log(receiverId);
-    console.log(messageType);
-    console.log(messageText);
+    if (messageType === "image" && !req.file) {
+      console.error("File upload failed: req.file is undefined");
+      return res.status(400).json({ error: "File upload failed" });
+    }
 
     if (
       !senderId ||
@@ -195,9 +197,9 @@ const messageController = async (req, res) => {
       senderId,
       receiverId,
       messageType,
-      messageText: messageType === "text" ? messageText : null, // Set messageText only for text messages
+      messageText: messageType === "text" ? messageText : null,
       timestamp: new Date(),
-      image: messageType === "image", // Adjust according to your schema needs
+      messageUrl: messageType === "image" ? req.file.path : null,
     });
 
     await message.save();

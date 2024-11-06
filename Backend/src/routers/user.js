@@ -1,6 +1,7 @@
 const express = require("express");
 const Auth = require("../middleware/auth");
 const multer = require("multer");
+const path = require("path");
 const {
   signinController,
   signupController,
@@ -16,16 +17,16 @@ const {
   getChatUserDetails,
   getMessageBetweenUsersController,
 } = require("../controllers/userController");
+
 const storage = multer.diskStorage({
-  destination: function (req, file, cp) {
-    cb(null, "files/");
+  destination: function (req, file, cb) {
+    cb(null, path.resolve(__dirname, "../file/")); // Ensure correct path resolution
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(null, uniqueSuffix + "-" + file.originalname);
   },
 });
-
 const upload = multer({ storage: storage });
 const {
   sendWelcomeEmail,
