@@ -4,21 +4,134 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
+import EmojiSelector from "react-native-emoji-selector";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ChatUser = ({ user }) => {
+  const [showEmojiSelector, setShowEmojiSelector] = useState(false);
+  const [message, setMessage] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
+  const [receiverDetails, setReceiverDetails] = useState();
+
+  const senderId = user._id;
+  const route = useRoute();
+  const receiverId = route.params?.user._id ?? "";
+  const navigation = useNavigation();
+  const handelEmojiPress = () => {
+    setShowEmojiSelector(!showEmojiSelector);
+  };
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      const token = await AsyncStorage.getItem("token");
+      try {
+        const receiverData = await axios.get(
+          `http://192.168.1.21:7777/api/user/getChatUserDetails/${receiverId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (receiverData.status === 200) {
+          setReceiverDetails(receiverData.data);
+        }
+      } catch (error) {
+        console.log("error while fetching user details", error);
+      }
+    };
+    fetchUserDetails();
+  }, []);
+
+  const handleSendMessage = async (messageType: string, imageUri: string) => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("senderId", senderId); //* Append senderId to the form data
+      formData.append("receiverId", receiverId); //* Append receiverId to the form data
+
+      if (messageType === "image") {
+        formData.append("messageType", "image");
+        formData.append("imageFile", {
+          uri: imageUri,
+          name: "image.jpg",
+          type: "image/jpg ",
+        });
+      } else {
+        formData.append("messageType", "text");
+        formData.append("messageText", message);
+      }
+      const response = await axios.post(
+        "http://192.168.1.21:7777/api/user/messages",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log("Message sent successfully");
+        setMessage("");
+        setSelectedImage("");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "",
+      headerLeft: () => (
+        <View style={styles.headerStyle}>
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="black"
+            onPress={() => navigation.goBack()}
+          />
+          <Image
+            style={styles.imageStyle}
+            source={require("../../assets/images/defaultProfile.png")}
+          />
+          <Text style={styles.nameStyle}>
+            {receiverDetails
+              ? receiverDetails.firstName + " " + receiverDetails.lastName
+              : "Loading..."}
+          </Text>
+        </View>
+      ),
+    });
+  }, [receiverDetails]);
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
-      <ScrollView></ScrollView>
+      <ScrollView>
+        <Text>{user.firstName}</Text>
+        <Text>{route.params.user.firstName}</Text>
+      </ScrollView>
       <View style={styles.parentStyle}>
         <View style={styles.emojiWithTextInputStyle}>
-          <Entypo name="emoji-happy" size={24} color="black" />
+          <Entypo
+            name="emoji-happy"
+            size={24}
+            color="black"
+            onPress={handelEmojiPress}
+          />
           <TextInput
+            value={message}
+            onChangeText={(text) => setMessage(text)}
             style={styles.textInputStyle}
             placeholder="write your message"
           />
@@ -26,11 +139,22 @@ const ChatUser = ({ user }) => {
         <View style={styles.cameraWithMicAndSendButtonStyle}>
           <Feather name="camera" size={24} color="black" />
           <SimpleLineIcons name="microphone" size={24} color="black" />
-          <TouchableOpacity style={styles.sendButton}>
+          <TouchableOpacity
+            style={styles.sendButton}
+            onPress={() => handleSendMessage("text", "")}
+          >
             <Text style={styles.sendTextStyle}>Send</Text>
           </TouchableOpacity>
         </View>
       </View>
+      {showEmojiSelector && (
+        <EmojiSelector
+          style={{ height: 250 }}
+          onEmojiSelected={(emoji) =>
+            setMessage((prevMessage) => prevMessage + emoji)
+          }
+        />
+      )}
     </KeyboardAvoidingView>
   );
 };
@@ -92,5 +216,21 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "600",
     fontSize: 16,
+  },
+  nameStyle: {
+    alignContent: "center",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  imageStyle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    resizeMode: "cover",
+  },
+  headerStyle: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
   },
 });

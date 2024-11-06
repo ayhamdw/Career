@@ -3,6 +3,7 @@ const {
   loginValidation,
 } = require("../utils/validations/validation"); //! Validation Functions
 const User = require("../models/user"); //! User Model Object
+const Message = require("../models/message"); //! Message Model Object
 const { json } = require("express");
 const signupController = async (req, res) => {
   const { error } = signupValidation(req.body);
@@ -136,8 +137,6 @@ const getFriendsRequest = async (req, res) => {
 const acceptFriendRequestController = async (req, res) => {
   try {
     const { senderId, receiverId } = JSON.parse(req.body.ids);
-    // console.log("senderId", senderId);
-    // console.log("receiverId", receiverId);
     const sender = await User.findById(senderId);
     const receiver = await User.findById(receiverId);
     sender.friends.push(receiverId);
@@ -173,6 +172,75 @@ const acceptedFriendsController = async (req, res) => {
     res.status(500).json({ Error: error });
   }
 };
+const messageController = async (req, res) => {
+  try {
+    // console.log(req.body);
+    const { senderId, receiverId, messageType, messageText } = req.body;
+
+    console.log(senderId);
+    console.log(receiverId);
+    console.log(messageType);
+    console.log(messageText);
+
+    if (
+      !senderId ||
+      !receiverId ||
+      !messageType ||
+      (!messageText && messageType !== "image")
+    ) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const message = new Message({
+      senderId,
+      receiverId,
+      messageType,
+      messageText: messageType === "text" ? messageText : null, // Set messageText only for text messages
+      timestamp: new Date(),
+      image: messageType === "image", // Adjust according to your schema needs
+    });
+
+    await message.save();
+    console.log("Message saved successfully");
+    res.status(200).json({ message: "Message Sent Successfully" });
+  } catch (error) {
+    console.error("Error while saving message:", error); // Log error for debugging
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getChatUserDetails = async (req, res) => {
+  console.log("inside get chat user details");
+  try {
+    const userId = req.params.userId;
+    await User.findById(userId)
+      .then((user) => {
+        res.status(200).json(user);
+      })
+      .catch((error) => {
+        console.log("error while finding user", error);
+        res.status(500).json({ Error: error });
+      });
+  } catch (error) {
+    res.status(500).json({ Error: error });
+  }
+};
+
+const getMessageBetweenUsersController = async (req, res) => {
+  try {
+    const { senderId, receiverId } = req.params;
+    const message = await Message.findOne({
+      $or: [
+        { senderId: receiverId, receiverId: senderId },
+        { senderId: senderId, receiverId: receiverId },
+      ],
+    }).populate("senderId", "_id name");
+    res.status(200).json(message);
+  } catch (error) {
+    console.log("error while getting the messages", error);
+    res.status(500).json({ error: error });
+  }
+};
 
 module.exports = {
   signinController,
@@ -185,4 +253,7 @@ module.exports = {
   getFriendsRequest,
   acceptFriendRequestController,
   acceptedFriendsController,
+  messageController,
+  getChatUserDetails,
+  getMessageBetweenUsersController,
 };

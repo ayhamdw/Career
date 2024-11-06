@@ -26,9 +26,9 @@ const MessageNavigator = ({ user }) => {
       <Stack.Screen
         name="ChatUser"
         component={screenData.ChatUser}
-        options={{
-          headerShown: false,
-        }}
+        // options={{
+        //   headerShown: false,
+        // }}
       />
     </Stack.Navigator>
   );
