@@ -7,8 +7,10 @@ import {
   Image,
   Pressable,
   StatusBar,
+  Platform,
+  Keyboard,
 } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
@@ -20,12 +22,16 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 
+import styles from "@/assets/styles/ChatUserStyle";
+
 const ChatUser = ({ user }) => {
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
   const [message, setMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const [receiverDetails, setReceiverDetails] = useState();
   const [messages, setMessages] = useState([]);
+
+  const scrollViewRef = useRef(null);
 
   const senderId = user._id;
   const route = useRoute();
@@ -57,6 +63,19 @@ const ChatUser = ({ user }) => {
     fetchUserDetails();
   }, []);
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   const handleSendMessage = async (messageType: string, imageUri: string) => {
     try {
       const token = await AsyncStorage.getItem("token");
@@ -68,9 +87,9 @@ const ChatUser = ({ user }) => {
         console.log("Image uri", imageUri);
         formData.append("messageType", "image");
         formData.append("imageFile", {
-          uri: imageUri, // Remove "file://" prefix if needed
+          uri: imageUri,
           name: "image.jpg",
-          type: "image/jpeg", // Ensure the correct MIME type
+          type: "image/jpeg",
         });
       } else {
         formData.append("messageType", "text");
@@ -80,13 +99,14 @@ const ChatUser = ({ user }) => {
       console.log("Sender ID:", formData.getAll("senderId"));
       console.log("Receiver ID:", formData.getAll("receiverId"));
       console.log("Message Type:", formData.getAll("messageType"));
+      console.log("Message text:", formData.getAll("messageText"));
       console.log("Image File:", formData.getAll("imageFile"));
       const response = await axios.post(
         "http://192.168.1.21:7777/api/user/messages",
         formData,
         {
           headers: {
-            // "Content-Type": "multipart/form-data",
+            "content-type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         }
@@ -96,6 +116,7 @@ const ChatUser = ({ user }) => {
         setMessage("");
         setSelectedImage("");
         fetchMessages();
+        scrollViewRef.current?.scrollToEnd({ animated: true });
       }
     } catch (error) {
       console.log("error", error);
@@ -173,9 +194,18 @@ const ChatUser = ({ user }) => {
     }
   };
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
+    >
       <StatusBar barStyle="dark-content" />
-      <ScrollView>
+      <ScrollView
+        ref={scrollViewRef} // Step 2: Attach the reference to ScrollView
+        onContentSizeChange={() =>
+          scrollViewRef.current?.scrollToEnd({ animated: true })
+        } // Auto-scroll on content change
+      >
         {messages.map((item, index) => {
           if (item.messageType === "text") {
             return (
@@ -240,105 +270,3 @@ const ChatUser = ({ user }) => {
 };
 
 export default ChatUser;
-
-const styles = StyleSheet.create({
-  parentStyle: {
-    flexDirection: "row",
-    backgroundColor: "#FFFFFF",
-    padding: 10,
-    borderTopWidth: 1,
-    borderTopColor: "#E0E0E0",
-    alignItems: "center",
-  },
-  emojiWithTextInputStyle: {
-    backgroundColor: "#F3F4F6",
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 8,
-    borderRadius: 30,
-    flex: 1,
-    marginRight: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  textInputStyle: {
-    flex: 1,
-    marginLeft: 8,
-    height: 40,
-    backgroundColor: "white",
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    borderColor: "#E0E0E0",
-    borderWidth: 1,
-    fontSize: 16,
-    color: "#333",
-  },
-  cameraWithMicAndSendButtonStyle: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-  sendButton: {
-    backgroundColor: "#58D68D",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  sendTextStyle: {
-    color: "#FFFFFF",
-    fontWeight: "600",
-    fontSize: 16,
-  },
-  nameStyle: {
-    alignContent: "center",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  imageStyle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    resizeMode: "cover",
-  },
-  headerStyle: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-  },
-  senderMessageStyle: {
-    alignSelf: "flex-end",
-    backgroundColor: "#58D68D",
-    padding: 10,
-    marginVertical: 5,
-    marginHorizontal: 10,
-    borderRadius: 10,
-    maxWidth: "60%",
-  },
-  receiverMessageStyle: {
-    alignSelf: "flex-start",
-    backgroundColor: "#F3F4F6",
-    padding: 10,
-    marginVertical: 5,
-    marginHorizontal: 10,
-    maxWidth: "60%",
-    borderRadius: 10,
-  },
-  messageStyle: {
-    color: "black",
-    fontSize: 16,
-  },
-  messageTimeStyle: {
-    marginTop: 5,
-    color: "#5e5353 ",
-    fontSize: 10,
-    textAlign: "right",
-  },
-});
