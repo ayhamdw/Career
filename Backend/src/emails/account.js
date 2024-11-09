@@ -30,7 +30,18 @@ const sendCancellationEmail = (email, name) => {
   });
 };
 
+const sendCode = (email, code) => {
+  const verificationCode = Math.floor(100000 + Math.random() * 900000);
+  transporter.sendEmail({
+    to: email,
+    from: process.env.EMAILUSER,
+    subject: "Verification Code",
+    text: `Your verification code is ${code}`,
+  });
+};
+
 module.exports = {
   sendWelcomeEmail,
   sendCancellationEmail,
+  sendCode,
 };
