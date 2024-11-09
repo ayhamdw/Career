@@ -41,6 +41,14 @@ const ChatUser = ({ user }) => {
     setShowEmojiSelector(!showEmojiSelector);
   };
 
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     fetchMessages();
+  //   }, 5000);
+
+  //   return () => clearInterval(interval); // Clear the interval when the component unmounts
+  // }, []);
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       const token = await AsyncStorage.getItem("token");
@@ -96,11 +104,11 @@ const ChatUser = ({ user }) => {
         formData.append("messageText", message);
       }
 
-      console.log("Sender ID:", formData.getAll("senderId"));
-      console.log("Receiver ID:", formData.getAll("receiverId"));
-      console.log("Message Type:", formData.getAll("messageType"));
-      console.log("Message text:", formData.getAll("messageText"));
-      console.log("Image File:", formData.getAll("imageFile"));
+      // console.log("Sender ID:", formData.getAll("senderId"));
+      // console.log("Receiver ID:", formData.getAll("receiverId"));
+      // console.log("Message Type:", formData.getAll("messageType"));
+      // console.log("Message text:", formData.getAll("messageText"));
+      // console.log("Image File:", formData.getAll("imageFile"));
       const response = await axios.post(
         "http://192.168.1.21:7777/api/user/messages",
         formData,
@@ -112,7 +120,7 @@ const ChatUser = ({ user }) => {
         }
       );
       if (response.status === 200) {
-        console.log("Message sent successfully");
+        // console.log("Message sent successfully");
         setMessage("");
         setSelectedImage("");
         fetchMessages();
@@ -135,7 +143,7 @@ const ChatUser = ({ user }) => {
         }
       );
       if (response.status === 200) {
-        console.log("Messages fetched successfully");
+        // console.log("Messages fetched successfully");
         setMessages(response.data);
         // console.log(response.data);
       }
@@ -189,6 +197,8 @@ const ChatUser = ({ user }) => {
       quality: 1,
     });
 
+    console.log(result);
+
     if (!result.canceled) {
       handleSendMessage("image", result.assets[0].uri);
     }
@@ -218,6 +228,29 @@ const ChatUser = ({ user }) => {
                 ]}
               >
                 <Text style={styles.messageStyle}>{item.messageText}</Text>
+                <Text style={styles.messageTimeStyle}>
+                  {formatTime(item.timeStamp)}
+                </Text>
+              </Pressable>
+            );
+          } else if (item.messageType === "image") {
+            const baseUrl = "http://192.168.1.21:7777/assets/images/";
+            const imageUrl = item.messageUrl;
+            // console.log(imageUrl);
+            const fileName = imageUrl.split("\\").pop();
+            console.log(fileName);
+            const source = { uri: baseUrl + fileName };
+            console.log(source);
+            return (
+              <Pressable
+                key={index}
+                style={[
+                  item?.senderId?._id === senderId
+                    ? styles.senderMessageStyle
+                    : styles.receiverMessageStyle,
+                ]}
+              >
+                <Image source={source} style={{ height: 200, width: 200 }} />
                 <Text style={styles.messageTimeStyle}>
                   {formatTime(item.timeStamp)}
                 </Text>
