@@ -7,6 +7,7 @@ const Message = require("../models/message"); //! Message Model Object
 const {
   sendWelcomeEmail,
   sendCancellationEmail,
+  sendCode,
 } = require("../emails/account");
 
 const signupController = async (req, res) => {
@@ -248,6 +249,18 @@ const getMessageBetweenUsersController = async (req, res) => {
   }
 };
 
+const forgotPasswordController = async (req, res) => {
+  const { username } = req.body;
+  const user = User.find({ username: username });
+  if (!user) {
+    res.status(404).send("User not found");
+  } else {
+    const email = user.email.toString();
+    const code = Math.floor(100000 + Math.random() * 900000);
+    sendCode(email, code);
+  }
+};
+
 module.exports = {
   signinController,
   signupController,
@@ -262,4 +275,5 @@ module.exports = {
   messageController,
   getChatUserDetails,
   getMessageBetweenUsersController,
+  forgotPasswordController,
 };

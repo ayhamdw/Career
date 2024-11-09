@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Text, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "../../assets/styles/ForgotPasswordStyle";
+import axios from "axios";
 export default function ForgotPassword() {
   const [username, setUsername] = useState("");
   const [code, setCode] = useState("");
@@ -9,7 +10,10 @@ export default function ForgotPassword() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSendCode = () => {
-    console.log("Code sent to email associated with:", username);
+    const response = axios.post(
+      "http://192.168.1.21:7777/api/user/forgotPassword",
+      { username }
+    );
   };
 
   const handleResetPassword = () => {

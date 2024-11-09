@@ -126,6 +126,13 @@ const SignUp = () => {
                 style={styles.textInputStyle}
               />
             </View>
+            <TextInput
+              editable
+              placeholder="username"
+              keyboardType="default"
+              numberOfLines={1}
+              style={styles.textInputStyleFullWidth}
+            />
 
             <TextInput
               editable
@@ -134,13 +141,6 @@ const SignUp = () => {
               style={styles.textInputStyleFullWidth}
             />
 
-            <TextInput
-              editable
-              placeholder="Phone Number"
-              keyboardType="numeric"
-              numberOfLines={1}
-              style={styles.textInputStyleFullWidth}
-            />
             <View style={styles.datePickerContainer}>
               <Text style={styles.datePickerLabel}>Date of Birth:</Text>
               <Pressable
