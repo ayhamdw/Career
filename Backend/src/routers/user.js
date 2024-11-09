@@ -28,10 +28,7 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
-const {
-  sendWelcomeEmail,
-  sendCancellationEmail,
-} = require("../emails/account");
+
 const router = new express.Router();
 
 router.get("/", (req, res) => {

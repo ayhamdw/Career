@@ -4,7 +4,10 @@ const {
 } = require("../utils/validations/validation"); //! Validation Functions
 const User = require("../models/user"); //! User Model Object
 const Message = require("../models/message"); //! Message Model Object
-const { json } = require("express");
+const {
+  sendWelcomeEmail,
+  sendCancellationEmail,
+} = require("../emails/account");
 
 const signupController = async (req, res) => {
   const { error } = signupValidation(req.body);
@@ -33,6 +36,7 @@ const signinController = async (req, res, next) => {
       req.body.password
     );
     const token = await user.generateAuthToken();
+    sendWelcomeEmail(user.email, user.firstName);
     res.send({ user, token });
   } catch (error) {
     console.log("Error", error);

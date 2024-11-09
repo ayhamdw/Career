@@ -103,12 +103,6 @@ const ChatUser = ({ user }) => {
         formData.append("messageType", "text");
         formData.append("messageText", message);
       }
-
-      // console.log("Sender ID:", formData.getAll("senderId"));
-      // console.log("Receiver ID:", formData.getAll("receiverId"));
-      // console.log("Message Type:", formData.getAll("messageType"));
-      // console.log("Message text:", formData.getAll("messageText"));
-      // console.log("Image File:", formData.getAll("imageFile"));
       const response = await axios.post(
         "http://192.168.1.21:7777/api/user/messages",
         formData,
