@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     },
     receiverMessageStyle: {
       alignSelf: "flex-start",
-      backgroundColor: "#F3F4F6",
+      backgroundColor: "#dbdbdb",
       padding: 10,
       marginVertical: 5,
       marginHorizontal: 10,

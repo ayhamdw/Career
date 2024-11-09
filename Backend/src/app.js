@@ -14,6 +14,10 @@ app.use(express.json());
 app.use(generalRateLimiter);
 app.use(userRouter);
 app.use(cors({ origin: true, credentials: true }));
+app.use(
+  "/assets/images",
+  express.static(path.join(__dirname, "assets/images"))
+);
 
 app.use("/api/user", userRouter);
 
