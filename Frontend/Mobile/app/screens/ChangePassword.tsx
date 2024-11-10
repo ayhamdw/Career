@@ -17,7 +17,7 @@ const ChangePassword = ({ user }) => {
     try {
       const token = await AsyncStorage.getItem("token"); // get the token to send it in the header
       const response = await axios.get(
-        "http://192.168.1.21:7777/api/user/oldPassword",
+        "http://192.168.1.21:7777/api/password/oldPassword",
         {
           params: { oldPassword },
           headers: {

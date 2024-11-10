@@ -1,10 +1,12 @@
 const express = require("express");
+const multer = require("multer");
 const Auth = require("../middleware/auth");
 const {
   messageController,
   getMessageBetweenUsersController,
   getChatUserDetails,
 } = require("../controllers/messagesController");
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.resolve(__dirname, "../assets/images/")); // Ensure correct path resolution
@@ -27,3 +29,5 @@ router.get(
   Auth,
   getMessageBetweenUsersController
 );
+
+module.exports = router;

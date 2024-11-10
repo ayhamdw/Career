@@ -12,3 +12,5 @@ router.get("/oldPassword", Auth, oldPasswordChecker);
 router.post("/forgotPassword", forgotPasswordController);
 
 router.post("/resetPassword", resetPasswordController);
+
+module.exports = router;

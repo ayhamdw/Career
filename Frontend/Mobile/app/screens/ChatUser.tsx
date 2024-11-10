@@ -46,7 +46,7 @@ const ChatUser = ({ user }) => {
       const token = await AsyncStorage.getItem("token");
       try {
         const receiverData = await axios.get(
-          `http://192.168.1.21:7777/api/user/getChatUserDetails/${receiverId}`,
+          `http://192.168.1.21:7777/api/messages/getChatUserDetails/${receiverId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -96,7 +96,7 @@ const ChatUser = ({ user }) => {
         formData.append("messageText", message);
       }
       const response = await axios.post(
-        "http://192.168.1.21:7777/api/user/messages",
+        "http://192.168.1.21:7777/api/messages/messages",
         formData,
         {
           headers: {
@@ -121,7 +121,7 @@ const ChatUser = ({ user }) => {
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await axios.get(
-        `http://192.168.1.21:7777/api/user/messages/${senderId}/${receiverId}`,
+        `http://192.168.1.21:7777/api/messages/messages/${senderId}/${receiverId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

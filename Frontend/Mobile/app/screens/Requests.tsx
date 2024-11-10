@@ -40,7 +40,7 @@ const Request: React.FC<FriendRequestPageProps> = ({ user }) => {
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await axios.post(
-        "http://192.168.1.21:7777/api/user/send-friend-request",
+        "http://192.168.1.21:7777/api/friends/send-friend-request",
         { ids },
         {
           headers: {
@@ -60,7 +60,7 @@ const Request: React.FC<FriendRequestPageProps> = ({ user }) => {
         const token = await AsyncStorage.getItem("token");
         const id = user._id;
         const response = await axios.get(
-          `http://192.168.1.21:7777/api/user/logInUsers/${id}`,
+          `http://192.168.1.21:7777/api/friends/logInUsers/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
