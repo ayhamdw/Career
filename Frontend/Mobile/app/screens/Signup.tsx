@@ -1,9 +1,3 @@
-/*
-web id client: 155720957457-23gr289iqt06a9vmmsvort1ogca3iiph.apps.googleusercontent.com
-IOS client: 155720957457-buoh0r927fjprq0j9pf9cckbof2gu2g2.apps.googleusercontent.com
-android client: 155720957457-s5ikis9f80bfbf11eupfn98jjb3nfde9.apps.googleusercontent.com
-
-*/
 import React, { useEffect, useState } from "react";
 import {
   StyleSheet,

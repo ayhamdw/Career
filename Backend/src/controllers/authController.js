@@ -3,7 +3,7 @@ const {
   loginValidation,
 } = require("../utils/validations/validation"); //! Validation Functions
 const User = require("../models/user"); //! User Model Object
-const { sendWelcomeEmail, sendCode } = require("../emails/account");
+const { sendWelcomeEmail } = require("../emails/account");
 
 const signupController = async (req, res) => {
   const { error } = signupValidation(req.body);

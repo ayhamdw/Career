@@ -1,183 +1,97 @@
 import { StyleSheet } from "react-native";
-import { SIZE } from "./Dimensions";
-const styles = StyleSheet.create({
-  safeAreaStyle: {
+
+export default StyleSheet.create({
+  container: {
     flex: 1,
-    backgroundColor: "white",
-  },
-  scrollContainer: {
+    padding: 20,
+    backgroundColor: "#fff",
     justifyContent: "center",
-    alignItems: "center",
-    paddingBottom: 50,
   },
-  imageStyle: {
-    width: SIZE.width - 100,
-    height: 250,
-    resizeMode: "contain",
-    marginBottom: 20,
-  },
-  titleStyle: {
-    fontSize: 36,
+  headerText: {
+    fontSize: 24,
     fontWeight: "bold",
-    color: "#1E1E1E",
-    marginBottom: 20,
+    color: "#333",
     textAlign: "center",
+    marginBottom: 50,
   },
-  buttonStyle: {
-    backgroundColor: "#EAECEF",
-    borderRadius: 8,
-    padding: 10,
-    width: "80%",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    marginTop: 15,
-    marginBottom: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 6,
-  },
-  buttonTextStyle: {
+  label: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#333333",
-    marginLeft: 10,
+    color: "#333",
+    marginBottom: 5,
   },
-  viewButtonStyle: {
-    width: "100%",
+  textInput: {
+    height: 50,
+    borderColor: "#58d68d",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    backgroundColor: "#f9f9f9",
+    marginBottom: 15,
+  },
+  genderSelectionContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 20,
+  },
+  selectedButton: {
+    backgroundColor: "#58d68d",
+    height: 50,
+    width: "40%",
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 10,
   },
-  iconSignupStyle: {
-    width: 28,
-    height: 28,
-    resizeMode: "contain",
+  unselectedButton: {
+    backgroundColor: "#e0e0e0",
+    height: 50,
+    width: "40%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
   },
-  orTextStyle: {
-    marginVertical: 10,
-    fontSize: 14,
-    color: "#666666",
+  selectedButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
-  textInputContainerStyle: {
+  unselectedButtonText: {
+    color: "#333",
+  },
+  dateInputContainer: {
+    height: 50,
+    justifyContent: "center",
+    borderColor: "#58d68d",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    backgroundColor: "#f9f9f9",
+  },
+  dateInputText: {
+    fontSize: 16,
+    color: "#333",
+  },
+  button: {
+    backgroundColor: "#58d68d",
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    marginTop: 20,
+    width: "45%",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "80%",
-    marginBottom: 20,
-  },
-  textInputStyle: {
-    width: "48%",
-    borderColor: "#CED0CE",
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    backgroundColor: "#FFFFFF",
-    fontSize: 14,
-    color: "#333",
-  },
-  textInputStyleFullWidth: {
-    width: "80%",
-    borderColor: "#CED0CE",
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    backgroundColor: "#FFFFFF",
-    fontSize: 14,
-    color: "#333",
-    marginBottom: 15,
-  },
-  datePickerContainer: {
-    width: "80%",
-    marginBottom: 20,
-    justifyContent: "center",
-  },
-  datePickerLabel: {
-    marginBottom: 5,
-    color: "#333",
-    fontSize: 14,
-  },
-  datePicker: {
-    borderColor: "#CED0CE",
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    backgroundColor: "#FFFFFF",
-    fontSize: 14,
-    color: "#333",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  dateText: {
-    fontSize: 14,
-    color: "#333",
-  },
-  genderContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
-    justifyContent: "center",
-    width: "80%",
-  },
-  genderText: {
-    fontSize: 16,
-    color: "#333",
-    marginRight: 10,
-  },
-  genderButton: {
-    borderColor: "#CED0CE",
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    marginHorizontal: 5,
-  },
-  selectedGender: {
-    backgroundColor: "#4CAF50",
-    borderColor: "#4CAF50",
-  },
-  genderButtonText: {
-    color: "#333",
-    fontSize: 14,
-  },
-  passwordContainer: {
-    position: "relative",
-    width: "80%",
-    marginBottom: 20,
-  },
-  showPasswordButton: {
-    position: "absolute",
-    right: 12,
-    top: 10,
-  },
-  showPasswordText: {
-    color: "#4CAF50",
-    fontSize: 14,
-  },
-  signUpButtonStyle: {
-    backgroundColor: "#4CAF50",
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    width: "80%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 15,
-  },
-  signUpButtonTextStyle: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  dropDownContainer: {
-    width: "80%",
-    marginBottom: 20,
+    marginTop: 20,
   },
   dropdown: {
-    margin: 16,
+    marginBottom:15 ,
     height: 50,
     backgroundColor: 'white',
     borderRadius: 12,
@@ -189,11 +103,11 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
-
     elevation: 2,
-
-    width: '80%',
+    width: '100%',
+    alignSelf: 'center',
   },
+
   icon: {
     marginRight: 5,
   },
@@ -222,4 +136,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-export default styles;

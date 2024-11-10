@@ -4,6 +4,7 @@ import Main from "./Main";
 import IntroductionNavigation from "./IntroductionNavigation2";
 import SignUp from "../Signup";
 import ForgotPassword from "../ForgetPassword";
+import SignUpNavigator from "./SignupNavigation";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +29,7 @@ const MainNavigation = () => {
 
       <Stack.Screen
         name="SignUp"
-        component={SignUp}
+        component={SignUpNavigator}
         options={{ headerShown: false }}
       />
       <Stack.Screen

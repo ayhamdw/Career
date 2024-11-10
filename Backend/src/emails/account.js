@@ -1,5 +1,4 @@
 const nodemailer = require("nodemailer");
-const Transport = require("nodemailer-sendinblue-transport");
 require("dotenv").config({ path: __dirname + "/config/.env" });
 
 const transporter = nodemailer.createTransport({
@@ -31,7 +30,7 @@ const sendCancellationEmail = (email, name) => {
   });
 };
 
-const sendCode = (email, code) => {
+const sendResetCode = (email, code) => {
   transporter.sendMail({
     to: email,
     from: process.env.EMAILUSER,
@@ -59,5 +58,5 @@ const sendCode = (email, code) => {
 module.exports = {
   sendWelcomeEmail,
   sendCancellationEmail,
-  sendCode,
+  sendResetCode,
 };
