@@ -75,3 +75,9 @@ const resetPasswordController = async (req, res) => {
     console.log("Error", error);
   }
 };
+
+module.exports = {
+  oldPasswordChecker,
+  forgotPasswordController,
+  resetPasswordController,
+};
