@@ -17,6 +17,7 @@ const {
   getChatUserDetails,
   getMessageBetweenUsersController,
   forgotPasswordController,
+  resetPasswordController,
 } = require("../controllers/userController");
 
 const storage = multer.diskStorage({
@@ -67,6 +68,8 @@ router.get(
 );
 
 router.post("/forgotPassword", forgotPasswordController);
+
+router.post("/resetPassword", resetPasswordController);
 
 // router.get("/users/me", Auth, async (req, res) => {
 //   res.send(req.user);
