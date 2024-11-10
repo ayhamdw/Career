@@ -6,7 +6,11 @@ const cors = require("cors");
 require("dotenv").config({ path: __dirname + "/config/.env" });
 require("./db/mongoose");
 
-const userRouter = require("./routers/user");
+const userRouter = require("./routers/userRouter");
+const friendsRouter = require("./routers/friendsRouter");
+const messagesRouter = require("./routers/messagesRouter");
+const authRouter = require("./routers/authRouter");
+const passwordRouter = require("./routers/passwordRouter");
 
 const app = express();
 
@@ -19,7 +23,11 @@ app.use(
   express.static(path.join(__dirname, "assets/images"))
 );
 
-app.use("/api/user", userRouter);
+// app.use("/api/user", userRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/friends", friendsRouter);
+app.use("/api/messages", messagesRouter);
+app.use("/api/password", passwordRouter);
 
 app.use(errorHandler);
 module.exports = app;

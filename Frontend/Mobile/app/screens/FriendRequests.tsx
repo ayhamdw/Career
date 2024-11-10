@@ -31,7 +31,7 @@ const FriendRequests = ({ user }) => {
       });
       console.log("After Accept Friend Request");
       const response = await axios.post(
-        `http://192.168.1.21:7777/api/user/acceptFriendRequest`,
+        `http://192.168.1.21:7777/api/friends/acceptFriendRequest`,
         { ids },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -52,7 +52,7 @@ const FriendRequests = ({ user }) => {
       const id = user._id;
       const token = await AsyncStorage.getItem("token");
       const response = await axios.get(
-        `http://192.168.1.21:7777/api/user/getFriendsRequest/${id}`,
+        `http://192.168.1.21:7777/api/friends/getFriendsRequest/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

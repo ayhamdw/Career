@@ -40,7 +40,7 @@ const Messages: React.FC<MessagesProps> = ({ user }) => {
         const token = await AsyncStorage.getItem("token");
         const id = user._id;
         const response = await axios.get(
-          `http://192.168.1.21:7777/api/user/acceptedFriends/${id}`,
+          `http://192.168.1.21:7777/api/friends/acceptedFriends/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

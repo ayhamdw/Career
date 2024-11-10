@@ -17,3 +17,5 @@ router.get("/getFriendsRequest/:userId", Auth, getFriendsRequest);
 router.post("/acceptFriendRequest", Auth, acceptFriendRequestController);
 
 router.get("/acceptedFriends/:userId", Auth, acceptedFriendsController);
+
+module.exports = router;

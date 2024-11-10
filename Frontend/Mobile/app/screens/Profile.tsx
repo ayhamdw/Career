@@ -21,7 +21,7 @@ const Profile = ({ user }) => {
       const token = await AsyncStorage.getItem("token");
 
       const response = await axios.post(
-        "http://192.168.1.21:7777/api/user/logout",
+        "http://192.168.1.21:7777/api/auth/logout",
         {},
         {
           headers: {

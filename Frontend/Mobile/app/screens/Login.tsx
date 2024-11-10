@@ -28,7 +28,7 @@ export default function Login() {
   const signInButton = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.1.21:7777/api/user/login",
+        "http://192.168.1.21:7777/api/auth/login",
         {
           email,
           password,
