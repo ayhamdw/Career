@@ -22,7 +22,7 @@ const sendWelcomeEmail = (email, name) => {
 };
 
 const sendCancellationEmail = (email, name) => {
-  transporter.sendEmail({
+  transporter.sendMail({
     to: email,
     from: process.env.EMAILUSER,
     subject: "Goodbye",
@@ -31,8 +31,7 @@ const sendCancellationEmail = (email, name) => {
 };
 
 const sendCode = (email, code) => {
-  const verificationCode = Math.floor(100000 + Math.random() * 900000);
-  transporter.sendEmail({
+  transporter.sendMail({
     to: email,
     from: process.env.EMAILUSER,
     subject: "Verification Code",
