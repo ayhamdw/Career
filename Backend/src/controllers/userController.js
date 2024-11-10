@@ -10,6 +10,8 @@ const {
   sendCode,
 } = require("../emails/account");
 
+const securePassword = require("../utils/securePassword");
+
 const signupController = async (req, res) => {
   const { error } = signupValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -251,15 +253,53 @@ const getMessageBetweenUsersController = async (req, res) => {
 
 const forgotPasswordController = async (req, res) => {
   const { username } = req.body;
-  const user = await User.findOne({ username: username }).lean();
-  if (!user) {
-    res.status(404).send("User not found");
-  } else {
-    console.log("User", user);
-    const email = user.email.toString();
-    console.log("Email", email);
-    const code = Math.floor(100000 + Math.random() * 900000);
-    sendCode(email, code);
+  try {
+    const user = await User.findOne({ username: username }).lean();
+    if (!user) {
+      res.status(404).send("User not found");
+    } else {
+      const email = user.email.toString();
+      const code = Math.floor(100000 + Math.random() * 900000);
+      await User.updateOne(
+        { username: username },
+        { resetCode: code, resetCodeExpires: Date.now() + 15 * 60 * 1000 }
+      );
+      sendCode(email, code);
+      res.status(200).send("Code sent successfully");
+    }
+  } catch (error) {
+    console.log("Error", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+const resetPasswordController = async (req, res) => {
+  const { username, code, password } = req.body.data;
+  try {
+    const user = await User.findOne({ username: username }).lean();
+    const correctCode = user.resetCode;
+    const expireDate = user.resetCodeExpires;
+    if (code !== correctCode) {
+      if (new Date() > expireDate) {
+        console.log("Expire Date");
+        return res.status(403).send({ message: "The Code has been expired" });
+      } else {
+        const hashedPassword = securePassword(password);
+        await User.updateOne(
+          { username: username },
+          { password: (await hashedPassword).toString() }
+        );
+        console.log("Changed Successfully");
+        return res
+          .status(200)
+          .send({ message: "The Password Changed Successfully" });
+      }
+    } else {
+      console.log("Incorrect Code");
+      return res.status(403).send({ message: "Incorrect Code" });
+    }
+  } catch (error) {
+    console.log("Error", error);
   }
 };
 
@@ -278,4 +318,5 @@ module.exports = {
   getChatUserDetails,
   getMessageBetweenUsersController,
   forgotPasswordController,
+  resetPasswordController,
 };

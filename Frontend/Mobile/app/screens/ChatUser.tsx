@@ -41,14 +41,6 @@ const ChatUser = ({ user }) => {
     setShowEmojiSelector(!showEmojiSelector);
   };
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     fetchMessages();
-  //   }, 5000);
-
-  //   return () => clearInterval(interval); // Clear the interval when the component unmounts
-  // }, []);
-
   useEffect(() => {
     const fetchUserDetails = async () => {
       const token = await AsyncStorage.getItem("token");
