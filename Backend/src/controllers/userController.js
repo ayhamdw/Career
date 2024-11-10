@@ -262,7 +262,7 @@ const forgotPasswordController = async (req, res) => {
       const code = Math.floor(100000 + Math.random() * 900000);
       await User.updateOne(
         { username: username },
-        { resetCode: code, resetCodeExpires: Date.now() + 15 * 60 * 1000 }
+        { resetCode: code, resetCodeExpires: Date.now() + 7 * 60 * 1000 }
       );
       sendCode(email, code);
       res.status(200).send("Code sent successfully");
@@ -279,7 +279,7 @@ const resetPasswordController = async (req, res) => {
     const user = await User.findOne({ username: username }).lean();
     const correctCode = user.resetCode;
     const expireDate = user.resetCodeExpires;
-    if (code !== correctCode) {
+    if (code.toString() === correctCode.toString()) {
       if (new Date() > expireDate) {
         console.log("Expire Date");
         return res.status(403).send({ message: "The Code has been expired" });
