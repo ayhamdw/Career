@@ -251,11 +251,13 @@ const getMessageBetweenUsersController = async (req, res) => {
 
 const forgotPasswordController = async (req, res) => {
   const { username } = req.body;
-  const user = User.find({ username: username });
+  const user = await User.findOne({ username: username }).lean();
   if (!user) {
     res.status(404).send("User not found");
   } else {
+    console.log("User", user);
     const email = user.email.toString();
+    console.log("Email", email);
     const code = Math.floor(100000 + Math.random() * 900000);
     sendCode(email, code);
   }
