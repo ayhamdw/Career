@@ -84,3 +84,11 @@ const acceptedFriendsController = async (req, res) => {
     res.status(500).json({ Error: error });
   }
 };
+
+module.exports = {
+  logInUsers,
+  sendFiendRequestController,
+  getFriendsRequest,
+  acceptFriendRequestController,
+  acceptedFriendsController,
+};

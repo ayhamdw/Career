@@ -4,7 +4,6 @@ const {
 } = require("../utils/validations/validation"); //! Validation Functions
 const User = require("../models/user"); //! User Model Object
 const { sendWelcomeEmail, sendCode } = require("../emails/account");
-const securePassword = require("../utils/securePassword");
 
 const signupController = async (req, res) => {
   const { error } = signupValidation(req.body);
@@ -64,4 +63,11 @@ const logoutAllController = async (req, res) => {
   } catch (error) {
     res.status(500).send(error);
   }
+};
+
+module.exports = {
+  signupController,
+  signinController,
+  logoutController,
+  logoutAllController,
 };
