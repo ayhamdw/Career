@@ -1,75 +1,10 @@
 const express = require("express");
-const Auth = require("../middleware/auth");
-const multer = require("multer");
-const path = require("path");
-const {
-  signinController,
-  signupController,
-  logoutController,
-  logoutAllController,
-  oldPasswordChecker,
-  logInUsers,
-  sendFiendRequestController,
-  getFriendsRequest,
-  acceptFriendRequestController,
-  acceptedFriendsController,
-  messageController,
-  getChatUserDetails,
-  getMessageBetweenUsersController,
-  forgotPasswordController,
-  resetPasswordController,
-} = require("../controllers/userController");
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.resolve(__dirname, "../assets/images/")); // Ensure correct path resolution
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
-  },
-});
-const upload = multer({ storage: storage });
 
 const router = new express.Router();
 
 router.get("/", (req, res) => {
   res.send("Hello World");
 });
-
-router.post("/signup", signupController);
-
-router.post("/login", signinController);
-
-router.post("/logout", Auth, logoutController);
-
-router.post("/logoutAll", Auth, logoutAllController);
-
-router.get("/oldPassword", Auth, oldPasswordChecker);
-
-router.get("/logInUsers/:userId", Auth, logInUsers);
-
-router.post("/send-friend-request", Auth, sendFiendRequestController);
-
-router.get("/getFriendsRequest/:userId", Auth, getFriendsRequest);
-
-router.post("/acceptFriendRequest", Auth, acceptFriendRequestController);
-
-router.get("/acceptedFriends/:userId", Auth, acceptedFriendsController);
-
-router.post("/messages", upload.single("imageFile"), Auth, messageController);
-
-router.get("/getChatUserDetails/:userId", Auth, getChatUserDetails);
-
-router.get(
-  "/messages/:senderId/:receiverId",
-  Auth,
-  getMessageBetweenUsersController
-);
-
-router.post("/forgotPassword", forgotPasswordController);
-
-router.post("/resetPassword", resetPasswordController);
 
 // router.get("/users/me", Auth, async (req, res) => {
 //   res.send(req.user);
