@@ -1,5 +1,6 @@
 const User = require("../models/user"); //! User Model Object
 const securePassword = require("../utils/securePassword");
+const { sendResetCode } = require("../emails/account");
 
 const oldPasswordChecker = async (req, res) => {
   console.log("inside old password checker");
@@ -37,7 +38,7 @@ const forgotPasswordController = async (req, res) => {
         { username: username },
         { resetCode: code, resetCodeExpires: Date.now() + 7 * 60 * 1000 }
       );
-      sendCode(email, code);
+      sendResetCode(email, code);
       res.status(200).send("Code sent successfully");
     }
   } catch (error) {

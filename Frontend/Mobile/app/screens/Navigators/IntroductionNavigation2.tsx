@@ -7,6 +7,7 @@ import SignUp from "../Signup";
 import ForgotPassword from "../ForgetPassword";
 import ProfileNavigator from "./ProfileNavigator";
 import Main from "./Main";
+import SignUpNavigator from "./SignupNavigation";
 import { SafeAreaView } from "react-native";
 
 const Stack = createNativeStackNavigator();
@@ -22,7 +23,7 @@ const IntroductionNavigation = () => (
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen
         name="SignUp"
-        component={SignUp}
+        component={SignUpNavigator}
         options={{ headerStyle: { backgroundColor: "white" } }}
       />
       <Stack.Screen
