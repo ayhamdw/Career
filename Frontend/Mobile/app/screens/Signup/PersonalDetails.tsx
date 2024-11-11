@@ -48,6 +48,8 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
 
         if (response.status === 200) {
           console.log("Done");
+          const code = response.data.code;
+          console.log(code);
           navigation.navigate("Verification", {
             firstName,
             lastName,
@@ -55,6 +57,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
             gender,
             dateOfBirth,
             email,
+            code,
           });
         }
       } catch (error) {

@@ -82,4 +82,5 @@ module.exports = {
   sendWelcomeEmail,
   sendCancellationEmail,
   sendResetCode,
+  sendVerificationCode,
 };
