@@ -37,7 +37,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
     if (firstName && lastName && username) {
       try {
         const response = await axios.post(
-          `http://192.168.1.21:7777/api/auth/checkUsername`,
+          `http://192.168.1.21:7777/api/check/username`,
           { username }
         );
         if (response.status === 200) {

@@ -55,6 +55,29 @@ const sendResetCode = (email, code) => {
   });
 };
 
+const sendVerificationCode = (email, code) => {
+  transporter.sendMail({
+    to: email,
+    from: process.env.EMAILUSER,
+    subject: "Verification Signup Code",
+    html: `<div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 8px;">
+  <h2 style="color: #58d68d; text-align: center;">Account Verification</h2>
+  <p style="font-size: 16px;">Hello,</p>
+  <p style="font-size: 16px;">
+    Thank you for signing up! To complete your registration, please use the verification code below:
+  </p>
+  <div style="margin: 20px auto; text-align: center;">
+    <span style="font-size: 24px; color: #58d68d; font-weight: bold;">${code}</span>
+  </div>
+  <p style="font-size: 16px;">Enter this code in the app to verify your account. If you did not sign up, please ignore this email.</p>
+  <br>
+  <footer style="text-align: center; margin-top: 20px;">
+    <p style="font-size: 12px; color: #aaa;">&copy; 2024 Career Company. All rights reserved.</p>
+  </footer>
+</div>`,
+  });
+};
+
 module.exports = {
   sendWelcomeEmail,
   sendCancellationEmail,

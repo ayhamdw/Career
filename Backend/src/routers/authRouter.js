@@ -16,6 +16,4 @@ router.post("/logout", Auth, logoutController);
 
 router.post("/logoutAll", Auth, logoutAllController);
 
-router.post("/checkUsername", checkUserNameController);
-
 module.exports = router;
