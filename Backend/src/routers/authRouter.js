@@ -6,6 +6,7 @@ const {
   signinController,
   logoutController,
   logoutAllController,
+  checkUserNameController,
 } = require("../controllers/authController");
 router.post("/signup", signupController);
 
@@ -14,5 +15,7 @@ router.post("/login", signinController);
 router.post("/logout", Auth, logoutController);
 
 router.post("/logoutAll", Auth, logoutAllController);
+
+router.post("/checkUsername", checkUserNameController);
 
 module.exports = router;
