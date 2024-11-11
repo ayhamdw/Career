@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Pressable, Image } from "react-native";
+import { View, Text, TextInput, Pressable, Image, Alert } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
 import { SignUpStackParamList } from "./types";
 import * as Google from "expo-auth-session/providers/google";
 import google from "../../../assets/images/google.png";
 import * as WebBrowser from "expo-web-browser";
+import axios, { AxiosError } from "axios";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 type BasicInfoProps = NativeStackScreenProps<SignUpStackParamList, "BasicInfo">;
 
@@ -31,16 +33,36 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
 
   const [request, response, promptAsync] = Google.useAuthRequest(config);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (firstName && lastName && username) {
-      navigation.navigate("PersonalDetails", {
-        firstName,
-        lastName,
-        username,
-      });
+      try {
+        const response = await axios.post(
+          `http://192.168.1.21:7777/api/auth/checkUsername`,
+          { username }
+        );
+        if (response.status === 200) {
+          console.log("Done");
+          navigation.navigate("PersonalDetails", {
+            firstName,
+            lastName,
+            username,
+          });
+        }
+      } catch (error) {
+        const err = error as AxiosError;
+        if (err.response && err.response.status === 400) {
+          Alert.alert("Username already exists");
+        } else {
+          console.log("Error:", error);
+        }
+      }
     } else {
       alert("Please fill all fields");
     }
+  };
+
+  const handlePrevious = () => {
+    navigation.goBack();
   };
 
   const handleToken = () => {
@@ -86,7 +108,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
         style={styles.textInput}
       />
       <View style={styles.buttonContainer}>
-        <Pressable onPress={handleNext} style={styles.button}>
+        <Pressable onPress={handlePrevious} style={styles.button}>
           <Text style={styles.buttonText}>Previous</Text>
         </Pressable>
         <Pressable onPress={handleNext} style={styles.button}>
@@ -94,10 +116,13 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
         </Pressable>
       </View>
       <Text style={styles.signupWith}>Or Signup with</Text>
-      <Pressable style={styles.buttonStyle} onPress={() => promptAsync()}>
+      <TouchableOpacity
+        style={styles.buttonStyle}
+        onPress={() => promptAsync()}
+      >
         <Image source={google} style={styles.iconSignupStyle}></Image>
         <Text style={styles.buttonTextStyle}>Continue with Google</Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };
