@@ -135,4 +135,40 @@ export default StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
+  buttonStyle: {
+    backgroundColor: "#EAECEF",
+    borderRadius: 8,
+    padding: 10,
+    width: "80%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 15,
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 6,
+    alignSelf: "center"
+  },
+  iconSignupStyle: {
+    width: 28,
+    height: 28,
+    resizeMode: "contain",
+  },
+  buttonTextStyle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333333",
+    marginLeft: 10,
+  },
+  signupWith: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333333",
+    marginTop: 30,
+    marginBottom: 10,
+    alignSelf: "center",
+  }
 });
