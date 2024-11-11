@@ -11,6 +11,7 @@ const friendsRouter = require("./routers/friendsRouter");
 const messagesRouter = require("./routers/messagesRouter");
 const authRouter = require("./routers/authRouter");
 const passwordRouter = require("./routers/passwordRouter");
+const checkInformationRouter = require("./routers/checkInformationRouter");
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/friends", friendsRouter);
 app.use("/api/messages", messagesRouter);
 app.use("/api/password", passwordRouter);
+app.use("/api/check", checkInformationRouter);
 
 app.use(errorHandler);
 module.exports = app;

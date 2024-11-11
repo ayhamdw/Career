@@ -64,24 +64,10 @@ const logoutAllController = async (req, res) => {
     res.status(500).send(error);
   }
 };
-const checkUserNameController = async (req, res) => {
-  const { username } = req.body;
-  try {
-    const user = await User.findOne({ username: username });
-    if (!user) {
-      res.status(200).send({ message: "Username is available" });
-    } else {
-      res.status(400).send({ message: "Username is not available" });
-    }
-  } catch (error) {
-    console.log("Error", error);
-  }
-};
 
 module.exports = {
   signupController,
   signinController,
   logoutController,
   logoutAllController,
-  checkUserNameController,
 };
