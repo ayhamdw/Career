@@ -124,66 +124,43 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
             </Text>
           </Pressable>
         </View>
-
-        <Text style={styles.label}>Date of Birth:</Text>
-        {/* <Pressable
-        style={styles.dateInputContainer}
-        onPress={() => setShowDatePicker(true)}
-        >
-        <Text style={styles.dateInputText}>
-        {dateOfBirth
-        ? `${dateOfBirth.getDate()}-${
-          dateOfBirth.getMonth() + 1
-          }-${dateOfBirth.getFullYear()}`
-          : "Select Date"}
-          </Text>
+        <View>
+          <Text style={styles.label}>Date of Birth:</Text>
+          <Pressable
+            style={styles.dateInputContainer}
+            onPress={() => setShowDatePicker(true)}
+          >
+            <Text style={styles.dateInputText}>
+              {dateOfBirth
+                ? `${dateOfBirth.getDate()}-${
+                    dateOfBirth.getMonth() + 1
+                  }-${dateOfBirth.getFullYear()}`
+                : "Select Date"}
+            </Text>
           </Pressable>
           {showDatePicker && (
             <DateTimePicker
-            value={dateOfBirth || new Date()}
-            mode="date"
-            display="default"
-            onChange={onChange}
-            maximumDate={new Date()}
-            testID="datePicker"
+              value={dateOfBirth || new Date()}
+              mode="date"
+              display="default"
+              onChange={onChange}
+              maximumDate={new Date()}
+              testID="datePicker"
             />
-            )} */}
+          )}
 
-        <Pressable
-          style={styles.dateInputContainer}
-          onPress={() => setShowDatePicker(true)}
-        >
-          <Text style={styles.dateInputText}>
-            {dateOfBirth
-              ? `${dateOfBirth.getDate()}-${
-                  dateOfBirth.getMonth() + 1
-                }-${dateOfBirth.getFullYear()}`
-              : "Select Date"}
-          </Text>
-        </Pressable>
-        {showDatePicker && (
-          <DateTimePicker
-            value={dateOfBirth || new Date()}
-            mode="date"
-            display="default"
-            onChange={onChange}
-            maximumDate={new Date()}
-            testID="datePicker"
+          <Text style={styles.label}>Email:</Text>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            style={styles.textInput}
           />
-        )}
-
-        <Text style={styles.label}>Email:</Text>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          style={styles.textInput}
-        />
-
+        </View>
         <View style={styles.buttonContainer}>
           <Pressable onPress={handlePrevious} style={styles.button}>
-            <Text style={styles.buttonText}>previous</Text>
+            <Text style={styles.buttonText}>Previous</Text>
           </Pressable>
 
           <Pressable onPress={handleNext} style={styles.button}>

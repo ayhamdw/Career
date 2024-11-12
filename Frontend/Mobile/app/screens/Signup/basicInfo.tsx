@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Pressable, Image, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  Image,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
 import { SignUpStackParamList } from "./types";
@@ -78,52 +87,62 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
   }, [response]);
 
   return (
-    <View style={styles.container}>
-      <Text
-        style={{
-          fontSize: 24,
-          fontWeight: "bold",
-          color: "#333",
-          marginBottom: 20,
-        }}
-      >
-        Welcome! Let's get started.
-      </Text>
-      <TextInput
-        placeholder="First Name"
-        value={firstName}
-        onChangeText={setFirstName}
-        style={styles.textInput}
-      />
-      <TextInput
-        placeholder="Last Name"
-        value={lastName}
-        onChangeText={setLastName}
-        style={styles.textInput}
-      />
-      <TextInput
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-        style={styles.textInput}
-      />
-      <View style={styles.buttonContainer}>
-        <Pressable onPress={handlePrevious} style={styles.button}>
-          <Text style={styles.buttonText}>Previous</Text>
-        </Pressable>
-        <Pressable onPress={handleNext} style={styles.button}>
-          <Text style={styles.buttonText}>Next</Text>
-        </Pressable>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
+    >
+      <View style={styles.container}>
+        <View>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: "bold",
+              color: "#333",
+              marginBottom: 20,
+            }}
+          >
+            Welcome! Let's get started.
+          </Text>
+          <TextInput
+            placeholder="First Name"
+            value={firstName}
+            onChangeText={setFirstName}
+            style={styles.textInput}
+          />
+          <TextInput
+            placeholder="Last Name"
+            value={lastName}
+            onChangeText={setLastName}
+            style={styles.textInput}
+          />
+          <TextInput
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
+            style={styles.textInput}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Pressable onPress={handlePrevious} style={styles.button}>
+            <Text style={styles.buttonText}>Previous</Text>
+          </Pressable>
+          <Pressable onPress={handleNext} style={styles.button}>
+            <Text style={styles.buttonText}>Next</Text>
+          </Pressable>
+        </View>
+        <View>
+          <Text style={styles.signupWith}>Or Signup with</Text>
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={() => promptAsync()}
+          >
+            <Image source={google} style={styles.iconSignupStyle}></Image>
+            <Text style={styles.buttonTextStyle}>Continue with Google</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <Text style={styles.signupWith}>Or Signup with</Text>
-      <TouchableOpacity
-        style={styles.buttonStyle}
-        onPress={() => promptAsync()}
-      >
-        <Image source={google} style={styles.iconSignupStyle}></Image>
-        <Text style={styles.buttonTextStyle}>Continue with Google</Text>
-      </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
