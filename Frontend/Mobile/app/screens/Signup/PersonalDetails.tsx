@@ -152,7 +152,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
           <Text style={styles.label}>Email:</Text>
           <TextInput
             placeholder="Email"
-            value={email}
+            value={email.trim()}
             onChangeText={setEmail}
             keyboardType="email-address"
             style={styles.textInput}
