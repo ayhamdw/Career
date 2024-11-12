@@ -70,7 +70,7 @@ const resetPasswordController = async (req, res) => {
       }
     } else {
       console.log("Incorrect Code");
-      return res.status(403).send({ message: "Incorrect Code" });
+      return res.status(500).send({ message: "Incorrect Code" });
     }
   } catch (error) {
     console.log("Error", error);

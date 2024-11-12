@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "../../assets/styles/ForgotPasswordStyle";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Toast from "react-native-toast-message";
 import { ScrollView } from "react-native-gesture-handler";
 export default function ForgotPassword() {
@@ -24,7 +24,7 @@ export default function ForgotPassword() {
       return;
     }
     const response = await axios.post(
-      "http://192.168.1.21:7777/api/user/forgotPassword",
+      "http://192.168.1.21:7777/api/password/forgotPassword",
       { username }
     );
     if (response.status === 200) {
@@ -47,12 +47,52 @@ export default function ForgotPassword() {
         code,
         password,
       };
-      const response = await axios.post(
-        "http://192.168.1.21:7777/api/user/resetPassword",
-        { data }
-      );
-    } else {
-      console.log("Passwords do not match");
+      try {
+        const response = await axios.post(
+          "http://192.168.1.21:7777/api/password/resetPassword",
+          { data }
+        );
+        if (response.status === 200) {
+          Alert.alert(
+            "✅ Password Changed Successfully! ✅",
+            "Your password has been updated. You can now use your new password to log in.",
+            [
+              {
+                text: "Got it",
+                onPress: () => console.log("Password change alert closed"),
+              },
+            ],
+            { cancelable: false }
+          );
+        }
+      } catch (error) {
+        const err = error as AxiosError;
+        if (err.response?.status === 500) {
+          Alert.alert(
+            "❌ Incorrect Code ❌",
+            "The Code you entered is incorrect. Please try again.",
+            [
+              {
+                text: "Retry",
+                onPress: () => console.log("Retry alert closed"),
+              },
+            ],
+            { cancelable: false }
+          );
+        } else if (err.response?.status === 403) {
+          Alert.alert(
+            "⏰ Time Code Expired ⏰",
+            "The verification code has expired. Please request a new code to continue.",
+            [
+              {
+                text: "Request New Code",
+                onPress: () => console.log("Expired code alert closed"),
+              },
+            ],
+            { cancelable: false }
+          );
+        }
+      }
     }
   };
 
