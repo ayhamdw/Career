@@ -21,7 +21,8 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
   const [careerFocus, setCareerFocus] = useState<boolean>(false);
   const [city, setCity] = useState<string>("");
   const [career, setCareer] = useState<string>("");
-
+  const [anotherCity, setAnotherCity] = useState<string>("");
+  const [anotherCareer, setAnotherCareer] = useState<string>("");
   const cities = [
     { label: "Qalqilya", value: "Qalqilya" },
     { label: "Nablus", value: "Nablus" },
@@ -31,6 +32,7 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
     { label: "Bethlehem", value: "Bethlehem" },
     { label: "Jerusalem", value: "Jerusalem" },
     { label: "Ramallah", value: "Ramallah" },
+    { label: "Other", value: "other" },
   ];
 
   const proficiencies = [
@@ -64,10 +66,13 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
     { label: "Social Worker", value: "social_worker" },
     { label: "Psychologist", value: "psychologist" },
     { label: "Architect", value: "architect" },
+    { label: "Other", value: "other" },
   ];
 
   const handleSignUp = () => {
     if (city && career && password) {
+      const selectCity = city === "other" ? anotherCity : city;
+      const selectCareer = career === "other" ? anotherCareer : career;
       console.log("User data:", {
         firstName,
         lastName,
@@ -75,8 +80,8 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
         gender,
         dateOfBirth,
         email,
-        city,
-        career,
+        city: selectCity,
+        career: selectCareer,
         password,
       });
       alert("welcome To Career!!!");
@@ -114,6 +119,15 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
         }}
       />
 
+      {city === "other" && (
+        <TextInput
+          style={styles.textInput}
+          placeholder="City Name"
+          onChangeText={(text) => setAnotherCity(text)}
+          value={anotherCity}
+        ></TextInput>
+      )}
+
       <Dropdown
         style={[styles.dropdown, { borderColor: "#58d68d", borderWidth: 1 }]}
         placeholderStyle={styles.placeholderStyle}
@@ -135,6 +149,14 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
           setCareerFocus(false);
         }}
       />
+      {career === "other" && (
+        <TextInput
+          placeholder="Your Career"
+          style={styles.textInput}
+          value={anotherCareer}
+          onChangeText={setAnotherCareer}
+        ></TextInput>
+      )}
       <TextInput
         placeholder="Password"
         value={password}
