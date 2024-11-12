@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
@@ -95,84 +102,90 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.headerText}>Personal Information</Text>
-      <Dropdown
-        style={[styles.dropdown, { borderColor: "#58d68d", borderWidth: 1 }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={cities}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!cityFocus ? "Select City" : "..."}
-        searchPlaceholder="Search..."
-        value={city}
-        onFocus={() => setCityFocus(true)}
-        onBlur={() => setCityFocus(false)}
-        onChange={(item) => {
-          setCity(item.value);
-          setCityFocus(false);
-        }}
-      />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
+    >
+      <View style={styles.container}>
+        <Text style={styles.headerText}>Personal Information</Text>
+        <Dropdown
+          style={[styles.dropdown, { borderColor: "#58d68d", borderWidth: 1 }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={cities}
+          search
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={!cityFocus ? "Select City" : "..."}
+          searchPlaceholder="Search..."
+          value={city}
+          onFocus={() => setCityFocus(true)}
+          onBlur={() => setCityFocus(false)}
+          onChange={(item) => {
+            setCity(item.value);
+            setCityFocus(false);
+          }}
+        />
 
-      {city === "other" && (
-        <TextInput
-          style={styles.textInput}
-          placeholder="City Name"
-          onChangeText={(text) => setAnotherCity(text)}
-          value={anotherCity}
-        ></TextInput>
-      )}
+        {city === "other" && (
+          <TextInput
+            style={styles.textInput}
+            placeholder="City Name"
+            onChangeText={(text) => setAnotherCity(text)}
+            value={anotherCity.trim()}
+          ></TextInput>
+        )}
 
-      <Dropdown
-        style={[styles.dropdown, { borderColor: "#58d68d", borderWidth: 1 }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={proficiencies}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!careerFocus ? "Select Career" : "..."}
-        searchPlaceholder="Search..."
-        value={career}
-        onFocus={() => setCareerFocus(true)}
-        onBlur={() => setCareerFocus(false)}
-        onChange={(item) => {
-          setCareer(item.value);
-          setCareerFocus(false);
-        }}
-      />
-      {career === "other" && (
+        <Dropdown
+          style={[styles.dropdown, { borderColor: "#58d68d", borderWidth: 1 }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={proficiencies}
+          search
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={!careerFocus ? "Select Career" : "..."}
+          searchPlaceholder="Search..."
+          value={career}
+          onFocus={() => setCareerFocus(true)}
+          onBlur={() => setCareerFocus(false)}
+          onChange={(item) => {
+            setCareer(item.value);
+            setCareerFocus(false);
+          }}
+        />
+        {career === "other" && (
+          <TextInput
+            placeholder="Your Career"
+            style={styles.textInput}
+            value={anotherCareer.trim()}
+            onChangeText={setAnotherCareer}
+          ></TextInput>
+        )}
         <TextInput
-          placeholder="Your Career"
+          placeholder="Password"
+          value={password.trim()}
+          onChangeText={setPassword}
+          secureTextEntry
           style={styles.textInput}
-          value={anotherCareer}
-          onChangeText={setAnotherCareer}
-        ></TextInput>
-      )}
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.textInput}
-      />
-      <View style={styles.buttonContainer}>
-        <Pressable onPress={handlePrevious} style={styles.button}>
-          <Text style={styles.buttonText}>Previous</Text>
-        </Pressable>
-        <Pressable onPress={handleSignUp} style={styles.button}>
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </Pressable>
+        />
+        <View style={styles.buttonContainer}>
+          <Pressable onPress={handlePrevious} style={styles.button}>
+            <Text style={styles.buttonText}>Previous</Text>
+          </Pressable>
+          <Pressable onPress={handleSignUp} style={styles.button}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </Pressable>
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

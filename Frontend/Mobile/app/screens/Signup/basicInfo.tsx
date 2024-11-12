@@ -106,19 +106,19 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
           </Text>
           <TextInput
             placeholder="First Name"
-            value={firstName}
+            value={firstName.trim()}
             onChangeText={setFirstName}
             style={styles.textInput}
           />
           <TextInput
             placeholder="Last Name"
-            value={lastName}
+            value={lastName.trim()}
             onChangeText={setLastName}
             style={styles.textInput}
           />
           <TextInput
             placeholder="Username"
-            value={username}
+            value={username.trim()}
             onChangeText={setUsername}
             style={styles.textInput}
           />
