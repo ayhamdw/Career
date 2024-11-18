@@ -17,7 +17,9 @@ import axios from "axios";
 import styles from "../../assets/styles/LoginStyle";
 import { COLORS } from "@/assets/styles/Dimensions";
 import { LoginProps } from "./utils/TypesLogin";
-const Login: React.FC<LoginProps> = ({ navigation }) => {
+import { useNavigation } from "@react-navigation/native";
+const Login = () => {
+  const navigation = useNavigation();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const theme = isDarkMode ? darkTheme : lightTheme;
   const [email, setEmail] = useState("");
@@ -37,8 +39,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
       const { token, user } = response.data;
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", JSON.stringify(user));
-      console.log("test successful");
-      navigation.navigate("Main", { user });
+      navigation.replace("Main", { user });
     } catch (error) {
       console.log("Login failed:", error);
     }

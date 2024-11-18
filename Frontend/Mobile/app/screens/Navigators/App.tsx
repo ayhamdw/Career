@@ -7,6 +7,9 @@ import Login from "../Login";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { navigationRef } from "./navigation";
 import { LoginStack } from "./LoginNavigator";
+import Main from "./Main";
+import CustomTabNavigator from "./CustomTabNavigator";
+import { NavigationIndependentTree } from "@react-navigation/native";
 
 const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);
@@ -34,14 +37,13 @@ const App = () => {
   }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer independent={true}>
-        {initialRoute === "Main" && <MainNavigation />}
-        {initialRoute === "IntroductionNavigation" && (
-          <IntroductionNavigation />
-        )}
-        {initialRoute === "Login" && <LoginStack />}
-      </NavigationContainer>
+    <GestureHandlerRootView>
+      <NavigationIndependentTree>
+        <NavigationContainer>
+          {/* <LoginStack /> */}
+          <MainNavigation />
+        </NavigationContainer>
+      </NavigationIndependentTree>
     </GestureHandlerRootView>
   );
 };

@@ -5,7 +5,7 @@ export type SigninPage = {
     Login: undefined;
     SignUp: undefined;
     ForgotPassword: undefined;
-    Main: {user:object};
+    Main: {user:any};
 }
 
 export type LoginProps = NativeStackScreenProps<SigninPage, 'Login'>;

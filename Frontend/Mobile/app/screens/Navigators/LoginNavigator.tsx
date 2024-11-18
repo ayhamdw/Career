@@ -8,7 +8,13 @@ const Stack = createNativeStackNavigator();
 
 export const LoginStack = () => (
   <Stack.Navigator initialRouteName="Login">
-    <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen
+      name="Login"
+      component={Login}
+      options={{
+        headerShown: false,
+      }}
+    />
     <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
     <Stack.Screen name="SignUp" component={SignUpNavigator} />
     <Stack.Screen name="Main" component={Main} />
