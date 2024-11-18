@@ -2,12 +2,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "../Login";
 import Main from "./Main";
 import IntroductionNavigation from "./IntroductionNavigation2";
-import SignUp from "../Signup";
 import ForgotPassword from "../ForgetPassword";
 import SignUpNavigator from "./SignupNavigation";
 
 const Stack = createNativeStackNavigator();
-
 const MainNavigation = () => {
   return (
     <Stack.Navigator initialRouteName="Login">

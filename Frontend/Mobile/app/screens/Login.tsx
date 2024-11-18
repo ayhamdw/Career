@@ -9,7 +9,11 @@ import {
   Switch,
   Pressable,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import {
+  createNavigationContainerRef,
+  useNavigation,
+} from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { lightTheme, darkTheme } from "../../assets/styles/themes";
 import facebook from "../../assets/images/facebook.png";
 import gmail from "../../assets/images/gmail.png";
@@ -17,15 +21,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import styles from "../../assets/styles/LoginStyle";
 import { COLORS } from "@/assets/styles/Dimensions";
-export default function Login() {
-  const navigation = useNavigation();
+import { navigate } from "./Navigators/navigation";
+import { SigninPage } from "./utils/TypesLogin";
+import { LoginProps } from "./utils/TypesLogin";
+const Login: React.FC<LoginProps> = ({ navigation }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const theme = isDarkMode ? darkTheme : lightTheme;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const toggleSwitch = () => setIsDarkMode((previousState) => !previousState);
-
   const signInButton = async () => {
     try {
       const response = await axios.post(
@@ -40,7 +45,7 @@ export default function Login() {
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", JSON.stringify(user));
       console.log("test successful");
-      navigation.replace("Main", { user });
+      navigation.navigate("Main", { user });
     } catch (error) {
       console.log("Login failed:", error);
     }
@@ -140,11 +145,7 @@ export default function Login() {
             Don't have an account?
           </Text>
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("SignUp", {
-                screen: "IntroductionNavigation",
-              })
-            }
+            onPress={() => navigation.navigate("SignupNavigator")}
           >
             <Text
               style={[
@@ -170,11 +171,9 @@ export default function Login() {
           </Pressable>
         </View>
 
-        {/* Toggle Switch */}
         <View style={styles.toggleContainer}>
           <Text style={[styles.toggleText]}>Dark Mode</Text>
           <Switch
-            // style={styles.toogleButton}
             value={isDarkMode}
             onValueChange={toggleSwitch}
             thumbColor="#f4f3f4"
@@ -184,4 +183,6 @@ export default function Login() {
       </View>
     </SafeAreaView>
   );
-}
+};
+
+export default Login;
