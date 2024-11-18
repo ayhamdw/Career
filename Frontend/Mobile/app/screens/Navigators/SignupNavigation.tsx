@@ -3,7 +3,6 @@ import BasicInfo from "../Signup/basicInfo";
 import PersonalDetails from "../Signup/PersonalDetails";
 import Verification from "../Signup/Verification";
 import AdditionalInfo from "../Signup/AdditionalInfo";
-import { View, Text } from "react-native";
 
 const Stack = createStackNavigator();
 

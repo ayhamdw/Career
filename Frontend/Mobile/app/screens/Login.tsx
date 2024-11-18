@@ -25,6 +25,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const toggleSwitch = () => setIsDarkMode((previousState) => !previousState);
+
   const signInButton = async () => {
     try {
       const response = await axios.post(

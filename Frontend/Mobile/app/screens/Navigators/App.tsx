@@ -4,7 +4,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import IntroductionNavigation from "./IntroductionNavigation2";
 import MainNavigation from "./MainNavigation";
 import Login from "../Login";
-import { SafeAreaView } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);
