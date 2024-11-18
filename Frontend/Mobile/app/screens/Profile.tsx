@@ -14,7 +14,6 @@ import styles from "../../assets/styles/ProfileStyle";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const Profile = ({ user }) => {
-  // console.log(user.firstName, user.lastName);
   const navigation = useNavigation();
   const logoutFunction = async () => {
     try {
@@ -63,7 +62,7 @@ const Profile = ({ user }) => {
               source={{ uri: "https://via.placeholder.com/100" }}
               style={styles.profileImage}
             />
-            <Text style={styles.name}>{user.firstName}</Text>
+            <Text style={styles.name}>{user.profile.firstName}</Text>
             <Text style={styles.jobTitle}>UI/UX Designer</Text>
 
             <View style={styles.statsContainer}>

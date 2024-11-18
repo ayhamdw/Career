@@ -9,13 +9,19 @@ import ChatUser from "../ChatUser";
 import MessageNavigator from "./MessageNavigator";
 
 const Main = ({ route }) => {
-  const { user } = route.params;
+  const { user } = route?.params || {}; // Use optional chaining and fallback to {}
+  console.log("Main user:", user);
+
+  if (!user) {
+    console.warn("No user passed to Main.");
+    return null; // Or show a fallback UI
+  }
 
   const screenData = useMemo(
     () => ({
-      Main: (props) => <HomePage {...props} user={user} />,
+      HomePage: (props) => <HomePage {...props} user={user} />,
       Requests: (props) => <Requests {...props} user={user} />,
-      Messages: (props) => <MessageNavigator {...props} user={user} />,
+      Chat: (props) => <MessageNavigator {...props} user={user} />,
       Setting: (props) => <ProfileNavigator {...props} user={user} />,
       FriendRequests: (props) => <FriendRequests {...props} user={user} />,
     }),
