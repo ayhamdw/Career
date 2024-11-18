@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["user", "admin"],
       required: true,
+      default: "user",
     },
     profile: {
       firstName: { type: String, required: true, trim: true },
@@ -54,14 +55,18 @@ const userSchema = new mongoose.Schema(
         },
       },
       bio: { type: String, trim: true },
-      experience: { type: String, trim: true },
-      profileImage: { type: String, trim: true },
+      experience: { type: String, trim: true, default: "" },
+      profileImage: { type: String, trim: true, default: "" },
       ratings: [
         {
-          rating: { type: Number, required: true },
-          review: { type: String, trim: true },
-          userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-          date: { type: Date, default: Date.now },
+          rating: { type: Number, required: true, default: 0 },
+          review: { type: String, trim: true, default: "" },
+          userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            default: null,
+          },
+          date: { type: Date, default: Date.now, default: "" },
         },
       ],
     },
