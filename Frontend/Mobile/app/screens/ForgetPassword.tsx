@@ -14,7 +14,7 @@ import Toast from "react-native-toast-message";
 import { ScrollView } from "react-native-gesture-handler";
 export default function ForgotPassword() {
   const [username, setUsername] = useState("");
-  const [code, setCode] = useState(0);
+  const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -38,7 +38,7 @@ export default function ForgotPassword() {
   };
 
   const handleResetPassword = async () => {
-    if (code === 0 || password == "" || confirmPassword == "") {
+    if (code === "" || password == "" || confirmPassword == "") {
       Alert.alert("Error", "Please fill in all fields");
     }
     if (password === confirmPassword) {
@@ -104,7 +104,6 @@ export default function ForgotPassword() {
     >
       <ScrollView>
         <SafeAreaView style={styles.container}>
-          <Toast ref={(ref) => Toast.setRef(ref)} />
           <Text style={styles.headerText}>Forgot Password</Text>
           <Text style={styles.label}>Username</Text>
           <TextInput

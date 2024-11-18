@@ -79,7 +79,7 @@ const signupValidation = (data) => {
     friends: Joi.array().items().required(),
     sendRequests: Joi.array().items().required(),
     resetCode: Joi.number().optional(),
-    resetCodeExpires: Joi.date().optional(),
+    resetCodeExpires: Joi.date().optional().default(null),
   });
 
   return schema.validate(data, { abortEarly: false });

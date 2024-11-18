@@ -5,6 +5,9 @@ import IntroductionNavigation from "./IntroductionNavigation2";
 import MainNavigation from "./MainNavigation";
 import Login from "../Login";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { navigationRef } from "./navigation";
+import { LoginStack } from "./LoginNavigator";
+
 const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);
   useEffect(() => {
@@ -37,7 +40,7 @@ const App = () => {
         {initialRoute === "IntroductionNavigation" && (
           <IntroductionNavigation />
         )}
-        {initialRoute === "Login" && <Login />}
+        {initialRoute === "Login" && <LoginStack />}
       </NavigationContainer>
     </GestureHandlerRootView>
   );

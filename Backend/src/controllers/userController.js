@@ -1,4 +1,4 @@
-const User = require("../models/user"); //! User Model Object
+const User = require("../models/user2"); //! User Model Object
 const getUserDetails = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId).select("-password"); // Exclude sensitive fields

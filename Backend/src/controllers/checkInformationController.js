@@ -1,4 +1,4 @@
-const User = require("../models/user");
+const User = require("../models/user2");
 const { sendVerificationCode } = require("../emails/account");
 const checkUserNameController = async (req, res) => {
   const { username } = req.body;
