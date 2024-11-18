@@ -3,6 +3,7 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const customError = require("../middleware/error/customError");
+require("dotenv").config();
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -102,9 +103,11 @@ const userSchema = new mongoose.Schema(
     ],
     resetCode: {
       type: Number,
+      default: 0,
     },
     resetCodeExpires: {
       type: Date,
+      default: null,
     },
   },
   {
@@ -129,7 +132,7 @@ userSchema.methods.generateAuthToken = async function () {
     expiresIn: "14d",
   });
 
-  user.tokens = user.tokens.concat({ token });
+  user.tokens = await user.tokens.concat({ token });
   await user.save();
 
   return token;
@@ -137,7 +140,7 @@ userSchema.methods.generateAuthToken = async function () {
 
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
-
+  console.log(user);
   if (!user) {
     throw new customError("USER_NOT_FOUND");
   }
@@ -150,6 +153,15 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
   return user;
 };
+
+userSchema.pre("save", async function (next) {
+  const user = this;
+  if (user.isModified("password")) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+
+  next();
+});
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

@@ -9,11 +9,6 @@ import {
   Switch,
   Pressable,
 } from "react-native";
-import {
-  createNavigationContainerRef,
-  useNavigation,
-} from "@react-navigation/native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { lightTheme, darkTheme } from "../../assets/styles/themes";
 import facebook from "../../assets/images/facebook.png";
 import gmail from "../../assets/images/gmail.png";
@@ -21,8 +16,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import styles from "../../assets/styles/LoginStyle";
 import { COLORS } from "@/assets/styles/Dimensions";
-import { navigate } from "./Navigators/navigation";
-import { SigninPage } from "./utils/TypesLogin";
 import { LoginProps } from "./utils/TypesLogin";
 const Login: React.FC<LoginProps> = ({ navigation }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -95,7 +88,6 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
             />
           </View>
           <View style={styles.inputItem}>
-            {/* <Text style={[styles.label, { color: theme.labelColor }]}>Password</Text> */}
             <TextInput
               style={[
                 styles.input,
@@ -144,9 +136,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
           <Text style={[styles.par, { color: theme.textColor }]}>
             Don't have an account?
           </Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("SignupNavigator")}
-          >
+          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
             <Text
               style={[
                 styles.signUpText,

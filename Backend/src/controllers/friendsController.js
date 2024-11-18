@@ -1,4 +1,4 @@
-const User = require("../models/user"); //! User Model Object
+const User = require("../models/user2"); //! User Model Object
 
 const logInUsers = async (req, res) => {
   const loggedInUsers = req.params.userId;

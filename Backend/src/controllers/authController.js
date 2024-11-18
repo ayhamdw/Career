@@ -23,19 +23,19 @@ const signupController = async (req, res) => {
 
 const signinController = async (req, res, next) => {
   console.log("Inside Login");
-  const { error } = loginValidation(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
   console.log(req.body.email, req.body.password);
   try {
     const user = await User.findByCredentials(
       req.body.email,
       req.body.password
     );
+    console.log(user.profile.firstName);
     const token = await user.generateAuthToken();
+    console.log(token);
     sendWelcomeEmail(user.email, user.firstName);
     res.send({ user, token });
   } catch (error) {
-    console.log("Error", error);
+    console.log("Error inside the Login");
     next(error);
   }
 };

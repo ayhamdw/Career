@@ -1,4 +1,4 @@
-const User = require("../models/user"); //! User Model Object
+const User = require("../models/user2"); //! User Model Object
 const Message = require("../models/message"); //! Message Model Object
 const messageController = async (req, res) => {
   try {

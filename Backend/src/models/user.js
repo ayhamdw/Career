@@ -126,7 +126,7 @@
 //   return user;
 // };
 
-// //Hash plain password before saving
+//Hash plain password before saving
 // userSchema.pre("save", async function (next) {
 //   const user = this;
 //   if (user.isModified("password")) {
