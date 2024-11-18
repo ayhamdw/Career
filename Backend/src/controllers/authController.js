@@ -2,17 +2,17 @@ const {
   signupValidation,
   loginValidation,
 } = require("../utils/validations/validation"); //! Validation Functions
-const User = require("../models/user"); //! User Model Object
+const User = require("../models/user2"); //! User Model Object
 const { sendWelcomeEmail } = require("../emails/account");
 
 const signupController = async (req, res) => {
   const { error } = signupValidation(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send("Error" + error.details[0].message);
 
   const user = new User(req.body);
-
   try {
     await user.save();
+    console.log("test");
     // sendWelcomeEmail(user.email, user.name)
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
