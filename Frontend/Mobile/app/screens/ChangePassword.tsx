@@ -11,13 +11,14 @@ import styles from "../../assets/styles/ChangePasswordStyle";
 import { COLORS } from "../../assets/styles/Dimensions";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ayhamWifiUrl } from "../../constants/Urls";
 
 const ChangePassword = ({ user }) => {
   const checkOldPassword = async (oldPassword: string) => {
     try {
       const token = await AsyncStorage.getItem("token"); // get the token to send it in the header
       const response = await axios.get(
-        "http://192.168.1.21:7777/api/password/oldPassword",
+        `${ayhamWifiUrl}/api/password/oldPassword`,
         {
           params: { oldPassword },
           headers: {

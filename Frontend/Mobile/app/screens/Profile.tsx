@@ -13,6 +13,7 @@ import { CommonActions, useNavigation } from "@react-navigation/native";
 import styles from "../../assets/styles/ProfileStyle";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ayhamWifiUrl } from "@/constants/Urls";
 const Profile = ({ user }) => {
   const navigation = useNavigation();
   const logoutFunction = async () => {
@@ -20,7 +21,7 @@ const Profile = ({ user }) => {
       const token = await AsyncStorage.getItem("token");
 
       const response = await axios.post(
-        "http://192.168.1.21:7777/api/auth/logout",
+        `${ayhamWifiUrl}/api/auth/logout`,
         {},
         {
           headers: {

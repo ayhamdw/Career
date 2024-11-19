@@ -53,12 +53,13 @@ const CustomTabNavigator = ({ screenData, user }) => (
           <TabIcon route={route} color={color} size={size} />
         ),
         tabBarLabelStyle: {
+          marginTop: 20,
           fontSize: 12,
           fontWeight: "bold",
         },
         tabBarStyle: {
-          backgroundColor: COLORS.tabBarBackgroundColor,
-          // paddingBottom: 5,
+          backgroundColor: "#fff",
+          paddingBottom: 5,
           borderTopWidth: 0,
           display: routeName === "ChatUser" ? "none" : "flex",
         },

@@ -111,7 +111,7 @@ const userSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt
+    timestamps: true,
   }
 );
 
@@ -132,7 +132,7 @@ userSchema.methods.generateAuthToken = async function () {
     expiresIn: "14d",
   });
 
-  user.tokens = await user.tokens.concat({ token });
+  user.tokens = user.tokens.concat({ token });
   await user.save();
 
   return token;

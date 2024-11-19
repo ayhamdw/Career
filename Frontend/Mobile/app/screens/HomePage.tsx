@@ -14,7 +14,6 @@ import { COLORS } from "@/assets/styles/Dimensions";
 import styles from "../../assets/styles/HomePageStyle";
 
 const HomePage = ({ user }) => {
-  console.log("User Home Page", user || "No user found");
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCity, setSelectedCity] = useState("Your Location");
   const [sidebarVisible, setSidebarVisible] = useState(false);
