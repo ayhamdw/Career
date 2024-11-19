@@ -12,6 +12,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
 import { SignUpStackParamList } from "./types";
 import axios, { AxiosError } from "axios";
+import { ayhamWifiUrl } from "@/constants/Urls";
 
 type PersonalDetailsProps = NativeStackScreenProps<
   SignUpStackParamList,
@@ -39,12 +40,9 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
   const handleNext = async () => {
     if (gender && email && dateOfBirth) {
       try {
-        const response = await axios.post(
-          "http://192.168.1.21:7777/api/check/email",
-          {
-            email,
-          }
-        );
+        const response = await axios.post(`${ayhamWifiUrl}/api/check/email`, {
+          email,
+        });
 
         if (response.status === 200) {
           console.log("Done");

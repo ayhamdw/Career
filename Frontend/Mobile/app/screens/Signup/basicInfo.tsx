@@ -17,7 +17,7 @@ import google from "../../../assets/images/google.png";
 import * as WebBrowser from "expo-web-browser";
 import axios, { AxiosError } from "axios";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
+import { ayhamWifiUrl } from "@/constants/Urls";
 type BasicInfoProps = NativeStackScreenProps<SignUpStackParamList, "BasicInfo">;
 
 const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
@@ -46,7 +46,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
     if (firstName && lastName && username) {
       try {
         const response = await axios.post(
-          `http://192.168.1.21:7777/api/check/username`,
+          `${ayhamWifiUrl}/api/check/username`,
           { username }
         );
         if (response.status === 200) {
