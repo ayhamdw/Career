@@ -4,22 +4,30 @@
     "scheme": "myapp",
     "slug": "Mobile",
     "version": "1.0.0",
+    "permissions": ["LOCATION"],
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.career.mobile"
-
+      "bundleIdentifier": "com.career.project",
+      "config": {
+        "googleMapsApiKey": "AIzaSyAFRRxD0w9k4pdQ4PYsnxHGBGa_GbVYljU"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       },
-      "package": "com.career.mobile"
+      "package": "com.career.mobile",
+      "googleMaps": {
+        "apiKey": "AIzaSyAFRRxD0w9k4pdQ4PYsnxHGBGa_GbVYljU"
+      }
     },
     "web": {
       "bundler": "metro",
@@ -29,6 +37,7 @@
       "expo-router",
       "expo-font",
       "expo-asset",
+      "expo-location",
       [
         "expo-image-picker",
         {
