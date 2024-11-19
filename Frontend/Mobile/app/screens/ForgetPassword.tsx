@@ -12,6 +12,8 @@ import styles from "../../assets/styles/ForgotPasswordStyle";
 import axios, { AxiosError } from "axios";
 import Toast from "react-native-toast-message";
 import { ScrollView } from "react-native-gesture-handler";
+import { ayhamWifiUrl } from "../../constants/Urls";
+
 export default function ForgotPassword() {
   const [username, setUsername] = useState("");
   const [code, setCode] = useState("");
@@ -24,7 +26,7 @@ export default function ForgotPassword() {
       return;
     }
     const response = await axios.post(
-      "http://192.168.1.21:7777/api/password/forgotPassword",
+      `${ayhamWifiUrl}/api/password/forgotPassword`,
       { username }
     );
     if (response.status === 200) {
@@ -49,7 +51,7 @@ export default function ForgotPassword() {
       };
       try {
         const response = await axios.post(
-          "http://192.168.1.21:7777/api/password/resetPassword",
+          `${ayhamWifiUrl}/api/password/resetPassword`,
           { data }
         );
         if (response.status === 200) {

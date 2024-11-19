@@ -16,26 +16,22 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import styles from "../../assets/styles/LoginStyle";
 import { COLORS } from "@/assets/styles/Dimensions";
-import { LoginProps } from "./utils/TypesLogin";
 import { useNavigation } from "@react-navigation/native";
+import { ayhamWifiUrl } from "../../constants/Urls";
 const Login = () => {
   const navigation = useNavigation();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const theme = isDarkMode ? darkTheme : lightTheme;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  console.log(ayhamWifiUrl);
   const toggleSwitch = () => setIsDarkMode((previousState) => !previousState);
   const signInButton = async () => {
     try {
-      const response = await axios.post(
-        "http://192.168.1.21:7777/api/auth/login",
-        {
-          email,
-          password,
-        }
-      );
-      console.log("test");
+      const response = await axios.post(`${ayhamWifiUrl}/api/auth/login`, {
+        email,
+        password,
+      });
       const { token, user } = response.data;
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", JSON.stringify(user));

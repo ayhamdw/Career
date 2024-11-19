@@ -16,6 +16,7 @@ import styles from "../../assets/styles/MessagesStyle";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
+import { ayhamWifiUrl } from "@/constants/Urls";
 
 interface User {
   _id: string; // Include _id as it's used in the fetch call
@@ -40,7 +41,7 @@ const Messages: React.FC<MessagesProps> = ({ user }) => {
         const token = await AsyncStorage.getItem("token");
         const id = user._id;
         const response = await axios.get(
-          `http://192.168.1.21:7777/api/friends/acceptedFriends/${id}`,
+          `${ayhamWifiUrl}/api/friends/acceptedFriends/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -29,10 +29,9 @@ const signinController = async (req, res, next) => {
       req.body.email,
       req.body.password
     );
-    console.log(user.profile.firstName);
     const token = await user.generateAuthToken();
     console.log(token);
-    sendWelcomeEmail(user.email, user.firstName);
+    sendWelcomeEmail(user.email, user.profile.firstName);
     res.send({ user, token });
   } catch (error) {
     console.log("Error inside the Login");

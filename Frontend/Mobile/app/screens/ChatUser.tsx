@@ -23,6 +23,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 
 import styles from "@/assets/styles/ChatUserStyle";
+import { ayhamWifiUrl } from "../../constants/Urls";
 
 const ChatUser = ({ user }) => {
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
@@ -46,7 +47,7 @@ const ChatUser = ({ user }) => {
       const token = await AsyncStorage.getItem("token");
       try {
         const receiverData = await axios.get(
-          `http://192.168.1.21:7777/api/messages/getChatUserDetails/${receiverId}`,
+          `${ayhamWifiUrl}/api/messages/getChatUserDetails/${receiverId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -96,7 +97,7 @@ const ChatUser = ({ user }) => {
         formData.append("messageText", message);
       }
       const response = await axios.post(
-        "http://192.168.1.21:7777/api/messages/messages",
+        `${ayhamWifiUrl}/api/messages/messages`,
         formData,
         {
           headers: {
@@ -121,7 +122,7 @@ const ChatUser = ({ user }) => {
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await axios.get(
-        `http://192.168.1.21:7777/api/messages/messages/${senderId}/${receiverId}`,
+        `${ayhamWifiUrl}/api/messages/messages/${senderId}/${receiverId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -220,7 +221,7 @@ const ChatUser = ({ user }) => {
               </Pressable>
             );
           } else if (item.messageType === "image") {
-            const baseUrl = "http://192.168.1.21:7777/assets/images/";
+            const baseUrl = `${ayhamWifiUrl}/assets/images/`;
             const imageUrl = item.messageUrl;
             // console.log(imageUrl);
             const fileName = imageUrl.split("\\").pop();

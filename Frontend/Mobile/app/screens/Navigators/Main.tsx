@@ -9,8 +9,7 @@ import ChatUser from "../ChatUser";
 import MessageNavigator from "./MessageNavigator";
 
 const Main = ({ route }) => {
-  const { user } = route?.params || {}; // Use optional chaining and fallback to {}
-  console.log("Main user:", user);
+  const { user } = route?.params || {};
 
   if (!user) {
     console.warn("No user passed to Main.");

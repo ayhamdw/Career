@@ -14,6 +14,7 @@ import axios from "axios";
 import styles from "@/assets/styles/RequestStyle";
 import { AntDesign } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
+import { ayhamWifiUrl } from "@/constants/Urls";
 
 interface User {
   _id: string;
@@ -40,7 +41,7 @@ const Request: React.FC<FriendRequestPageProps> = ({ user }) => {
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await axios.post(
-        "http://192.168.1.21:7777/api/friends/send-friend-request",
+        `${ayhamWifiUrl}/api/friends/send-friend-request`,
         { ids },
         {
           headers: {
@@ -60,7 +61,7 @@ const Request: React.FC<FriendRequestPageProps> = ({ user }) => {
         const token = await AsyncStorage.getItem("token");
         const id = user._id;
         const response = await axios.get(
-          `http://192.168.1.21:7777/api/friends/logInUsers/${id}`,
+          `${ayhamWifiUrl}/api/friends/logInUsers/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
