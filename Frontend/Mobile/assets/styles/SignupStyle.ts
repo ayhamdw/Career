@@ -2,10 +2,10 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
     padding: 20,
     backgroundColor: "#fff",
     justifyContent: "center",
+    height: "100%",
   },
   headerText: {
     fontSize: 24,
@@ -77,7 +77,7 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    marginTop: 20,
+    // marginTop: 20,
     width: "45%",
   },
   buttonText: {
@@ -87,7 +87,7 @@ export default StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginTop: 20,
   },
   dropdown: {

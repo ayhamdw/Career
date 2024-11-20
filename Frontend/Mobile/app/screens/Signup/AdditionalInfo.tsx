@@ -53,39 +53,6 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
     { label: "Other", value: "other" },
   ]);
 
-  const proficiencies = [
-    { label: "Electrician", value: "electrician" },
-    { label: "Plumber", value: "plumber" },
-    { label: "Carpenter", value: "carpenter" },
-    { label: "Painter", value: "painter" },
-    { label: "Mechanic", value: "mechanic" },
-    { label: "Gardener", value: "gardener" },
-    { label: "Driver", value: "driver" },
-    { label: "Housekeeper", value: "housekeeper" },
-    { label: "Chef", value: "chef" },
-    { label: "Teacher", value: "teacher" },
-    { label: "Tutor", value: "tutor" },
-    { label: "Babysitter", value: "babysitter" },
-    { label: "Personal Trainer", value: "personal_trainer" },
-    { label: "IT Specialist", value: "it_specialist" },
-    { label: "Web Developer", value: "web_developer" },
-    { label: "Designer", value: "designer" },
-    { label: "Translator", value: "translator" },
-    { label: "Marketing Specialist", value: "marketing_specialist" },
-    { label: "Salesperson", value: "salesperson" },
-    { label: "Customer Support", value: "customer_support" },
-    { label: "Doctor", value: "doctor" },
-    { label: "Nurse", value: "nurse" },
-    { label: "Engineer", value: "engineer" },
-    { label: "Lawyer", value: "lawyer" },
-    { label: "Barber", value: "barber" },
-    { label: "Accountant", value: "accountant" },
-    { label: "Pharmacist", value: "pharmacist" },
-    { label: "Social Worker", value: "social_worker" },
-    { label: "Psychologist", value: "psychologist" },
-    { label: "Architect", value: "architect" },
-    { label: "Other", value: "other" },
-  ];
   const userLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -274,7 +241,7 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
             <Text style={styles.buttonText}>Previous</Text>
           </Pressable>
           <Pressable onPress={handleSignUp} style={styles.button}>
-            <Text style={styles.buttonText}>Sign Up</Text>
+            <Text style={styles.buttonText}>Next</Text>
           </Pressable>
         </View>
       </View>

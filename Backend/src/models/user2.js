@@ -40,6 +40,17 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: "user",
     },
+    career: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    careerCategory: {
+      type: String,
+      required: true,
+      enum: ["Home Services", "Technical", "Education", "Healthcare", "Other"], // Define specific categories
+      trim: true,
+    },
     profile: {
       firstName: { type: String, required: true, trim: true },
       lastName: { type: String, required: true, trim: true },
