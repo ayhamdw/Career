@@ -13,7 +13,6 @@ import styles from "../../../assets/styles/SignupStyle";
 import { SignUpStackParamList } from "./types";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
-import axios from "axios";
 
 type AdditionalInfoProps = NativeStackScreenProps<
   SignUpStackParamList,
@@ -40,8 +39,8 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
     longitudeDelta: 0.0421,
   });
 
-  const cities = [
-    { label: "Qalqilya", value: "Qalqilya" },
+  const [cities, setCities] = useState([
+    { label: "Qalqiliya", value: "Qalqiliya" },
     { label: "Nablus", value: "Nablus" },
     { label: "Tulkarm", value: "Tulkarm" },
     { label: "Jenin", value: "Jenin" },
@@ -50,7 +49,7 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
     { label: "Jerusalem", value: "Jerusalem" },
     { label: "Ramallah", value: "Ramallah" },
     { label: "Other", value: "other" },
-  ];
+  ]);
 
   const proficiencies = [
     { label: "Electrician", value: "electrician" },
@@ -85,27 +84,39 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
     { label: "Architect", value: "architect" },
     { label: "Other", value: "other" },
   ];
-
   const userLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       console.log("Permission to access location was denied");
       return;
-    } else {
-      let location = await Location.getCurrentPositionAsync({
-        enableHighAccuracy: true,
-      });
+    }
+
+    try {
+      let location = await Location.getCurrentPositionAsync({});
       let regionName = await Location.reverseGeocodeAsync({
-        latitude: mapRegion.latitude,
-        longitude: mapRegion.longitude,
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
       });
-      console.log(regionName, "nothing");
+
+      const mapCity = regionName[0]?.city || "Unknown City";
+
       setMapRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       });
+
+      setCities((prevCities) => {
+        if (!prevCities.find((item) => item.value === mapCity)) {
+          return [{ label: mapCity, value: mapCity }, ...prevCities];
+        }
+        return prevCities;
+      });
+
+      setCity(mapCity);
+    } catch (error) {
+      console.error("Error fetching location:", error);
     }
   };
 
@@ -113,43 +124,43 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
     userLocation();
   }, []);
 
-  async function getCityName(latitude, longitude, apiKey) {
-    try {
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
-      const response = await axios.get(url);
+  // async function getCityName(latitude, longitude, apiKey) {
+  //   try {
+  //     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+  //     const response = await axios.get(url);
 
-      if (response.data.status === "OK" && response.data.results.length > 0) {
-        const addressComponents = response.data.results[0].address_components;
+  //     if (response.data.status === "OK" && response.data.results.length > 0) {
+  //       const addressComponents = response.data.results[0].address_components;
 
-        // Find the city from address components
-        const cityComponent = addressComponents.find((component) =>
-          component.types.includes("locality")
-        );
+  //       // Find the city from address components
+  //       const cityComponent = addressComponents.find((component) =>
+  //         component.types.includes("locality")
+  //       );
 
-        return cityComponent ? cityComponent.long_name : "City not found";
-      } else {
-        throw new Error(`Error: ${response.data.status}`);
-      }
-    } catch (error) {
-      console.error("Error getting city name:", error.message);
-      throw error;
-    }
-  }
+  //       return cityComponent ? cityComponent.long_name : "City not found";
+  //     } else {
+  //       throw new Error(`Error: ${response.data.status}`);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error getting city name:", error.message);
+  //     throw error;
+  //   }
+  // }
 
-  (async () => {
-    const apiKey = "AIzaSyAFRRxD0w9k4pdQ4PYsnxHGBGa_GbVYljU";
-    try {
-      console.log(mapRegion.latitude, mapRegion.longitude);
-      const city = await getCityName(
-        mapRegion.latitude,
-        mapRegion.longitude,
-        apiKey
-      );
-      console.log("City Name:", city);
-    } catch (error) {
-      console.error("Error fetching city name:", error.message);
-    }
-  })();
+  // (async () => {
+  //   const apiKey = "AIzaSyAFRRxD0w9k4pdQ4PYsnxHGBGa_GbVYljU";
+  //   try {
+  //     console.log(mapRegion.latitude, mapRegion.longitude);
+  //     const city = await getCityName(
+  //       mapRegion.latitude,
+  //       mapRegion.longitude,
+  //       apiKey
+  //     );
+  //     console.log("City Name:", city);
+  //   } catch (error) {
+  //     console.error("Error fetching city name:", error.message);
+  //   }
+  // })();
 
   const handleSignUp = () => {
     if (city && career && password) {
@@ -185,7 +196,6 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
       <View style={styles.container}>
         <Text style={styles.headerText}>Personal Information</Text>
 
-        {/* City Dropdown */}
         <Dropdown
           style={[styles.dropdown, { borderColor: "#58d68d", borderWidth: 1 }]}
           placeholderStyle={styles.placeholderStyle}
@@ -208,7 +218,6 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
           }}
         />
 
-        {/* Additional City Input */}
         {city === "other" && (
           <TextInput
             style={styles.textInput}
@@ -218,7 +227,6 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
           />
         )}
 
-        {/* Career Dropdown */}
         <Dropdown
           style={[styles.dropdown, { borderColor: "#58d68d", borderWidth: 1 }]}
           placeholderStyle={styles.placeholderStyle}
@@ -241,7 +249,6 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
           }}
         />
 
-        {/* Additional Career Input */}
         {career === "other" && (
           <TextInput
             placeholder="Your Career"
@@ -251,7 +258,6 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
           />
         )}
 
-        {/* Password Input */}
         <TextInput
           placeholder="Password"
           value={password.trim()}
@@ -260,7 +266,6 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
           style={styles.textInput}
         />
 
-        {/* Buttons */}
         <View style={styles.buttonContainer}>
           <Pressable onPress={handlePrevious} style={styles.button}>
             <Text style={styles.buttonText}>Previous</Text>
@@ -271,11 +276,10 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
         </View>
       </View>
 
-      {/* Google Map */}
       <View>
         <MapView
           region={mapRegion}
-          style={{ width: "100%", height: 200 }}
+          style={{ width: "100%", height: 400 }}
           showsUserLocation={true}
         />
       </View>
