@@ -23,10 +23,20 @@ const signupValidation = (data) => {
         "Password must contain at least one letter and one number.",
       "any.required": "Password is required.",
     }),
-    role: Joi.string().valid("user", "provider").required().messages({
-      "any.only": "Role must be either 'user' or 'provider'.",
+    role: Joi.string().valid("user", "adin").required().messages({
+      "any.only": "Role must be either 'user' or 'admin'.",
       "any.required": "Role is required.",
     }),
+    career: Joi.string().trim().optional(),
+    careerCategory: Joi.string().valid(
+      "Home Services",
+      "Technical",
+      "Education",
+      "Healthcare",
+      "Legal & Financial Services",
+      "Creative Services",
+      "Other"
+    ),
     profile: Joi.object({
       firstName: Joi.string().min(3).max(30).trim().required().messages({
         "string.base": "First name must be a string.",

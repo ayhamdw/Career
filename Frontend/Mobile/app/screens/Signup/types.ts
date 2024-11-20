@@ -4,5 +4,6 @@ export type SignUpStackParamList = {
     Verification: { firstName: string; lastName: string; username: string; gender: string; dateOfBirth: Date; email: string, code:number };
     AdditionalInfo: { firstName: string; lastName: string; username: string; gender: string; dateOfBirth: Date; email: string };
     CareerDetails: {firstName: string; lastName: string; username: string; gender: string; dateOfBirth: Date; email: string,city:string, latitude: number, longitude: number};
+    PasswordPage: {firstName: string; lastName: string; username: string; gender: string; dateOfBirth: Date; email: string,city:string, latitude: number, longitude: number,category:string,career:string,bio:string}
   };
   

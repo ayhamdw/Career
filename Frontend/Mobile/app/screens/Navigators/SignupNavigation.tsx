@@ -4,6 +4,7 @@ import PersonalDetails from "../Signup/PersonalDetails";
 import Verification from "../Signup/Verification";
 import AdditionalInfo from "../Signup/AdditionalInfo";
 import CareerDetails from "../Signup/CareerDetails";
+import PasswordPage from "../Signup/PasswordPage";
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,13 @@ const SignUpNavigator = () => {
       <Stack.Screen
         name="CareerDetails"
         component={CareerDetails}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PasswordPage"
+        component={PasswordPage}
         options={{
           headerShown: false,
         }}
