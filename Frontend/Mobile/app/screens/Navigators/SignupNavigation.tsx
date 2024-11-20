@@ -3,6 +3,7 @@ import BasicInfo from "../Signup/basicInfo";
 import PersonalDetails from "../Signup/PersonalDetails";
 import Verification from "../Signup/Verification";
 import AdditionalInfo from "../Signup/AdditionalInfo";
+import CareerDetails from "../Signup/CareerDetails";
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,13 @@ const SignUpNavigator = () => {
       <Stack.Screen
         name="AdditionalInfo"
         component={AdditionalInfo}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="CareerDetails"
+        component={CareerDetails}
         options={{
           headerShown: false,
         }}

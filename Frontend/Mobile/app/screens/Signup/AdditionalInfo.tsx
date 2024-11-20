@@ -32,6 +32,8 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
   const [career, setCareer] = useState<string>("");
   const [anotherCity, setAnotherCity] = useState<string>("");
   const [anotherCareer, setAnotherCareer] = useState<string>("");
+  const [latitude, setLatitude] = useState<number>(0);
+  const [longitude, setLongitude] = useState<number>(0);
   const [mapRegion, setMapRegion] = useState({
     latitude: 31.9464,
     longitude: 35.3027,
@@ -98,6 +100,9 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
         longitude: location.coords.longitude,
       });
 
+      setLatitude(location.coords.latitude);
+      setLongitude(location.coords.longitude);
+
       const mapCity = regionName[0]?.city || "Unknown City";
 
       setMapRegion({
@@ -163,10 +168,9 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
   // })();
 
   const handleSignUp = () => {
-    if (city && career && password) {
+    if (city) {
       const selectCity = city === "other" ? anotherCity : city;
-      const selectCareer = career === "other" ? anotherCareer : career;
-      console.log("User data:", {
+      navigation.navigate("CareerDetails", {
         firstName,
         lastName,
         username,
@@ -174,10 +178,9 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
         dateOfBirth,
         email,
         city: selectCity,
-        career: selectCareer,
-        password,
+        latitude,
+        longitude,
       });
-      alert("Welcome to Career!!!");
     } else {
       alert("Please fill all fields");
     }
@@ -227,7 +230,7 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
           />
         )}
 
-        <Dropdown
+        {/* <Dropdown
           style={[styles.dropdown, { borderColor: "#58d68d", borderWidth: 1 }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
@@ -256,15 +259,15 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
             value={anotherCareer.trim()}
             onChangeText={setAnotherCareer}
           />
-        )}
+        )} */}
 
-        <TextInput
+        {/* <TextInput
           placeholder="Password"
           value={password.trim()}
           onChangeText={setPassword}
           secureTextEntry
           style={styles.textInput}
-        />
+        /> */}
 
         <View style={styles.buttonContainer}>
           <Pressable onPress={handlePrevious} style={styles.button}>
@@ -279,7 +282,7 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
       <View>
         <MapView
           region={mapRegion}
-          style={{ width: "100%", height: 400 }}
+          style={{ width: "100%", height: 500 }}
           showsUserLocation={true}
         />
       </View>
