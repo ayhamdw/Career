@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Root from './Root'
 import NotFound from './General-Components/NotFound/NotFound'
 import HomePage from './HomePage/HomePage'
@@ -37,7 +37,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-    
+      <RouterProvider router={router}/>
     </>
     
   )
