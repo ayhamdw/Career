@@ -8,7 +8,7 @@ const {
   logoutAllController,
   checkUserNameController,
 } = require("../controllers/authController");
-router.post("/signup", signupController);
+router.post("/register", signupController);
 
 router.post("/login", signinController);
 

@@ -6,31 +6,31 @@ const User = require("../models/user2"); //! User Model Object
 const { sendWelcomeEmail } = require("../emails/account");
 
 const signupController = async (req, res) => {
+  console.log(req.body);
   const { error } = signupValidation(req.body);
   if (error) return res.status(400).send("Error" + error.details[0].message);
-
   const user = new User(req.body);
   try {
     await user.save();
     console.log("test");
-    // sendWelcomeEmail(user.email, user.name)
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
   } catch (error) {
+    console.log("Error inside the Signup", error);
     res.status(400).send(error);
   }
 };
 
 const signinController = async (req, res, next) => {
-  console.log("Inside Login");
-  console.log(req.body.email, req.body.password);
+  // console.log("Inside Login");
+  // console.log(req.body.email, req.body.password);
   try {
     const user = await User.findByCredentials(
       req.body.email,
       req.body.password
     );
     const token = await user.generateAuthToken();
-    console.log(token);
+    // console.log("token ", token);
     sendWelcomeEmail(user.email, user.profile.firstName);
     res.send({ user, token });
   } catch (error) {

@@ -24,7 +24,6 @@ const Login = () => {
   const theme = isDarkMode ? darkTheme : lightTheme;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  console.log(ayhamWifiUrl);
   const toggleSwitch = () => setIsDarkMode((previousState) => !previousState);
   const signInButton = async () => {
     try {

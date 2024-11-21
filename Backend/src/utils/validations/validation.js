@@ -27,14 +27,17 @@ const signupValidation = (data) => {
       "any.only": "Role must be either 'user' or 'admin'.",
       "any.required": "Role is required.",
     }),
+    gender: Joi.string().valid("Male", "Female").required(),
+    city: Joi.string().trim().optional(),
+    dateOfBirth: Joi.date().required(),
     career: Joi.string().trim().optional(),
     careerCategory: Joi.string().valid(
       "Home Services",
-      "Technical",
-      "Education",
+      "Technical Services",
+      "Educational Services",
       "Healthcare",
-      "Legal & Financial Services",
       "Creative Services",
+      "Legal & Financial Services",
       "Other"
     ),
     profile: Joi.object({

@@ -3,14 +3,16 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  TextInputComponent,
   TextInput,
   Pressable,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { SignUpStackParamList } from "./types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
+import axios from "axios";
+import { ayhamWifiUrl } from "@/constants/Urls";
 
 type PasswordPageProps = NativeStackScreenProps<
   SignUpStackParamList,
@@ -20,10 +22,26 @@ type PasswordPageProps = NativeStackScreenProps<
 const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const {
+    firstName,
+    lastName,
+    username,
+    gender,
+    dateOfBirth,
+    email,
+    city,
+    latitude,
+    longitude,
+    category,
+    career,
+    bio,
+    experience,
+  } = route.params;
+
   const handlePrevious = () => {
     navigation.goBack();
   };
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!password || !confirmPassword) {
       alert("Please fill in all fields");
       return;
@@ -32,9 +50,66 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
       alert("Passwords do not match");
       return;
     }
-    console.log("Done");
+    try {
+      const response = await axios.post(`${ayhamWifiUrl}/api/auth/register`, {
+        username,
+        email,
+        password,
+        role: "user",
+        gender,
+        city,
+        dateOfBirth,
+        career,
+        careerCategory: category,
+        profile: {
+          firstName,
+          lastName,
+          bio,
+          experience,
+          phone: "+970594387038",
+          location: {
+            type: "Point",
+            coordinates: [longitude, latitude],
+          },
+        },
+        verificationStatus: false,
+        tokens: [],
+        friendRequests: [],
+        friends: [],
+        sendRequests: [],
+        resetCode: 0,
+        resetCodeExpires: new Date().toISOString(),
+      });
+      console.log("inside");
+      if (response.status === 201) {
+        console.log("Done");
+        Alert.alert(
+          "🎉 Success 🎉",
+          "Your account has been created successfully! 🚀 Ready to explore amazing features?",
+          [
+            {
+              text: "Let's Go! 🚀",
+              onPress: () => console.log("User navigated to the app"),
+            },
+          ]
+        );
+        navigation.navigate("MainNavigation");
+      }
+    } catch (error) {
+      console.log("Error");
+      Alert.alert(
+        "❌ Oops!",
+        "Something went wrong while creating your account. 😔 Please try again or check your details.",
+        [
+          {
+            text: "Retry 🔄",
+            onPress: () => console.log("User attempts to retry"),
+          },
+          { text: "Cancel ❌", style: "cancel" },
+        ]
+      );
+    }
   };
-  console.log(route.params);
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -63,7 +138,7 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
           </Pressable>
 
           <Pressable onPress={handleNext} style={styles.button}>
-            <Text style={styles.buttonText}>Next</Text>
+            <Text style={styles.buttonText}>Signup</Text>
           </Pressable>
         </View>
       </View>
