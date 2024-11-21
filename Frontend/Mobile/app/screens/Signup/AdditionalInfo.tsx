@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
+import { View, KeyboardAvoidingView, Platform } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
 import { SignUpStackParamList } from "./types";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
+import Header from "@/components/General Components/Header/Header";
+import CityDropdown from "@/components/AdditionalInfo/CityDropdown/CityDropdown";
+import TextInputWrapper from "@/components/AdditionalInfo/TextInputWrapper/TextInputWrapper";
+import ButtonGroup from "@/components/AdditionalInfo/ButtonGroup/ButtonGroup";
+import MapComponent from "@/components/AdditionalInfo/MapComponent/MapComponent";
 
 type AdditionalInfoProps = NativeStackScreenProps<
   SignUpStackParamList,
@@ -25,13 +21,9 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
 }) => {
   const { firstName, lastName, username, gender, dateOfBirth, email } =
     route.params;
-  const [password, setPassword] = useState<string>("");
   const [cityFocus, setCityFocus] = useState<boolean>(false);
-  const [careerFocus, setCareerFocus] = useState<boolean>(false);
   const [city, setCity] = useState<string>("");
-  const [career, setCareer] = useState<string>("");
   const [anotherCity, setAnotherCity] = useState<string>("");
-  const [anotherCareer, setAnotherCareer] = useState<string>("");
   const [latitude, setLatitude] = useState<number>(0);
   const [longitude, setLongitude] = useState<number>(0);
   const [mapRegion, setMapRegion] = useState({
@@ -96,44 +88,6 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
     userLocation();
   }, []);
 
-  // async function getCityName(latitude, longitude, apiKey) {
-  //   try {
-  //     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
-  //     const response = await axios.get(url);
-
-  //     if (response.data.status === "OK" && response.data.results.length > 0) {
-  //       const addressComponents = response.data.results[0].address_components;
-
-  //       // Find the city from address components
-  //       const cityComponent = addressComponents.find((component) =>
-  //         component.types.includes("locality")
-  //       );
-
-  //       return cityComponent ? cityComponent.long_name : "City not found";
-  //     } else {
-  //       throw new Error(`Error: ${response.data.status}`);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error getting city name:", error.message);
-  //     throw error;
-  //   }
-  // }
-
-  // (async () => {
-  //   const apiKey = "AIzaSyAFRRxD0w9k4pdQ4PYsnxHGBGa_GbVYljU";
-  //   try {
-  //     console.log(mapRegion.latitude, mapRegion.longitude);
-  //     const city = await getCityName(
-  //       mapRegion.latitude,
-  //       mapRegion.longitude,
-  //       apiKey
-  //     );
-  //     console.log("City Name:", city);
-  //   } catch (error) {
-  //     console.error("Error fetching city name:", error.message);
-  //   }
-  // })();
-
   const handleSignUp = () => {
     if (city) {
       const selectCity = city === "other" ? anotherCity : city;
@@ -164,53 +118,23 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
       keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
     >
       <View style={styles.container}>
-        <Text style={styles.headerText}>Personal Information</Text>
-
-        <Dropdown
-          style={[styles.dropdown, { borderColor: "#58d68d", borderWidth: 1 }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          data={cities}
-          search
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!cityFocus ? "Select City" : "..."}
-          searchPlaceholder="Search..."
-          value={city}
-          onFocus={() => setCityFocus(true)}
-          onBlur={() => setCityFocus(false)}
-          onChange={(item) => {
-            setCity(item.value);
-            setCityFocus(false);
-          }}
+        <Header title="Personal Information" />
+        <CityDropdown
+          cities={cities}
+          city={city}
+          setCity={setCity}
+          setCityFocus={setCityFocus}
+          cityFocus={cityFocus}
         />
-
         {city === "other" && (
-          <TextInput
-            style={styles.textInput}
+          <TextInputWrapper
             placeholder="City Name"
-            onChangeText={(text) => setAnotherCity(text)}
+            onChangeText={setAnotherCity}
             value={anotherCity.trim()}
           />
         )}
-
-        <View style={[styles.buttonContainer, { marginBottom: 20 }]}>
-          <Pressable onPress={handlePrevious} style={styles.button}>
-            <Text style={styles.buttonText}>Previous</Text>
-          </Pressable>
-          <Pressable onPress={handleSignUp} style={styles.button}>
-            <Text style={styles.buttonText}>Next</Text>
-          </Pressable>
-        </View>
-        <MapView
-          region={mapRegion}
-          style={{ width: "100%", height: "60%" }}
-          showsUserLocation={true}
-          zoomEnabled={true}
-        />
+        <ButtonGroup onPrevious={handlePrevious} onNext={handleSignUp} />
+        <MapComponent region={mapRegion} />
       </View>
     </KeyboardAvoidingView>
   );
