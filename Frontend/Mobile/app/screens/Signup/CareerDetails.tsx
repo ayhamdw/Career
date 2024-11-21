@@ -22,7 +22,7 @@ const CareerDetails: React.FC<CareerDetailsProps> = ({ navigation, route }) => {
   const [career, setCareer] = useState<string>("");
   const [categoryFocus, setCategoryFocus] = useState<boolean>(false);
   const [careerFocus, setCareerFocus] = useState<boolean>(false);
-  const [bio, selectedBio] = useState<string>("");
+  const [bio, setBio] = useState<string>("");
   const [experience, setExperience] = useState<string>("");
 
   const {
@@ -129,7 +129,7 @@ const CareerDetails: React.FC<CareerDetailsProps> = ({ navigation, route }) => {
     categories.find((cat) => cat.category === category)?.careers || [];
 
   const handleNext = () => {
-    if (!category || !career || !selectedBio) {
+    if (!category || !career || !setBio) {
       alert("Please Fill All Fields");
       return;
     }
@@ -223,7 +223,7 @@ const CareerDetails: React.FC<CareerDetailsProps> = ({ navigation, route }) => {
           <TextInput
             multiline={true}
             style={[styles.textInput, { height: 100 }]}
-            onChangeText={(text) => selectedBio(text)}
+            onChangeText={(text) => setBio(text)}
             value={bio}
           />
           <Text style={styles.label}>Write Experience</Text>
