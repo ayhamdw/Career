@@ -146,6 +146,7 @@ const CareerDetails: React.FC<CareerDetailsProps> = ({ navigation, route }) => {
       category,
       career,
       bio,
+      experience,
     });
   };
 

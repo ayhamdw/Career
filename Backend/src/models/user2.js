@@ -40,6 +40,20 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: "user",
     },
+    gender: {
+      type: String,
+      required: true,
+      enum: ["Male", "Female"],
+    },
+    city: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    dateOfBirth: {
+      type: Date,
+      required: true,
+    },
     career: {
       type: String,
       required: false,
@@ -48,7 +62,15 @@ const userSchema = new mongoose.Schema(
     careerCategory: {
       type: String,
       required: true,
-      enum: ["Home Services", "Technical", "Education", "Healthcare", "Other"], // Define specific categories
+      enum: [
+        "Home Services",
+        "Technical Services",
+        "Educational Services",
+        "Healthcare",
+        "Creative Services",
+        "Legal & Financial Services",
+        "Other",
+      ], // Define specific categories
       trim: true,
     },
     profile: {

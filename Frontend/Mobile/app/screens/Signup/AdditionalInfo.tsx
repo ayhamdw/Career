@@ -197,46 +197,7 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
           />
         )}
 
-        {/* <Dropdown
-          style={[styles.dropdown, { borderColor: "#58d68d", borderWidth: 1 }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          data={proficiencies}
-          search
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!careerFocus ? "Select Career" : "..."}
-          searchPlaceholder="Search..."
-          value={career}
-          onFocus={() => setCareerFocus(true)}
-          onBlur={() => setCareerFocus(false)}
-          onChange={(item) => {
-            setCareer(item.value);
-            setCareerFocus(false);
-          }}
-        />
-
-        {career === "other" && (
-          <TextInput
-            placeholder="Your Career"
-            style={styles.textInput}
-            value={anotherCareer.trim()}
-            onChangeText={setAnotherCareer}
-          />
-        )} */}
-
-        {/* <TextInput
-          placeholder="Password"
-          value={password.trim()}
-          onChangeText={setPassword}
-          secureTextEntry
-          style={styles.textInput}
-        /> */}
-
-        <View style={styles.buttonContainer}>
+        <View style={[styles.buttonContainer, { marginBottom: 20 }]}>
           <Pressable onPress={handlePrevious} style={styles.button}>
             <Text style={styles.buttonText}>Previous</Text>
           </Pressable>
@@ -244,13 +205,11 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
             <Text style={styles.buttonText}>Next</Text>
           </Pressable>
         </View>
-      </View>
-
-      <View>
         <MapView
           region={mapRegion}
-          style={{ width: "100%", height: 500 }}
+          style={{ width: "100%", height: "60%" }}
           showsUserLocation={true}
+          zoomEnabled={true}
         />
       </View>
     </KeyboardAvoidingView>
