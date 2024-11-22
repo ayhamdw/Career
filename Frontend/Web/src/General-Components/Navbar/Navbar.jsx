@@ -8,7 +8,7 @@ import NavLogo from './logo.png'
 
 
 function Navbar() {
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(true);
 
   function showMenuBar() {
     setShowMenu(!showMenu);

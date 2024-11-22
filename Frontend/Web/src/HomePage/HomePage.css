@@ -1,0 +1,21 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Arial", sans-serif; 
+  }
+
+.containerHome{
+    margin-top: -80px;
+    /* background-color: red; */
+    
+}
+
+.swiper{
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+  
