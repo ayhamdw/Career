@@ -23,16 +23,16 @@ function HomePage() {
           delay: 2000, // Delay between slide transitions (in milliseconds)
           disableOnInteraction: false, // Keep autoplay running even if the user interacts with the slider
         }}
-        breakpoints={{
-          340:{
-            slidesPerView:1,
-            spaceBetween: 15
-          },
-          700:{
-            slidesPerView:1,
-            spaceBetween: 15
-          }
-        }}
+        // breakpoints={{
+        //   340:{
+        //     slidesPerView:1,
+        //     spaceBetween: 15
+        //   },
+        //   700:{
+        //     slidesPerView:1,
+        //     spaceBetween: 15
+        //   }
+        // }}
         freeMode={false}
         pagination={{
           clickable: true
@@ -42,11 +42,11 @@ function HomePage() {
         
         modules={[FreeMode, Pagination, Autoplay]}
         
-        className='max-w-[90%] lg:max-w-full h-full'
+        className='max-w-[100%] lg:max-w-full h-full'
         >
           {ServiceData.map((item)=>(
             <SwiperSlide key={item.title}>
-            <div className="flex flex-col gap-6 mb-20 group relative shadow-lg text-white rounded-xl px-6 py-8  h-[250px] lg:h-[500px] overflow-hidden cursor-pointer">
+            <div className="flex flex-col group relative shadow-lg text-white rounded-xl px-6 py-8  h-[400px] lg:h-[500px] overflow-hidden cursor-pointer">
               <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{ backgroundImage: `url(${item.backgroundImage})` }}
