@@ -10,50 +10,46 @@ import NavLogo from './logo.png'
 function Navbar() {
   const [showMenu, setShowMenu] = useState(false);
 
-  function showMenuBar(){
+  function showMenuBar() {
     setShowMenu(!showMenu);
-    // if(showMenu){
-  
-    // }
-    // else
   }
-  
+
   return (
     <>
       <div className='container'>
-          <div className={showMenu? 'closeNav' : 'openNav'}>
-            <div className='Logo'>
-              <img src={NavLogo} alt="Career Logo" />
-            </div>
-            <div className={showMenu? 'navSections':'navSectionsOpen'}>
-              <Link className='navSection'>
-                <p>Main</p>
-              </Link>
-              <Link className='navSection'>
-                <p>Requests</p>
-              </Link>
-              <Link className='navSection'>
-                <p>Messages</p>
-              </Link>
-              <Link className='navSection'>
-                <p>Friend Requests</p>
-              </Link>
-              <Link className='navSection'>
-                <p>Settings</p>
-              </Link>
-            </div>
-            <div className='logining'>
-              <Link className='signIn'>Sign in</Link>
-              <Link className='signUp'>Sign Up</Link>
-            </div>
-            <button className={showMenu? 'burger-menu-close' : 'burger-menu-open'} onClick={showMenuBar}>
-              <div className="line"></div>
-              <div className="line"></div>
-              <div className="line"></div>
-            </button>
+        <div className={showMenu ? 'closeNav' : 'openNav'}>
+          <div className='Logo'>
+            <img src={NavLogo} alt="Career Logo" />
           </div>
+          <div className={showMenu ? 'navSections' : 'navSectionsOpen'}>
+            <Link className='navSection'>
+              <p>Main</p>
+            </Link>
+            <Link className='navSection'>
+              <p>Requests</p>
+            </Link>
+            <Link className='navSection'>
+              <p>Messages</p>
+            </Link>
+            <Link className='navSection'>
+              <p>Friend Requests</p>
+            </Link>
+            <Link className='navSection'>
+              <p>Settings</p>
+            </Link>
+          </div>
+          <div className='logining'>
+            <Link className='signIn'>Sign in</Link>
+            <Link className='signUp'>Sign Up</Link>
+          </div>
+          <button className={showMenu ? 'burger-menu-close' : 'burger-menu-open'} onClick={showMenuBar}>
+            <div className="line"></div>
+            <div className="line"></div>
+            <div className="line"></div>
+          </button>
+        </div>
       </div>
-    
+
     </>
   )
 }
