@@ -1,0 +1,169 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif; /* Add a clean font */
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+.openNav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 10px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgb(109, 201, 126), rgb(45, 155, 116)); /* Gradient background */
+    height: 450px;
+    transition: 0.5s;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+    padding: 15px;
+}
+
+.closeNav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    border-radius: 12px;
+    background: rgb(109, 201, 126);
+    height: 60px;
+    transition: 0.5s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+    padding: 0 15px;
+}
+
+.Logo img {
+    width: 80px;
+    transition: transform 0.3s ease;
+}
+
+.Logo img:hover {
+    transform: scale(1.1); /* Hover effect on the logo */
+}
+
+.navSections {
+    display: flex;
+    gap: 20px;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navSectionsLink {
+    text-decoration: none;
+    color: #333;
+}
+
+.navSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth animation */
+}
+
+.navSection:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    transform: translateY(-3px); /* Slight hover lift effect */
+}
+
+.logining {
+    display: flex;
+    margin-right: 10px;
+    gap: 10px;
+}
+
+.signIn, .signUp {
+    padding: 8px 20px;
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: all 0.3s ease;
+}
+
+.signIn:hover, .signUp:hover {
+    background-color: #333;
+    color: #fff;
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+
+
+.burger-menu-close {
+    display: none;
+}
+
+.burger-menu-open {
+    display: flex;
+}
+
+.line {
+    background-color: #333;
+    height: 4px;
+    width: 100%;
+    border-radius: 2px;
+}
+
+@media (max-width: 1030px) {
+    .burger-menu-open, .burger-menu-close {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 25px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    .signIn, .signUp {
+        display: none;
+    }
+
+    .navSections {
+        display: none;
+    }
+
+    .navSectionsOpen {
+        height: 220px;
+        width: 100%;
+        margin-top: 110px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .navSection {
+        width: 100%;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .navSection:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .burger-menu-close, .burger-menu-open {
+        transform: rotate(0deg);
+    }
+
+    .line {
+        background-color: #fff;
+    }
+}
