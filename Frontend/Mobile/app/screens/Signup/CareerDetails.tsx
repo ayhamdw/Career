@@ -11,6 +11,7 @@ import { SignUpStackParamList } from "./types";
 import { Dropdown } from "react-native-element-dropdown";
 import styles from "../../../assets/styles/SignupStyle";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
+import Header from "@/components/General Components/Header/Header";
 
 type CareerDetailsProps = NativeStackScreenProps<
   SignUpStackParamList,
@@ -163,7 +164,7 @@ const CareerDetails: React.FC<CareerDetailsProps> = ({ navigation, route }) => {
     >
       <ScrollView style={{ height: "100%", backgroundColor: "#fff" }}>
         <View style={styles.container}>
-          <Text style={styles.headerText}>About You</Text>
+          <Header title="About You" />
           <Text style={styles.label}>Select Category</Text>
           <Dropdown
             style={[
