@@ -13,11 +13,11 @@ import styles from "../../../assets/styles/SignupStyle";
 import { SignUpStackParamList } from "./types";
 import axios, { AxiosError } from "axios";
 import { ayhamWifiUrl } from "@/constants/Urls";
-import Header from "@/components/General Components/Header/Header";
-import GenderSelection from "@/components/PersonalInfo/GenderSelection/GenderSelection";
-import DateOfBirth from "@/components/PersonalInfo/DateOfBirth/DateOfBirth";
-import ButtonGroup from "@/components/General Components/ButtonGroup/ButtonGroup";
-import EmailInput from "@/components/PersonalInfo/EmailInput/EmailInput";
+import Header from "@/components/General Components/Header";
+import GenderSelection from "@/components/PersonalInfo/GenderSelection";
+import DateOfBirth from "@/components/PersonalInfo/DateOfBirth";
+import ButtonGroup from "@/components/General Components/ButtonGroup";
+import EmailInput from "@/components/PersonalInfo/EmailInput";
 type PersonalDetailsProps = NativeStackScreenProps<
   SignUpStackParamList,
   "PersonalDetails"

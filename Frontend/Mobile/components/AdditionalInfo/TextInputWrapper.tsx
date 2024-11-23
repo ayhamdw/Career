@@ -1,6 +1,6 @@
 import { TextInput } from "react-native";
 import React from "react";
-import styles from "../../../assets/styles/SignupStyle";
+import styles from "../../assets/styles/SignupStyle";
 
 interface TextInputWrapperProps {
   placeholder: string;

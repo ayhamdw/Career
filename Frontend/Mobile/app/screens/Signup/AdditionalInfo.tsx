@@ -4,11 +4,11 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
 import { SignUpStackParamList } from "./types";
 import * as Location from "expo-location";
-import Header from "@/components/General Components/Header/Header";
-import CityDropdown from "@/components/AdditionalInfo/CityDropdown/CityDropdown";
-import TextInputWrapper from "@/components/AdditionalInfo/TextInputWrapper/TextInputWrapper";
-import ButtonGroup from "@/components/General Components/ButtonGroup/ButtonGroup";
-import MapComponent from "@/components/AdditionalInfo/MapComponent/MapComponent";
+import Header from "@/components/General Components/Header";
+import CityDropdown from "@/components/AdditionalInfo/CityDropdown";
+import TextInputWrapper from "@/components/AdditionalInfo/TextInputWrapper";
+import ButtonGroup from "@/components/General Components/ButtonGroup";
+import MapComponent from "@/components/AdditionalInfo/MapComponent";
 
 type AdditionalInfoProps = NativeStackScreenProps<
   SignUpStackParamList,
