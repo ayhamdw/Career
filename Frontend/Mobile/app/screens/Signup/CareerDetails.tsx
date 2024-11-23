@@ -1,17 +1,15 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-} from "react-native";
+import { View, KeyboardAvoidingView, Platform } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SignUpStackParamList } from "./types";
-import { Dropdown } from "react-native-element-dropdown";
 import styles from "../../../assets/styles/SignupStyle";
-import { ScrollView, TextInput } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import Header from "@/components/General Components/Header";
+import CategoryDropdown from "@/components/CareerDetails/CategoryDropdown";
+import DropDownTitle from "@/components/CareerDetails/DropDownTitle";
+import CareerDropdown from "@/components/CareerDetails/CareerDropdown";
+import MultiLineInputText from "@/components/CareerDetails/MultiLineInputText";
+import ButtonGroup from "@/components/General Components/ButtonGroup";
 
 type CareerDetailsProps = NativeStackScreenProps<
   SignUpStackParamList,
@@ -37,7 +35,6 @@ const CareerDetails: React.FC<CareerDetailsProps> = ({ navigation, route }) => {
     latitude,
     longitude,
   } = route.params;
-
   const categories = [
     {
       category: "Technical Services",
@@ -164,88 +161,31 @@ const CareerDetails: React.FC<CareerDetailsProps> = ({ navigation, route }) => {
     >
       <ScrollView style={{ height: "100%", backgroundColor: "#fff" }}>
         <View style={styles.container}>
-          <Header title="About You" />
-          <Text style={styles.label}>Select Category</Text>
-          <Dropdown
-            style={[
-              styles.dropdown,
-              { borderColor: "#58d68d", borderWidth: 1 },
-            ]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={categories.map((cat) => ({
-              label: cat.category,
-              value: cat.category,
-            }))}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!categoryFocus ? "Select Category" : "..."}
-            searchPlaceholder="Search Category..."
-            value={category}
-            onFocus={() => setCategoryFocus(true)}
-            onBlur={() => setCategoryFocus(false)}
-            onChange={(item) => {
-              setCategory(item.value);
-              setCategoryFocus(false);
-              setCareer("");
-            }}
+          <Header title="Complete Your Profile" />
+          <DropDownTitle title="Select Category" />
+          <CategoryDropdown
+            category={category}
+            setCategory={setCategory}
+            categoryFocus={categoryFocus}
+            setCategoryFocus={setCategoryFocus}
+            setCareer={setCareer}
+            categories={categories}
+            categoryDate={[]}
           />
 
-          <Text style={styles.label}>Select Career</Text>
-          <Dropdown
-            style={[
-              styles.dropdown,
-              { borderColor: "#58d68d", borderWidth: 1 },
-            ]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={selectedCategoryCareers}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!careerFocus ? "Select Career" : "..."}
-            searchPlaceholder="Search Career..."
-            value={career}
-            onFocus={() => setCareerFocus(true)}
-            onBlur={() => setCareerFocus(false)}
-            onChange={(item) => {
-              setCareer(item.value);
-              setCareerFocus(false);
-            }}
+          <DropDownTitle title="Select Career" />
+          <CareerDropdown
+            selectedCategoryCareers={selectedCategoryCareers}
+            careerFocus={careerFocus}
+            career={career}
+            setCareer={setCareer}
+            setCareerFocus={setCareerFocus}
           />
-          <Text style={styles.label}>Write Bio</Text>
-          <TextInput
-            multiline={true}
-            style={[styles.textInput, { height: 100 }]}
-            onChangeText={(text) => setBio(text)}
-            value={bio}
-          />
-          <Text style={styles.label}>Write Experience</Text>
-          <TextInput
-            multiline={true}
-            style={[styles.textInput, { height: 100 }]}
-            onChangeText={(text) => setExperience(text)}
-            value={experience}
-          />
-          <View style={[styles.buttonContainer]}>
-            <Pressable
-              onPress={() => console.log("test")}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Previous</Text>
-            </Pressable>
-
-            <Pressable onPress={handleNext} style={styles.button}>
-              <Text style={styles.buttonText}>Next</Text>
-            </Pressable>
-          </View>
+          <DropDownTitle title="Write Bio" />
+          <MultiLineInputText onChangeText={setBio} value={bio} />
+          <DropDownTitle title="Write Experience" />
+          <MultiLineInputText onChangeText={setExperience} value={experience} />
+          <ButtonGroup onPrevious={handlePrevious} onNext={handleNext} />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
