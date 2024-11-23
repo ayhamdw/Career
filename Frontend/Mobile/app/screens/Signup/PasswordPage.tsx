@@ -13,6 +13,9 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
 import axios from "axios";
 import { ayhamWifiUrl } from "@/constants/Urls";
+import Header from "@/components/General Components/Header";
+import ButtonGroup from "@/components/General Components/ButtonGroup";
+import Password from "@/components/Password/Password";
 
 type PasswordPageProps = NativeStackScreenProps<
   SignUpStackParamList,
@@ -117,30 +120,18 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
       keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
     >
       <View style={styles.container}>
-        <Text style={styles.headerText}>Password Page</Text>
-        <TextInput
-          style={styles.textInput}
+        <Header title="Password Page" />
+        <Password
           placeholder="Enter password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          secureTextEntry={true}
+          password={password}
+          onChangeText={setPassword}
         />
-        <TextInput
-          style={styles.textInput}
+        <Password
           placeholder="Confirm Password"
-          value={confirmPassword}
-          onChangeText={(text) => setConfirmPassword(text)}
-          secureTextEntry={true}
+          password={confirmPassword}
+          onChangeText={setConfirmPassword}
         />
-        <View style={[styles.buttonContainer]}>
-          <Pressable onPress={handlePrevious} style={styles.button}>
-            <Text style={styles.buttonText}>Previous</Text>
-          </Pressable>
-
-          <Pressable onPress={handleNext} style={styles.button}>
-            <Text style={styles.buttonText}>Signup</Text>
-          </Pressable>
-        </View>
+        <ButtonGroup onPrevious={handlePrevious} onNext={handleNext} />
       </View>
     </KeyboardAvoidingView>
   );
