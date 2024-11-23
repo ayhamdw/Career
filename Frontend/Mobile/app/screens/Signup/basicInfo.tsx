@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
-  Image,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { View, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
 import { SignUpStackParamList } from "./types";
@@ -16,8 +7,11 @@ import * as Google from "expo-auth-session/providers/google";
 import google from "../../../assets/images/google.png";
 import * as WebBrowser from "expo-web-browser";
 import axios, { AxiosError } from "axios";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { ayhamWifiUrl } from "@/constants/Urls";
+import Header from "@/components/General Components/Header/Header";
+import TextInputData from "@/components/BasicInfo/TextInput/TextInput";
+import ButtonGroup from "@/components/General Components/ButtonGroup/ButtonGroup";
+import GoogleSignup from "@/components/BasicInfo/GoogleSignup/GoogleSignup";
 type BasicInfoProps = NativeStackScreenProps<SignUpStackParamList, "BasicInfo">;
 
 const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
@@ -93,54 +87,31 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
       keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
     >
       <View style={styles.container}>
+        <Header title="Welcome! Let's get started." />
         <View>
-          <Text
-            style={{
-              fontSize: 24,
-              fontWeight: "bold",
-              color: "#333",
-              marginBottom: 20,
-            }}
-          >
-            Welcome! Let's get started.
-          </Text>
-          <TextInput
+          <TextInputData
             placeholder="First Name"
             value={firstName.trim()}
             onChangeText={setFirstName}
-            style={styles.textInput}
           />
-          <TextInput
+          <TextInputData
             placeholder="Last Name"
             value={lastName.trim()}
             onChangeText={setLastName}
-            style={styles.textInput}
           />
-          <TextInput
+          <TextInputData
             placeholder="Username"
             value={username.trim()}
             onChangeText={setUsername}
-            style={styles.textInput}
           />
         </View>
-        <View style={styles.buttonContainer}>
-          <Pressable onPress={handlePrevious} style={styles.button}>
-            <Text style={styles.buttonText}>Previous</Text>
-          </Pressable>
-          <Pressable onPress={handleNext} style={styles.button}>
-            <Text style={styles.buttonText}>Next</Text>
-          </Pressable>
-        </View>
-        <View>
-          <Text style={styles.signupWith}>Or Signup with</Text>
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            onPress={() => promptAsync()}
-          >
-            <Image source={google} style={styles.iconSignupStyle}></Image>
-            <Text style={styles.buttonTextStyle}>Continue with Google</Text>
-          </TouchableOpacity>
-        </View>
+        <ButtonGroup onPrevious={handlePrevious} onNext={handleNext} />
+        <GoogleSignup
+          registerWith="Or Register With"
+          googleSignup="Google Register"
+          onPress={promptAsync}
+          source={google}
+        />
       </View>
     </KeyboardAvoidingView>
   );
