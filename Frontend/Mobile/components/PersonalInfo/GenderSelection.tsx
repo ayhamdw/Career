@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
-import styles from "../../../assets/styles/SignupStyle";
+import styles from "../../assets/styles/SignupStyle";
 interface GenderSelectionProps {
   gender: string;
   setGender: (text: string) => void;

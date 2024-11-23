@@ -1,6 +1,6 @@
 import React from "react";
 import { Dropdown } from "react-native-element-dropdown";
-import styles from "../../../assets/styles/SignupStyle";
+import styles from "../../assets/styles/SignupStyle";
 interface CityDropdownProps {
   cities: { label: string; value: string }[];
   city: string;

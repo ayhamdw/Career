@@ -10,7 +10,7 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
 import { SignUpStackParamList } from "./types";
-import Header from "@/components/General Components/Header/Header";
+import Header from "@/components/General Components/Header";
 import VerificationComponent from "@/components/Verification/Verification";
 import EnterEmail from "@/components/Verification/EnterEmail";
 type VerificationProps = NativeStackScreenProps<

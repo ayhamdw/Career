@@ -8,10 +8,10 @@ import google from "../../../assets/images/google.png";
 import * as WebBrowser from "expo-web-browser";
 import axios, { AxiosError } from "axios";
 import { ayhamWifiUrl } from "@/constants/Urls";
-import Header from "@/components/General Components/Header/Header";
-import TextInputData from "@/components/BasicInfo/TextInput/TextInput";
-import ButtonGroup from "@/components/General Components/ButtonGroup/ButtonGroup";
-import GoogleSignup from "@/components/BasicInfo/GoogleSignup/GoogleSignup";
+import Header from "@/components/General Components/Header";
+import TextInputData from "@/components/BasicInfo/TextInput";
+import ButtonGroup from "@/components/General Components/ButtonGroup";
+import GoogleSignup from "@/components/BasicInfo/GoogleSignup";
 type BasicInfoProps = NativeStackScreenProps<SignUpStackParamList, "BasicInfo">;
 
 const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {

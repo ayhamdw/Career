@@ -11,7 +11,7 @@ import { SignUpStackParamList } from "./types";
 import { Dropdown } from "react-native-element-dropdown";
 import styles from "../../../assets/styles/SignupStyle";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
-import Header from "@/components/General Components/Header/Header";
+import Header from "@/components/General Components/Header";
 
 type CareerDetailsProps = NativeStackScreenProps<
   SignUpStackParamList,
