@@ -22,7 +22,7 @@ function Navbar() {
             <img src={NavLogo} alt="Career Logo" />
           </div>
           <div className={showMenu ? 'navSections' : 'navSectionsOpen'}>
-            <Link className='navSection'>
+            <Link className='navSection' to='/'>
               <p>Main</p>
             </Link>
             <Link className='navSection'>
@@ -39,8 +39,8 @@ function Navbar() {
             </Link>
           </div>
           <div className='logining'>
-            <Link className='signIn'>Sign in</Link>
-            <Link className='signUp'>Sign Up</Link>
+            <Link className='signIn' to='/login'>Sign in</Link>
+            <Link className='signUp' to='/signup'>Sign Up</Link>
           </div>
           <button className={showMenu ? 'burger-menu-close' : 'burger-menu-open'} onClick={showMenuBar}>
             <div className="line"></div>
