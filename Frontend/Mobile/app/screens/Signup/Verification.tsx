@@ -10,7 +10,9 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
 import { SignUpStackParamList } from "./types";
-
+import Header from "@/components/General Components/Header/Header";
+import VerificationComponent from "@/components/Verification/Verification";
+import EnterEmail from "@/components/Verification/EnterEmail";
 type VerificationProps = NativeStackScreenProps<
   SignUpStackParamList,
   "Verification"
@@ -51,16 +53,12 @@ const Verification: React.FC<VerificationProps> = ({ navigation, route }) => {
     >
       <View style={styles.container}>
         <View>
-          <Text style={styles.headerText}>Verification</Text>
-          <Text style={{ marginBottom: 20, fontSize: 16, fontWeight: 500 }}>
-            Write Code That We send for {email}
-          </Text>
-          <TextInput
+          <Header title="Verification" />
+          <EnterEmail email={email} />
+          <VerificationComponent
             placeholder="Verification Code"
-            value={verificationCode}
+            verificationCode={verificationCode}
             onChangeText={setVerificationCode}
-            style={styles.textInput}
-            keyboardType="decimal-pad"
           />
           <View style={styles.buttonContainer}>
             <Pressable onPress={handlePrevious} style={styles.button}>
