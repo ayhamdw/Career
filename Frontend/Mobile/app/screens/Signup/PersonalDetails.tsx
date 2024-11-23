@@ -13,7 +13,11 @@ import styles from "../../../assets/styles/SignupStyle";
 import { SignUpStackParamList } from "./types";
 import axios, { AxiosError } from "axios";
 import { ayhamWifiUrl } from "@/constants/Urls";
-
+import Header from "@/components/General Components/Header/Header";
+import GenderSelection from "@/components/PersonalInfo/GenderSelection/GenderSelection";
+import DateOfBirth from "@/components/PersonalInfo/DateOfBirth/DateOfBirth";
+import ButtonGroup from "@/components/General Components/ButtonGroup/ButtonGroup";
+import EmailInput from "@/components/PersonalInfo/EmailInput/EmailInput";
 type PersonalDetailsProps = NativeStackScreenProps<
   SignUpStackParamList,
   "PersonalDetails"
@@ -82,90 +86,17 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
       keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
     >
       <View style={styles.container}>
-        <Text style={styles.headerText}>Complete Your Profile</Text>
-
-        <View style={styles.genderSelectionContainer}>
-          <Pressable
-            onPress={() => setGender("Male")}
-            style={
-              gender === "Male"
-                ? styles.selectedButton
-                : styles.unselectedButton
-            }
-          >
-            <Text
-              style={
-                gender === "Male"
-                  ? styles.selectedButtonText
-                  : styles.unselectedButtonText
-              }
-            >
-              Male
-            </Text>
-          </Pressable>
-          <Pressable
-            onPress={() => setGender("Female")}
-            style={
-              gender === "Female"
-                ? styles.selectedButton
-                : styles.unselectedButton
-            }
-          >
-            <Text
-              style={
-                gender === "Female"
-                  ? styles.selectedButtonText
-                  : styles.unselectedButtonText
-              }
-            >
-              Female
-            </Text>
-          </Pressable>
-        </View>
-        <View>
-          <Text style={styles.label}>Date of Birth:</Text>
-          <Pressable
-            style={styles.dateInputContainer}
-            onPress={() => setShowDatePicker(true)}
-          >
-            <Text style={styles.dateInputText}>
-              {dateOfBirth
-                ? `${dateOfBirth.getDate()}-${
-                    dateOfBirth.getMonth() + 1
-                  }-${dateOfBirth.getFullYear()}`
-                : "Select Date"}
-            </Text>
-          </Pressable>
-          {showDatePicker && (
-            <DateTimePicker
-              value={dateOfBirth || new Date()}
-              mode="date"
-              display="default"
-              onChange={onChange}
-              maximumDate={new Date()}
-              testID="datePicker"
-            />
-          )}
-
-          <Text style={styles.label}>Email:</Text>
-          <TextInput
-            placeholder="Email"
-            value={email.trim()}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            style={styles.textInput}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <Pressable onPress={handlePrevious} style={styles.button}>
-            <Text style={styles.buttonText}>Previous</Text>
-          </Pressable>
-
-          <Pressable onPress={handleNext} style={styles.button}>
-            <Text style={styles.buttonText}>Next</Text>
-          </Pressable>
-        </View>
-        {/* </View> */}
+        <Header title="Complete Your Profile" />
+        <GenderSelection gender={gender} setGender={setGender} />
+        <DateOfBirth
+          setShowDatePicker={setShowDatePicker}
+          dateOfBirth={dateOfBirth}
+          showDatePicker={showDatePicker}
+          onChange={onChange}
+        />
+        <Text style={styles.label}>Email:</Text>
+        <EmailInput placeholder="Email" email={email} onChangeText={setEmail} />
+        <ButtonGroup onPrevious={handlePrevious} onNext={handleNext} />
       </View>
     </KeyboardAvoidingView>
   );
