@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -16,7 +16,7 @@ import { ayhamWifiUrl } from "@/constants/Urls";
 import styles from "@/assets/styles/ProfileStyle";
 const Profile = ({ user }) => {
   const navigation = useNavigation();
-
+  console.log(user);
   const logoutFunction = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
@@ -88,7 +88,7 @@ const Profile = ({ user }) => {
           {user.profile.firstName}
         </Text>
         <Text style={{ fontSize: 16, color: "#7d7d7d", marginBottom: 20 }}>
-          UI/UX Designer
+          {user.careerCategory + "," + user.career}
         </Text>
       </View>
 
