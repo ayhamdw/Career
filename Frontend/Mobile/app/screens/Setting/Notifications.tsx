@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import styles from "../../assets/styles/NotificationsStyles";
+import styles from "../../../assets/styles/NotificationsStyles";
 
 const notifications = [
   {

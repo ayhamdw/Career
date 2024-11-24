@@ -5,7 +5,7 @@ import { COLORS } from "../../../assets/styles/Dimensions";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import MessageNavigator from "./MessageNavigator"; // Import MessageNavigator
 import Main from "./Main";
-import Requests from "../Requests";
+import Requests from "../Setting/Requests";
 import FriendRequests from "../FriendRequests";
 import ProfileNavigator from "./ProfileNavigator";
 import HomePage from "../HomePage";

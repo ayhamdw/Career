@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  Platform,
-  TextInput,
-  Pressable,
-  Alert,
-} from "react-native";
+import { View, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import React, { useState } from "react";
 import { SignUpStackParamList } from "./types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";

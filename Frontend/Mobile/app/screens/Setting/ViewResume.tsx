@@ -1,7 +1,7 @@
 import { View, Text, Image, ScrollView } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import styles from "../../assets/styles/ViewResumeStyle";
+import styles from "../../../assets/styles/ViewResumeStyle";
 const ViewResume = () => {
   const qualifications = [
     "UI/UX Designer",
