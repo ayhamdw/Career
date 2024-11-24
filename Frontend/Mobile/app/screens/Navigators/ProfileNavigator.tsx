@@ -1,11 +1,10 @@
 import React, { useMemo } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import Profile from "../Profile";
-import ProfileInfo from "../ProfileInformation";
-import AppliedJobs from "../AppliedJobs";
+import Profile from "../Setting/Profile";
+import ProfileInfo from "../Setting/ProfileInformation";
 import BookmarkJobs from "../BookmarkJobs";
-import ViewResume from "../ViewResume";
-import Notifications from "../Notifications";
+import ViewResume from "../Setting/ViewResume";
+import Notifications from "../Setting/Notifications";
 import ChangePassword from "../ChangePassword";
 import Login from "../Login";
 
@@ -16,7 +15,6 @@ const ProfileNavigator = ({ user }) => {
     () => ({
       Profile: (props) => <Profile {...props} user={user} />,
       ProfileInfo: (props) => <ProfileInfo {...props} user={user} />,
-      AppliedJobs: (props) => <AppliedJobs {...props} user={user} />,
       BookmarkJobs: (props) => <BookmarkJobs {...props} user={user} />,
       ViewResume: (props) => <ViewResume {...props} user={user} />,
       Notifications: (props) => <Notifications {...props} user={user} />,
@@ -36,15 +34,6 @@ const ProfileNavigator = ({ user }) => {
       <Stack.Screen
         name="ProfileInfo"
         component={screenData.ProfileInfo}
-        options={{
-          headerStyle: { backgroundColor: "white" },
-          headerTitle: "",
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="AppliedJobs"
-        component={screenData.AppliedJobs}
         options={{
           headerStyle: { backgroundColor: "white" },
           headerTitle: "",

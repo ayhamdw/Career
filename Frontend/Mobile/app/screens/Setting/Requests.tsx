@@ -102,7 +102,7 @@ const Request: React.FC<FriendRequestPageProps> = ({ user }) => {
               source={
                 item.profileImage
                   ? { uri: item.profileImage }
-                  : require("../../assets/images/defaultProfile.png")
+                  : require("../../../assets/images/defaultProfile.png")
               }
               style={styles.imageStyle}
             />

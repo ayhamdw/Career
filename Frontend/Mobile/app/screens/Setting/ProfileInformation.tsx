@@ -1,16 +1,14 @@
-import { COLORS } from "@/assets/styles/Dimensions";
 import React, { useState } from "react";
 import {
   View,
   Text,
   TextInput,
   ScrollView,
-  StyleSheet,
   TouchableOpacity,
   StatusBar,
 } from "react-native";
 
-import styles from "../../assets/styles/ProfileInformationStyle";
+import styles from "../../../assets/styles/ProfileInformationStyle";
 
 const ProfileInfo = ({ user }) => {
   const [qualifications, setQualifications] = useState([

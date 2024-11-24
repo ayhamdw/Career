@@ -98,18 +98,25 @@ const styles = StyleSheet.create({
   option: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    padding: 15,
+    marginBottom: 15,
+    borderRadius: 10,
+    backgroundColor: "white",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
   },
   optionText: {
-    marginLeft: 10,
-    fontSize: 16,
-    color: COLORS.textColor,
+    fontSize: 18,
+    fontWeight: "500",
+    color: "#333",
   },
   iconStyle: {
-    fontSize: 24,
-    color: "black",
+    fontSize: 22,
+    color: "#58d68d",
+    marginRight: 10,
   },
 });
 

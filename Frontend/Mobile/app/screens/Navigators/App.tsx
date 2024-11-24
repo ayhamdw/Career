@@ -10,6 +10,7 @@ import { LoginStack } from "./LoginNavigator";
 import Main from "./Main";
 import CustomTabNavigator from "./CustomTabNavigator";
 import { NavigationIndependentTree } from "@react-navigation/native";
+import { StatusBar } from "react-native";
 
 const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);
@@ -39,8 +40,8 @@ const App = () => {
   return (
     <GestureHandlerRootView>
       <NavigationIndependentTree>
+        <StatusBar barStyle="dark-content" />
         <NavigationContainer>
-          {/* <LoginStack /> */}
           <MainNavigation />
         </NavigationContainer>
       </NavigationIndependentTree>

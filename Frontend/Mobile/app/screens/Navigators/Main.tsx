@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import Requests from "../Requests";
+import Requests from "../Setting/Requests";
 import Messages from "../Messages";
 import CustomTabNavigator from "./CustomTabNavigator";
 import HomePage from "../HomePage";
