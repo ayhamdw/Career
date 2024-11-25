@@ -9,11 +9,12 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import TextFieldComponent from "@/components/Setting/ProfileInfo/TextFieldComponent";
 import axios from "axios";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ProfileHeader from "@/components/Setting/ProfileInfo/ProfileHeader";
+import SaveButton from "@/components/Setting/ProfileInfo/SaveButton";
 
 interface FormDataType {
   firstName: string;
@@ -43,15 +44,6 @@ const ProfileInfo = ({ user }: { user: any }) => {
     experience: "",
   });
 
-  const [newData, setNewData] = useState<FormDataType>({
-    firstName: "",
-    lastName: "",
-    career: "",
-    email: "",
-    bio: "",
-    experience: "",
-  });
-
   const handleChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value }); //! Change The Value That I Changed it in Text Input
   };
@@ -73,8 +65,8 @@ const ProfileInfo = ({ user }: { user: any }) => {
       );
       if (response.status === 200) {
         Alert.alert(
-          "Profile Updated 🎉", // Title
-          "Your information has been updated successfully!", // Message
+          "Profile Updated 🎉",
+          "Your information has been updated successfully!",
           [
             {
               text: "OK",
@@ -85,8 +77,8 @@ const ProfileInfo = ({ user }: { user: any }) => {
       }
     } catch (error) {
       Alert.alert(
-        "Update Failed 🚨", // Title
-        "Something went wrong. Please try again.", // Message
+        "Update Failed 🚨",
+        "Something went wrong. Please try again.",
         [
           {
             text: "Retry",
@@ -155,27 +147,7 @@ const ProfileInfo = ({ user }: { user: any }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
     >
-      <LinearGradient
-        colors={["#58d68d", "#28a745"]}
-        style={{
-          height: 150,
-          justifyContent: "center",
-          alignItems: "center",
-          borderBottomLeftRadius: 30,
-          borderBottomRightRadius: 30,
-        }}
-      >
-        <Text
-          style={{
-            color: "white",
-            fontSize: 28,
-            fontWeight: "bold",
-            marginTop: 20,
-          }}
-        >
-          Profile Information
-        </Text>
-      </LinearGradient>
+      <ProfileHeader title="Profile Information" />
       <ScrollView style={{ flex: 1, backgroundColor: "#f7f7f7" }}>
         <StatusBar barStyle="dark-content" />
 
@@ -215,41 +187,7 @@ const ProfileInfo = ({ user }: { user: any }) => {
           onChangeText={(text) => handleChange("experience", text)}
           placeholder="Experience"
         />
-
-        <View style={{ padding: 20 }}>
-          <TouchableOpacity
-            style={{
-              marginTop: 20,
-              borderRadius: 10,
-              overflow: "hidden",
-              elevation: 5,
-              shadowColor: "#000",
-              shadowOpacity: 0.2,
-              shadowRadius: 8,
-            }}
-            onPress={handleSave}
-          >
-            <LinearGradient
-              colors={["#58d68d", "#28a745"]}
-              style={{
-                paddingVertical: 15,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 10,
-              }}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 18,
-                  fontWeight: "600",
-                }}
-              >
-                Save
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
+        <SaveButton title="Save" handleSave={handleSave} />
       </ScrollView>
     </KeyboardAvoidingView>
   );
