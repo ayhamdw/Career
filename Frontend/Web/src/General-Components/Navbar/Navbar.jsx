@@ -39,7 +39,7 @@ function Navbar() {
             </Link>
           </div>
           <div className='logining'>
-            <Link className='signIn' to='/login'>Sign in</Link>
+            <Link className='signIn' to='/signin'>Sign in</Link>
             <Link className='signUp' to='/signup'>Sign Up</Link>
           </div>
           <button className={showMenu ? 'burger-menu-close' : 'burger-menu-open'} onClick={showMenuBar}>
