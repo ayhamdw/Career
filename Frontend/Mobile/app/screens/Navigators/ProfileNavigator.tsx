@@ -7,6 +7,7 @@ import ViewResume from "../Setting/ViewResume";
 import Notifications from "../Setting/Notifications";
 import ChangePassword from "../ChangePassword";
 import Login from "../Login";
+import { View } from "react-native-animatable";
 
 const Stack = createStackNavigator();
 
@@ -16,7 +17,6 @@ const ProfileNavigator = ({ user }) => {
       Profile: (props) => <Profile {...props} user={user} />,
       ProfileInfo: (props) => <ProfileInfo {...props} user={user} />,
       BookmarkJobs: (props) => <BookmarkJobs {...props} user={user} />,
-      ViewResume: (props) => <ViewResume {...props} user={user} />,
       Notifications: (props) => <Notifications {...props} user={user} />,
       ChangePassword: (props) => <ChangePassword {...props} user={user} />,
       Logout: (props) => <Login {...props} />,
@@ -49,15 +49,7 @@ const ProfileNavigator = ({ user }) => {
           headerShown: false,
         }}
       />
-      <Stack.Screen
-        name="ViewResume"
-        component={screenData.ViewResume}
-        options={{
-          headerStyle: { backgroundColor: "white" },
-          headerTitle: "",
-          headerShown: false,
-        }}
-      />
+
       <Stack.Screen
         name="Notifications"
         component={screenData.Notifications}
