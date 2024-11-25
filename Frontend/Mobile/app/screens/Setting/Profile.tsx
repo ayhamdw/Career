@@ -16,7 +16,6 @@ import { ayhamWifiUrl } from "@/constants/Urls";
 import styles from "@/assets/styles/ProfileStyle";
 const Profile = ({ user }) => {
   const navigation = useNavigation();
-  console.log(user);
   const logoutFunction = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
