@@ -19,8 +19,16 @@ type VerificationProps = NativeStackScreenProps<
 >;
 
 const Verification: React.FC<VerificationProps> = ({ navigation, route }) => {
-  const { firstName, lastName, username, gender, dateOfBirth, email, code } =
-    route.params;
+  const {
+    firstName,
+    lastName,
+    username,
+    profileImage,
+    gender,
+    dateOfBirth,
+    email,
+    code,
+  } = route.params;
   const [verificationCode, setVerificationCode] = useState<string>("");
 
   const handleNext = () => {
@@ -30,6 +38,7 @@ const Verification: React.FC<VerificationProps> = ({ navigation, route }) => {
           firstName,
           lastName,
           username,
+          profileImage,
           gender,
           dateOfBirth,
           email,

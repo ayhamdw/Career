@@ -107,7 +107,6 @@ const ChatUser = ({ user }) => {
         }
       );
       if (response.status === 200) {
-        // console.log("Message sent successfully");
         setMessage("");
         setSelectedImage("");
         fetchMessages();
