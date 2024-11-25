@@ -19,11 +19,13 @@ import { useNavigation } from "expo-router";
 import { ayhamWifiUrl } from "@/constants/Urls";
 
 interface User {
-  _id: string; // Include _id as it's used in the fetch call
-  firstName: string;
-  lastName: string;
+  _id: string;
+  profile: {
+    firstName: string;
+    lastName: string;
+    profileImage?: string;
+  };
   email: string;
-  profileImage?: string;
   unreadMessages?: string;
   lastMessage?: string;
 }
@@ -48,7 +50,8 @@ const Messages: React.FC<MessagesProps> = ({ user }) => {
             },
           }
         );
-        setUsers(response.data); // Save the users in the state
+        setUsers(response.data);
+        console.log("Users:", response.data);
       } catch (error) {
         console.log("Error fetching users:", error);
       }
@@ -68,13 +71,18 @@ const Messages: React.FC<MessagesProps> = ({ user }) => {
             style={styles.messageContainer}
           >
             <Image
-              source={item.profileImage ? { uri: item.profileImage } : Man1}
+              source={
+                item.profile?.profileImage || " "
+                  ? { uri: item.profile?.profileImage || " " }
+                  : Man1
+              }
               style={styles.imageStyle}
             />
+
             <View style={styles.messageBubble}>
               <View style={styles.messageHeader}>
                 <Text style={styles.userName}>
-                  {`${item.firstName} ${item.lastName}`}
+                  {`${item.profile?.firstName} ${item.profile?.lastName}`}
                 </Text>
                 <Text style={styles.numberOfMessages}>
                   {item.unreadMessages || "+0"}
@@ -90,5 +98,4 @@ const Messages: React.FC<MessagesProps> = ({ user }) => {
     </SafeAreaView>
   );
 };
-
 export default Messages;
