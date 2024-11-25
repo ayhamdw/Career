@@ -28,7 +28,8 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
-  const [profileImage, setProfileImage] = useState<string | null>(null); // State for profile image
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [tempProfileImage, setTempProfileImage] = useState<string | null>(null);
 
   const webClientId =
     "155720957457-23gr289iqt06a9vmmsvort1ogca3iiph.apps.googleusercontent.com";
@@ -47,7 +48,6 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
 
   const [request, response, promptAsync] = Google.useAuthRequest(config);
 
-  // Function to handle image selection
   const handleImageSelect = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -57,7 +57,10 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
     });
 
     if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
+      const uri = result.assets[0].uri.split("/").pop() || " ";
+      console.log(uri);
+      setTempProfileImage(result.assets[0].uri);
+      setProfileImage(uri);
     }
   };
 
@@ -116,12 +119,11 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
       <View style={styles.container}>
         <Header title="Welcome! Let's get started." />
 
-        {/* Profile Image Section */}
         <View style={styles.imageContainer}>
           <TouchableOpacity onPress={handleImageSelect}>
-            {profileImage ? (
+            {tempProfileImage ? (
               <Image
-                source={{ uri: profileImage }}
+                source={{ uri: tempProfileImage }}
                 style={styles.profileImage}
               />
             ) : (

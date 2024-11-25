@@ -85,7 +85,6 @@ const ChatUser = ({ user }) => {
       formData.append("receiverId", receiverId); //* Append receiverId to the form data
 
       if (messageType === "image") {
-        console.log("Image uri", imageUri);
         formData.append("messageType", "image");
         formData.append("imageFile", {
           uri: imageUri,
