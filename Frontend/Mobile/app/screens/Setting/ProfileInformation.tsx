@@ -7,11 +7,15 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import TextFieldComponent from "@/components/Setting/ProfileInfo/TextFieldComponent";
+import axios from "axios";
+import { ayhamWifiUrl } from "@/constants/Urls";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-interface formDataType {
+interface FormDataType {
   firstName: string;
   lastName: string;
   career: string;
@@ -21,7 +25,7 @@ interface formDataType {
 }
 
 const ProfileInfo = ({ user }: { user: any }) => {
-  const [originalData, setOriginalData] = useState<formDataType>({
+  const [originalData, setOriginalData] = useState<FormDataType>({
     firstName: "",
     lastName: "",
     career: "",
@@ -30,7 +34,16 @@ const ProfileInfo = ({ user }: { user: any }) => {
     experience: "",
   });
 
-  const [formData, setFormData] = useState<formDataType>({
+  const [formData, setFormData] = useState<FormDataType>({
+    firstName: "",
+    lastName: "",
+    career: "",
+    email: "",
+    bio: "",
+    experience: "",
+  });
+
+  const [newData, setNewData] = useState<FormDataType>({
     firstName: "",
     lastName: "",
     career: "",
@@ -46,29 +59,92 @@ const ProfileInfo = ({ user }: { user: any }) => {
   const handleSave = async () => {
     const changedFields = getChangedFields();
     console.log(changedFields);
+    console.log(ayhamWifiUrl);
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.put(
+        `${ayhamWifiUrl}/api/user/update/profile`,
+        { changedFields, userId: user._id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        Alert.alert(
+          "Profile Updated 🎉", // Title
+          "Your information has been updated successfully!", // Message
+          [
+            {
+              text: "OK",
+              onPress: () => console.log("Alert closed"),
+            },
+          ]
+        );
+      }
+    } catch (error) {
+      Alert.alert(
+        "Update Failed 🚨", // Title
+        "Something went wrong. Please try again.", // Message
+        [
+          {
+            text: "Retry",
+            onPress: () => console.log("Retry pressed"),
+          },
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+        ]
+      );
+    }
   };
 
   useEffect(() => {
-    const userDate = {
-      firstName: user.profile.firstName,
-      lastName: user.profile.lastName,
-      career: user.career,
-      email: user.email,
-      bio: user.profile.bio,
-      experience: user.profile.experience,
+    console.log("Fetching user data...");
+
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        console.log(token);
+        const response = await axios.get(
+          `${ayhamWifiUrl}/api/user/me/${user._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          const userData = {
+            firstName: response.data.profile.firstName,
+            lastName: response.data.profile.lastName,
+            career: response.data.career,
+            email: response.data.email,
+            bio: response.data.profile.bio,
+            experience: response.data.profile.experience,
+          };
+
+          setOriginalData(userData);
+          setFormData(userData);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
     };
-    setOriginalData(userDate);
-    setFormData(userDate);
+
+    fetchData();
   }, [user]);
   const getChangedFields = () => {
-    const changedFields: Partial<formDataType> = {};
+    const changedFields: Partial<FormDataType> = {};
     for (const key in formData) {
       if (
-        formData[key as keyof formDataType] !==
-        originalData[key as keyof formDataType]
+        formData[key as keyof FormDataType] !==
+        originalData[key as keyof FormDataType]
       ) {
-        changedFields[key as keyof formDataType] =
-          formData[key as keyof formDataType];
+        changedFields[key as keyof FormDataType] =
+          formData[key as keyof FormDataType];
       }
     }
     return changedFields;
