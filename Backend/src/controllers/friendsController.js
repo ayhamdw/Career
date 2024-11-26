@@ -15,6 +15,7 @@ const logInUsers = async (req, res) => {
 
 const sendFiendRequestController = async (req, res) => {
   const { currentUserId, selectedUserId } = JSON.parse(req.body.ids);
+  console.log(JSON.parse(req.body.ids));
   try {
     await User.findByIdAndUpdate(selectedUserId, {
       $push: {
@@ -27,8 +28,9 @@ const sendFiendRequestController = async (req, res) => {
         sendRequests: selectedUserId,
       },
     });
+    res.status(200).json({ message: "Friend Request Sent" });
   } catch (error) {
-    console.log("error", error);
+    res.send(500).json({ Error: error });
   }
 };
 
