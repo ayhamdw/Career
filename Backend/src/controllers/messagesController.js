@@ -2,7 +2,6 @@ const User = require("../models/user2"); //! User Model Object
 const Message = require("../models/message"); //! Message Model Object
 const messageController = async (req, res) => {
   try {
-    console.log("inside message controller");
     console.log(req.body);
     const { senderId, receiverId, messageType, messageText } = req.body;
 
@@ -19,7 +18,6 @@ const messageController = async (req, res) => {
     ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
-
     const message = new Message({
       senderId,
       receiverId,
@@ -33,13 +31,12 @@ const messageController = async (req, res) => {
     console.log("Message saved successfully");
     res.status(200).json({ message: "Message Sent Successfully" });
   } catch (error) {
-    console.error("Error while saving message:", error); // Log error for debugging
+    console.error("Error while saving message:", error);
     res.status(500).json({ error: error.message });
   }
 };
 
 const getChatUserDetails = async (req, res) => {
-  // console.log("inside get chat user details");
   try {
     const userId = req.params.userId;
     await User.findById(userId)
