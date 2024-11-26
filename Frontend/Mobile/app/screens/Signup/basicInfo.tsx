@@ -60,7 +60,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
       const uri = result.assets[0].uri.split("/").pop() || " ";
       console.log(uri);
       setTempProfileImage(result.assets[0].uri);
-      setProfileImage(uri);
+      setProfileImage(result.assets[0].uri);
     }
   };
 

@@ -9,6 +9,7 @@ const {
   logoutAllController,
   checkUserNameController,
 } = require("../controllers/authController");
+
 router.post("/register", upload.single("imageFile"), signupController);
 
 router.post("/login", signinController);
