@@ -28,7 +28,6 @@ function Signup() {
       return;
     }
     console.log('Form Data:', formData);
-    // Add logic to handle form submission (e.g., API call with image upload)
   };
 
   return (
