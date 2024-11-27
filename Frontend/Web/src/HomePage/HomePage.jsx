@@ -15,8 +15,8 @@ import { ServiceData } from './HomePage'
 
 function HomePage() {
   return (
-    <div className='container'>
-      <div className='flex items-center justify-center flex-col mt-10 w-full'>
+    <div className='containerHome'>
+      <div className='imagessw flex items-center justify-center flex-col mt-10 w-full'>
         <Swiper
         loop={true}
         autoplay={{
@@ -46,7 +46,7 @@ function HomePage() {
         >
           {ServiceData.map((item)=>(
             <SwiperSlide key={item.title}>
-            <div className="flex flex-col group relative shadow-lg text-white rounded-xl px-6 py-8  h-[400px] lg:h-[500px] overflow-hidden cursor-pointer">
+            <div className="test flex flex-col group relative shadow-lg text-white rounded-xl px-6 py-8  h-[400px] lg:h-[500px] overflow-hidden cursor-pointer">
               <div
                 className="absolute inset-0 bg-contain bg-center"
                 style={{ backgroundImage: `url(${item.backgroundImage})` }}

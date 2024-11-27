@@ -34,7 +34,7 @@ function Sginin() {
           <h2>Welcome To Career</h2>
           <img src={Logo} alt="Career Logo" />
           <p>Don't have an account?</p>
-          <Link to='/login'>Sgin Up</Link>
+          <Link to='/signup'>Sgin Up</Link>
 
         </div>
 
