@@ -19,8 +19,15 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
   navigation,
   route,
 }) => {
-  const { firstName, lastName, username, gender, dateOfBirth, email } =
-    route.params;
+  const {
+    firstName,
+    lastName,
+    username,
+    profileImage,
+    gender,
+    dateOfBirth,
+    email,
+  } = route.params;
   const [cityFocus, setCityFocus] = useState<boolean>(false);
   const [city, setCity] = useState<string>("");
   const [anotherCity, setAnotherCity] = useState<string>("");
@@ -95,6 +102,7 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({
         firstName,
         lastName,
         username,
+        profileImage,
         gender,
         dateOfBirth,
         email,

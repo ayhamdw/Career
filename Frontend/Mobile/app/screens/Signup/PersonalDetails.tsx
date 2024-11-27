@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { View, Text, KeyboardAvoidingView, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
@@ -27,7 +20,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
   navigation,
   route,
 }) => {
-  const { firstName, lastName, username } = route.params;
+  const { firstName, lastName, username, profileImage } = route.params;
   const [gender, setGender] = useState<string>("");
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
   const [email, setEmail] = useState<string>("");
@@ -56,6 +49,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
             firstName,
             lastName,
             username,
+            profileImage,
             gender,
             dateOfBirth,
             email,

@@ -1,6 +1,7 @@
 const User = require("../models/user2"); //! User Model Object
 const getUserDetails = async (req, res) => {
   try {
+    console.log("inside");
     const user = await User.findById(req.params.userId).select("-password"); // Exclude sensitive fields
     if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json(user);
@@ -11,16 +12,33 @@ const getUserDetails = async (req, res) => {
 
 const updateUserProfile = async (req, res) => {
   try {
-    const updates = req.body;
-    const user = await User.findByIdAndUpdate(req.user._id, updates, {
-      new: true,
-      runValidators: true,
-    }).select("-password");
+    const { changedFields, userId } = req.body;
+    if (!changedFields || !userId) {
+      return res.status(400).json({ error: "Invalid request data" });
+    }
+    const updateFields = {};
+    for (const key in changedFields) {
+      if (key === "email" || key === "career") {
+        updateFields[key] = changedFields[key];
+      } else {
+        updateFields[`profile.${key}`] = changedFields[key];
+      }
+    }
 
-    if (!user) return res.status(404).json({ message: "User not found" });
-    res.status(200).json({ message: "Profile updated successfully", user });
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateFields },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res
+      .status(200)
+      .json({ message: "Profile updated successfully", user: updatedUser });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -36,7 +54,7 @@ const deleteUserAccount = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({}).select("firstName lastName email"); // Adjust fields as needed
+    const users = await User.find({}).select("firstName lastName email");
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -170,5 +170,30 @@ export default StyleSheet.create({
     marginTop: 30,
     marginBottom: 10,
     alignSelf: "center",
-  }
+  },
+  imageContainer: {
+    alignItems: "center",
+    marginVertical: 20,
+  },
+  profileImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 2,
+    borderColor: "#58d68d", // Use creative color
+  },
+  placeholderImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: "#f0f0f0",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#d1d1d1",
+  },
+  imageText: {
+    color: "#a9a9a9",
+    fontSize: 16,
+  },
 });

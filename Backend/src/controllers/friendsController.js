@@ -15,6 +15,7 @@ const logInUsers = async (req, res) => {
 
 const sendFiendRequestController = async (req, res) => {
   const { currentUserId, selectedUserId } = JSON.parse(req.body.ids);
+  console.log(JSON.parse(req.body.ids));
   try {
     await User.findByIdAndUpdate(selectedUserId, {
       $push: {
@@ -27,8 +28,9 @@ const sendFiendRequestController = async (req, res) => {
         sendRequests: selectedUserId,
       },
     });
+    res.status(200).json({ message: "Friend Request Sent" });
   } catch (error) {
-    console.log("error", error);
+    res.send(500).json({ Error: error });
   }
 };
 
@@ -76,7 +78,10 @@ const acceptedFriendsController = async (req, res) => {
   try {
     const userId = req.params.userId;
     const user = await User.findById(userId)
-      .populate("friends", "firstName lastName email image")
+      .populate(
+        "friends",
+        "profile.firstName profile.lastName email profile.profileImage"
+      )
       .lean();
     const friends = user.friends;
     res.status(200).json(friends);

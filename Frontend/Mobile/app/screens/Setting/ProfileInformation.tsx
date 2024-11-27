@@ -7,11 +7,16 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import TextFieldComponent from "@/components/Setting/ProfileInfo/TextFieldComponent";
+import axios from "axios";
+import { ayhamWifiUrl } from "@/constants/Urls";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import ProfileHeader from "@/components/Setting/ProfileInfo/ProfileHeader";
+import SaveButton from "@/components/Setting/ProfileInfo/SaveButton";
 
-interface formDataType {
+interface FormDataType {
   firstName: string;
   lastName: string;
   career: string;
@@ -21,7 +26,7 @@ interface formDataType {
 }
 
 const ProfileInfo = ({ user }: { user: any }) => {
-  const [originalData, setOriginalData] = useState<formDataType>({
+  const [originalData, setOriginalData] = useState<FormDataType>({
     firstName: "",
     lastName: "",
     career: "",
@@ -30,7 +35,7 @@ const ProfileInfo = ({ user }: { user: any }) => {
     experience: "",
   });
 
-  const [formData, setFormData] = useState<formDataType>({
+  const [formData, setFormData] = useState<FormDataType>({
     firstName: "",
     lastName: "",
     career: "",
@@ -46,29 +51,92 @@ const ProfileInfo = ({ user }: { user: any }) => {
   const handleSave = async () => {
     const changedFields = getChangedFields();
     console.log(changedFields);
+    console.log(ayhamWifiUrl);
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.put(
+        `${ayhamWifiUrl}/api/user/update/profile`,
+        { changedFields, userId: user._id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        Alert.alert(
+          "Profile Updated 🎉",
+          "Your information has been updated successfully!",
+          [
+            {
+              text: "OK",
+              onPress: () => console.log("Alert closed"),
+            },
+          ]
+        );
+      }
+    } catch (error) {
+      Alert.alert(
+        "Update Failed 🚨",
+        "Something went wrong. Please try again.",
+        [
+          {
+            text: "Retry",
+            onPress: () => console.log("Retry pressed"),
+          },
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+        ]
+      );
+    }
   };
 
   useEffect(() => {
-    const userDate = {
-      firstName: user.profile.firstName,
-      lastName: user.profile.lastName,
-      career: user.career,
-      email: user.email,
-      bio: user.profile.bio,
-      experience: user.profile.experience,
+    console.log("Fetching user data...");
+
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        console.log(token);
+        const response = await axios.get(
+          `${ayhamWifiUrl}/api/user/me/${user._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          const userData = {
+            firstName: response.data.profile.firstName,
+            lastName: response.data.profile.lastName,
+            career: response.data.career,
+            email: response.data.email,
+            bio: response.data.profile.bio,
+            experience: response.data.profile.experience,
+          };
+
+          setOriginalData(userData);
+          setFormData(userData);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
     };
-    setOriginalData(userDate);
-    setFormData(userDate);
+
+    fetchData();
   }, [user]);
   const getChangedFields = () => {
-    const changedFields: Partial<formDataType> = {};
+    const changedFields: Partial<FormDataType> = {};
     for (const key in formData) {
       if (
-        formData[key as keyof formDataType] !==
-        originalData[key as keyof formDataType]
+        formData[key as keyof FormDataType] !==
+        originalData[key as keyof FormDataType]
       ) {
-        changedFields[key as keyof formDataType] =
-          formData[key as keyof formDataType];
+        changedFields[key as keyof FormDataType] =
+          formData[key as keyof FormDataType];
       }
     }
     return changedFields;
@@ -79,27 +147,7 @@ const ProfileInfo = ({ user }: { user: any }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
     >
-      <LinearGradient
-        colors={["#58d68d", "#28a745"]}
-        style={{
-          height: 150,
-          justifyContent: "center",
-          alignItems: "center",
-          borderBottomLeftRadius: 30,
-          borderBottomRightRadius: 30,
-        }}
-      >
-        <Text
-          style={{
-            color: "white",
-            fontSize: 28,
-            fontWeight: "bold",
-            marginTop: 20,
-          }}
-        >
-          Profile Information
-        </Text>
-      </LinearGradient>
+      <ProfileHeader title="Profile Information" />
       <ScrollView style={{ flex: 1, backgroundColor: "#f7f7f7" }}>
         <StatusBar barStyle="dark-content" />
 
@@ -139,41 +187,7 @@ const ProfileInfo = ({ user }: { user: any }) => {
           onChangeText={(text) => handleChange("experience", text)}
           placeholder="Experience"
         />
-
-        <View style={{ padding: 20 }}>
-          <TouchableOpacity
-            style={{
-              marginTop: 20,
-              borderRadius: 10,
-              overflow: "hidden",
-              elevation: 5,
-              shadowColor: "#000",
-              shadowOpacity: 0.2,
-              shadowRadius: 8,
-            }}
-            onPress={handleSave}
-          >
-            <LinearGradient
-              colors={["#58d68d", "#28a745"]}
-              style={{
-                paddingVertical: 15,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 10,
-              }}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 18,
-                  fontWeight: "600",
-                }}
-              >
-                Save
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
+        <SaveButton title="Save" handleSave={handleSave} />
       </ScrollView>
     </KeyboardAvoidingView>
   );
