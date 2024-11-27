@@ -78,13 +78,14 @@ function Signup() {
                 required
               />
             </div>
-            <div className={style.field}>
+            <div className={`${style.field}`}>
               <label htmlFor="image">Upload Image</label>
               <input
                 type="file"
                 name="image"
                 accept="image/*"
                 onChange={handleChange}
+                className={style.fieldFile}
               />
             </div>
             <button type="submit" className={style.signUpButton}>Sign Up</button>
