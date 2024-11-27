@@ -1,14 +1,14 @@
 const express = require("express");
 
 const router = new express.Router();
+const {
+  updateUserProfile,
+  getUserDetails,
+} = require("../controllers/userController");
+const Auth = require("../middleware/auth");
 
-router.get("/", (req, res) => {
-  res.send("Hello World");
-});
-
-// router.get("/users/me", Auth, async (req, res) => {
-//   res.send(req.user);
-// });
+router.get("/me/:userId", Auth, getUserDetails);
+router.put("/update/profile", Auth, updateUserProfile);
 
 // router.patch("/users/me", Auth, async (req, res) => {
 //   const updates = Object.keys(req.body);

@@ -6,7 +6,8 @@ const User = require("../models/user2"); //! User Model Object
 const { sendWelcomeEmail } = require("../emails/account");
 
 const signupController = async (req, res) => {
-  console.log(req.body);
+  console.log(req.file);
+  // req.body.profile.profileImage = req.file.path || " ";
   const { error } = signupValidation(req.body);
   if (error) return res.status(400).send("Error" + error.details[0].message);
   const user = new User(req.body);

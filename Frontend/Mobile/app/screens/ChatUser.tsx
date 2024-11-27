@@ -1,6 +1,5 @@
 import {
   KeyboardAvoidingView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -56,6 +55,7 @@ const ChatUser = ({ user }) => {
         );
         if (receiverData.status === 200) {
           setReceiverDetails(receiverData.data);
+          console.log("Receiver Data", receiverData.data);
         }
       } catch (error) {
         console.log("error while fetching user details", error);
@@ -85,7 +85,6 @@ const ChatUser = ({ user }) => {
       formData.append("receiverId", receiverId); //* Append receiverId to the form data
 
       if (messageType === "image") {
-        console.log("Image uri", imageUri);
         formData.append("messageType", "image");
         formData.append("imageFile", {
           uri: imageUri,
@@ -107,7 +106,6 @@ const ChatUser = ({ user }) => {
         }
       );
       if (response.status === 200) {
-        // console.log("Message sent successfully");
         setMessage("");
         setSelectedImage("");
         fetchMessages();
@@ -160,7 +158,9 @@ const ChatUser = ({ user }) => {
           />
           <Text style={styles.nameStyle}>
             {receiverDetails
-              ? receiverDetails.firstName + " " + receiverDetails.lastName
+              ? receiverDetails.profile.firstName +
+                " " +
+                receiverDetails.profile.lastName
               : "Loading..."}
           </Text>
         </View>
@@ -183,9 +183,6 @@ const ChatUser = ({ user }) => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
-
     if (!result.canceled) {
       handleSendMessage("image", result.assets[0].uri);
     }
@@ -223,9 +220,7 @@ const ChatUser = ({ user }) => {
           } else if (item.messageType === "image") {
             const baseUrl = `${ayhamWifiUrl}/assets/images/`;
             const imageUrl = item.messageUrl;
-            // console.log(imageUrl);
             const fileName = imageUrl.split("\\").pop();
-            console.log(fileName);
             const source = { uri: baseUrl + fileName };
             console.log(source);
             return (

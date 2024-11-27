@@ -30,6 +30,7 @@ app.use("/api/friends", friendsRouter);
 app.use("/api/messages", messagesRouter);
 app.use("/api/password", passwordRouter);
 app.use("/api/check", checkInformationRouter);
+app.use("/api/user", userRouter);
 
 app.use(errorHandler);
 module.exports = app;

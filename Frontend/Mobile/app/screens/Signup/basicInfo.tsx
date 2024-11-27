@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, KeyboardAvoidingView, Platform, Alert } from "react-native";
+import {
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+  TouchableOpacity,
+  Image,
+  Text,
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "../../../assets/styles/SignupStyle";
 import { SignUpStackParamList } from "./types";
@@ -12,12 +21,15 @@ import Header from "@/components/General Components/Header";
 import TextInputData from "@/components/BasicInfo/TextInput";
 import ButtonGroup from "@/components/General Components/ButtonGroup";
 import GoogleSignup from "@/components/BasicInfo/GoogleSignup";
+
 type BasicInfoProps = NativeStackScreenProps<SignUpStackParamList, "BasicInfo">;
 
 const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [tempProfileImage, setTempProfileImage] = useState<string | null>(null);
 
   const webClientId =
     "155720957457-23gr289iqt06a9vmmsvort1ogca3iiph.apps.googleusercontent.com";
@@ -36,6 +48,22 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
 
   const [request, response, promptAsync] = Google.useAuthRequest(config);
 
+  const handleImageSelect = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const uri = result.assets[0].uri.split("/").pop() || " ";
+      console.log(uri);
+      setTempProfileImage(result.assets[0].uri);
+      setProfileImage(result.assets[0].uri);
+    }
+  };
+
   const handleNext = async () => {
     if (firstName && lastName && username) {
       try {
@@ -49,6 +77,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
             firstName,
             lastName,
             username,
+            profileImage,
           });
         }
       } catch (error) {
@@ -60,7 +89,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
         }
       }
     } else {
-      alert("Please fill all fields");
+      Alert.alert("Error", "Please fill all fields");
     }
   };
 
@@ -70,12 +99,13 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
 
   const handleToken = () => {
     console.log("In Handle Token");
-    if (response?.type == "success") {
+    if (response?.type === "success") {
       const { authentication } = response;
       const token = authentication?.accessToken;
       console.log("Google Token ", token);
     }
   };
+
   useEffect(() => {
     handleToken();
   }, [response]);
@@ -88,6 +118,22 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
     >
       <View style={styles.container}>
         <Header title="Welcome! Let's get started." />
+
+        <View style={styles.imageContainer}>
+          <TouchableOpacity onPress={handleImageSelect}>
+            {tempProfileImage ? (
+              <Image
+                source={{ uri: tempProfileImage }}
+                style={styles.profileImage}
+              />
+            ) : (
+              <View style={styles.placeholderImage}>
+                <Text style={styles.imageText}>Add Photo</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        </View>
+
         <View>
           <TextInputData
             placeholder="First Name"

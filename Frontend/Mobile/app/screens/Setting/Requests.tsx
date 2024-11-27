@@ -18,9 +18,11 @@ import { ayhamWifiUrl } from "@/constants/Urls";
 
 interface User {
   _id: string;
-  firstName: string;
-  lastName: string;
-  profileImage?: string;
+  profile: {
+    firstName: string;
+    lastName: string;
+    profileImage?: string;
+  };
   email: string;
 }
 
@@ -100,8 +102,8 @@ const Request: React.FC<FriendRequestPageProps> = ({ user }) => {
           >
             <Image
               source={
-                item.profileImage
-                  ? { uri: item.profileImage }
+                item.profile.profileImage
+                  ? { uri: item.profile.profileImage }
                   : require("../../../assets/images/defaultProfile.png")
               }
               style={styles.imageStyle}
@@ -109,7 +111,7 @@ const Request: React.FC<FriendRequestPageProps> = ({ user }) => {
             <View style={styles.userInfo}>
               <Text
                 style={styles.userName}
-              >{`${item.firstName} ${item.lastName}`}</Text>
+              >{`${item.profile.firstName} ${item.profile.lastName}`}</Text>
               <Text style={styles.userEmail}>{item.email}</Text>
             </View>
             <TouchableOpacity

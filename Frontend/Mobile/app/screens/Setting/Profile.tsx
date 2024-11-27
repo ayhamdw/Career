@@ -16,7 +16,6 @@ import { ayhamWifiUrl } from "@/constants/Urls";
 import styles from "@/assets/styles/ProfileStyle";
 const Profile = ({ user }) => {
   const navigation = useNavigation();
-  console.log(user);
   const logoutFunction = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
@@ -46,7 +45,7 @@ const Profile = ({ user }) => {
       console.log("Logout failed:", err);
     }
   };
-
+  console.log(user);
   return (
     <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
       <StatusBar barStyle="dark-content" />
@@ -75,7 +74,7 @@ const Profile = ({ user }) => {
 
       <View style={{ alignItems: "center", marginTop: -80 }}>
         <Image
-          source={{ uri: "https://via.placeholder.com/150" }}
+          source={{ uri: user.profile.profileImage }}
           style={{
             width: 150,
             height: 150,
@@ -109,13 +108,6 @@ const Profile = ({ user }) => {
         >
           <Ionicons name="person-outline" style={styles.iconStyle} />
           <Text style={styles.optionText}>Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.option}
-          onPress={() => navigation.navigate("ViewResume")}
-        >
-          <Ionicons name="document-text-outline" style={styles.iconStyle} />
-          <Text style={styles.optionText}>View Resume</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.option}
