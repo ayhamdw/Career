@@ -23,7 +23,7 @@ function Navbar() {
           </div>
           <div className={showMenu ? 'navSections' : 'navSectionsOpen'}>
             <Link className='navSection' to='/'>
-              <p>Main</p>
+              <p>Home</p>
             </Link>
             <Link className='navSection'>
               <p>Requests</p>
