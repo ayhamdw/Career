@@ -1,4 +1,4 @@
-/* General Reset */
+
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +6,6 @@
     font-family: "Arial", sans-serif;
 }
 
-/* Main Container */
 .container {
     display: flex;
     justify-content: center;
@@ -17,7 +16,7 @@
     width: 80%;
 }
 
-/* Sign Up Form Structure */
+
 .signUpForm {
     display: flex;
     background-color: white;
@@ -31,7 +30,7 @@
     position: relative;
 }
 
-/* Background Gradient Effect */
+
 .signUpForm:before {
     content: '';
     position: absolute;
@@ -43,7 +42,6 @@
     z-index: 0;
 }
 
-/* Input Section */
 .inputPart {
     flex: 1;
     padding: 50px;
@@ -67,7 +65,7 @@
     gap: 20px;
 }
 
-/* Field Styles */
+
 .field {
     display: flex;
     flex-direction: column;
@@ -95,14 +93,14 @@
     box-shadow: 0 0 8px rgba(45, 155, 116, 0.3);
 }
 
-/* Upload Field Styles */
+
 .field input[type="file"] {
     padding: 10px;
     border: none;
     background-color: transparent;
 }
 
-/* Sign Up Button */
+
 .signUpButton {
     background-color: rgb(109, 201, 126);
     color: white;
@@ -121,7 +119,7 @@
     box-shadow: 0 8px 15px rgba(45, 155, 116, 0.3);
 }
 
-/* Design Section */
+
 .designPart {
     flex: 1;
     background: linear-gradient(135deg, rgb(109, 201, 126), rgb(45, 155, 116));
@@ -167,7 +165,7 @@
     color: #f1f1f1;
 }
 
-/* Responsive Adjustments */
+
 @media (max-width: 768px) {
     .signUpForm {
         flex-direction: column;
