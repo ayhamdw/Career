@@ -173,7 +173,6 @@ import React from "react";
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   ScrollView,
   Image,
@@ -182,6 +181,7 @@ import {
 
 const HomePage = () => {
   const [search, setSearch] = React.useState<string>("");
+
   return (
     <View style={styles.container}>
       {/* Header */}
