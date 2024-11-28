@@ -168,6 +168,7 @@
 
 // export default HomePage;
 import Header from "@/components/HomePage/Header";
+import SearchBar from "@/components/HomePage/SearchBar";
 import React from "react";
 import {
   View,
@@ -179,18 +180,19 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const JobRecommendationScreen = () => {
+const HomePage = () => {
+  const [search, setSearch] = React.useState<string>("");
   return (
     <View style={styles.container}>
       {/* Header */}
       <Header name="Ayham Omar" />
+
       {/* Search Bar */}
-      <View style={styles.searchBar}>
-        <TextInput placeholder="Search" style={styles.searchInput} />
-        <TouchableOpacity style={styles.searchIcon}>
-          <Text>🔍</Text>
-        </TouchableOpacity>
-      </View>
+      <SearchBar
+        placeholder="Search for jobs"
+        value={search}
+        onChangeText={setSearch}
+      />
 
       {/* Tips Section */}
       <View style={styles.tipsSection}>
@@ -344,4 +346,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default JobRecommendationScreen;
+export default HomePage;
