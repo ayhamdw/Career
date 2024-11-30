@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const multer = require('multer');
 const errorHandler = require("./middleware/error/errorHandler");
 const { generalRateLimiter } = require("./utils/rateLimiters");
 const cors = require("cors");

@@ -61,9 +61,19 @@ const logoutAllController = async (req, res) => {
   }
 };
 
+const getAllEmails = async (req, res) => {
+  try {
+    const users = await User.find({}, 'email'); 
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: 'Server Error' });
+  }
+};
+
 module.exports = {
   signupController,
   signinController,
   logoutController,
   logoutAllController,
+  getAllEmails,
 };
