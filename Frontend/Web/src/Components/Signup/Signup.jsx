@@ -44,7 +44,25 @@ function Signup() {
     }
   }, []);
 
-  const handleChange = (e) => {
+
+  const [emails, setEmails] = useState([]);
+  const [emailExists, setEmailExists] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  useEffect(() => {
+    const fetchEmails = async () => {
+      try {
+        // Send a GET request to fetch all emails
+        const response = await axios.get('http://localhost:7777/api/auth/emails');
+        setEmails(response.data);  // This will store all emails
+      } catch (error) {
+        console.log('Error fetching emails: ', error);
+      }
+    };
+    fetchEmails();
+  }, []);
+  
+
+  const handleChange = async (e) => {
     const { name, value } = e.target;
     if (name === 'coordinates[0]' || name === 'coordinates[1]') {
       setUser((prev) => ({
@@ -52,11 +70,26 @@ function Signup() {
         coordinates: name === 'coordinates[0]' ? [value, prev.coordinates[1]] : [prev.coordinates[0], value],
       }));
     }
+    if(name === 'email'){
+      setUser((prev) => ({
+        ...prev,
+        email: value,
+      }));
+      const emailExists = emails.some((email) => email.email === value);
+      setEmailExists(emailExists);
+      if (emailExists) {
+        setErrorMessage('This email is already registered.');
+      } else {
+        setErrorMessage('');
+      }
 
+    }
     else {
       setUser((prev) => ({ ...prev, [name]: value }));
     }
   };
+
+ 
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -168,7 +201,12 @@ function Signup() {
             {/* Email */}
             <div className={style.field}>
               <label>Email</label>
-              <input type="email" name="email" value={user.email} onChange={handleChange} required />
+              <input type="email" name="email" value={user.email} onChange={handleChange} required
+              style={{border: emailExists? '1px solid red':''}}
+              />
+              {emailExists && (
+                <p style={{ color: 'red' }}>{errorMessage}</p>
+              )}
             </div>
 
             {/* Password */}
