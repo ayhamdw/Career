@@ -8,6 +8,7 @@ const {
   logoutController,
   logoutAllController,
   checkUserNameController,
+  getAllEmails,
 } = require("../controllers/authController");
 
 router.post("/register", upload.single("imageFile"), signupController);
@@ -17,5 +18,7 @@ router.post("/login", signinController);
 router.post("/logout", Auth, logoutController);
 
 router.post("/logoutAll", Auth, logoutAllController);
+
+router.get('/emails',getAllEmails);
 
 module.exports = router;
