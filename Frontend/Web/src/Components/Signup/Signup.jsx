@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import style from './Signup.module.css';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Signup() {
   const [user, setUser] = useState({
@@ -49,7 +51,9 @@ function Signup() {
         ...prev,
         coordinates: name === 'coordinates[0]' ? [value, prev.coordinates[1]] : [prev.coordinates[0], value],
       }));
-    } else {
+    }
+
+    else {
       setUser((prev) => ({ ...prev, [name]: value }));
     }
   };
@@ -60,6 +64,18 @@ function Signup() {
       setUser((prev) => ({ ...prev, profileImage: file }));
     }
   };
+  const notifySuccess = () => {
+    toast.success('Successfully registered!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,6 +84,7 @@ function Signup() {
       alert('Password must not contain the word "password".');
       return;
     }
+
 
     const formData = new FormData();
     formData.append('username', user.username);
@@ -86,39 +103,51 @@ function Signup() {
     formData.append('profile[bio]', user.bio);
     formData.append('profile[experience]', user.experience);
     formData.append('profile[profileImage]', "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...");
-    
+
     formData.append('profile[location][type]', "Point");
     // Send profileImage if it exists
     // if (user.profileImage) {
     //   formData.append('profile[profileImage]', user.profileImage);
     // }
 
-    
+
     formData.append('profile[location][coordinates][0]', user.coordinates[0]);
     formData.append('profile[location][coordinates][1]', user.coordinates[1]);
 
-    
-    formData.append('tokens[0][token]', 'validTokenHere');
-    formData.append('friendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c'); 
-    formData.append('friends[0]', '5f9a8b8f8c8d8e8b8f8a8b8c'); 
-    formData.append('sendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c'); 
-  
-    console.log('Form Data:', formData); 
+
+    formData.append('friendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c');
+    formData.append('friends[0]', '5f9a8b8f8c8d8e8b8f8a8b8c');
+    formData.append('sendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c');
+    formData.append('tokens[0][token]', "replace with actual api");
+
 
     try {
-      const { data } = await axios.post('http://localhost:7777/api/auth/register', formData, {
+      const response = await axios.post('http://localhost:7777/api/auth/register', formData, {
+
+
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      alert('Successfully registered!');
+      const { token } = response.data;
+      localStorage.setItem('authToken', token);
+      formData.append('tokens[0][token]', token);
+
+      notifySuccess();
       setUser({
         username: '', email: '', password: '', role: '', gender: '', city: '',
         dateOfBirth: '', careerCategory: '', firstName: '', lastName: '',
         phone: '', bio: '', experience: '', profileImage: null, coordinates: ['', ''],
       });
     } catch (error) {
-      console.error('Error during registration:', error.response?.data || error.message);
+      if (user.firstName.length < 3) {
+        alert("Username must be at least 3 characters long")
+        return;
+      }
+      else {
+        console.error('Error during registration:', error.response?.data || error.message);
+      }
+
     }
   };
 
@@ -153,8 +182,8 @@ function Signup() {
               <label>Role</label>
               <select name="role" value={user.role} onChange={handleChange} required>
                 <option value="">Select Role</option>
-                <option value="user">Client</option>
-                <option value="admin">Service Provider</option>
+                <option value="user">user</option>
+                <option value="admin">admin</option>
               </select>
             </div>
 
@@ -171,7 +200,24 @@ function Signup() {
             {/* City */}
             <div className={style.field}>
               <label>City</label>
-              <input type="text" name="city" value={user.city} onChange={handleChange} required />
+              <select name="city" value={user.city} onChange={handleChange} required>
+                <option value="">Select a city</option>
+                <option value="Nablus">Nablus</option>
+                <option value="Ramallah">Ramallah</option>
+                <option value="Hebron">Hebron</option>
+                <option value="Bethlehem">Bethlehem</option>
+                <option value="Jenin">Jenin</option>
+                <option value="Jericho">Jericho</option>
+                <option value="Gaza">Gaza</option>
+                <option value="Rafah">Rafah</option>
+                <option value="Tulkarm">Tulkarm</option>
+                <option value="Qalqilya">Qalqilya</option>
+                <option value="Salfit">Salfit</option>
+                <option value="Tubas">Tubas</option>
+                <option value="Jerusalem">Jerusalem</option>
+                <option value="Khan Yunis">Khan Yunis</option>
+                <option value="Deir al-Balah">Deir al-Balah</option>
+              </select>
             </div>
 
             {/* Date of Birth */}
@@ -198,13 +244,25 @@ function Signup() {
             {/* First Name */}
             <div className={style.field}>
               <label>First Name</label>
-              <input type="text" name="firstName" value={user.firstName} onChange={handleChange} required />
+              <input type="text" name="firstName" value={user.firstName} onChange={handleChange} required
+                style={{ border: user.firstName && user.firstName.length < 3 ? '1px solid red' : '' }}
+              />
+              {user.firstName && user.firstName.length < 3 && (
+                <p style={{ color: 'red' }}>First Name must be at least 3 characters long.</p>
+              )}
+
+
             </div>
 
             {/* Last Name */}
             <div className={style.field}>
               <label>Last Name</label>
-              <input type="text" name="lastName" value={user.lastName} onChange={handleChange} required />
+              <input type="text" name="lastName" value={user.lastName} onChange={handleChange} required
+                style={{ border: user.lastName && user.lastName.length < 3 ? '1px solid red' : '' }}
+              />
+              {user.lastName && user.lastName.length < 3 && (
+                <p style={{ color: 'red' }}>Last Name must be at least 3 characters long.</p>
+              )}
             </div>
 
             {/* Phone */}
