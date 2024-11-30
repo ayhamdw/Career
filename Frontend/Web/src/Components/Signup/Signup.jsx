@@ -64,7 +64,6 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Password validation: Check if 'password' contains 'password'
     if (user.password.toLowerCase().includes('password')) {
       alert('Password must not contain the word "password".');
       return;
@@ -94,17 +93,17 @@ function Signup() {
     //   formData.append('profile[profileImage]', user.profileImage);
     // }
 
-    // Handle location as nested object (coordinates)
+    
     formData.append('profile[location][coordinates][0]', user.coordinates[0]);
     formData.append('profile[location][coordinates][1]', user.coordinates[1]);
 
-    // Handle other fields
+    
     formData.append('tokens[0][token]', 'validTokenHere');
-    formData.append('friendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c'); // Replace with a valid ObjectId if needed
-    formData.append('friends[0]', '5f9a8b8f8c8d8e8b8f8a8b8c'); // Replace with a valid ObjectId if needed
-    formData.append('sendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c'); // Replace with a valid ObjectId if needed
+    formData.append('friendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c'); 
+    formData.append('friends[0]', '5f9a8b8f8c8d8e8b8f8a8b8c'); 
+    formData.append('sendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c'); 
   
-    console.log('Form Data:', formData); // Debugging
+    console.log('Form Data:', formData); 
 
     try {
       const { data } = await axios.post('http://localhost:7777/api/auth/register', formData, {
