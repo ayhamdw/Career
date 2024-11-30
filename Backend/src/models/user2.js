@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
+      // enum: ["user", "admin"],
       required: true,
       default: "user",
     },
@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
     },
     city: {
       type: String,
-      required: false,
+      required: true,
       trim: true,
     },
     dateOfBirth: {
