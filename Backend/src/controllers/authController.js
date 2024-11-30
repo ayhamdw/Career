@@ -7,7 +7,6 @@ const { sendWelcomeEmail } = require("../emails/account");
 
 const signupController = async (req, res) => {
   console.log(req.file);
-  // req.body.profile.profileImage = req.file.path || " ";
   const { error } = signupValidation(req.body);
   if (error) return res.status(400).send("Error" + error.details[0].message);
   const user = new User(req.body);
@@ -23,15 +22,12 @@ const signupController = async (req, res) => {
 };
 
 const signinController = async (req, res, next) => {
-  // console.log("Inside Login");
-  // console.log(req.body.email, req.body.password);
   try {
     const user = await User.findByCredentials(
       req.body.email,
       req.body.password
     );
     const token = await user.generateAuthToken();
-    // console.log("token ", token);
     sendWelcomeEmail(user.email, user.profile.firstName);
     res.send({ user, token });
   } catch (error) {
