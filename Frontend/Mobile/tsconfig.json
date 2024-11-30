@@ -4,6 +4,7 @@
     "strict": true,
     "jsx": "react-jsx",
     "paths": {
+      "@env": ["./node_modules/react-native-dotenv"],
       "@/*": [
         "./*"
       ]

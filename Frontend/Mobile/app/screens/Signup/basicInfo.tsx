@@ -21,7 +21,8 @@ import Header from "@/components/General Components/Header";
 import TextInputData from "@/components/BasicInfo/TextInput";
 import ButtonGroup from "@/components/General Components/ButtonGroup";
 import GoogleSignup from "@/components/BasicInfo/GoogleSignup";
-
+import uuid from "react-native-uuid";
+import Amazon from "@/app/Services/Amazon";
 type BasicInfoProps = NativeStackScreenProps<SignUpStackParamList, "BasicInfo">;
 
 const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
@@ -57,10 +58,13 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
     });
 
     if (!result.canceled) {
-      const uri = result.assets[0].uri.split("/").pop() || " ";
-      console.log(uri);
-      setTempProfileImage(result.assets[0].uri);
-      setProfileImage(result.assets[0].uri);
+      const { uri } = result.assets[0]; //! Get The Image Uri
+      const uniqueId = uuid.v4(); //! Generate Unique Id for the image
+      const ext = uri.split(".").pop(); //! Get The Extension
+      const newFileName = `profile-image/${uniqueId}.${ext}`.trim();
+      setTempProfileImage(result.assets[0].uri); //! Set The Image
+      const s3ImageUrl = await Amazon.uploadImageToS3(newFileName, uri); //! Upload Image to S3
+      setProfileImage(s3ImageUrl); //! Set The Image URL
     }
   };
 
