@@ -2,6 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { ToastContainer } from 'react-toastify';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Root from './Root'
 import NotFound from './General-Components/NotFound/NotFound'
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
+      <ToastContainer />
       <RouterProvider router={router}/>
     </>
     
