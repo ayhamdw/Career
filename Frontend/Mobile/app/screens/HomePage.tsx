@@ -93,32 +93,35 @@ const HomePage = ({ user }: { user: User }) => {
   }) => {
     console.log("Job:", job);
   };
+
+  const fetchUser = async (filter?: string) => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(
+        `${ayhamWifiUrl}/api/proficient/proficient-data`,
+        {
+          params: {
+            id: user._id,
+            careerCategory: filter,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUsers(response.data);
+    } catch (error) {
+      console.log("Error fetching user:", error);
+    }
+  };
   const handleFilterPress = (filter: string) => {
+    console.log("Filter:", filter);
     setSelectedFilter(filter);
+    fetchUser(filter);
   };
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
-        const response = await axios.get(
-          `${ayhamWifiUrl}/api/proficient/proficient-data`,
-          {
-            params: {
-              id: user._id,
-              careerCategory: selectedFilter,
-            },
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setUsers(response.data);
-      } catch (error) {
-        console.log("Error fetching user:", error);
-      }
-    };
-    fetchUser();
+    fetchUser(selectedFilter);
   }, [user]);
   return (
     <ScrollView>
