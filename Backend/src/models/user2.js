@@ -88,6 +88,10 @@ const userSchema = new mongoose.Schema(
       firstName: { type: String, required: true, trim: true },
       lastName: { type: String, required: true, trim: true },
       phone: { type: String, required: true, trim: true },
+      numberOfRequest: {
+        type: Number,
+        default: 0,
+      },
       location: {
         type: {
           type: String,

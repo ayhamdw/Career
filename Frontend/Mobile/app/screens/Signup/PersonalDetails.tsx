@@ -26,7 +26,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
   const [email, setEmail] = useState<string>("");
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const onChange = (event, selectedDate) => {
+  const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || dateOfBirth;
     setShowDatePicker(false);
     if (selectedDate) {
