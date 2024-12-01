@@ -3,6 +3,7 @@ const User = require("../models/user2");
 const getProficientData = async (req, res) => {
   try {
     const { id, careerCategory } = req.query;
+    console.log(careerCategory);
     if (careerCategory === "All Proficient") {
       await User.find({ _id: { $ne: id } })
         .select("profile email city career careerCategory")
