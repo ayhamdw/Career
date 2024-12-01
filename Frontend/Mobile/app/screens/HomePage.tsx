@@ -11,48 +11,50 @@ import { useRoute } from "@react-navigation/native";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const HomePage = ({ user }) => {
-  interface Location {
-    type: string;
-    coordinates: [number, number];
-  }
 
-  interface Profile {
-    firstName: string;
-    lastName: string;
-    bio: string;
-    experience: string;
-    phone: string;
-    location: Location;
-    ratings: {
-      rating: number;
-      review: string;
-      userId: string;
-      date: Date;
-    };
-  }
+interface Location {
+  type: string;
+  coordinates: [number, number];
+}
 
-  interface User {
-    username: string;
-    email: string;
-    password: string;
-    role: string;
-    gender: string;
-    city: string;
-    dateOfBirth: Date;
-    career: string;
-    careerCategory: string;
+interface Profile {
+  firstName: string;
+  lastName: string;
+  bio: string;
+  experience: string;
+  phone: string;
+  location: Location;
+  ratings: {
     rating: number;
-    profile: Profile;
-    verificationStatus: boolean;
-    tokens: string[];
-    friendRequests: string[];
-    friends: string[];
-    sendRequests: string[];
-    resetCode: number;
-    resetCodeExpires: Date;
-  }
+    review: string;
+    userId: string;
+    date: Date;
+  };
+}
 
+interface User {
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+  gender: string;
+  city: string;
+  dateOfBirth: Date;
+  career: string;
+  careerCategory: string;
+  rating: number;
+  profile: Profile;
+  verificationStatus: boolean;
+  tokens: string[];
+  friendRequests: string[];
+  friends: string[];
+  sendRequests: string[];
+  resetCode: number;
+  resetCodeExpires: Date;
+}
+
+const HomePage = ({ user }: { user: User }) => {
   const [search, setSearch] = React.useState<string>("");
   const [selectedFilter, setSelectedFilter] =
     React.useState<string>("All Proficient");
@@ -89,7 +91,7 @@ const HomePage = ({ user }) => {
     career: string;
     careerCategory: string;
   }) => {
-    console.log(job.profile.ratings[0].rating);
+    console.log("Job:", job);
   };
   const handleFilterPress = (filter: string) => {
     setSelectedFilter(filter);
@@ -100,8 +102,12 @@ const HomePage = ({ user }) => {
       try {
         const token = await AsyncStorage.getItem("token");
         const response = await axios.get(
-          `${ayhamWifiUrl}/api/proficient/proficient-data/${user._id}`,
+          `${ayhamWifiUrl}/api/proficient/proficient-data`,
           {
+            params: {
+              id: user._id,
+              careerCategory: selectedFilter,
+            },
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -117,7 +123,7 @@ const HomePage = ({ user }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Header name="Ayham Omar" />
+        <Header name={user.profile.firstName + " " + user.profile.lastName} />
 
         <SearchBar
           placeholder="Search for jobs"

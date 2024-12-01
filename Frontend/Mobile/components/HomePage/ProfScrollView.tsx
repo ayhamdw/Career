@@ -37,6 +37,13 @@ interface ProfListProps {
 }
 
 const ProfList: React.FC<ProfListProps> = ({ jobs, onCardPress }) => {
+  const calcRating = (job: any) => {
+    let rating = 0;
+    for (let i = 0; i < job.profile.ratings.length; i++) {
+      rating += job.profile.ratings[i].rating;
+    }
+    return rating / job.profile.ratings.length;
+  };
   return (
     <ScrollView style={styles.jobList}>
       {jobs.map((job, index) => (
@@ -71,9 +78,7 @@ const ProfList: React.FC<ProfListProps> = ({ jobs, onCardPress }) => {
                   key={i}
                   name="star"
                   size={18}
-                  color={
-                    i < job.profile.ratings[0]?.rating ? "#fbc02d" : "#ccc"
-                  }
+                  color={i < calcRating(job) ? "#fbc02d" : "#ccc"}
                   style={styles.star}
                 />
               ))}

@@ -10,9 +10,6 @@ const oldPasswordChecker = async (req, res) => {
     return res.status(401).send("User not authenticated");
   }
 
-  console.log("User email:", req.user.email);
-  console.log("Old Password:", req.query.oldPassword);
-
   try {
     const user = await User.findByCredentials(
       req.user.email,
