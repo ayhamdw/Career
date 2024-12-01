@@ -2,7 +2,6 @@ const User = require("../models/user2"); //! User Model Object
 
 const logInUsers = async (req, res) => {
   const loggedInUsers = req.params.userId;
-  console.log(`id , ${loggedInUsers}`);
   //* Get All users Except Me (My Account)
   User.find({ _id: { $ne: loggedInUsers } })
     .then((users) => {

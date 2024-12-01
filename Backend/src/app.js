@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const multer = require('multer');
+const multer = require("multer");
 const errorHandler = require("./middleware/error/errorHandler");
 const { generalRateLimiter } = require("./utils/rateLimiters");
 const cors = require("cors");
@@ -13,6 +13,7 @@ const messagesRouter = require("./routers/messagesRouter");
 const authRouter = require("./routers/authRouter");
 const passwordRouter = require("./routers/passwordRouter");
 const checkInformationRouter = require("./routers/checkInformationRouter");
+const proficientRouter = require("./routers/proficientRouter");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/api/messages", messagesRouter);
 app.use("/api/password", passwordRouter);
 app.use("/api/check", checkInformationRouter);
 app.use("/api/user", userRouter);
+app.use("/api/proficient", proficientRouter);
 
 app.use(errorHandler);
 module.exports = app;

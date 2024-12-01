@@ -3,7 +3,18 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const customError = require("../middleware/error/customError");
+const { faker } = require("@faker-js/faker");
 require("dotenv").config();
+const careerCategories = [
+  "Technical Services",
+  "Home Services",
+  "Educational Services",
+  "Healthcare",
+  "Creative Services",
+  "Legal & Financial Services",
+  "Other",
+];
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -43,7 +54,7 @@ const userSchema = new mongoose.Schema(
     gender: {
       type: String,
       required: true,
-      enum: ["Male", "Female"],
+      enum: ["Male", "Female", "male", "female"],
     },
     city: {
       type: String,
@@ -173,7 +184,6 @@ userSchema.methods.generateAuthToken = async function () {
 
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
-  console.log(user);
   if (!user) {
     throw new customError("USER_NOT_FOUND");
   }
@@ -195,6 +205,54 @@ userSchema.pre("save", async function (next) {
 
   next();
 });
+
+userSchema.statics.generateFakeData = async () => {
+  try {
+    const fakeUsers = [];
+
+    for (let i = 0; i < 10; i++) {
+      const careerCategory = faker.helpers.arrayElement(careerCategories); // Randomly pick a career category
+
+      fakeUsers.push({
+        username: faker.internet.username(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+        role: "user",
+        gender: faker.person.sexType(),
+        city: faker.location.city(),
+        dateOfBirth: faker.date.birthdate({ min: 18, max: 60, mode: "age" }),
+        career: faker.person.jobTitle(),
+        careerCategory: careerCategory, // Use the randomly selected category
+        profile: {
+          firstName: faker.person.firstName(),
+          lastName: faker.person.lastName(),
+          bio: faker.lorem.sentences(),
+          experience: faker.lorem.paragraph(),
+          phone: faker.phone.number("+### ### ### ###"),
+          location: {
+            type: "Point",
+            coordinates: [
+              parseFloat(faker.location.longitude()),
+              parseFloat(faker.location.latitude()),
+            ],
+          },
+        },
+        verificationStatus: faker.datatype.boolean(),
+        tokens: [],
+        friendRequests: [],
+        friends: [],
+        sendRequests: [],
+        resetCode: faker.number.int({ min: 1000, max: 9999 }),
+        resetCodeExpires: faker.date.future(),
+      });
+    }
+
+    await User.insertMany(fakeUsers);
+    console.log("Fake data inserted successfully!");
+  } catch (error) {
+    console.error("Error inserting fake data:", error);
+  }
+};
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

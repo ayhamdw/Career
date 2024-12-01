@@ -4,15 +4,12 @@ const {
 } = require("../utils/validations/validation"); //! Validation Functions
 const User = require("../models/user2"); //! User Model Object
 const { sendWelcomeEmail } = require("../emails/account");
-
 const signupController = async (req, res) => {
-  console.log(req.file);
   const { error } = signupValidation(req.body);
   if (error) return res.status(400).send("Error" + error.details[0].message);
   const user = new User(req.body);
   try {
     await user.save();
-    console.log("test");
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
   } catch (error) {
@@ -28,6 +25,7 @@ const signinController = async (req, res, next) => {
       req.body.password
     );
     const token = await user.generateAuthToken();
+    // await User.generateFakeData();
     sendWelcomeEmail(user.email, user.profile.firstName);
     res.send({ user, token });
   } catch (error) {
@@ -63,10 +61,10 @@ const logoutAllController = async (req, res) => {
 
 const getAllEmails = async (req, res) => {
   try {
-    const users = await User.find({}, 'email'); 
+    const users = await User.find({}, "email");
     res.json(users);
   } catch (error) {
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({ error: "Server Error" });
   }
 };
 
