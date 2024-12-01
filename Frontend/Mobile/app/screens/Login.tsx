@@ -34,7 +34,7 @@ const Login = () => {
       const { token, user } = response.data;
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", JSON.stringify(user));
-      navigation.replace("Main", { user });
+      navigation.replace("Main", { user: user });
     } catch (error) {
       console.log("Login failed:", error);
     }

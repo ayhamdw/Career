@@ -1,13 +1,14 @@
 import Header from "@/components/HomePage/Header";
 import SearchBar from "@/components/HomePage/SearchBar";
 import React from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import TipsHeader from "@/components/HomePage/TipsHeader";
 import TipsImage from "@/components/HomePage/TipsImage";
 import ProfRecommendation from "@/components/HomePage/ProfRecommendation";
 import ProfList from "@/components/HomePage/ProfScrollView";
 import styles from "@/assets/styles/HomePage/HomePage";
-const HomePage = () => {
+import { useRoute } from "@react-navigation/native";
+const HomePage = ({ user }) => {
   const [search, setSearch] = React.useState<string>("");
   const [selectedFilter, setSelectedFilter] =
     React.useState<string>("All Proficient");
