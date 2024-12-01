@@ -3,6 +3,7 @@ import style from './Signup.module.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// import { response } from '../../../../../Backend/src/app';
 
 function Signup() {
   const [user, setUser] = useState({
@@ -48,12 +49,31 @@ function Signup() {
   const [emails, setEmails] = useState([]);
   const [emailExists, setEmailExists] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const [usernameAvailable, setUsernameAvailable] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchUsernames = async() =>{
+  //     try{
+  //       const userResponse = await axios.post('http://localhost:7777/api/check/username');
+  //       setUsername(userResponse.data);
+  //       console.log(userResponse.data)
+
+  //     }
+  //     catch(e){
+  //       console.log(e.error)
+  //     }
+  //   }
+  //   fetchUsernames();
+  // },[]);
+
+
   useEffect(() => {
     const fetchEmails = async () => {
       try {
-        // Send a GET request to fetch all emails
+        
         const response = await axios.get('http://localhost:7777/api/auth/emails');
-        setEmails(response.data);  // This will store all emails
+        setEmails(response.data);  
       } catch (error) {
         console.log('Error fetching emails: ', error);
       }
@@ -82,11 +102,27 @@ function Signup() {
       } else {
         setErrorMessage('');
       }
+    }
 
+    if(name === 'username' && value){
+      setUser((prev) => ({
+        ...prev,
+        username: value,
+      }));
+      try{
+        const usernameResponse = await axios.post('http://localhost:7777/api/check/username',{username: value});
+        console.log(usernameResponse.data); // Log the whole response
+        setUsernameAvailable(usernameResponse.data.message === 'Username is available');
+      }
+      catch(error){
+        console.error('Error checking username:');
+        setUsernameAvailable(false);
+      }
     }
-    else {
-      setUser((prev) => ({ ...prev, [name]: value }));
-    }
+    
+    
+
+    
   };
 
  
@@ -195,7 +231,13 @@ function Signup() {
             {/* Username */}
             <div className={style.field}>
               <label>Username</label>
-              <input type="text" name="username" value={user.username} onChange={handleChange} required />
+              <input type="text" name="username" value={user.username} onChange={handleChange} required 
+              style={{border: usernameAvailable? '': '1px solid red'}}
+              />
+              {usernameAvailable === false && (
+                <p style={{ color: 'red' }}>Username Already Exist</p>
+              )}
+              
             </div>
 
             {/* Email */}
