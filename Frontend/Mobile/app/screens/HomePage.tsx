@@ -93,7 +93,6 @@ const HomePage = ({ user }: { user: User }) => {
     career: string;
     careerCategory: string;
   }) => {
-    // console.log("Job:", job);
     navigation.navigate("ProfProfile", { job });
   };
 
