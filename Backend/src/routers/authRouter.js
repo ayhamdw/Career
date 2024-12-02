@@ -9,6 +9,7 @@ const {
   logoutAllController,
   checkUserNameController,
   getAllEmails,
+  getAllUsernames,
 } = require("../controllers/authController");
 
 router.post("/register", upload.single("imageFile"), signupController);
@@ -20,5 +21,7 @@ router.post("/logout", Auth, logoutController);
 router.post("/logoutAll", Auth, logoutAllController);
 
 router.get('/emails',getAllEmails);
+
+router.get('/usernames',getAllUsernames);
 
 module.exports = router;

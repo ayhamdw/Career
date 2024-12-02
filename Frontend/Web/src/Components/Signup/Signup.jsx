@@ -3,7 +3,6 @@ import style from './Signup.module.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import { response } from '../../../../../Backend/src/app';
 
 function Signup() {
   const [user, setUser] = useState({
@@ -31,6 +30,7 @@ function Signup() {
         (position) => {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
+          console.log(latitude+","+longitude);
           setUser((prev) => ({
             ...prev,
             coordinates: [latitude.toString(), longitude.toString()],
@@ -50,36 +50,40 @@ function Signup() {
   const [emailExists, setEmailExists] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [usernameAvailable, setUsernameAvailable] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchUsernames = async() =>{
-  //     try{
-  //       const userResponse = await axios.post('http://localhost:7777/api/check/username');
-  //       setUsername(userResponse.data);
-  //       console.log(userResponse.data)
+  const [usernames, setUsernames] = useState([]);
+  const [usernameExist, setUsernameExist] = useState(false);
 
-  //     }
-  //     catch(e){
-  //       console.log(e.error)
-  //     }
-  //   }
-  //   fetchUsernames();
-  // },[]);
+
 
 
   useEffect(() => {
     const fetchEmails = async () => {
       try {
-        
+
         const response = await axios.get('http://localhost:7777/api/auth/emails');
-        setEmails(response.data);  
+        setEmails(response.data);
       } catch (error) {
         console.log('Error fetching emails: ', error);
       }
     };
     fetchEmails();
   }, []);
+  
+  useEffect(() => {
+    const fetchUsernames = async () => {
+      try {
+
+        const responseUsers = await axios.get('http://localhost:7777/api/auth/usernames');
+        setUsernames(responseUsers.data);
+      } catch (error) {
+        console.log('Error fetching Usernames: ', error);
+      }
+    };
+    fetchUsernames();
+  }, []);
+
+
   
 
   const handleChange = async (e) => {
@@ -90,7 +94,7 @@ function Signup() {
         coordinates: name === 'coordinates[0]' ? [value, prev.coordinates[1]] : [prev.coordinates[0], value],
       }));
     }
-    if(name === 'email'){
+    if (name === 'email') {
       setUser((prev) => ({
         ...prev,
         email: value,
@@ -104,28 +108,14 @@ function Signup() {
       }
     }
 
-    if(name === 'username' && value){
-      setUser((prev) => ({
-        ...prev,
-        username: value,
-      }));
-      try{
-        const usernameResponse = await axios.post('http://localhost:7777/api/check/username',{username: value});
-        console.log(usernameResponse.data); // Log the whole response
-        setUsernameAvailable(usernameResponse.data.message === 'Username is available');
-      }
-      catch(error){
-        console.error('Error checking username:');
-        setUsernameAvailable(false);
-      }
+    if (name === 'username') {
+      setUser((prev) => ({ ...prev, username: value }));
+      const usernameExist = usernames.some((username) => username.username === value);
+      setUsernameExist(usernameExist);      
     }
-    
-    
 
-    
   };
 
- 
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -231,20 +221,19 @@ function Signup() {
             {/* Username */}
             <div className={style.field}>
               <label>Username</label>
-              <input type="text" name="username" value={user.username} onChange={handleChange} required 
-              style={{border: usernameAvailable? '': '1px solid red'}}
+              <input type="text" name="username" value={user.username} onChange={handleChange} required
+                style={{ border: usernameExist ? '1px solid red' : '' }}
               />
-              {usernameAvailable === false && (
-                <p style={{ color: 'red' }}>Username Already Exist</p>
-              )}
-              
+              {usernameExist === true && <p style={{ color: 'red' }}>Username Already Exist</p>}
+
+
             </div>
 
             {/* Email */}
             <div className={style.field}>
               <label>Email</label>
               <input type="email" name="email" value={user.email} onChange={handleChange} required
-              style={{border: emailExists? '1px solid red':''}}
+                style={{ border: emailExists ? '1px solid red' : '' }}
               />
               {emailExists && (
                 <p style={{ color: 'red' }}>{errorMessage}</p>
