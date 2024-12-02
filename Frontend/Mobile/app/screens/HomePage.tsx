@@ -11,6 +11,7 @@ import { useRoute } from "@react-navigation/native";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "expo-router";
 
 interface Location {
   type: string;
@@ -55,6 +56,7 @@ interface User {
 }
 
 const HomePage = ({ user }: { user: User }) => {
+  const navigation = useNavigation();
   const [search, setSearch] = React.useState<string>("");
   const [selectedFilter, setSelectedFilter] =
     React.useState<string>("All Proficient");
@@ -91,7 +93,8 @@ const HomePage = ({ user }: { user: User }) => {
     career: string;
     careerCategory: string;
   }) => {
-    console.log("Job:", job);
+    // console.log("Job:", job);
+    navigation.navigate("ProfProfile", { job });
   };
 
   const fetchUser = async (filter?: string) => {

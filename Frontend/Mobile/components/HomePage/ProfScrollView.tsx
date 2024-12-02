@@ -42,7 +42,7 @@ const ProfList: React.FC<ProfListProps> = ({ jobs, onCardPress }) => {
     for (let i = 0; i < job.profile.ratings.length; i++) {
       rating += job.profile.ratings[i].rating;
     }
-    return rating / job.profile.ratings.length;
+    return Math.round(rating / job.profile.ratings.length);
   };
   return (
     <ScrollView style={styles.jobList}>
@@ -87,7 +87,6 @@ const ProfList: React.FC<ProfListProps> = ({ jobs, onCardPress }) => {
               </Text>
             </View>
 
-            {/* Bio section */}
             <Text style={styles.bio} numberOfLines={2}>
               {job.profile.bio || "No bio available."}
             </Text>
