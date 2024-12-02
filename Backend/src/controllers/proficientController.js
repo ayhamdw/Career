@@ -20,4 +20,33 @@ const getProficientData = async (req, res) => {
   }
 };
 
-module.exports = { getProficientData };
+const getReviews = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const reviews = await Promise.all(
+      user.profile.ratings.map(async (rating) => {
+        const reviewer = await User.findById(rating.userId).select(
+          "profile.firstName profile.lastName profile.profileImage"
+        );
+        return {
+          rating: rating.rating,
+          review: rating.review,
+          date: rating.date,
+          reviewer: reviewer || null,
+        };
+      })
+    );
+
+    res.status(200).json({ reviews });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = { getProficientData, getReviews };
