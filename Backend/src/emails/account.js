@@ -7,6 +7,10 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAILUSER,
     pass: process.env.EMAILPASSWORD,
   },
+  tls: {
+    rejectUnauthorized: false, 
+  },
+  debug: true,
 });
 
 const sendWelcomeEmail = (email, name) => {
@@ -56,6 +60,7 @@ const sendResetCode = (email, code) => {
 };
 
 const sendVerificationCode = (email, code) => {
+  return new Promise((resolve, reject) => {
   transporter.sendMail({
     to: email,
     from: process.env.EMAILUSER,
@@ -75,6 +80,17 @@ const sendVerificationCode = (email, code) => {
     <p style="font-size: 12px; color: #aaa;">&copy; 2024 Career Company. All rights reserved.</p>
   </footer>
 </div>`,
+  },
+  (error, info) => {
+    if (error) {
+      console.error("Error sending email:", error); // Log the error
+      reject(error);  // Reject promise if email fails
+    } else {
+      console.log("Email sent successfully:", info.response);
+      resolve(info);  // Resolve promise on successful email send
+    }
+  }
+);
   });
 };
 
