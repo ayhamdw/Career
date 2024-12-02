@@ -7,22 +7,23 @@ import ProfileNavigator from "./ProfileNavigator";
 import FriendRequests from "../FriendRequests";
 import ChatUser from "../ChatUser";
 import MessageNavigator from "./MessageNavigator";
+import HomePageNavigation from "./HomePageNavigation";
 
 const Main = ({ route }) => {
   const { user } = route?.params || {};
 
   if (!user) {
     console.warn("No user passed to Main.");
-    return null; // Or show a fallback UI
+    return null;
   }
 
   const screenData = useMemo(
     () => ({
-      HomePage: (props) => <HomePage {...props} user={user} />,
-      Requests: (props) => <Requests {...props} user={user} />,
-      Chat: (props) => <MessageNavigator {...props} user={user} />,
-      Setting: (props) => <ProfileNavigator {...props} user={user} />,
-      FriendRequests: (props) => <FriendRequests {...props} user={user} />,
+      HomePage: (props: any) => <HomePageNavigation {...props} user={user} />,
+      Requests: (props: any) => <Requests {...props} user={user} />,
+      Chat: (props: any) => <MessageNavigator {...props} user={user} />,
+      Setting: (props: any) => <ProfileNavigator {...props} user={user} />,
+      FriendRequests: (props: any) => <FriendRequests {...props} user={user} />,
     }),
     [user]
   );

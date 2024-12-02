@@ -11,15 +11,15 @@ import { View } from "react-native-animatable";
 
 const Stack = createStackNavigator();
 
-const ProfileNavigator = ({ user }) => {
+const ProfileNavigator = ({ user }: { user: any }) => {
   const screenData = useMemo(
     () => ({
-      Profile: (props) => <Profile {...props} user={user} />,
-      ProfileInfo: (props) => <ProfileInfo {...props} user={user} />,
-      BookmarkJobs: (props) => <BookmarkJobs {...props} user={user} />,
-      Notifications: (props) => <Notifications {...props} user={user} />,
-      ChangePassword: (props) => <ChangePassword {...props} user={user} />,
-      Logout: (props) => <Login {...props} />,
+      Profile: (props: any) => <Profile {...props} user={user} />,
+      ProfileInfo: (props: any) => <ProfileInfo {...props} user={user} />,
+      BookmarkJobs: (props: any) => <BookmarkJobs {...props} user={user} />,
+      Notifications: (props: any) => <Notifications {...props} user={user} />,
+      ChangePassword: (props: any) => <ChangePassword {...props} user={user} />,
+      Logout: (props: any) => <Login {...props} />,
     }),
     [user]
   );
