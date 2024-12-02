@@ -113,6 +113,14 @@ function Signup() {
       const usernameExist = usernames.some((username) => username.username === value);
       setUsernameExist(usernameExist);      
     }
+    
+    else {
+      setUser((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+    
 
   };
 
@@ -134,6 +142,18 @@ function Signup() {
       progress: undefined,
       theme: "colored",
     });
+  };
+
+
+  const sendVerificationCode = async (email) => {
+    const code = Math.floor(100000 + Math.random() * 900000);
+    try {
+      await axios.post('http://localhost:7777/api/send/send-verification', { email, code });
+      toast.info('Verification code sent to your email!', { position: "top-right" });
+    } catch (error) {
+      console.error('Error sending verification code:', error.response?.data || error.message);
+      toast.error('Failed to send verification code.');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -208,6 +228,7 @@ function Signup() {
       }
 
     }
+    sendVerificationCode(user.email);
   };
 
   return (
