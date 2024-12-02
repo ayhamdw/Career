@@ -3,6 +3,7 @@ import style from './Signup.module.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
   const [user, setUser] = useState({
@@ -156,6 +157,7 @@ function Signup() {
     }
   };
 
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -229,6 +231,7 @@ function Signup() {
 
     }
     sendVerificationCode(user.email);
+    navigate('/signin');
   };
 
   return (
