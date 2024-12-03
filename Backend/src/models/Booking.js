@@ -12,18 +12,7 @@ const bookingSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  serviceId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Service",
-    required: true,
-    trim: true,
-  },
   dateRequested: {
-    type: Date,
-    trim: true,
-    required: true,
-  },
-  dateScheduled: {
     type: Date,
     trim: true,
     required: true,

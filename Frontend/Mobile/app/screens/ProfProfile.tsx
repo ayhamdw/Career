@@ -47,8 +47,36 @@ interface Reviews {
 }
 export default function ProfProfile() {
   const route = useRoute();
-  const { job } = route.params;
+  const { job, user } = route.params;
+  console.log("prof Id", job._id);
+  console.log("user Id", user._id);
   const [reviews, setReviews] = useState<Reviews[]>([]);
+  const onMessagePress = () => {
+    console.log("Message Pressed");
+  };
+
+  const onRequestPress = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.post(
+        `${ayhamWifiUrl}/api/proficient/booking-proficient`,
+        {
+          proficientId: job._id,
+          myId: user._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log("response is ok");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const fetchReviewsUser = async () => {
@@ -94,7 +122,7 @@ export default function ProfProfile() {
 
         <ReviewsSection reviews={reviews} />
       </ScrollView>
-      <Action />
+      <Action onMessagePress={onMessagePress} onRequestPress={onRequestPress} />
     </View>
   );
 }
