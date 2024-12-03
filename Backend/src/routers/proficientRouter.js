@@ -5,6 +5,7 @@ const {
   getProficientData,
   getReviews,
   createBooking,
+  requestDetails,
 } = require("../controllers/proficientController");
 
 router.get("/proficient-data", Auth, getProficientData);
@@ -12,4 +13,7 @@ router.get("/proficient-data", Auth, getProficientData);
 router.get("/reviews/:id", Auth, getReviews);
 
 router.post("/booking-proficient", Auth, createBooking);
+
+router.get("/requestDetails", Auth, requestDetails);
+
 module.exports = router;
