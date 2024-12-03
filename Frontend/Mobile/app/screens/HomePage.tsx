@@ -94,7 +94,7 @@ const HomePage = ({ user }: { user: User }) => {
     career: string;
     careerCategory: string;
   }) => {
-    navigation.navigate("ProfProfile", { job });
+    navigation.navigate("ProfProfile", { job, user });
   };
 
   const fetchUser = async (filter?: string) => {

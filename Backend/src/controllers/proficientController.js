@@ -49,4 +49,8 @@ const getReviews = async (req, res) => {
   }
 };
 
-module.exports = { getProficientData, getReviews };
+const createBooking = async (req, res) => {
+  res.status(200).send("Booking created");
+};
+
+module.exports = { getProficientData, getReviews, createBooking };
