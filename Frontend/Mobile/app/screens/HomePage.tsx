@@ -31,6 +31,7 @@ interface Profile {
     userId: string;
     date: Date;
   };
+  numberOfRequest: number;
 }
 
 interface User {

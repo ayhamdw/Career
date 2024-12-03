@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,16 +6,55 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LinearGradient } from "expo-linear-gradient";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import axios from "axios";
 
+interface Job {
+  profile: {
+    firstName: string;
+    lastName: string;
+    bio: string;
+    experience: string;
+    location: {
+      type: string;
+      coordinates: [number, number];
+    };
+    ratings: {
+      rating: number;
+      review: string;
+      userId: string;
+      date: Date;
+    };
+  };
+  email: string;
+  city: string;
+  career: string;
+  careerCategory: string;
+}
+
+interface Reviews {
+  data: Date;
+  rating: number;
+  review: string;
+  reviewer: {
+    _id: string;
+    profile: {
+      firstName: string;
+      lastName: string;
+      profileImage: string;
+    };
+  };
+}
 export default function ProfProfile() {
   const route = useRoute();
   const { job } = route.params;
+  const [reviews, setReviews] = useState<Reviews[]>([]);
 
   useEffect(() => {
     const fetchReviewsUser = async () => {
@@ -29,29 +68,39 @@ export default function ProfProfile() {
             },
           }
         );
-        console.log("Reviews:", response.data.reviews[0].reviewer);
+        console.log("Reviews:", response.data.reviews);
+        setReviews(response.data.reviews);
       } catch (error) {
         console.log("Error fetching reviews:", error);
       }
     };
     fetchReviewsUser();
-  });
+  }, [job]);
+
+  const calcRating = (job: any) => {
+    let rating = 0;
+    for (const element of job) {
+      rating += element.rating;
+    }
+    return Math.round(rating / job.length);
+  };
 
   return (
     <View style={styles.container}>
-      {/* Header Section */}
-      <View style={styles.header}>
+      <StatusBar barStyle="dark-content" />
+      <LinearGradient colors={["#00b09b", "#96c93d"]} style={styles.header}>
         <Image
           source={{ uri: job.profile.profileImage }}
           style={styles.profileImage}
         />
-        <Text style={styles.name}>
-          {job.profile.firstName} {job.profile.lastName}
-        </Text>
-        <Text style={styles.career}>{job.career}</Text>
-      </View>
+        <View style={styles.headerContent}>
+          <Text style={styles.name}>
+            {job.profile.firstName} {job.profile.lastName}
+          </Text>
+          <Text style={styles.career}>{job.career}</Text>
+        </View>
+      </LinearGradient>
 
-      {/* Profile Details */}
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.profileSection}>
           <Text style={styles.sectionTitle}>About</Text>
@@ -70,27 +119,30 @@ export default function ProfProfile() {
 
         <View style={styles.profileSection}>
           <Text style={styles.sectionTitle}>Ratings</Text>
-          <Text style={styles.details}>
-            ⭐ {job.profile.ratings.rating} ({job.numberOfRequest} requests)
-          </Text>
+          <Text style={styles.details}>⭐ {calcRating(reviews)}</Text>
         </View>
 
-        {/* Reviews Section */}
-        {/* <View style={styles.profileSection}>
+        <View style={styles.profileSection}>
           <Text style={styles.sectionTitle}>Reviews</Text>
-          {job.profile.ratings.reviews.map((review, index) => (
+          {reviews.map((review, index) => (
             <View key={index} style={styles.reviewCard}>
-              <Text style={styles.reviewerName}>{review.userId}</Text>
-              <Text style={styles.reviewText}>{review.review}</Text>
-              <Text style={styles.reviewDate}>
-                {new Date(review.date).toLocaleDateString()}
-              </Text>
+              <Image
+                source={{ uri: review.reviewer.profile.profileImage }}
+                style={styles.reviewerImage}
+              />
+              <View style={styles.reviewContent}>
+                <Text style={styles.reviewerName}>
+                  {review.reviewer.profile.firstName}{" "}
+                  {review.reviewer.profile.lastName}
+                </Text>
+                <Text style={styles.rating}>⭐ {review.rating.toFixed(1)}</Text>
+                <Text style={styles.reviewText}>{review.review}</Text>
+              </View>
             </View>
           ))}
-        </View> */}
+        </View>
       </ScrollView>
 
-      {/* Action Buttons */}
       <View style={styles.actions}>
         <TouchableOpacity style={styles.button}>
           <Ionicons name="chatbubbles" size={20} color="#fff" />
@@ -108,91 +160,106 @@ export default function ProfProfile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f4f4f4",
   },
   header: {
     alignItems: "center",
-    padding: 20,
-    backgroundColor: "#58d68d",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    paddingVertical: 20,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    marginBottom: 10,
   },
   profileImage: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    marginBottom: 10,
+    borderWidth: 3,
+    borderColor: "#fff",
+    marginTop: 10,
+  },
+  headerContent: {
+    alignItems: "center",
   },
   name: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: "bold",
     color: "#fff",
+    marginTop: 10,
   },
   career: {
     fontSize: 16,
-    color: "#fff",
-    marginTop: 5,
+    color: "#e3f2fd",
   },
   content: {
     padding: 20,
   },
   profileSection: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 15,
+    elevation: 4,
     marginBottom: 20,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 5,
-    color: "#58d68d",
+    color: "#00b09b",
+    marginBottom: 15,
   },
   bio: {
     fontSize: 16,
-    lineHeight: 22,
     color: "#333",
+    lineHeight: 24,
   },
   details: {
     fontSize: 16,
-    lineHeight: 22,
-    color: "#555",
+    color: "#333",
   },
   reviewCard: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#f9f9f9",
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-    borderColor: "#ddd",
-    borderWidth: 1,
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 15,
+    elevation: 3,
+  },
+  reviewerImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 15,
+  },
+  reviewContent: {
+    flex: 1,
   },
   reviewerName: {
     fontWeight: "bold",
-    color: "#58d68d",
-    marginBottom: 5,
+    color: "#00b09b",
+  },
+  rating: {
+    fontSize: 14,
+    color: "#f39c12",
   },
   reviewText: {
     fontSize: 14,
     color: "#555",
-    marginBottom: 5,
-  },
-  reviewDate: {
-    fontSize: 12,
-    color: "#aaa",
-    textAlign: "right",
+    marginTop: 5,
   },
   actions: {
     flexDirection: "row",
     justifyContent: "space-around",
-    padding: 20,
-    backgroundColor: "#f9f9f9",
-    borderTopWidth: 1,
-    borderTopColor: "#ddd",
+    paddingVertical: 15,
+    backgroundColor: "#fff",
   },
   button: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#58d68d",
-    paddingVertical: 10,
+    backgroundColor: "#00b09b",
+    paddingVertical: 12,
     paddingHorizontal: 20,
-    borderRadius: 10,
+    borderRadius: 25,
+    elevation: 4,
   },
   buttonText: {
     marginLeft: 10,
