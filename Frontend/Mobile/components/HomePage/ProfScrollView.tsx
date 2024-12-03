@@ -24,6 +24,7 @@ interface Prof {
       userId: string;
       date: Date;
     };
+    numberOfRequest: number;
   };
   email: string;
   city: string;
@@ -39,8 +40,8 @@ interface ProfListProps {
 const ProfList: React.FC<ProfListProps> = ({ jobs, onCardPress }) => {
   const calcRating = (job: any) => {
     let rating = 0;
-    for (let i = 0; i < job.profile.ratings.length; i++) {
-      rating += job.profile.ratings[i].rating;
+    for (const element of job.profile.ratings) {
+      rating += element.rating;
     }
     return Math.round(rating / job.profile.ratings.length);
   };
