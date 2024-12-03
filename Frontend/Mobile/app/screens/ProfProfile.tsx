@@ -14,6 +14,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import axios from "axios";
+import Header from "@/components/ProficientPage/Header";
+import AboutSection from "@/components/ProficientPage/AboutSection";
+import ReviewsSection from "@/components/ProficientPage/ReviewsSection";
 
 interface Job {
   profile: {
@@ -82,65 +85,23 @@ export default function ProfProfile() {
     for (const element of job) {
       rating += element.rating;
     }
-    return Math.round(rating / job.length);
+    return rating / job.length;
   };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <LinearGradient colors={["#00b09b", "#96c93d"]} style={styles.header}>
-        <Image
-          source={{ uri: job.profile.profileImage }}
-          style={styles.profileImage}
-        />
-        <View style={styles.headerContent}>
-          <Text style={styles.name}>
-            {job.profile.firstName} {job.profile.lastName}
-          </Text>
-          <Text style={styles.career}>{job.career}</Text>
-        </View>
-      </LinearGradient>
-
+      <Header job={job} />
       <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.profileSection}>
-          <Text style={styles.sectionTitle}>About</Text>
-          <Text style={styles.bio}>{job.profile.bio}</Text>
-        </View>
+        <AboutSection section={job.profile.bio} title="About" />
 
-        <View style={styles.profileSection}>
-          <Text style={styles.sectionTitle}>Experience</Text>
-          <Text style={styles.details}>{job.profile.experience}</Text>
-        </View>
+        <AboutSection section={job.profile.experience} title="Experience" />
 
-        <View style={styles.profileSection}>
-          <Text style={styles.sectionTitle}>Location</Text>
-          <Text style={styles.details}>{job.city}</Text>
-        </View>
+        <AboutSection section={job.city} title="Location" />
 
-        <View style={styles.profileSection}>
-          <Text style={styles.sectionTitle}>Ratings</Text>
-          <Text style={styles.details}>⭐ {calcRating(reviews)}</Text>
-        </View>
+        <AboutSection section={String(calcRating(reviews))} title="Ratings" />
 
-        <View style={styles.profileSection}>
-          <Text style={styles.sectionTitle}>Reviews</Text>
-          {reviews.map((review, index) => (
-            <View key={index} style={styles.reviewCard}>
-              <Image
-                source={{ uri: review.reviewer.profile.profileImage }}
-                style={styles.reviewerImage}
-              />
-              <View style={styles.reviewContent}>
-                <Text style={styles.reviewerName}>
-                  {review.reviewer.profile.firstName}{" "}
-                  {review.reviewer.profile.lastName}
-                </Text>
-                <Text style={styles.rating}>⭐ {review.rating.toFixed(1)}</Text>
-                <Text style={styles.reviewText}>{review.review}</Text>
-              </View>
-            </View>
-          ))}
-        </View>
+        <ReviewsSection reviews={reviews} />
       </ScrollView>
 
       <View style={styles.actions}>
@@ -209,7 +170,6 @@ const styles = StyleSheet.create({
   bio: {
     fontSize: 16,
     color: "#333",
-    lineHeight: 24,
   },
   details: {
     fontSize: 16,
