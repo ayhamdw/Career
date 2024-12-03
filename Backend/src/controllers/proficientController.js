@@ -1,4 +1,5 @@
 const User = require("../models/user2");
+const Booking = require("../models/Booking");
 
 const getProficientData = async (req, res) => {
   try {
@@ -50,7 +51,41 @@ const getReviews = async (req, res) => {
 };
 
 const createBooking = async (req, res) => {
-  res.status(200).send("Booking created");
+  const { proficientId, myId } = req.body;
+  try {
+    const myLocation = await User.findById(myId).select("profile.location");
+    const proficientLocation = await User.findById(proficientId).select(
+      "profile.location"
+    );
+    const [myLat, myLong] = myLocation.profile.location.coordinates;
+    const [profLat, profLong] = proficientLocation.profile.location.coordinates;
+
+    const user = await User.findById(myId);
+    const provider = await User.findById(proficientId);
+
+    user.sendProficientRequests.push(proficientId);
+    provider.receiveProficientRequest.push(myId);
+
+    const booking = new Booking({
+      userId: myId,
+      providerId: proficientId,
+      dateRequested: new Date(),
+      location: {
+        type: "Point",
+        coordinates: [myLat, myLong],
+      },
+      status: "Pending",
+    });
+
+    provider.profile.numberOfRequest += 1;
+
+    await user.save();
+    await provider.save();
+    await booking.save();
+    res.status(200).json({ message: "Booking request sent" });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = { getProficientData, getReviews, createBooking };
