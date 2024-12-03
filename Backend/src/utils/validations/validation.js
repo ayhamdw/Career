@@ -90,6 +90,8 @@ const signupValidation = (data) => {
     tokens: Joi.array().items().required(),
     friendRequests: Joi.array().items().required(),
     friends: Joi.array().items().required(),
+    sendProficientRequests: Joi.array().items().required(),
+    receiveProficientRequest: Joi.array().items().required(),
     sendRequests: Joi.array().items().required(),
     resetCode: Joi.number().optional(),
     resetCodeExpires: Joi.date().optional().default(null),

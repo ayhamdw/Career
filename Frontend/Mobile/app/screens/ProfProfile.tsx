@@ -48,8 +48,6 @@ interface Reviews {
 export default function ProfProfile() {
   const route = useRoute();
   const { job, user } = route.params;
-  console.log("prof Id", job._id);
-  console.log("user Id", user._id);
   const [reviews, setReviews] = useState<Reviews[]>([]);
   const onMessagePress = () => {
     console.log("Message Pressed");
@@ -71,7 +69,7 @@ export default function ProfProfile() {
         }
       );
       if (response.status === 200) {
-        console.log("response is ok");
+        console.log("Done");
       }
     } catch (error) {
       console.log(error);
@@ -90,7 +88,6 @@ export default function ProfProfile() {
             },
           }
         );
-        console.log("Reviews:", response.data.reviews);
         setReviews(response.data.reviews);
       } catch (error) {
         console.log("Error fetching reviews:", error);

@@ -149,6 +149,18 @@ const userSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    sendProficientRequests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    receiveProficientRequest: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     resetCode: {
       type: Number,
       default: 0,
