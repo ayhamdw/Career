@@ -23,6 +23,14 @@ function Signup() {
     experience: '',
     profileImage: null,
     coordinates: [null, null],
+    sendProficientRequests: ['674f0eee59fa49413982b509'],
+    receiveProficientRequest: ['674f0eee59fa49413982b509'],
+    resetCode: 0,
+    resetCodeExpires: null,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    
+
   });
 
   useEffect(() => {
@@ -200,6 +208,8 @@ function Signup() {
     formData.append('friends[0]', '5f9a8b8f8c8d8e8b8f8a8b8c');
     formData.append('sendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c');
     formData.append('tokens[0][token]', "replace with actual api");
+    formData.append('sendProficientRequests[]', user.sendProficientRequests[0]);
+    formData.append('receiveProficientRequest[]', user.receiveProficientRequest[0]);
 
 
     try {
