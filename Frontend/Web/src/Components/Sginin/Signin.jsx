@@ -22,9 +22,10 @@ function Signin() {
       console.log(response.data.verificationStatus);
       if (response.status === 200) {
         if (response.data.verificationStatus === false) {
-          
+          localStorage.setItem('userEmail', email);
           navigate('/verify');
         } else {
+          localStorage.setItem('userEmail', email);
           navigate('/');
         }
       }

@@ -4,6 +4,7 @@ const {
 } = require("../utils/validations/validation"); //! Validation Functions
 const User = require("../models/user2"); //! User Model Object
 const { sendWelcomeEmail } = require("../emails/account");
+
 const signupController = async (req, res) => {
   const { error } = signupValidation(req.body);
   if (error) return res.status(400).send("Error" + error.details[0].message);
@@ -82,6 +83,29 @@ const getAllUsernames = async (req, res) => {
   }
 };
 
+const verifyCode = async (req, res) => {
+  const { email, code } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    if (user.verificationCode !== code) {
+      return res.status(400).json({ success: false, message: 'Invalid code' });
+    }
+
+    user.verificationStatus = true;
+    await user.save();
+
+    return res.status(200).json({ success: true, message: 'Verification successful' });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'An error occurred. Please try again later.' });
+  }
+}
+
 module.exports = {
   signupController,
   signinController,
@@ -89,4 +113,5 @@ module.exports = {
   logoutAllController,
   getAllEmails,
   getAllUsernames,
+  verifyCode,
 };

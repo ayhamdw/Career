@@ -36,6 +36,5 @@ app.use("/api/check", checkInformationRouter);
 app.use("/api/user", userRouter);
 app.use("/api/proficient", proficientRouter);
 app.use("/api/send",sendVerificationCode)
-
 app.use(errorHandler);
 module.exports = app;
