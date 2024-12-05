@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import style from './Verify.module.css';
 import verifyLogo from './verifyLogo.png';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';  // Import axios for HTTP requests
 
 function Verify() {
   const [values, setValues] = useState(['', '', '', '', '', '']);
+  const [errorMessage, setErrorMessage] = useState('');  // Error handling
+  const navigate = useNavigate();
+  const userEmail = localStorage.getItem('userEmail');  // Example storage
 
   const handleChange = (index, newValue) => {
     const updatedValues = [...values];
-    
     
     if (newValue === '' && values[index] !== '') {
       updatedValues[index] = '';
@@ -16,7 +20,6 @@ function Verify() {
       updatedValues[index] = newValue;
       setValues(updatedValues);
 
-      
       if (newValue && index < values.length - 1) {
         document.getElementById(`digit-${index + 1}`).focus();
       }
@@ -24,9 +27,27 @@ function Verify() {
   };
 
   const handleKeyDown = (index, e) => {
-    
     if (e.key === 'Backspace' && values[index] === '' && index > 0) {
       document.getElementById(`digit-${index - 1}`).focus();
+    }
+  };
+
+  const handleVerify = async () => {
+    const code = values.join('');  
+    
+    try {
+      const response = await axios.post('http://localhost:7777/api/auth/verify-code', {
+        email: userEmail,
+        code: code,
+      });
+
+      if (response.data.success) {
+        navigate('/');  
+      } else {
+        setErrorMessage('Invalid code, please try again.');
+      }
+    } catch (error) {
+      setErrorMessage('An error occurred. Please try again later.');
     }
   };
 
@@ -50,8 +71,9 @@ function Verify() {
             />
           ))}
         </div>
-        <button className={style.cancelButton}>Cancel</button>
-        <button className={style.verifyButton}>Verify</button>
+        {errorMessage && <p className={style.error}>{errorMessage}</p>}  {/* Error message */}
+        <button className={style.cancelButton} onClick={() => navigate('/signin')}>Cancel</button>
+        <button className={style.verifyButton} onClick={handleVerify}>Verify</button>
       </div>
     </div>
   );

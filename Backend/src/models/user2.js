@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const customError = require("../middleware/error/customError");
 const { faker } = require("@faker-js/faker");
+const { required } = require("joi");
 require("dotenv").config();
 const careerCategories = [
   "Technical Services",
@@ -122,6 +123,11 @@ const userSchema = new mongoose.Schema(
     verificationStatus: {
       type: Boolean,
       default: false,
+    },
+    verificationCode:{
+      type: String,
+      default:'',
+      required: false,
     },
     tokens: [
       {

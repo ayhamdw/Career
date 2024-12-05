@@ -20,6 +20,7 @@ function Signup() {
     lastName: '',
     phone: '',
     bio: '',
+    verificationCode:'',
     experience: '',
     profileImage: null,
     coordinates: [null, null],
@@ -154,15 +155,20 @@ function Signup() {
   };
 
 
-  const sendVerificationCode = async (email) => {
-    const code = Math.floor(100000 + Math.random() * 900000);
+ 
+  const g = async (email) => {
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    setUser((prev) => ({
+      ...prev,
+      verificationCode: code, 
+    }));
     try {
       await axios.post('http://localhost:7777/api/send/send-verification', { email, code });
       toast.info('Verification code sent to your email!', { position: "top-right" });
     } catch (error) {
       console.error('Error sending verification code:', error.response?.data || error.message);
       toast.error('Failed to send verification code.');
-    }
+    }    
   };
 
   const navigate = useNavigate();
@@ -174,6 +180,8 @@ function Signup() {
       return;
     }
 
+    
+    
 
     const formData = new FormData();
     formData.append('username', user.username);
@@ -184,7 +192,7 @@ function Signup() {
     formData.append('city', user.city);
     formData.append('dateOfBirth', user.dateOfBirth);
     formData.append('careerCategory', user.careerCategory);
-
+    
     // Send profile data as a nested object
     formData.append('profile[firstName]', user.firstName);
     formData.append('profile[lastName]', user.lastName);
@@ -192,7 +200,7 @@ function Signup() {
     formData.append('profile[bio]', user.bio);
     formData.append('profile[experience]', user.experience);
     formData.append('profile[profileImage]', "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...");
-
+    
     formData.append('profile[location][type]', "Point");
     // Send profileImage if it exists
     // if (user.profileImage) {
@@ -211,8 +219,15 @@ function Signup() {
     formData.append('sendProficientRequests[]', user.sendProficientRequests[0]);
     formData.append('receiveProficientRequest[]', user.receiveProficientRequest[0]);
 
-
+    
+    if (!user.verificationCode) {
+      sendVerificationCode(user.email);  
+    }
+    console.log("Verification Code: ", user.verificationCode);
+    formData.append('verificationCode', user.verificationCode);
     try {
+      
+
       const response = await axios.post('http://localhost:7777/api/auth/register', formData, {
 
 
@@ -222,26 +237,23 @@ function Signup() {
       });
       const { token } = response.data;
       localStorage.setItem('authToken', token);
+      
       formData.append('tokens[0][token]', token);
 
+      
+      
       notifySuccess();
+      navigate('/signin');
       setUser({
         username: '', email: '', password: '', role: '', gender: '', city: '',
         dateOfBirth: '', careerCategory: '', firstName: '', lastName: '',
         phone: '', bio: '', experience: '', profileImage: null, coordinates: ['', ''],
       });
     } catch (error) {
-      if (user.firstName.length < 3) {
-        alert("Username must be at least 3 characters long")
-        return;
-      }
-      else {
-        console.error('Error during registration:', error.response?.data || error.message);
-      }
-
+      console.error('Error during registration: ', error.response?.data || error.message);
+      toast.error('Registration failed.');
     }
-    sendVerificationCode(user.email);
-    navigate('/signin');
+    
   };
 
   return (

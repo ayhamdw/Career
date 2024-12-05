@@ -10,6 +10,7 @@ const {
   checkUserNameController,
   getAllEmails,
   getAllUsernames,
+  verifyCode,
 } = require("../controllers/authController");
 
 router.post("/register", upload.single("imageFile"), signupController);
@@ -23,5 +24,8 @@ router.post("/logoutAll", Auth, logoutAllController);
 router.get('/emails',getAllEmails);
 
 router.get('/usernames',getAllUsernames);
+
+router.post('/verify-code', verifyCode);
+
 
 module.exports = router;
