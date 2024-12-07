@@ -1,0 +1,171 @@
+.CareerStatistics {
+    background: linear-gradient(180deg, rgb(109, 201, 126) 0%, rgb(45, 155, 78) 100%);
+    padding: 60px 0;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-top: 50px;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+  }
+  
+  .StatisticsDescription {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .highlight {
+    color: #fef9e7;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  .StatisticsDescription h2 {
+    color: #ffffff;
+    font-size: 45px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 1s ease-out;
+  }
+  
+  .desc {
+    color: #f4f9f3;
+    width: 80%;
+    line-height: 1.8;
+    font-size: 18px;
+    font-weight: 400;
+    margin: 0 auto;
+    opacity: 0.9;
+    animation: fadeInUp 1.5s ease-out;
+  }
+  
+  .statistc {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  
+  .statItem {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    padding: 25px;
+    width: 180px;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  .statItem:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+  }
+  
+  .statItem h2 {
+    color: #f0c932;
+    font-size: 35px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  .statItem span {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 5px;
+    text-transform: uppercase;
+  }
+  
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .StatisticsDescription h2 {
+      font-size: 35px;
+    }
+  
+    .desc {
+      width: 90%;
+      font-size: 16px;
+    }
+  
+    .statItem {
+      width: 150px;
+      padding: 20px;
+    }
+  
+    .statItem h2 {
+      font-size: 30px;
+    }
+  
+    .statItem span {
+      font-size: 14px;
+    }
+  
+    .statistc {
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .CareerStatistics {
+      padding: 50px 0;
+    }
+  
+    .StatisticsDescription h2 {
+      font-size: 30px;
+    }
+  
+    .desc {
+      font-size: 14px;
+    }
+  
+    .statItem {
+      width: 130px;
+      padding: 15px;
+    }
+  
+    .statItem h2 {
+      font-size: 28px;
+    }
+  
+    .statItem span {
+      font-size: 12px;
+    }
+  
+    .statistc {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+  

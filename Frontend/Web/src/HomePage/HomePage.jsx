@@ -13,8 +13,11 @@ import { RxArrowTopRight } from "react-icons/rx";
 
 import { ServiceData } from './HomePage'
 
+import AboutUs from './AboutUs/AboutUs';
+
 function HomePage() {
   return (
+    <>
     <div className='containerHome'>
       <div className='imagessw flex items-center justify-center flex-col mt-10 w-full'>
         <Swiper
@@ -63,7 +66,14 @@ function HomePage() {
           ))}
         </Swiper>
       </div>
+
+      
     </div>
+
+    <AboutUs/>
+
+    </>
+    
   );
 }
 
