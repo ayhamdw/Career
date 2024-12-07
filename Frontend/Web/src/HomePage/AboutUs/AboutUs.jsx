@@ -4,7 +4,7 @@ import styles from './AboutUs.module.css';
 const AboutUs = () => {
     return (
         <section className={styles.CareerStatistics}>
-            <div className="container">
+            <div className={styles.container}>
                 <div className={styles.row}>
                     <div className={styles.StatisticsDescription}>
                         <span className={styles.highlight}>CAREER STATISTICS</span>
