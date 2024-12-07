@@ -14,6 +14,7 @@ import { RxArrowTopRight } from "react-icons/rx";
 import { ServiceData } from './HomePage'
 
 import AboutUs from './AboutUs/AboutUs';
+import Services from './Services/Services';
 
 function HomePage() {
   return (
@@ -69,6 +70,7 @@ function HomePage() {
 
       
     </div>
+    <Services/>
 
     <AboutUs/>
 
