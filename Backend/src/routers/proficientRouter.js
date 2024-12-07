@@ -14,6 +14,6 @@ router.get("/reviews/:id", Auth, getReviews);
 
 router.post("/booking-proficient", Auth, createBooking);
 
-router.get("/requestDetails", Auth, requestDetails);
+router.get("/requestDetails/:id", Auth, requestDetails);
 
 module.exports = router;

@@ -89,7 +89,33 @@ const createBooking = async (req, res) => {
 };
 
 const requestDetails = async (req, res) => {
-  res.status(200).send("Request Details");
+  try {
+    const { id } = req.params;
+    const city = await User.findById(id).select("city");
+    console.log(city.city);
+
+    const booking = await Booking.find({
+      userId: id,
+    });
+
+    const proficientInfo = await Promise.all(
+      booking.map(async (book) => {
+        const provider = await User.findById(book.providerId).select(
+          "_id profile.firstName profile.lastName profile.profileImage"
+        );
+        return {
+          provider: provider || null,
+          dateRequested: book.dateRequested,
+          status: book.status,
+          city: city.city,
+        };
+      })
+    );
+    console.log(proficientInfo);
+    res.status(200).json({ proficientInfo });
+  } catch (error) {
+    res.status(500).send("Error: " + error);
+  }
 };
 
 module.exports = {

@@ -10,15 +10,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { ayhamWifiUrl } from "@/constants/Urls";
 
-const Request = ({ user }) => {
+const Request = ({ user }: { user: any }) => {
   const [requests, setRequests] = useState([]);
-
+  const id = user._id;
   useEffect(() => {
     const fetchRequests = async () => {
       try {
         const token = await AsyncStorage.getItem("token");
         const response = await axios.get(
-          `${ayhamWifiUrl}/api/proficient/requestDetails`,
+          `${ayhamWifiUrl}/api/proficient/requestDetails/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -26,15 +26,15 @@ const Request = ({ user }) => {
           }
         );
         if (response.status === 200) {
-          setRequests(response.data);
-          console.log("Requests fetched successfully.");
+          setRequests(response.data.proficientInfo);
+          console.log("Requests:", response.data.proficientInfo);
         }
       } catch (error) {
         console.log("Error fetching requests:", error);
       }
     };
     fetchRequests();
-  }, [user]);
+  }, [user._id]);
 
   const fakeRequests = [
     {
@@ -73,13 +73,13 @@ const Request = ({ user }) => {
               </Text>
             </View>
             <Text style={styles.profCareer}>{item.profCareer}</Text>
-            <Text style={styles.location}>{`Location: ${item.location}`}</Text>
-            <Text style={styles.date}>{`Date: ${item.date}`}</Text>
+            <Text style={styles.info}>{`📍 ${item.location}`}</Text>
+            <Text style={styles.info}>{`📅 ${item.date}`}</Text>
             <TouchableOpacity
               style={styles.detailsButton}
               onPress={() => console.log("View details pressed")}
             >
-              <Text style={styles.detailsButtonText}>View Details</Text>
+              <Text style={styles.detailsButtonText}>Details</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -97,31 +97,35 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 16,
+    marginBottom: 12,
     color: "#333333",
+    textAlign: "center",
   },
   list: {
     paddingBottom: 16,
   },
   card: {
     backgroundColor: "#f8f9fa",
-    borderRadius: 10,
-    padding: 16,
-    marginBottom: 16,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowRadius: 2,
+    elevation: 2,
+    borderLeftWidth: 4,
+    borderLeftColor: "#58d68d",
   },
   cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 8,
   },
   profName: {
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 16,
+    fontWeight: "bold",
     color: "#58d68d",
   },
   status: {
@@ -129,30 +133,27 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   profCareer: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#555555",
-    marginVertical: 4,
+    marginBottom: 4,
   },
-  location: {
-    fontSize: 14,
+  info: {
+    fontSize: 12,
     color: "#777777",
-  },
-  date: {
-    fontSize: 14,
-    color: "#999999",
-    marginBottom: 8,
+    marginBottom: 2,
   },
   detailsButton: {
+    marginTop: 8,
     backgroundColor: "#58d68d",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 5,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 4,
     alignSelf: "flex-start",
   },
   detailsButtonText: {
     color: "#ffffff",
     fontWeight: "600",
-    fontSize: 14,
+    fontSize: 12,
   },
 });
 

@@ -45,7 +45,6 @@ const Profile = ({ user }) => {
       console.log("Logout failed:", err);
     }
   };
-  console.log(user);
   return (
     <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
       <StatusBar barStyle="dark-content" />
