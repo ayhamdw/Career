@@ -101,7 +101,7 @@ const requestDetails = async (req, res) => {
     const proficientInfo = await Promise.all(
       booking.map(async (book) => {
         const provider = await User.findById(book.providerId).select(
-          "_id profile.firstName profile.lastName profile.profileImage"
+          "_id profile.firstName profile.lastName profile.profileImage career"
         );
         return {
           provider: provider || null,
