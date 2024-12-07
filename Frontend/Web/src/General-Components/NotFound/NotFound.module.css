@@ -1,29 +1,29 @@
-/* NotFound.css */
-.not-found-container {
+.notFoundContainer  {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 60vh;
     padding: 20px;
     text-align: center;
     /* background-color: #f0f0f0; */
+    
   }
   
-  .not-found-title {
+  .notFoundTitle{
     font-size: 10rem;
     color: #ff4d4d;
     margin: 0;
   }
   
-  .not-found-text {
+  .notFoundText{
     font-size: 1.5rem;
     color: #333;
     margin: 10px 0;
-    max-width: 600px; /* Prevent text from stretching on large screens */
+    max-width: 600px; 
   }
   
-  .back-home-link {
+  .backHomeLink {
     margin-top: 20px;
     padding: 12px 25px;
     /* background-color: #4caf50; */
@@ -34,37 +34,37 @@
     transition: background-color 0.3s, transform 0.2s;
   }
   
-  .back-home-link:hover {
+  .backHomeLink:hover {
     background-color: #45a049;
     transform: translateY(-3px);
   }
   
   /* Responsive Design */
   @media (max-width: 768px) {
-    .not-found-title {
+    .notFoundTitle  {
       font-size: 6rem;
     }
   
-    .not-found-text {
+    .notFoundText  {
       font-size: 1.2rem;
     }
   
-    .back-home-link {
+    .backHomeLink {
       padding: 10px 20px;
       font-size: 1rem;
     }
   }
   
   @media (max-width: 480px) {
-    .not-found-title {
+    .notFoundTitle  {
       font-size: 4rem;
     }
   
-    .not-found-text {
+    .notFoundText  {
       font-size: 1rem;
     }
   
-    .back-home-link {
+    .backHomeLink {
       padding: 8px 18px;
       font-size: 0.9rem;
     }
