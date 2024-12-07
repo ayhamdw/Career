@@ -10,9 +10,34 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { ayhamWifiUrl } from "@/constants/Urls";
 
+interface Request {
+  city: string;
+  dateRequested: string;
+  provider: {
+    _id: string;
+    career: string;
+    profile: {
+      firstName: string;
+      lastName: string;
+    };
+    status: string;
+  };
+}
+
 const Request = ({ user }: { user: any }) => {
-  const [requests, setRequests] = useState([]);
+  const [requests, setRequests] = useState<Request[]>([]);
   const id = user._id;
+
+  // Format time to HH:MM AM/PM
+  const formatTime = (dateString: string): string => {
+    const date = new Date(dateString);
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
+  };
+
   useEffect(() => {
     const fetchRequests = async () => {
       try {
@@ -27,7 +52,6 @@ const Request = ({ user }: { user: any }) => {
         );
         if (response.status === 200) {
           setRequests(response.data.proficientInfo);
-          console.log("Requests:", response.data.proficientInfo);
         }
       } catch (error) {
         console.log("Error fetching requests:", error);
@@ -36,32 +60,25 @@ const Request = ({ user }: { user: any }) => {
     fetchRequests();
   }, [user._id]);
 
-  const fakeRequests = [
-    {
-      id: "1",
-      profName: "Ayham",
-      profCareer: "Electrician",
-      location: "Nablus",
-      status: "Pending",
-      date: "2024-12-02",
-    },
-  ];
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sent Requests</Text>
       <FlatList
-        data={fakeRequests}
-        keyExtractor={(item) => item.id}
+        data={requests}
+        keyExtractor={(item) => item.provider._id}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
           <View style={styles.card}>
             <View style={styles.cardHeader}>
-              <Text style={styles.profName}>{item.profName}</Text>
-              <Text
+              <Text style={styles.profName}>
+                {item.provider.profile.firstName +
+                  " " +
+                  item.provider.profile.lastName}
+              </Text>
+              <View
                 style={{
-                  ...styles.status,
-                  color:
+                  ...styles.statusBadge,
+                  backgroundColor:
                     item.status === "Pending"
                       ? "#ffc107"
                       : item.status === "Accepted"
@@ -69,12 +86,15 @@ const Request = ({ user }: { user: any }) => {
                       : "#dc3545",
                 }}
               >
-                {item.status}
-              </Text>
+                <Text style={styles.statusText}>{item.status}</Text>
+              </View>
             </View>
-            <Text style={styles.profCareer}>{item.profCareer}</Text>
-            <Text style={styles.info}>{`📍 ${item.location}`}</Text>
-            <Text style={styles.info}>{`📅 ${item.date}`}</Text>
+            <Text style={styles.profCareer}>🎓 {item.provider.career}</Text>
+            <Text style={styles.info}>📍 {item.city}</Text>
+            <Text style={styles.info}>
+              📅 {new Date(item.dateRequested).toLocaleDateString()}
+            </Text>
+            <Text style={styles.info}>⏰ {formatTime(item.dateRequested)}</Text>
             <TouchableOpacity
               style={styles.detailsButton}
               onPress={() => console.log("View details pressed")}
@@ -91,69 +111,77 @@ const Request = ({ user }: { user: any }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#fff",
     padding: 16,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 12,
-    color: "#333333",
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#333",
     textAlign: "center",
+    marginBottom: 16,
   },
   list: {
     paddingBottom: 16,
   },
   card: {
-    backgroundColor: "#f8f9fa",
-    borderRadius: 8,
-    padding: 12,
+    backgroundColor: "white",
+    borderRadius: 16,
+    padding: 16,
     marginBottom: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-    borderLeftWidth: 4,
-    borderLeftColor: "#58d68d",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
   cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 12,
   },
   profName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#58d68d",
   },
-  status: {
-    fontSize: 14,
+  statusBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 20,
+  },
+  statusText: {
+    fontSize: 12,
+    color: "white",
     fontWeight: "600",
+    textTransform: "capitalize",
   },
   profCareer: {
     fontSize: 14,
-    color: "#555555",
+    fontWeight: "600",
+    color: "#555",
     marginBottom: 4,
   },
   info: {
-    fontSize: 12,
-    color: "#777777",
-    marginBottom: 2,
+    fontSize: 14,
+    color: "#777",
+    marginBottom: 6,
   },
   detailsButton: {
-    marginTop: 8,
+    marginTop: 12,
     backgroundColor: "#58d68d",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 4,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
     alignSelf: "flex-start",
   },
   detailsButtonText: {
-    color: "#ffffff",
-    fontWeight: "600",
-    fontSize: 12,
+    fontSize: 14,
+    color: "white",
+    fontWeight: "bold",
   },
 });
 
