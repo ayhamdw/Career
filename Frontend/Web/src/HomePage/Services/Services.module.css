@@ -1,0 +1,134 @@
+.Services {
+    font-family: Poppins, sans-serif;
+    width: 100%;
+    padding-bottom: 10px;
+    margin-top: 50px;
+}
+
+.container {
+    width: calc(100% - 120px);
+    margin: auto;
+}
+
+.Services .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.Services .serviceDescreption {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.Services .serviceDescreption span {
+    color: #6dc97e; /* Career app green color */
+    font-size: 60px;
+    font-weight: 800;
+}
+
+.Services .serviceDescreption h2 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    margin: 0;
+}
+
+.Services .serviceDescreption p {
+    color: #9e9f9f;
+    font-size: 16px;
+}
+
+@media screen and (max-width: 550px) {
+    .Services .serviceDescreption span {
+        font-size: 40px;
+    }
+
+    .Services .serviceDescreption h2 {
+        font-size: 24px;
+    }
+
+    .Services .serviceDescreption p {
+        font-size: 12px;
+    }
+
+    .Services .serviceItem img {
+        width: 25px;
+    }
+
+    .Services .serviceItem h2 {
+        font-size: 17px;
+    }
+
+    .Services .serviceItem p {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 408px) {
+    .Services .serviceDescreption span {
+        font-size: 27px;
+    }
+
+    .Services .serviceDescreption h2 {
+        font-size: 18px;
+    }
+
+    .Services .serviceDescreption p {
+        font-size: 10px;
+    }
+}
+
+.Services .serviceItems {
+    display: flex;
+    width: 100%;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.Services .serviceItem {
+    width: 300px;
+    background: linear-gradient(180deg, rgb(109, 201, 126) 0%, rgb(45, 155, 78) 100%);
+    padding: 50px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 20px;
+    transition: transform 0.6s ease-in-out;
+}
+
+.Services .serviceItem:hover {
+    transform: scale(1.06);
+}
+
+.Services .serviceItem .circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.Services .serviceItem img {
+    width: 40px;
+}
+
+.Services .serviceItem h2 {
+    color: white;
+    font-size: 24px;
+}
+
+.Services .serviceItem p {
+    color: #ddd;
+    font-size: 14px;
+}
