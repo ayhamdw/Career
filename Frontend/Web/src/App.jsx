@@ -10,6 +10,7 @@ import HomePage from './HomePage/HomePage.jsx'
 import Sginin from './Components/Sginin/Signin'
 import Signup from './Components/Signup/Signup'
 import Verify from './Components/Verify/Verify'
+import Messages from './General-Components/Messages/Messages'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -32,6 +33,11 @@ const router = createBrowserRouter([
         path:'/verify',
         element:<Verify/>
       },
+      {
+        path:'/messages',
+        element:<Messages/>
+      },
+
       {
         path:'*',
         element:<NotFound/>
