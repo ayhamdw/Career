@@ -118,9 +118,16 @@ const requestDetails = async (req, res) => {
   }
 };
 
+const senderDetails = async (req, res) => {
+  const { id } = req.params;
+  res.status(200).send("Sender Details");
+  console.log("Sender Details");
+};
+
 module.exports = {
   getProficientData,
   getReviews,
   createBooking,
   requestDetails,
+  senderDetails,
 };

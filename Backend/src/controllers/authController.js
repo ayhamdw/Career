@@ -27,12 +27,11 @@ const signinController = async (req, res, next) => {
     );
     const token = await user.generateAuthToken();
     // await User.generateFakeData();
-    sendWelcomeEmail(user.email, user.profile.firstName);
-    res.send({ 
-      user, 
+    // sendWelcomeEmail(user.email, user.profile.firstName);
+    res.send({
+      user,
       token,
       verificationStatus: user.verificationStatus,
-
     });
   } catch (error) {
     console.log("Error inside the Login");
@@ -90,21 +89,28 @@ const verifyCode = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     if (user.verificationCode !== code) {
-      return res.status(400).json({ success: false, message: 'Invalid code' });
+      return res.status(400).json({ success: false, message: "Invalid code" });
     }
 
     user.verificationStatus = true;
     await user.save();
 
-    return res.status(200).json({ success: true, message: 'Verification successful' });
+    return res
+      .status(200)
+      .json({ success: true, message: "Verification successful" });
   } catch (error) {
-    return res.status(500).json({ success: false, message: 'An error occurred. Please try again later.' });
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred. Please try again later.",
+    });
   }
-}
+};
 
 module.exports = {
   signupController,
