@@ -133,11 +133,20 @@ const senderDetails = async (req, res) => {
         };
       })
     );
-    console.log(senderDetails);
     res.status(200).json({ senderDetails });
   } catch (error) {
     console.log(error);
     res.status(401).send("Error", error);
+  }
+};
+
+const acceptRequest = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  try {
+    res.status(200).send("Request Accepted");
+  } catch (error) {
+    res.status(500).send("Error: " + error);
   }
 };
 
@@ -147,4 +156,5 @@ module.exports = {
   createBooking,
   requestDetails,
   senderDetails,
+  acceptRequest,
 };

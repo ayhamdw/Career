@@ -34,7 +34,6 @@ export default function FriendRequests({ user }: { user: any }) {
     const fetchUserData = async () => {
       try {
         const token = await AsyncStorage.getItem("token");
-        console.log("Token:", token);
         const response = await axios.get(
           `${ayhamWifiUrl}/api/proficient/sender-details/${id}`,
           {
@@ -45,7 +44,6 @@ export default function FriendRequests({ user }: { user: any }) {
         );
         if (response.status === 200) {
           setSenderUserData(response.data.senderDetails);
-          console.log("Sender User Data:", response.data);
         }
       } catch (error) {
         console.log("Error fetching sender user data:", error);
@@ -54,9 +52,25 @@ export default function FriendRequests({ user }: { user: any }) {
     fetchUserData();
   }, [id]);
 
-  const handleAccept = (requestId: string) => {
-    console.log(`Accepted request with ID: ${requestId}`);
-    // Add accept logic here
+  const handleAccept = async (requestId: string) => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.post(
+        `${ayhamWifiUrl}/api/proficient/accept-request/${requestId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log("Request accepted successfully");
+      } else {
+        console.log("Request not accepted");
+      }
+    } catch (error) {
+      console.log("Error accepting request:", error);
+    }
   };
 
   const handleReject = (requestId: string) => {
