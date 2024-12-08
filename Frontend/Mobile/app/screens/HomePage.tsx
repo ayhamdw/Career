@@ -71,7 +71,7 @@ const HomePage = ({ user }: { user: User }) => {
     "Legal & Financial Services",
     "Other",
   ];
-  const handleCardPress = (job: {
+  const handleCardPress = (proficientDetails: {
     profile: {
       firstName: string;
       lastName: string;
@@ -93,7 +93,7 @@ const HomePage = ({ user }: { user: User }) => {
     career: string;
     careerCategory: string;
   }) => {
-    navigation.navigate("ProfProfile", { job, user });
+    navigation.navigate("ProfNavigator", { proficientDetails, user });
   };
 
   const fetchUser = async (filter?: string) => {

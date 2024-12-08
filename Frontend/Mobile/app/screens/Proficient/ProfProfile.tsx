@@ -8,6 +8,7 @@ import Header from "@/components/ProficientPage/Header";
 import AboutSection from "@/components/ProficientPage/AboutSection";
 import ReviewsSection from "@/components/ProficientPage/ReviewsSection";
 import Action from "@/components/ProficientPage/Action";
+import { useNavigation } from "expo-router";
 
 interface Job {
   profile: {
@@ -45,35 +46,36 @@ interface Reviews {
     };
   };
 }
-export default function ProfProfile() {
-  const route = useRoute();
-  const { job, user } = route.params;
+export default function ProfProfile({ proficientDetails, user }) {
+  console.log("ProfProfile proficientDetails:", proficientDetails);
+  const navigation = useNavigation();
   const [reviews, setReviews] = useState<Reviews[]>([]);
   const onMessagePress = () => {
     console.log("Message Pressed");
   };
 
   const onRequestPress = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      const response = await axios.post(
-        `${ayhamWifiUrl}/api/proficient/booking-proficient`,
-        {
-          proficientId: job._id,
-          myId: user._id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.status === 200) {
-        console.log("Done");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const token = await AsyncStorage.getItem("token");
+    //   const response = await axios.post(
+    //     `${ayhamWifiUrl}/api/proficient/booking-proficient`,
+    //     {
+    //       proficientId: proficientDetails._id,
+    //       myId: user._id,
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     }
+    //   );
+    //   if (response.status === 200) {
+    //     console.log("Done");
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    navigation.navigate("RequestDetailsPage", { proficientDetails, user });
   };
 
   useEffect(() => {
@@ -81,7 +83,7 @@ export default function ProfProfile() {
       try {
         const token = await AsyncStorage.getItem("token");
         const response = await axios.get(
-          `${ayhamWifiUrl}/api/proficient/reviews/${job._id}`,
+          `${ayhamWifiUrl}/api/proficient/reviews/${proficientDetails._id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -94,7 +96,7 @@ export default function ProfProfile() {
       }
     };
     fetchReviewsUser();
-  }, [job]);
+  }, [proficientDetails]);
 
   const calcRating = (job: any) => {
     let rating = 0;
@@ -107,13 +109,16 @@ export default function ProfProfile() {
   return (
     <View style={{ flex: 1, backgroundColor: "#f4f4f4" }}>
       <StatusBar barStyle="dark-content" />
-      <Header job={job} />
+      <Header job={proficientDetails} />
       <ScrollView contentContainerStyle={{ padding: 20 }}>
-        <AboutSection section={job.profile.bio} title="About" />
+        <AboutSection section={proficientDetails.profile.bio} title="About" />
 
-        <AboutSection section={job.profile.experience} title="Experience" />
+        <AboutSection
+          section={proficientDetails.profile.experience}
+          title="Experience"
+        />
 
-        <AboutSection section={job.city} title="Location" />
+        <AboutSection section={proficientDetails.city} title="Location" />
 
         <AboutSection section={String(calcRating(reviews))} title="Ratings" />
 
