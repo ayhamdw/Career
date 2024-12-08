@@ -8,6 +8,7 @@ footer {
     margin: auto;
     margin-top: 100px; 
     height: 400px;
+    z-index: 999;
     
   }
   
@@ -17,12 +18,14 @@ footer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 10px;
+    
 
   }
   
   .footer-section {
     flex: 1;
     margin: 0 10px;
+    
   }
   
   .footer-section h4 {
