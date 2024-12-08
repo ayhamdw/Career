@@ -122,10 +122,22 @@ const senderDetails = async (req, res) => {
   const { id } = req.params;
   try {
     const booking = await Booking.find({ providerId: id });
-    console.log(booking);
+    const senderDetails = await Promise.all(
+      booking.map(async (book) => {
+        const sender = await User.findById(book.userId).select(
+          "_id profile email career city"
+        );
+        return {
+          sender: sender || null,
+          dataRequested: book.dateRequested,
+        };
+      })
+    );
+    console.log(senderDetails);
+    res.status(200).json({ senderDetails });
   } catch (error) {
-    res.status(500).send("Error", error);
     console.log(error);
+    res.status(401).send("Error", error);
   }
 };
 

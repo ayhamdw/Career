@@ -28,14 +28,13 @@ const Request = ({ user }: { user: any }) => {
   const [requests, setRequests] = useState<Request[]>([]);
   const id = user._id;
 
-  // Format time to HH:MM AM/PM
   const formatTime = (dateString: string): string => {
     const date = new Date(dateString);
     let hours = date.getHours();
     const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
+    const amPm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12 || 12;
-    return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
+    return `${hours}:${minutes.toString().padStart(2, "0")} ${amPm}`;
   };
 
   useEffect(() => {

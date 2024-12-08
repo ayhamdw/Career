@@ -5,6 +5,7 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -14,31 +15,26 @@ import { ayhamWifiUrl } from "@/constants/Urls";
 export default function FriendRequests({ user }: { user: any }) {
   const id = user._id;
 
-  const [senderUserData, setSenderUserData] = React.useState([
-    {
-      _id: "1",
-      name: "John Doe",
-      email: "johndoe@example.com",
-      profession: "Electrician",
-      location: "Ramallah",
-      time: "2:30 PM",
-      date: "2024-12-07",
-    },
-    {
-      _id: "2",
-      name: "Jane Smith",
-      email: "janesmith@example.com",
-      profession: "Plumber",
-      location: "Nablus",
-      time: "10:15 AM",
-      date: "2024-12-06",
-    },
-  ]);
+  const [senderUserData, setSenderUserData] = React.useState([]);
+
+  const formatTime = (dateString: string): string => {
+    const date = new Date(dateString);
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const actualDate =
+      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    const amPm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    return `${actualDate} on ${hours}:${minutes
+      .toString()
+      .padStart(2, "0")} ${amPm}`;
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = await AsyncStorage.getItem("token");
+        console.log("Token:", token);
         const response = await axios.get(
           `${ayhamWifiUrl}/api/proficient/sender-details/${id}`,
           {
@@ -48,7 +44,7 @@ export default function FriendRequests({ user }: { user: any }) {
           }
         );
         if (response.status === 200) {
-          setSenderUserData(response.data);
+          setSenderUserData(response.data.senderDetails);
           console.log("Sender User Data:", response.data);
         }
       } catch (error) {
@@ -71,30 +67,36 @@ export default function FriendRequests({ user }: { user: any }) {
   const renderRequest = ({ item }: { item: any }) => (
     <View style={styles.card}>
       <View style={styles.header}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.profession}>{item.profession}</Text>
+        <Image
+          source={{ uri: item.sender.profile.profileImage }}
+          style={styles.profileImage}
+        />
+        <View>
+          <Text style={styles.name}>
+            {item.sender.profile.firstName + " " + item.sender.profile.lastName}
+          </Text>
+          <Text style={styles.profession}>{item.sender.career}</Text>
+        </View>
       </View>
-      <Text style={styles.email}>{item.email}</Text>
+      <Text style={styles.email}>{item.sender.email}</Text>
       <View style={styles.row}>
         <Ionicons name="location-outline" size={16} color="#888" />
-        <Text style={styles.location}>{item.location}</Text>
+        <Text style={styles.location}>{item.sender.city}</Text>
       </View>
       <View style={styles.row}>
         <Ionicons name="time-outline" size={16} color="#888" />
-        <Text style={styles.time}>
-          {item.time} on {item.date}
-        </Text>
+        <Text style={styles.time}>{formatTime(item.dataRequested)}</Text>
       </View>
       <View style={styles.actions}>
         <TouchableOpacity
           style={[styles.button, styles.acceptButton]}
-          onPress={() => handleAccept(item._id)}
+          onPress={() => handleAccept(item.sender._id)}
         >
           <Text style={styles.buttonText}>Accept</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.rejectButton]}
-          onPress={() => handleReject(item._id)}
+          onPress={() => handleReject(item.sender._id)}
         >
           <Text style={styles.buttonText}>Reject</Text>
         </TouchableOpacity>
@@ -107,7 +109,7 @@ export default function FriendRequests({ user }: { user: any }) {
       <Text style={styles.headerText}>Requests</Text>
       <FlatList
         data={senderUserData}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item.sender._id}
         renderItem={renderRequest}
         contentContainerStyle={styles.list}
       />
@@ -140,7 +142,14 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 12,
   },
   name: {
     fontSize: 18,
