@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
-import Requests from "../Setting/Requests";
+import Requests from "../Proficient/Requests";
 import Messages from "../Messages";
 import CustomTabNavigator from "./CustomTabNavigator";
 import HomePage from "../HomePage";
 import ProfileNavigator from "./ProfileNavigator";
-import FriendRequests from "../FriendRequests";
+import FriendRequests from "../Proficient/FriendRequests";
 import ChatUser from "../ChatUser";
 import MessageNavigator from "./MessageNavigator";
 import HomePageNavigation from "./HomePageNavigation";
