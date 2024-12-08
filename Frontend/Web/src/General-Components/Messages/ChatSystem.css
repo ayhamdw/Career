@@ -1,10 +1,12 @@
+
 .chat-system {
     display: grid;
     grid-template-columns: 25% 75%;
-    height: 100vh;
-    gap: 10px;
+    height: 800px;
+    gap: 15px;
     background: #f9fdfc;
     font-family: Arial, sans-serif;
+    margin: 30px;
   }
   
   .friends-list {
@@ -89,34 +91,50 @@
   }
   
   .messages-list {
-    flex-grow: 1;
-    overflow-y: auto;
+    /* flex-grow: 1; */
+    /* overflow-y: auto; */
     margin-bottom: 20px;
     padding-right: 10px;
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-end;
+    height: 100%;
+  }
+  .messages-list::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .messages-list::-webkit-scrollbar-thumb {
+    background-color: #6dc97e;
+    border-radius: 10px;
+  }
+  
+  .friends-list {
+    overflow-y: auto;
+    max-height: 100%; 
   }
   
   .message {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 15px;
-    transition: all 0.3s ease;
-  }
-  
-  .message.bot {
-    align-items: flex-start;
-    justify-content: flex-start;
+    margin-bottom: 10px;
   }
   
   .message.user {
-    align-items: flex-end;
     justify-content: flex-end;
+    align-items: flex-end;
+  }
+  
+  .message.bot {
+    flex-direction: c;
+    align-items: flex-start;
   }
   
   .message-avatar {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    margin-right: 8px;
+    margin-right: 10px;
   }
   
   .message-text {
@@ -142,6 +160,8 @@
     align-items: center;
     border-top: 1px solid #e0e0e0;
     padding-top: 15px;
+    justify-content: space-between;
+    
   }
   
   .message-input input {
@@ -167,6 +187,7 @@
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width: 20%;
   }
   
   .message-input button:hover {
