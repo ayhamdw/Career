@@ -7,6 +7,7 @@ const {
   createBooking,
   requestDetails,
   senderDetails,
+  acceptRequest,
 } = require("../controllers/proficientController");
 
 router.get("/proficient-data", Auth, getProficientData);
@@ -18,5 +19,7 @@ router.post("/booking-proficient", Auth, createBooking);
 router.get("/requestDetails/:id", Auth, requestDetails);
 
 router.get("/sender-details/:id", Auth, senderDetails);
+
+router.post("/accept-request/:id", Auth, acceptRequest);
 
 module.exports = router;
