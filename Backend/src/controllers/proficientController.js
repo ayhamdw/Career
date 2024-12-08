@@ -120,8 +120,13 @@ const requestDetails = async (req, res) => {
 
 const senderDetails = async (req, res) => {
   const { id } = req.params;
-  res.status(200).send("Sender Details");
-  console.log("Sender Details");
+  try {
+    const booking = await Booking.find({ providerId: id });
+    console.log(booking);
+  } catch (error) {
+    res.status(500).send("Error", error);
+    console.log(error);
+  }
 };
 
 module.exports = {
