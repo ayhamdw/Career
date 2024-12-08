@@ -7,7 +7,6 @@ import TipsImage from "@/components/HomePage/TipsImage";
 import ProfRecommendation from "@/components/HomePage/ProfRecommendation";
 import ProfList from "@/components/HomePage/ProfScrollView";
 import styles from "@/assets/styles/HomePage/HomePage";
-import { useRoute } from "@react-navigation/native";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
