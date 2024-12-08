@@ -52,30 +52,31 @@ export default function FriendRequests({ user }: { user: any }) {
     fetchUserData();
   }, [id]);
 
-  const handleAccept = async (requestId: string) => {
+  const handleAccept = async (bookId: string) => {
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await axios.post(
-        `${ayhamWifiUrl}/api/proficient/accept-request/${requestId}`,
+        `${ayhamWifiUrl}/api/proficient/accept-request/${bookId}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      if (response.status === 200) {
+      if (response.status == 200) {
         console.log("Request accepted successfully");
-      } else {
-        console.log("Request not accepted");
+        setSenderUserData(
+          senderUserData.filter((item: any) => item.bookId !== bookId)
+        );
       }
     } catch (error) {
       console.log("Error accepting request:", error);
     }
   };
 
-  const handleReject = (requestId: string) => {
+  const handleReject = (requestId: string, bookId: string) => {
     console.log(`Rejected request with ID: ${requestId}`);
-    // Add reject logic here
   };
 
   const renderRequest = ({ item }: { item: any }) => (
@@ -104,13 +105,13 @@ export default function FriendRequests({ user }: { user: any }) {
       <View style={styles.actions}>
         <TouchableOpacity
           style={[styles.button, styles.acceptButton]}
-          onPress={() => handleAccept(item.sender._id)}
+          onPress={() => handleAccept(item.bookId)}
         >
           <Text style={styles.buttonText}>Accept</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.rejectButton]}
-          onPress={() => handleReject(item.sender._id)}
+          onPress={() => handleReject(item.sender._id, item.bookId)}
         >
           <Text style={styles.buttonText}>Reject</Text>
         </TouchableOpacity>
@@ -123,7 +124,7 @@ export default function FriendRequests({ user }: { user: any }) {
       <Text style={styles.headerText}>Requests</Text>
       <FlatList
         data={senderUserData}
-        keyExtractor={(item) => item.sender._id}
+        keyExtractor={(item) => item.bookId}
         renderItem={renderRequest}
         contentContainerStyle={styles.list}
       />

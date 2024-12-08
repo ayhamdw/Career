@@ -111,7 +111,6 @@ const requestDetails = async (req, res) => {
         };
       })
     );
-    console.log(proficientInfo);
     res.status(200).json({ proficientInfo });
   } catch (error) {
     res.status(500).send("Error: " + error);
@@ -130,6 +129,7 @@ const senderDetails = async (req, res) => {
         return {
           sender: sender || null,
           dataRequested: book.dateRequested,
+          bookId: book._id,
         };
       })
     );
@@ -141,10 +141,10 @@ const senderDetails = async (req, res) => {
 };
 
 const acceptRequest = async (req, res) => {
-  const { id } = req.params;
-  console.log(id);
+  const { bookId } = req.params;
   try {
-    res.status(200).send("Request Accepted");
+    await Booking.findByIdAndUpdate(bookId, { status: "Accepted" });
+    res.status(200).json({ message: "Request Accepted" });
   } catch (error) {
     res.status(500).send("Error: " + error);
   }
