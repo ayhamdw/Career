@@ -18,15 +18,15 @@ const ChatSystem = () => {
     { name: "Shareef", picture: image7, bio: "Loves traveling.", page: "#" },
     { name: "Dania", picture: image3, bio: "Music lover.", page: "#" },
     { name: "Abeer", picture: image5, bio: "Fitness fanatic.", page: "#" },
-    { name: "Abeer", picture: image5, bio: "Fitness fanatic.", page: "#" },
-    { name: "Abeer", picture: image5, bio: "Fitness fanatic.", page: "#" },
+    { name: "Masa", picture: image3, bio: "Fitness fanatic.", page: "#" },
+    { name: "Lean", picture: image2, bio: "Fitness fanatic.", page: "#" },
   ]);
   const [activeFriend, setActiveFriend] = useState(friends[0]);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
-  const messagesEndRef = useRef(null);
-  const messagesListRef = useRef(null);
+  const [isInfoVisible, setIsInfoVisible] = useState(true);
+  const [isFriendsVisible, setIsFriendsVisible] = useState(true);
 
   const sendMessage = () => {
     if (input.trim() !== "") {
@@ -51,15 +51,35 @@ const ChatSystem = () => {
     setMessages([]);
   };
 
+
+  const scrollRef = useRef();
+
+  const scrollToBottom = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  };
+
   useEffect(() => {
-    // Scroll the message list only, not the whole page
-    messagesListRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    scrollToBottom();
   }, [messages]);
 
 
+  const handleResize = () => {
+    const width = window.innerWidth;
+    setIsInfoVisible(width > 1200);
+    setIsFriendsVisible(width > 800);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    handleResize(); 
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
 
   return (
-    <div className="chat-container">
+
       <div className="chat-system">
         <div className="friends-list">
           <h3>Friends</h3>
@@ -85,7 +105,7 @@ const ChatSystem = () => {
               <img src={activeFriend.picture} alt={activeFriend.name} />
               <h3>{activeFriend.name}</h3>
             </div>
-            <div className="messages-list" ref={messagesListRef}>
+            <div className="messages-list" ref={scrollRef}>
               
               {messages.map((msg, index) => (
                 <div
@@ -100,7 +120,7 @@ const ChatSystem = () => {
                     />
                   )}
                   <span className="message-text">{msg.text}</span>
-                  <div ref={messagesEndRef}></div>
+                  
                 </div>
               ))}
             </div>
@@ -115,7 +135,9 @@ const ChatSystem = () => {
               <button onClick={sendMessage}>Send</button>
             </div>
           </div>
-          <div className="chat-info">
+
+        </div>
+        <div className="chat-info">
             <div className="info-header">
               <img src={activeFriend.picture} alt={activeFriend.name} />
               <div>
@@ -150,9 +172,8 @@ const ChatSystem = () => {
               </div>
             </div>
           </div>
-        </div>
       </div>
-    </div>
+
   );
 };
 
