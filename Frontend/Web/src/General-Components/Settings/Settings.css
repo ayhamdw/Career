@@ -1,69 +1,34 @@
+/* Settings Page Layout */
 .settings-container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .settings-title {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .settings-section {
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .settings-section h2 {
-    margin-bottom: 15px;
-    color: #555;
-  }
-  
-  .profile-item {
-    margin-bottom: 15px;
-  }
-  
-  .profile-item label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #666;
-  }
-  
-  .profile-item input[type="text"],
-  .profile-item input[type="email"],
-  .profile-item input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .profile-item input[type="checkbox"] {
-    margin-right: 10px;
-  }
-  
-  .save-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .save-button:hover {
-    background-color: #0056b3;
-  }
-  
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8f9fa; /* Light background */
+  font-family: 'Arial', sans-serif;
+}
+
+/* Content Section */
+.settings-content {
+  flex: 1;
+  padding: 40px;
+  background-color: #ffffff; /* White for contrast */
+  border-radius: 8px;
+  margin: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.settings-content h1 {
+  color: #2c3e50; /* Main heading color */
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.settings-content p {
+  color: #7f8c8d; /* Subtle paragraph color */
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* Add spacing around the content */
+.settings-content {
+  padding: 30px;
+}
