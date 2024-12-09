@@ -11,6 +11,7 @@ import Sginin from './Components/Sginin/Signin'
 import Signup from './Components/Signup/Signup'
 import Verify from './Components/Verify/Verify'
 import Messages from './General-Components/Messages/Messages'
+import Settings from './General-Components/Settings/Settings.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -36,6 +37,11 @@ const router = createBrowserRouter([
       {
         path:'/messages',
         element:<Messages/>
+      },
+      {
+        path:'settings',
+        element:<Settings/>
+
       },
 
       {
