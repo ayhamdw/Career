@@ -82,6 +82,8 @@ const Request = ({ user }: { user: any }) => {
                       ? "#ffc107"
                       : item.status === "Accepted"
                       ? "#28a745"
+                      : item.status === "In Progress"
+                      ? "#007bff"
                       : "#dc3545",
                 }}
               >

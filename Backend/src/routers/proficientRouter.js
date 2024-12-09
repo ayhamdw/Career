@@ -20,6 +20,6 @@ router.get("/requestDetails/:id", Auth, requestDetails);
 
 router.get("/sender-details/:id", Auth, senderDetails);
 
-router.post("/accept-request/:bookId", Auth, acceptRequest);
+router.post("/request-action", Auth, acceptRequest);
 
 module.exports = router;
