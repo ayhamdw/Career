@@ -19,7 +19,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import "react-native-get-random-values";
 
 export default function RequestDetailsPage({ route, navigation }) {
-  const { proficientId } = route.params;
+  const { proficientDetails, user } = route.params;
+  const userId = user._id;
+  const proficientId = proficientDetails._id;
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<Date | null>(null);
   const [region, setRegion] = useState({
@@ -37,41 +39,42 @@ export default function RequestDetailsPage({ route, navigation }) {
       return;
     }
 
-    // try {
-    //   const token = await AsyncStorage.getItem("token");
-    const requestDateTime = new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate(),
-      selectedTime.getHours(),
-      selectedTime.getMinutes()
-    ).toISOString();
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const requestDateTime = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate(),
+        selectedTime.getHours(),
+        selectedTime.getMinutes()
+      ).toISOString();
 
-    //   const response = await axios.post(
-    //     `${ayhamWifiUrl}/api/proficient/booking-proficient`,
-    //     {
-    //       proficientId,
-    //       requestDateTime,
-    //       location: {
-    //         latitude: markerLocation.latitude,
-    //         longitude: markerLocation.longitude,
-    //       },
-    //     },
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     }
-    //   );
+      const response = await axios.post(
+        `${ayhamWifiUrl}/api/proficient/booking-proficient`,
+        {
+          proficientId,
+          userId,
+          requestDateTime,
+          location: {
+            latitude: markerLocation.latitude,
+            longitude: markerLocation.longitude,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    //   if (response.status === 200) {
-    //     Alert.alert("Success", "Request submitted successfully!");
-    //     navigation.goBack();
-    //   }
-    // } catch (error) {
-    //   console.log("Error submitting request:", error);
-    //   Alert.alert("Error", "Failed to submit the request.");
-    // }
+      if (response.status === 200) {
+        Alert.alert("Success", "Request submitted successfully!");
+        navigation.goBack();
+      }
+    } catch (error) {
+      console.log("Error submitting request:", error);
+      Alert.alert("Error", "Failed to submit the request.");
+    }
     console.log(markerLocation.latitude, markerLocation.longitude);
     console.log(requestDateTime);
   };
@@ -97,7 +100,7 @@ export default function RequestDetailsPage({ route, navigation }) {
             onRegionChangeComplete={setRegion}
           >
             <Marker
-              tappable
+              draggable
               coordinate={markerLocation}
               onDragEnd={(e) => setMarkerLocation(e.nativeEvent.coordinate)}
             />

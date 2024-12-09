@@ -1,6 +1,6 @@
 const User = require("../models/user2");
 const Booking = require("../models/Booking");
-
+const axios = require("axios");
 const getProficientData = async (req, res) => {
   try {
     const { id, careerCategory } = req.query;
@@ -51,28 +51,29 @@ const getReviews = async (req, res) => {
 };
 
 const createBooking = async (req, res) => {
-  const { proficientId, myId } = req.body;
+  const { proficientId, userId, requestDateTime, location } = req.body;
   try {
-    const myLocation = await User.findById(myId).select("profile.location");
-    const proficientLocation = await User.findById(proficientId).select(
-      "profile.location"
+    console.log(proficientId, userId, requestDateTime, location);
+    const { latitude, longitude } = location;
+    const locationAPI = await axios.get(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
     );
-    const [myLat, myLong] = myLocation.profile.location.coordinates;
-    const [profLat, profLong] = proficientLocation.profile.location.coordinates;
+    const city = locationAPI.data.address.city;
 
-    const user = await User.findById(myId);
+    const user = await User.findById(userId);
     const provider = await User.findById(proficientId);
 
     user.sendProficientRequests.push(proficientId);
-    provider.receiveProficientRequest.push(myId);
+    provider.receiveProficientRequest.push(userId);
 
     const booking = new Booking({
-      userId: myId,
+      userId: userId,
       providerId: proficientId,
-      dateRequested: new Date(),
+      dateRequested: requestDateTime,
+      city: city,
       location: {
         type: "Point",
-        coordinates: [myLat, myLong],
+        coordinates: [latitude, longitude],
       },
       status: "Pending",
     });
