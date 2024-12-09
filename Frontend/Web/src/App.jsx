@@ -11,40 +11,28 @@ import Sginin from './Components/Sginin/Signin'
 import Signup from './Components/Signup/Signup'
 import Verify from './Components/Verify/Verify'
 import Messages from './General-Components/Messages/Messages'
+import Settings from './General-Components/Settings/Settings.jsx';
+import Requests from './General-Components/Requests/Requests.jsx'
+
+
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Root/>,
-    errorElement: <NotFound/>,
-    children:[
-      {
-        path:'/',
-        element:<HomePage/>,
-      },
-      {
-        path:'/signin',
-        element: <Sginin/>
-      },
-      {
-        path:'/signup',
-        element:<Signup/>
-      },
-      {
-        path:'/verify',
-        element:<Verify/>
-      },
-      {
-        path:'/messages',
-        element:<Messages/>
-      },
-
-      {
-        path:'*',
-        element:<NotFound/>
-      }
-    ]
-  }
-])
+    path: "/",
+    element: <Root />,
+    errorElement: <NotFound />,
+    children: [
+      { path: "/", element: <HomePage /> },
+      { path: "/signin", element: <Sginin /> },
+      { path: "/signup", element: <Signup /> },
+      { path: "/verify", element: <Verify /> },
+      { path: "/messages", element: <Messages /> },
+      { path: "/requests", element: <Requests /> },
+      { path: "settings/*", element: <Settings /> },
+      { path: "*", element: <NotFound /> },
+      
+    ],
+  },
+]);
 
 function App() {
   return (
