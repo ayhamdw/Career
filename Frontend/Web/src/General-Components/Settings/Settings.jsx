@@ -4,6 +4,7 @@ import Sidebar from "./Sidebar/Sidebar";
 import Projects from "./Sidebar/components/Projects/Projects";
 import Portfolio from "./Sidebar/components/Portfolio/Portfolio";
 import ChangeInfo from "./Sidebar/components/ChangeInformation/ChangeInformation";
+import FriendRequests from "./Sidebar/components/FriendRequests/FriendRequests";
 import "./Settings.css";
 
 const Settings = () => {
@@ -15,6 +16,7 @@ const Settings = () => {
           <Route path="projects" element={<Projects />} />
           <Route path="portfolio" element={<Portfolio />} />
           <Route path="change-info" element={<ChangeInfo />} />
+          <Route path="friend-requests" element={<FriendRequests />} />
           <Route
             path=""
             element={<p>Please select an option from the sidebar.</p>}

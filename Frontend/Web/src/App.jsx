@@ -13,7 +13,6 @@ import Verify from './Components/Verify/Verify'
 import Messages from './General-Components/Messages/Messages'
 import Settings from './General-Components/Settings/Settings.jsx';
 import Requests from './General-Components/Requests/Requests.jsx'
-import FriendRequests from './General-Components/FriendRequests/FriendRequests.jsx'
 
 
 const router = createBrowserRouter([
@@ -27,7 +26,6 @@ const router = createBrowserRouter([
       { path: "/signup", element: <Signup /> },
       { path: "/verify", element: <Verify /> },
       { path: "/messages", element: <Messages /> },
-      { path: "/friend-requests", element: <FriendRequests /> },
       { path: "/requests", element: <Requests /> },
       { path: "settings/*", element: <Settings /> },
       { path: "*", element: <NotFound /> },

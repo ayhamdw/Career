@@ -40,8 +40,8 @@ function Navbar() {
               <li><Link to="/" className="nav-item">Home</Link></li>
               <li><Link to="/requests" className="nav-item">Requests</Link></li>
               <li><Link to="/messages" className="nav-item">Messages</Link></li>
-              <li><Link to="/friend-requests" className="nav-item">Friend Requests</Link></li>
-              <li><Link to="/settings" className="nav-item">Settings</Link></li>
+              <li><Link to="/Find-job" className="nav-item">Find a job</Link></li>
+              <li><Link to="/settings" className="nav-item">Profile</Link></li>
             </ul>
           </nav>
 

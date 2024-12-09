@@ -1,0 +1,150 @@
+/* General Styles */
+.friendRequestsPage {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+.friendRequestsList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.friendRequestItem {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s, box-shadow 0.3s ease;
+}
+
+.friendRequestItem:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.friendRequestContent {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.profilePictureContainer {
+  margin-right: 20px;
+}
+
+.profilePicture {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.requestDetails {
+  flex: 1;
+}
+
+.requestDetails h2 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin: 0;
+  font-weight: 600;
+}
+
+.location {
+  font-size: 1rem;
+  color: #7f8c8d;
+}
+
+.friendRequestContent p {
+  color: #7f8c8d;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.requestActions {
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100px;
+}
+
+/* Button Styles */
+.acceptBtn {
+  background-color: #27ae60;
+  color: white;
+  box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+}
+
+.acceptBtn:hover {
+  background-color: #2ecc71;
+  box-shadow: 0 6px 12px rgba(39, 174, 96, 0.4);
+}
+
+.rejectBtn {
+  background-color: #e74c3c;
+  color: white;
+  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+.rejectBtn:hover {
+  background-color: #c0392b;
+  box-shadow: 0 6px 12px rgba(231, 76, 60, 0.4);
+}
+
+.contactBtn {
+  background-color: #2980b9;
+  color: white;
+  box-shadow: 0 4px 8px rgba(41, 128, 185, 0.3);
+}
+
+.contactBtn:hover {
+  background-color: #3498db;
+  box-shadow: 0 6px 12px rgba(41, 128, 185, 0.4);
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .friendRequestsList {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .friendRequestsList {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

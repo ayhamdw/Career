@@ -34,12 +34,14 @@ const Sidebar = () => {
             <span>Change Information</span>
           </li>
         </Link>
-        <Link to="/friend-requests" className="sidebar-link">
+
+        <Link to="/settings/friend-requests" className="sidebar-link">
           <li>
             <FaUserFriends className="icon" />
             <span>Friend Requests</span>
           </li>
         </Link>
+        
         <Link to="/logout" className="sidebar-link">
           <li>
             <FaSignOutAlt className="icon" />
