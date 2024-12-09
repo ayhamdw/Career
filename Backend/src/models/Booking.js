@@ -19,6 +19,11 @@ const bookingSchema = mongoose.Schema(
       required: true,
     },
 
+    city: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     location: {
       type: {
         type: String,
