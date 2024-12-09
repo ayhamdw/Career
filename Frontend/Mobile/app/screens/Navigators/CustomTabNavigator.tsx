@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { COLORS } from "../../../assets/styles/Dimensions";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import MessageNavigator from "./MessageNavigator"; // Import MessageNavigator
+import ProfRequestNavigation from "../Proficient/ProfRequestNavigation";
 
 const Tab = createBottomTabNavigator();
 
@@ -76,11 +77,9 @@ const CustomTabNavigator = ({ screenData, user }) => (
     <Tab.Screen name="Chat" options={{ headerShown: false }}>
       {() => <MessageNavigator user={user} />}
     </Tab.Screen>
-    <Tab.Screen
-      name="FriendRequests"
-      component={screenData.FriendRequests}
-      options={{ headerShown: false }}
-    />
+    <Tab.Screen name="FriendRequests" options={{ headerShown: false }}>
+      {() => <ProfRequestNavigation user={user} />}
+    </Tab.Screen>
     <Tab.Screen
       name="Setting"
       component={screenData.Setting}
