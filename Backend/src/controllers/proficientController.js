@@ -99,6 +99,8 @@ const requestDetails = async (req, res) => {
       userId: id,
     });
 
+    console.log(booking);
+
     const proficientInfo = await Promise.all(
       booking.map(async (book) => {
         const provider = await User.findById(book.providerId).select(
@@ -131,6 +133,7 @@ const senderDetails = async (req, res) => {
           sender: sender || null,
           dataRequested: book.dateRequested,
           bookId: book._id,
+          status: book.status,
         };
       })
     );
@@ -142,9 +145,10 @@ const senderDetails = async (req, res) => {
 };
 
 const acceptRequest = async (req, res) => {
-  const { bookId } = req.params;
+  const { action, bookId } = req.body;
+  console.log(action, bookId);
   try {
-    await Booking.findByIdAndUpdate(bookId, { status: "Accepted" });
+    await Booking.findByIdAndUpdate(bookId, { status: action });
     res.status(200).json({ message: "Request Accepted" });
   } catch (error) {
     res.status(500).send("Error: " + error);
