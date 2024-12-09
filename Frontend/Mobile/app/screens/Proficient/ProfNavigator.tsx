@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProfProfile from "./ProfProfile";
 import RequestDetailsPage from "./RequestDetailsPage";
 import { useRoute, RouteProp } from "@react-navigation/native";
+import MapTracker from "./MapTracker";
 
 const Stack = createNativeStackNavigator();
 
@@ -96,6 +97,11 @@ export default function ProfNavigator({ user }: { user: User }) {
       <Stack.Screen
         name="RequestDetailsPage"
         component={screenData.RequestDetailsPage}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MapTracker"
+        component={MapTracker}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
