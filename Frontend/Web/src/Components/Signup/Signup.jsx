@@ -34,6 +34,7 @@ function Signup() {
 
   });
 
+  let code = "";
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -153,18 +154,25 @@ function Signup() {
       theme: "colored",
     });
   };
+  const formData = new FormData();
 
-
- 
-  const g = async (email) => {
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
+  
+  const sendVerificationCode = async (email) => {
+    const code = Math.floor(100000 + Math.random() * 900000); 
+    user.verificationCode = code;
     setUser((prev) => ({
       ...prev,
       verificationCode: code, 
     }));
+    
+    
     try {
       await axios.post('http://localhost:7777/api/send/send-verification', { email, code });
       toast.info('Verification code sent to your email!', { position: "top-right" });
+      console.log(code)
+      
+
+      
     } catch (error) {
       console.error('Error sending verification code:', error.response?.data || error.message);
       toast.error('Failed to send verification code.');
@@ -183,7 +191,7 @@ function Signup() {
     
     
 
-    const formData = new FormData();
+
     formData.append('username', user.username);
     formData.append('email', user.email);
     formData.append('password', user.password);
@@ -219,12 +227,14 @@ function Signup() {
     formData.append('sendProficientRequests[]', user.sendProficientRequests[0]);
     formData.append('receiveProficientRequest[]', user.receiveProficientRequest[0]);
 
-    
+
     if (!user.verificationCode) {
       sendVerificationCode(user.email);  
     }
-    console.log("Verification Code: ", user.verificationCode);
+
     formData.append('verificationCode', user.verificationCode);
+    console.log("verificationCode: "+ user.verificationCode)
+
     try {
       
 

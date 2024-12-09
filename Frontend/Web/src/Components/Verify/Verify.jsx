@@ -47,7 +47,7 @@ function Verify() {
         setErrorMessage('Invalid code, please try again.');
       }
     } catch (error) {
-      setErrorMessage('An error occurred. Please try again later.');
+      setErrorMessage('Invalid code, please try again.');
     }
   };
 
