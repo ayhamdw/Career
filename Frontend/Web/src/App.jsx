@@ -12,45 +12,24 @@ import Signup from './Components/Signup/Signup'
 import Verify from './Components/Verify/Verify'
 import Messages from './General-Components/Messages/Messages'
 import Settings from './General-Components/Settings/Settings.jsx';
+
+
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Root/>,
-    errorElement: <NotFound/>,
-    children:[
-      {
-        path:'/',
-        element:<HomePage/>,
-      },
-      {
-        path:'/signin',
-        element: <Sginin/>
-      },
-      {
-        path:'/signup',
-        element:<Signup/>
-      },
-      {
-        path:'/verify',
-        element:<Verify/>
-      },
-      {
-        path:'/messages',
-        element:<Messages/>
-      },
-      {
-        path:'settings',
-        element:<Settings/>
-
-      },
-
-      {
-        path:'*',
-        element:<NotFound/>
-      }
-    ]
-  }
-])
+    path: "/",
+    element: <Root />,
+    errorElement: <NotFound />,
+    children: [
+      { path: "/", element: <HomePage /> },
+      { path: "/signin", element: <Sginin /> },
+      { path: "/signup", element: <Signup /> },
+      { path: "/verify", element: <Verify /> },
+      { path: "/messages", element: <Messages /> },
+      { path: "settings/*", element: <Settings /> },
+      { path: "*", element: <NotFound /> },
+    ],
+  },
+]);
 
 function App() {
   return (

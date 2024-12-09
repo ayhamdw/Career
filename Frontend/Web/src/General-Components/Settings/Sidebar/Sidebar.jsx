@@ -12,30 +12,40 @@ const Sidebar = () => {
           alt="User"
           className="user-picture"
         />
-        <h2 className="user-name">John Doe</h2>
+        <h2 className="user-name">Shareef</h2>
       </div>
 
       <ul className="sidebar-links">
-        <li>
-          <FaProjectDiagram className="icon" />
-          <Link to="/projects">Projects (10)</Link>
-        </li>
-        <li>
-          <FaImage className="icon" />
-          <Link to="/portfolio">Portfolio</Link>
-        </li>
-        <li>
-          <FaUserEdit className="icon" />
-          <Link to="/change-info">Change Information</Link>
-        </li>
-        <li>
-          <FaUserFriends className="icon" />
-          <Link to="/friend-requests">Friend Requests</Link>
-        </li>
-        <li>
-          <FaSignOutAlt className="icon" />
-          <Link to="/logout">Logout</Link>
-        </li>
+        <Link to="/settings/projects" className="sidebar-link">
+          <li>
+            <FaProjectDiagram className="icon" />
+            <span>Projects (10)</span>
+          </li>
+        </Link>
+        <Link to="/settings/portfolio" className="sidebar-link">
+          <li>
+            <FaImage className="icon" />
+            <span>Portfolio</span>
+          </li>
+        </Link>
+        <Link to="/settings/change-info" className="sidebar-link">
+          <li>
+            <FaUserEdit className="icon" />
+            <span>Change Information</span>
+          </li>
+        </Link>
+        <Link to="/friend-requests" className="sidebar-link">
+          <li>
+            <FaUserFriends className="icon" />
+            <span>Friend Requests</span>
+          </li>
+        </Link>
+        <Link to="/logout" className="sidebar-link">
+          <li>
+            <FaSignOutAlt className="icon" />
+            <span>Logout</span>
+          </li>
+        </Link>
       </ul>
     </div>
   );
