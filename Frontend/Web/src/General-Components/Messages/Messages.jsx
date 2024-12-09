@@ -25,6 +25,9 @@ const ChatSystem = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
+  const [isInfoVisible, setIsInfoVisible] = useState(true);
+  const [isFriendsVisible, setIsFriendsVisible] = useState(true);
+
   const sendMessage = () => {
     if (input.trim() !== "") {
       const newMessage = { text: input, sender: "user" };
