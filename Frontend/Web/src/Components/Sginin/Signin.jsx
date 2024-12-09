@@ -3,12 +3,14 @@ import style from './Sginin.module.css'
 import {Link, useNavigate } from 'react-router-dom'
 import Logo from './logo.png'
 import axios from 'axios';
+import { useAuth } from '../../AuthContext';
 
 function Signin() {
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false); 
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSignin = async () => {
@@ -21,13 +23,10 @@ function Signin() {
       localStorage.setItem('token', response.data.token);
       console.log(response.data.verificationStatus);
       if (response.status === 200) {
-        if (response.data.verificationStatus === false) {
-          localStorage.setItem('userEmail', email);
-          navigate('/verify');
-        } else {
-          localStorage.setItem('userEmail', email);
-          navigate('/');
-        }
+        const { token, verificationStatus } = response.data;
+        login(token); 
+        localStorage.setItem('userEmail', email);
+        navigate(verificationStatus ? '/' : '/verify');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');

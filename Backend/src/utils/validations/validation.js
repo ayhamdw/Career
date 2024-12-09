@@ -87,6 +87,10 @@ const signupValidation = (data) => {
       }).required(),
     }).required(),
     verificationStatus: Joi.boolean().optional(),
+    verificationCode: Joi.string().length(6).required().messages({
+      "string.length": "Verification code must be exactly 6 characters.",
+      "any.required": "Verification code is required.",
+    }),
     tokens: Joi.array().items().required(),
     friendRequests: Joi.array().items().required(),
     friends: Joi.array().items().required(),

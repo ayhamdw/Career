@@ -1,9 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 import { FaProjectDiagram, FaImage, FaUserEdit, FaUserFriends, FaSignOutAlt } from "react-icons/fa";
+import { useAuth } from "../../../AuthContext";
+
+
+
 
 const Sidebar = () => {
+  const { logout } = useAuth(); 
+const navigate = useNavigate();
+
+const handleLogout = () => {
+  logout(); 
+  navigate("/signin"); 
+};
   return (
     <div className="sidebar-container">
       <div className="user-info">
@@ -42,8 +53,9 @@ const Sidebar = () => {
           </li>
         </Link>
         
-        <Link to="/logout" className="sidebar-link">
-          <li>
+        {/* Replace the Link for Logout with a Button */}
+        <Link className="sidebar-link" onClick={handleLogout}>
+          <li >
             <FaSignOutAlt className="icon" />
             <span>Logout</span>
           </li>

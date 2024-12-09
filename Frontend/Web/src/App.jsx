@@ -13,7 +13,8 @@ import Verify from './Components/Verify/Verify'
 import Messages from './General-Components/Messages/Messages'
 import Settings from './General-Components/Settings/Settings.jsx';
 import Requests from './General-Components/Requests/Requests.jsx'
-
+import { AuthProvider } from './AuthContext';
+import ProtectedRoute from './ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -25,9 +26,9 @@ const router = createBrowserRouter([
       { path: "/signin", element: <Sginin /> },
       { path: "/signup", element: <Signup /> },
       { path: "/verify", element: <Verify /> },
-      { path: "/messages", element: <Messages /> },
-      { path: "/requests", element: <Requests /> },
-      { path: "settings/*", element: <Settings /> },
+      { path: "/messages", element: <ProtectedRoute><Messages /></ProtectedRoute> },
+      { path: "/requests", element: <ProtectedRoute><Requests /></ProtectedRoute> },
+      { path: "settings/*", element: <ProtectedRoute><Settings /></ProtectedRoute> },
       { path: "*", element: <NotFound /> },
       
     ],
@@ -38,7 +39,9 @@ function App() {
   return (
     <>
       <ToastContainer />
-      <RouterProvider router={router}/>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </>
     
   )
