@@ -11,7 +11,6 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import { ayhamWifiUrl } from "@/constants/Urls";
-
 export default function FriendRequests({ user }: { user: any }) {
   const id = user._id;
   const [senderUserData, setSenderUserData] = useState([]);
@@ -43,7 +42,6 @@ export default function FriendRequests({ user }: { user: any }) {
       );
       if (response.status === 200) {
         setSenderUserData(response.data.senderDetails);
-        console.log("Sender user data:", response.data.senderDetails);
       }
     } catch (error) {
       console.error("Error fetching sender user data:", error);
@@ -77,7 +75,10 @@ export default function FriendRequests({ user }: { user: any }) {
   const filterData = () => {
     if (filter === "active") {
       return senderUserData.filter(
-        (item: any) => item.status === "Pending" || item.status === "Accepted"
+        (item: any) =>
+          item.status === "Pending" ||
+          item.status === "Accepted" ||
+          item.status === "In Progress"
       );
     }
     return senderUserData.filter(
@@ -86,7 +87,7 @@ export default function FriendRequests({ user }: { user: any }) {
   };
 
   const renderRequest = ({ item }: { item: any }) => {
-    const { sender, status, bookId, dataRequested } = item;
+    const { sender, status, bookId, dataRequested, city } = item;
     return (
       <View style={styles.card}>
         <View style={styles.header}>
@@ -116,7 +117,7 @@ export default function FriendRequests({ user }: { user: any }) {
         <Text style={styles.email}>{sender.email}</Text>
         <View style={styles.row}>
           <Ionicons name="location-outline" size={16} color="#888" />
-          <Text style={styles.location}>{sender.city}</Text>
+          <Text style={styles.location}>{city}</Text>
         </View>
         <View style={styles.row}>
           <Ionicons name="time-outline" size={16} color="#888" />
@@ -153,13 +154,19 @@ export default function FriendRequests({ user }: { user: any }) {
               >
                 <Text style={styles.buttonText}>Complete</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.button, styles.mapButton]}
+                onPress={() => console.log("Show Map")}
+              >
+                <Text style={styles.buttonText}>Map</Text>
+              </TouchableOpacity>
             </>
           )}
         </View>
       </View>
     );
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Requests</Text>
@@ -329,6 +336,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginHorizontal: 4,
+    width: "100%",
   },
   acceptButton: {
     backgroundColor: "#58d68d",
@@ -341,6 +349,9 @@ const styles = StyleSheet.create({
   },
   completeButton: {
     backgroundColor: "#3498db",
+  },
+  mapButton: {
+    backgroundColor: "#985174",
   },
   buttonText: {
     color: "#fff",

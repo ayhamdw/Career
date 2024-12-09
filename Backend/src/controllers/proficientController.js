@@ -4,7 +4,6 @@ const axios = require("axios");
 const getProficientData = async (req, res) => {
   try {
     const { id, careerCategory } = req.query;
-    console.log(careerCategory);
     if (careerCategory === "All Proficient") {
       await User.find({ _id: { $ne: id } })
         .select("profile email city career careerCategory")
@@ -53,10 +52,9 @@ const getReviews = async (req, res) => {
 const createBooking = async (req, res) => {
   const { proficientId, userId, requestDateTime, location } = req.body;
   try {
-    console.log(proficientId, userId, requestDateTime, location);
     const { latitude, longitude } = location;
     const locationAPI = await axios.get(
-      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=en`
     );
     const city = locationAPI.data.address.city;
 
@@ -93,13 +91,10 @@ const requestDetails = async (req, res) => {
   try {
     const { id } = req.params;
     const city = await User.findById(id).select("city");
-    console.log(city.city);
 
     const booking = await Booking.find({
       userId: id,
     });
-
-    console.log(booking);
 
     const proficientInfo = await Promise.all(
       booking.map(async (book) => {
@@ -126,14 +121,22 @@ const senderDetails = async (req, res) => {
     const booking = await Booking.find({ providerId: id });
     const senderDetails = await Promise.all(
       booking.map(async (book) => {
+        // const location = book.location;
+        // const [latitude, longitude] = location.coordinates;
+        // const locationAPI = await axios.get(
+        //   `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=31.89326346489804&lon=35.205436121785084&accept-language=en
+        //   `
+        // );
+        const city = book.city;
         const sender = await User.findById(book.userId).select(
-          "_id profile email career city"
+          "_id profile email career"
         );
         return {
           sender: sender || null,
           dataRequested: book.dateRequested,
           bookId: book._id,
           status: book.status,
+          city: city,
         };
       })
     );
@@ -146,7 +149,6 @@ const senderDetails = async (req, res) => {
 
 const acceptRequest = async (req, res) => {
   const { action, bookId } = req.body;
-  console.log(action, bookId);
   try {
     await Booking.findByIdAndUpdate(bookId, { status: action });
     res.status(200).json({ message: "Request Accepted" });
