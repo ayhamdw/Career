@@ -83,28 +83,18 @@ export default function MapTracker() {
           pinColor="green"
         />
         <MapViewDirections
-          origin={{
-            latitude: 32.1878265463798246,
-            longitude: 34.970540759368244,
-          }}
-          destination={{
-            latitude: 32.18275920631823,
-            longitude: 34.97247777204734,
-          }}
+          origin={{ latitude: latitude, longitude: longitude }}
+          destination={{ latitude: userLat, longitude: userLong }}
           apikey={GOOGLE_API_KEY}
           strokeWidth={4}
           strokeColor="#58d68d"
-          onReady={(result) => {}}
+          onReady={(result) => {
+            console.log("Route details:", result);
+            setDistance(result.distance.toFixed(2) + " km");
+            setDuration(result.duration.toFixed(2) + " mins");
+          }}
           onError={(errorMessage) => {
             console.error("Directions error:", errorMessage);
-            console.error("Origin:", {
-              latitude: 32.1878265463798246,
-              longitude: 34.970540759368244,
-            });
-            console.error("Destination:", {
-              latitude: 32.18275920631823,
-              longitude: 34.97247777204734,
-            });
           }}
         />
       </MapView>
