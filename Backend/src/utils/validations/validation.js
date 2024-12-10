@@ -87,7 +87,7 @@ const signupValidation = (data) => {
       }).required(),
     }).required(),
     verificationStatus: Joi.boolean().optional(),
-    verificationCode: Joi.string().length(6).required().messages({
+    verificationCode: Joi.string().length(6).optional().messages({
       "string.length": "Verification code must be exactly 6 characters.",
       "any.required": "Verification code is required.",
     }),

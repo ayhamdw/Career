@@ -124,9 +124,9 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    verificationCode:{
+    verificationCode: {
       type: String,
-      default:'',
+      default: "",
       required: false,
     },
     tokens: [
@@ -170,10 +170,12 @@ const userSchema = new mongoose.Schema(
     resetCode: {
       type: Number,
       default: 0,
+      required: false,
     },
     resetCodeExpires: {
       type: Date,
       default: null,
+      required: false,
     },
   },
   {
