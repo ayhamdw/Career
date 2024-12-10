@@ -47,34 +47,33 @@ interface Reviews {
   };
 }
 export default function ProfProfile({ proficientDetails, user }) {
-  console.log("ProfProfile proficientDetails:", proficientDetails);
   const navigation = useNavigation();
   const [reviews, setReviews] = useState<Reviews[]>([]);
-  const onMessagePress = () => {
-    console.log("Message Pressed");
+  const onMessagePress = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.post(
+        `${ayhamWifiUrl}/api/friends/acceptFriendRequest`,
+        {
+          senderId: user._id,
+          receiverId: proficientDetails._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        alert("Friend request accepted");
+        console.log("Friend request accepted");
+      }
+    } catch (error) {
+      console.log("Error accepting friend request:", error);
+    }
   };
 
   const onRequestPress = async () => {
-    // try {
-    //   const token = await AsyncStorage.getItem("token");
-    //   const response = await axios.post(
-    //     `${ayhamWifiUrl}/api/proficient/booking-proficient`,
-    //     {
-    //       proficientId: proficientDetails._id,
-    //       myId: user._id,
-    //     },
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     }
-    //   );
-    //   if (response.status === 200) {
-    //     console.log("Done");
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
     navigation.navigate("RequestDetailsPage", { proficientDetails, user });
   };
 

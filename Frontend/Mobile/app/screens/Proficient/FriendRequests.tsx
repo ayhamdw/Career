@@ -132,7 +132,7 @@ export default function FriendRequests({ user }: { user: any }) {
             <>
               <TouchableOpacity
                 style={[styles.button, styles.acceptButton]}
-                onPress={() => requestAction("Accept", bookId)}
+                onPress={() => requestAction("Accepted", bookId)}
               >
                 <Text style={styles.buttonText}>Accept</Text>
               </TouchableOpacity>

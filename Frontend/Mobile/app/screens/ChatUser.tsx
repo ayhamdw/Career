@@ -36,6 +36,7 @@ const ChatUser = ({ user }) => {
   const senderId = user._id;
   const route = useRoute();
   const receiverId = route.params?.user._id ?? "";
+  const image = route.params?.user.profile.profileImage ?? "";
   const navigation = useNavigation();
   const handelEmojiPress = () => {
     setShowEmojiSelector(!showEmojiSelector);
@@ -55,7 +56,6 @@ const ChatUser = ({ user }) => {
         );
         if (receiverData.status === 200) {
           setReceiverDetails(receiverData.data);
-          console.log("Receiver Data", receiverData.data);
         }
       } catch (error) {
         console.log("error while fetching user details", error);
@@ -152,10 +152,7 @@ const ChatUser = ({ user }) => {
             color="black"
             onPress={() => navigation.goBack()}
           />
-          <Image
-            style={styles.imageStyle}
-            source={require("../../assets/images/defaultProfile.png")}
-          />
+          <Image style={styles.imageStyle} source={image} />
           <Text style={styles.nameStyle}>
             {receiverDetails
               ? receiverDetails.profile.firstName +

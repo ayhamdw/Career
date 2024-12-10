@@ -49,7 +49,7 @@ const getFriendsRequest = async (req, res) => {
 
 const acceptFriendRequestController = async (req, res) => {
   try {
-    const { senderId, receiverId } = JSON.parse(req.body.ids);
+    const { senderId, receiverId } = req.body;
     const sender = await User.findById(senderId);
     const receiver = await User.findById(receiverId);
     sender.friends.push(receiverId);

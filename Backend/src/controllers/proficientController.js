@@ -105,7 +105,7 @@ const requestDetails = async (req, res) => {
           provider: provider || null,
           dateRequested: book.dateRequested,
           status: book.status,
-          city: city.city,
+          city: book.city,
         };
       })
     );
