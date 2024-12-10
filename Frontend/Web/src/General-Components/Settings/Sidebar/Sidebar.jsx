@@ -5,8 +5,6 @@ import { FaProjectDiagram, FaImage, FaUserEdit, FaUserFriends, FaSignOutAlt } fr
 import { useAuth } from "../../../AuthContext";
 
 
-
-
 const Sidebar = () => {
   const { logout } = useAuth(); 
 const navigate = useNavigate();
@@ -25,7 +23,6 @@ const handleLogout = () => {
         />
         <h2 className="user-name">Shareef</h2>
       </div>
-
       <ul className="sidebar-links">
         <Link to="/settings/projects" className="sidebar-link">
           <li>
@@ -45,11 +42,16 @@ const handleLogout = () => {
             <span>Change Information</span>
           </li>
         </Link>
-
         <Link to="/settings/friend-requests" className="sidebar-link">
           <li>
             <FaUserFriends className="icon" />
             <span>Friend Requests</span>
+          </li>
+        </Link>
+        <Link to="/settings/firends" className="sidebar-link">
+          <li>
+            <FaUserFriends className="icon" />
+            <span>Friends</span>
           </li>
         </Link>
         

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./ChatSystem.css";
+import axios from "axios";
 
 import image1 from './profile-images/1.png';
 import image2 from './profile-images/2.png';
@@ -10,6 +11,13 @@ import image6 from './profile-images/6.png';
 import image7 from './profile-images/7.png';
 
 const ChatSystem = () => {
+
+
+  
+
+
+
+
   const [friends] = useState([
     { name: "Khaled", picture: image1, bio: "Coffee enthusiast.", page: "#" },
     { name: "Mays", picture: image2, bio: "Loves painting.", page: "#" },
@@ -24,6 +32,7 @@ const ChatSystem = () => {
   const [activeFriend, setActiveFriend] = useState(friends[0]);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  
 
   const [isInfoVisible, setIsInfoVisible] = useState(true);
   const [isFriendsVisible, setIsFriendsVisible] = useState(true);

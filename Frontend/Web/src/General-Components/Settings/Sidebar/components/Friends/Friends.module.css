@@ -1,0 +1,104 @@
+/* Friends Container */
+.friendsContainer {
+    padding: 30px;
+    /* max-width: 1000px; */
+    margin: 0 auto;
+    background-color: #f4f8fb;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px #0000001a;
+    font-family: 'Roboto', sans-serif;
+    width: 100%;
+  }
+  
+  /* Friends Title */
+  .friendsTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  
+  /* Category Section */
+  .categorySection {
+    margin-bottom: 40px;
+  }
+  
+  /* Category Title */
+  .categoryTitle {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #2980b9;
+    text-transform: capitalize;
+    font-weight: bold;
+    border-bottom: 3px solid #2980b9;
+    padding-bottom: 8px;
+  }
+  
+  /* Friends List */
+  .friendsList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+    padding: 0 20px;
+  }
+  
+  /* Friend Card */
+  .friendCard {
+    background-color: #fff;
+    border: 1px solid #ecf0f1;
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .friendCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Friend Photo */
+  .friendPhoto {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    border: 3px solid #2980b9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Friend Details */
+  .friendDetails {
+    margin-bottom: 15px;
+  }
+  
+  .friendName {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #34495e;
+  }
+  
+  .friendCareer {
+    font-size: 1rem;
+    color: #7f8c8d;
+    font-weight: 500;
+  }
+  
+  /* Friend Badge */
+  .friendBadge {
+    display: inline-block;
+    background-color: #27ae60;
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 18px;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+  
