@@ -15,6 +15,7 @@ import { ServiceData } from './HomePage'
 
 import AboutUs from './AboutUs/AboutUs';
 import Services from './Services/Services';
+import CategoriesSection from './CategoriesSection/CategoriesSection'
 
 function HomePage() {
   return (
@@ -66,6 +67,7 @@ function HomePage() {
           </SwiperSlide>
           ))}
         </Swiper>
+
       </div>
 
       
@@ -73,7 +75,8 @@ function HomePage() {
     <Services/>
 
     <AboutUs/>
-
+    
+    <CategoriesSection/>
     </>
     
   );

@@ -1,0 +1,192 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* --main-color: #ff9500; */
+  --main-color: rgb(109, 201, 126);
+  --white-main: #fff;
+  --bg-color: #f7f7f8;
+}
+
+
+.inner-container {
+  margin: auto;
+  width: calc((100% - 120px));
+  /* background-color: aqua; */
+  max-width: 2000px;
+}
+
+.outer-container {
+  margin: auto;
+  width: calc((100% - 60px));
+}
+
+.container{
+  width: 90%;
+  margin: auto;
+}
+
+a {
+  text-decoration: none;
+}
+
+.courses {
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.innerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.headerTitle{
+
+  font-size: 50px;
+  color:rgb(109, 201, 126);
+
+}
+
+.viewContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.viewContent a {
+  padding: 10px 20px;
+  background-color: var(--white-main);
+  color: #262626;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.viewContent p {
+  color: #818181;
+}
+
+.courses span {
+  color: #59595a;
+}
+
+.courseCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.courseCard {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 15px;
+  width: calc((100% - 80px) / 3);
+  padding: 25px;
+  background-color: var(--white-main);
+  justify-content: space-between;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.courseCard img {
+  height: 300px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.cardInfo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cardInfo .grow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.courseCard a {
+  background-color: #f7f7f8;
+  border-radius: 8px;
+  color: #262626;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--main-color);
+  color: white;
+}
+
+.courseCard a:hover {
+  background-color: var(--main-color);
+  color: white;
+}
+
+@media screen and (max-width: 1470px) {
+  .courseCard img {
+    height: 300px;
+  }
+}
+
+@media screen and (max-width: 1150px) {
+  .courseCard img {
+    height: 250px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .courseCard {
+    width: 100%;
+  }
+
+  .courseCard img {
+    height: 400px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .courseCard img {
+    height: 300px;
+  }
+}
+
+@media screen and (max-width: 630px) {
+  .courseCard img {
+    height: 240px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .courseCard img {
+    height: 200px;
+  }
+}
+
+@media screen and (max-width: 444px) {
+  .courseCard img {
+    height: 150px;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .courseCard img {
+    height: 100px;
+  }
+}
