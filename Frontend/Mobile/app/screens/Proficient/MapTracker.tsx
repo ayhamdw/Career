@@ -86,10 +86,10 @@ export default function MapTracker() {
           origin={{ latitude: latitude, longitude: longitude }}
           destination={{ latitude: userLat, longitude: userLong }}
           apikey={GOOGLE_API_KEY}
+          mode="DRIVING"
           strokeWidth={4}
           strokeColor="#58d68d"
           onReady={(result) => {
-            console.log("Route details:", result);
             setDistance(result.distance.toFixed(2) + " km");
             setDuration(result.duration.toFixed(2) + " mins");
           }}
