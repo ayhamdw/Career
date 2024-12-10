@@ -93,7 +93,7 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
         navigation.navigate("MainNavigation");
       }
     } catch (error) {
-      console.log("Error");
+      console.log("Error", error);
       Alert.alert(
         "❌ Oops!",
         "Something went wrong while creating your account. 😔 Please try again or check your details.",

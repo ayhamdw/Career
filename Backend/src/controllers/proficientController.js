@@ -121,12 +121,6 @@ const senderDetails = async (req, res) => {
     const booking = await Booking.find({ providerId: id });
     const senderDetails = await Promise.all(
       booking.map(async (book) => {
-        // const location = book.location;
-        // const [latitude, longitude] = location.coordinates;
-        // const locationAPI = await axios.get(
-        //   `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=31.89326346489804&lon=35.205436121785084&accept-language=en
-        //   `
-        // );
         const city = book.city;
         const sender = await User.findById(book.userId).select(
           "_id profile email career"
@@ -137,6 +131,7 @@ const senderDetails = async (req, res) => {
           bookId: book._id,
           status: book.status,
           city: city,
+          location: book.location,
         };
       })
     );
