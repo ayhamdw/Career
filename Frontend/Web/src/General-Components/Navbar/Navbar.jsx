@@ -47,13 +47,10 @@ function Navbar() {
     <header className="navbar">
       <div className="containerNav">
         <div className="navbar-content">
-          {/* Logo Section */}
           <div className="logo">
             <img src={logo} alt="Logo" className="logo-img" />
             <Link to="/" className="logo-text">Career</Link>
           </div>
-
-          {/* Navigation Links */}
           <nav
             className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}
             role="navigation"
@@ -62,12 +59,10 @@ function Navbar() {
               <li><Link to="/" className="nav-item">Home</Link></li>
               <li><Link to="/requests" className="nav-item">Requests</Link></li>
               <li><Link to="/messages" className="nav-item">Messages</Link></li>
-              <li><Link to="/Find-job" className="nav-item">Find a job</Link></li>
+              <li><Link to="/community" className="nav-item">Community</Link></li>
               <li><Link to="/settings" className="nav-item">Profile</Link></li>
             </ul>
           </nav>
-
-          {/* Search Bar */}
           <div className="search-container">
             <input
               type="text"
@@ -77,11 +72,8 @@ function Navbar() {
               className="search-input"
             />
           </div>
-
-          {/* Authentication Links */}
           <div className="auth-links">
             {isAuthenticated ? (
-              // Display profile icon if user is authenticated
               <Link to="/settings" className="profile-icon-link">
                 <img src={ProfileIcon} alt="Profile" className="profile-icon" />
               </Link>
@@ -92,8 +84,6 @@ function Navbar() {
               </>
             )}
           </div>
-
-          {/* Mobile Menu Button */}
           <button
             className="mobile-menu-btn"
             onClick={toggleMobileMenu}
@@ -104,8 +94,6 @@ function Navbar() {
             <span className="menu-bar"></span>
           </button>
         </div>
-
-        {/* Backdrop for Mobile Menu */}
         {isMobileMenuOpen && <div className="menu-backdrop" onClick={toggleMobileMenu}></div>}
       </div>
     </header>
