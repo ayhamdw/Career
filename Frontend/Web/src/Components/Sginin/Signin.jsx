@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import style from './Sginin.module.css'
 import {Link, useNavigate } from 'react-router-dom'
-import Logo from './logo.png'
+import Logo from '../../assets/logo.png'
 import axios from 'axios';
 import { useAuth } from '../../AuthContext';
 
