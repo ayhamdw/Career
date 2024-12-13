@@ -15,6 +15,7 @@ import Settings from './General-Components/Settings/Settings.jsx';
 import Requests from './General-Components/Requests/Requests.jsx'
 import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './ProtectedRoute';
+import ServiceProvider from './Components/ServiceProvider/ServiceProvider.jsx'
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
       { path: "/signup", element: <Signup /> },
       { path: "/verify", element: <Verify /> },
       { path: "/messages", element: <ProtectedRoute><Messages /></ProtectedRoute> },
+      { path: "/service-provider", element: <ProtectedRoute><ServiceProvider /></ProtectedRoute> },
       { path: "/requests", element: <ProtectedRoute><Requests /></ProtectedRoute> },
       { path: "settings/*", element: <ProtectedRoute><Settings /></ProtectedRoute> },
       { path: "*", element: <NotFound /> },

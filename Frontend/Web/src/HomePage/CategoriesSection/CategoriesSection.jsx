@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './CategoriesSection.module.css';
+import {Link} from 'react-router-dom'
 
 import HomeServicesImage from './images/HomeServices.png'
 import TechnicalServices from './images/TechnicalServices.png'
@@ -26,7 +27,7 @@ const CategoriesSection = () => {
                 electrical work, cleaning, landscaping, and general home improvement
                 tasks. It requires technical skills and offers opportunities for specialization.
               </p>
-              <a href="#">Get it Now</a>
+              <Link to="/service-provider">Get it Now</Link>
             </div>
             <div className={styles.courseCard}>
               <img src={TechnicalServices} alt="Technical Services" />
@@ -45,7 +46,7 @@ const CategoriesSection = () => {
                 expertise to troubleshoot, repair, and optimize systems, offering
                 opportunities for specialization in various tech fields.
               </p>
-              <a href="#">Get it Now</a>
+              <Link to="/service-provider">Get it Now</Link>
             </div>
             <div className={styles.courseCard}>
               <img src={EducationalServices} alt="Educational Services" />
@@ -62,7 +63,7 @@ const CategoriesSection = () => {
                 all ages. It includes roles like teachers, tutors, counselors, and administrators,
                 aiming to provide knowledge, skills, and guidance for personal and professional growth.
               </p>
-              <a href="#">Get it Now</a>
+              <Link to="/service-provider">Get it Now</Link>
             </div>
 
             <div className={styles.courseCard}>
@@ -81,7 +82,7 @@ const CategoriesSection = () => {
                 like doctors, nurses, therapists, and medical technicians, all working
                 to provide care, treatment, and support to patients.
               </p>
-              <a href="#">Get it Now</a>
+              <Link to="/service-provider">Get it Now</Link>
             </div>
 
             <div className={styles.courseCard}>
@@ -100,7 +101,7 @@ const CategoriesSection = () => {
                 graphic designers, writers, artists, and marketers, helping to communicate ideas
                 and engage audiences.
               </p>
-              <a href="#">Get it Now</a>
+              <Link to="/service-provider">Get it Now</Link>
             </div>
 
             <div className={styles.courseCard}>
@@ -119,7 +120,7 @@ const CategoriesSection = () => {
                 lawyers, accountants, financial advisors, and consultants, helping individuals 
                 and businesses make informed decisions and stay compliant.
               </p>
-              <a href="#">Get it Now</a>
+              <Link to="/service-provider">Get it Now</Link>
             </div>
           </div>
         </div>
