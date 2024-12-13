@@ -18,7 +18,7 @@ const Settings = () => {
           <Route path="portfolio" element={<Portfolio />} />
           <Route path="change-info" element={<ChangeInfo />} />
           <Route path="friend-requests" element={<FriendRequests />} />
-          <Route path="firends" element={<Friends />} />
+          <Route path="friends" element={<Friends />} />
           <Route
             path=""
             element={<Projects />} 

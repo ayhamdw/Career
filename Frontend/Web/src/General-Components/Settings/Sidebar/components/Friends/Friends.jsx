@@ -3,62 +3,14 @@ import styles from './Friends.module.css';
 
 const Friends = () => {
   const friendsData = [
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      photo: "https://via.placeholder.com/150",
-      career: "Home Services",
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
-      photo: "https://via.placeholder.com/150",
-      career: "Technical Services",
-    },
-    {
-      id: 3,
-      firstName: "Ali",
-      lastName: "Khan",
-      photo: "https://via.placeholder.com/150",
-      career: "Educational Services",
-    },
-    {
-      id: 4,
-      firstName: "Sara",
-      lastName: "Lee",
-      photo: "https://via.placeholder.com/150",
-      career: "Healthcare",
-    },
-    {
-      id: 5,
-      firstName: "Tom",
-      lastName: "Brown",
-      photo: "https://via.placeholder.com/150",
-      career: "Creative Services",
-    },
-    {
-      id: 6,
-      firstName: "Emily",
-      lastName: "Davis",
-      photo: "https://via.placeholder.com/150",
-      career: "Legal & Financial Services",
-    },
-    {
-      id: 7,
-      firstName: "Ahmed",
-      lastName: "Hassan",
-      photo: "https://via.placeholder.com/150",
-      career: "Other",
-    },
-    {
-      id: 8,
-      firstName: "Maria",
-      lastName: "Garcia",
-      photo: "https://via.placeholder.com/150",
-      career: "Home Services",
-    },
+    { id: 1, firstName: "John", lastName: "Doe", photo: "https://via.placeholder.com/150", career: "Home Services" },
+    { id: 2, firstName: "Jane", lastName: "Smith", photo: "https://via.placeholder.com/150", career: "Technical Services" },
+    { id: 3, firstName: "Ali", lastName: "Khan", photo: "https://via.placeholder.com/150", career: "Educational Services" },
+    { id: 4, firstName: "Sara", lastName: "Lee", photo: "https://via.placeholder.com/150", career: "Healthcare" },
+    { id: 5, firstName: "Tom", lastName: "Brown", photo: "https://via.placeholder.com/150", career: "Creative Services" },
+    { id: 6, firstName: "Emily", lastName: "Davis", photo: "https://via.placeholder.com/150", career: "Legal & Financial Services" },
+    { id: 7, firstName: "Ahmed", lastName: "Hassan", photo: "https://via.placeholder.com/150", career: "Other" },
+    { id: 8, firstName: "Maria", lastName: "Garcia", photo: "https://via.placeholder.com/150", career: "Home Services" },
   ];
 
   const careerCategories = [
@@ -71,7 +23,6 @@ const Friends = () => {
     "Other",
   ];
 
-  // Group friends by career category
   const categorizedFriends = careerCategories.map((category) => ({
     category,
     friends: friendsData.filter((friend) => friend.career === category),
