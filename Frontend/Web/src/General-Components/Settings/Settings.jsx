@@ -12,19 +12,19 @@ const Settings = () => {
   return (
     <div className="settings-container">
       <Sidebar />
-      <div className="settings-content">
+      
         <Routes>
           <Route path="projects" element={<Projects />} />
           <Route path="portfolio" element={<Portfolio />} />
           <Route path="change-info" element={<ChangeInfo />} />
           <Route path="friend-requests" element={<FriendRequests />} />
-          <Route path="firends" element={<Friends />} />
+          <Route path="friends" element={<Friends />} />
           <Route
             path=""
-            element={<p>Please select an option from the sidebar.</p>}
+            element={<Projects />} 
           />
         </Routes>
-      </div>
+      
     </div>
   );
 };

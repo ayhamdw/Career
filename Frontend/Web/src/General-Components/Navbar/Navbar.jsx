@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import '../../index.css'
 import './Navbar.css'
 import '../../main.css'
 import { Link } from 'react-router-dom'
-import logo from './logo.png'; // Update with your actual logo path
+import logo from '../../../src/assets/logo.png'
+import ProfileIcon from './profile.png'; 
 
 
 
@@ -11,7 +12,28 @@ import logo from './logo.png'; // Update with your actual logo path
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);  
+    } else {
+      setIsAuthenticated(false); 
+    }
+
+    const handleStorageChange = () => {
+      const updatedToken = localStorage.getItem('token');
+      setIsAuthenticated(!!updatedToken);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
   
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -58,8 +80,17 @@ function Navbar() {
 
           {/* Authentication Links */}
           <div className="auth-links">
-            <Link to="/signin" className="auth-btn">Sign In</Link>
-            <Link to="/signup" className="auth-btn auth-btn-signup">Sign Up</Link>
+            {isAuthenticated ? (
+              // Display profile icon if user is authenticated
+              <Link to="/settings" className="profile-icon-link">
+                <img src={ProfileIcon} alt="Profile" className="profile-icon" />
+              </Link>
+            ) : (
+              <>
+                <Link to="/signin" className="auth-btn">Sign In</Link>
+                <Link to="/signup" className="auth-btn auth-btn-signup">Sign Up</Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}

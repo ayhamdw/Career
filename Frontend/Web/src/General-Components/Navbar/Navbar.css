@@ -193,3 +193,14 @@ a {
     display: block;
   }
 }
+
+
+.profile-icon-link {
+  display: inline-block;
+}
+
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}

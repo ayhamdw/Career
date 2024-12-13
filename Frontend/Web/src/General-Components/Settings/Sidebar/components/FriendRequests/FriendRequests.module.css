@@ -1,20 +1,22 @@
 /* General Styles */
 .friendRequestsPage {
-  max-width: 900px;
+  /* max-width: 900px; */
   margin: 0 auto;
   padding: 40px 20px;
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f9fafb;
+  /* background-color: #f9fafb; */
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 85%;
 }
 
-h1 {
+.friendRequestsPage h1 {
   text-align: center;
-  color: #333;
+  color: rgb(109, 201, 126);
   font-size: 2.5rem;
   margin-bottom: 30px;
   font-weight: 700;
+  
 }
 
 .friendRequestsList {
@@ -33,10 +35,10 @@ h1 {
   transition: transform 0.3s, box-shadow 0.3s ease;
 }
 
-.friendRequestItem:hover {
+/* .friendRequestItem:hover {
   transform: translateY(-10px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-}
+} */
 
 .friendRequestContent {
   display: flex;
@@ -97,7 +99,7 @@ button {
 
 /* Button Styles */
 .acceptBtn {
-  background-color: #27ae60;
+  background-color: rgb(109, 201, 126);;
   color: white;
   box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
 }
