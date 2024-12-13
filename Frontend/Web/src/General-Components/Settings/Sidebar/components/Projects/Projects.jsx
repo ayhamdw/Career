@@ -1,111 +1,37 @@
 import React from "react";
-import "./Projects.css";
+import styles from "./Projects.module.css";
 
 const Projects = () => {
   return (
-    <div className="projects-page">
-      <h2 className="page-title">Your Projects</h2>
-      <p className="projects-info">You have 10 projects in total.</p>
-      <div className="projects-grid">
-        <div className="project-card">
-          <div className="project-card-header">
-            <h3 className="project-title">Project 1</h3>
-            <p className="project-type">Web Development</p>
+    <div className={styles.projectsPage}>
+      <h2 className={styles.pageTitle}>Your Projects</h2>
+      <p className={styles.projectsInfo}>You have 10 projects in total.</p>
+      <div className={styles.projectsGrid}>
+        {Array.from({ length: 8 }, (_, index) => (
+          <div key={index} className={styles.projectCard}>
+            <img
+              src={`https://via.placeholder.com/300x220?text=Project+${index + 1}`}
+              alt={`Project ${index + 1}`}
+              className={styles.projectImage}
+            />
+            <div className={styles.projectCardContent}>
+              <div className={styles.projectCardHeader}>
+                <h3 className={styles.projectTitle}>Project {index + 1}</h3>
+                <p className={styles.projectType}>Project Type</p>
+              </div>
+              <p className={styles.projectDescription}>
+                Description for project {index + 1} goes here. Learn more about the features and functionalities.
+              </p>
+              <div className={styles.projectClientLocation}>
+                <span className={styles.projectClient}>Client: Company {index + 1}</span>
+                <span className={styles.projectLocation}>Location: City {index + 1}</span>
+              </div>
+              <a href={`/project/${index + 1}`} className={styles.projectButton}>
+                View Project
+              </a>
+            </div>
           </div>
-          <p className="project-description">
-            A responsive web application for managing projects.
-          </p>
-        </div>
-        <div className="project-card">
-          <div className="project-card-header">
-            <h3 className="project-title">Project 2</h3>
-            <p className="project-type">Mobile App</p>
-          </div>
-          <p className="project-description">
-            A mobile app designed to improve user engagement through push notifications.
-          </p>
-        </div>
-        <div className="project-card">
-          <div className="project-card-header">
-            <h3 className="project-title">Project 3</h3>
-            <p className="project-type">Machine Learning</p>
-          </div>
-          <p className="project-description">
-            A machine learning model for predicting trends based on user data.
-          </p>
-        </div>
-        <div className="project-card">
-          <div className="project-card-header">
-            <h3 className="project-title">Project 4</h3>
-            <p className="project-type">Data Analysis</p>
-          </div>
-          <p className="project-description">
-            In-depth analysis of large datasets to extract meaningful insights.
-          </p>
-        </div>
-        <div className="project-card">
-          <div className="project-card-header">
-            <h3 className="project-title">Project 5</h3>
-            <p className="project-type">E-Commerce</p>
-          </div>
-          <p className="project-description">
-            Developed a full-stack e-commerce platform with secure payment gateway integration.
-          </p>
-        </div>
-        <div className="project-card">
-          <div className="project-card-header">
-            <h3 className="project-title">Project 6</h3>
-            <p className="project-type">Cloud Computing</p>
-          </div>
-          <p className="project-description">
-            Built a scalable cloud infrastructure for a high-traffic website.
-          </p>
-        </div>
-        <div className="project-card">
-          <div className="project-card-header">
-            <h3 className="project-title">Project 7</h3>
-            <p className="project-type">Blockchain</p>
-          </div>
-          <p className="project-description">
-            Developed a blockchain-based platform for secure digital transactions.
-          </p>
-        </div>
-        <div className="project-card">
-          <div className="project-card-header">
-            <h3 className="project-title">Project 8</h3>
-            <p className="project-type">Game Development</p>
-          </div>
-          <p className="project-description">
-            Created an immersive 3D game with real-time multiplayer features.
-          </p>
-        </div>
-        <div className="project-card">
-          <div className="project-card-header">
-            <h3 className="project-title">Project 9</h3>
-            <p className="project-type">AI Automation</p>
-          </div>
-          <p className="project-description">
-            Developed an AI system for automating tasks and improving workflow efficiency.
-          </p>
-        </div>
-        <div className="project-card">
-          <div className="project-card-header">
-            <h3 className="project-title">Project 10</h3>
-            <p className="project-type">Networking</p>
-          </div>
-          <p className="project-description">
-            Built a high-speed network infrastructure for large-scale business operations.
-          </p>
-        </div>
-        <div className="project-card">
-          <div className="project-card-header">
-            <h3 className="project-title">Project 10</h3>
-            <p className="project-type">Networking</p>
-          </div>
-          <p className="project-description">
-            Built a high-speed network infrastructure for large-scale business operations.
-          </p>
-        </div>
+        ))}
       </div>
     </div>
   );

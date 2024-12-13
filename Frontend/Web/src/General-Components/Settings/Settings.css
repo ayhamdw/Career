@@ -3,8 +3,9 @@
   min-height: 100vh;
   background-color: #f8f9fa;
   font-family: 'Arial', sans-serif;
-  
+  /* background-color: red; */
   /* height: 100vh; */
+  
 }
 
 
@@ -13,8 +14,10 @@
   padding: 40px;
   background-color: #ffffff; 
   border-radius: 8px;
-  margin: 20px;
+  /* margin: 20px; */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: green;
+  /* width: 100%; */
 }
 
 .settings-content h1 {

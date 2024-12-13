@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./Sidebar.css";
+import style from "./Sidebar.module.css";
 import { FaProjectDiagram, FaImage, FaUserEdit, FaUserFriends, FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from "../../../AuthContext";
 
@@ -14,54 +14,54 @@ const handleLogout = () => {
   navigate("/signin"); 
 };
   return (
-    <div className="sidebar-container">
-      <div className="user-info">
+    <div className={style.sidebarContainer}>
+      <div className={style.userInfo}>
         <img
           src="https://via.placeholder.com/100"
           alt="User"
-          className="user-picture"
+          className={style.userPicture}
         />
-        <h2 className="user-name">Shareef</h2>
+        <h2 className={style.userName}>Shareef</h2>
       </div>
-      <ul className="sidebar-links">
-        <Link to="/settings/projects" className="sidebar-link">
+      <ul className={style.sidebarLinks}>
+        <Link to="/settings/projects" className={style.sidebarLink}>
           <li>
-            <FaProjectDiagram className="icon" />
+            <FaProjectDiagram className={style.icon} />
             <span>Projects (10)</span>
           </li>
         </Link>
-        <Link to="/settings/portfolio" className="sidebar-link">
+        <Link to="/settings/portfolio" className={style.sidebarLink}>
           <li>
-            <FaImage className="icon" />
+            <FaImage className={style.icon} />
             <span>Portfolio</span>
           </li>
         </Link>
-        <Link to="/settings/change-info" className="sidebar-link">
+        <Link to="/settings/change-info" className={style.sidebarLink}>
           <li>
-            <FaUserEdit className="icon" />
+            <FaUserEdit className={style.icon} />
             <span>Change Information</span>
           </li>
         </Link>
-        <Link to="/settings/friend-requests" className="sidebar-link">
+        <Link to="/settings/friend-requests" className={style.sidebarLink}>
           <li>
-            <FaUserFriends className="icon" />
+            <FaUserFriends className={style.icon} />
             <span>Friend Requests</span>
           </li>
         </Link>
-        <Link to="/settings/firends" className="sidebar-link">
+        <Link to="/settings/friends" className={style.sidebarLink}>
           <li>
-            <FaUserFriends className="icon" />
+            <FaUserFriends className={style.icon} />
             <span>Friends</span>
           </li>
         </Link>
         
-        {/* Replace the Link for Logout with a Button */}
-        <Link className="sidebar-link" onClick={handleLogout}>
-          <li >
-            <FaSignOutAlt className="icon" />
+        {/* Replace Link with a button or div for logout */}
+        <div className={style.sidebarLink} onClick={handleLogout}>
+          <li>
+            <FaSignOutAlt className={style.icon} />
             <span>Logout</span>
           </li>
-        </Link>
+        </div>
       </ul>
     </div>
   );
