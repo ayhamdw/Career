@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./Community.module.css";
 import userImage from './poster.png';
+import { toast } from 'react-toastify';
 
 const Community = ({ userCareer }) => {
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem('token');
   const [posts, setPosts] = useState([]);
   const [form, setForm] = useState({
     title: "",
     content: "",
     careerCategory: "",
     location: "",
+    numberOfWorker: "",
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
@@ -38,6 +40,7 @@ const Community = ({ userCareer }) => {
     "Miami",
   ];
 
+
   useEffect(() => {
     const fetchUserRole = async () => {
       try {
@@ -52,6 +55,7 @@ const Community = ({ userCareer }) => {
     fetchUserRole();
     fetchPosts();
   }, []);
+
 
   const fetchPosts = async () => {
     try {
@@ -70,12 +74,23 @@ const Community = ({ userCareer }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error("You need to log in first.");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
+      return;
+    }
+
     try {
       const post = {
         title: form.title,
         content: form.content,
         careerCategory: form.careerCategory,
         location: form.location,
+        numberOfWorker: form.numberOfWorker,
+        userRole: userRole,
       };
 
       const response = await axios.post(
@@ -98,17 +113,126 @@ const Community = ({ userCareer }) => {
 
   return (
     <div className={styles.communityContainer}>
-      <header>
-        <h1>Community Posts</h1>
-      </header>
-
       <div className={styles.mainContent}>
+        <div className={styles.rightSection}>
+          <h3>Featured Categories</h3>
+          <ul>
+            {categories.map((category, index) => (
+              <li key={index}>{category}</li>
+            ))}
+          </ul>
+
+          <h3>Popular Cities</h3>
+          <ul>
+            {cities.map((city, index) => (
+              <li key={index}>{city}</li>
+            ))}
+          </ul>
+        </div>
+
         <div className={styles.postsSection}>
-          <button className={styles.createPostBtn} onClick={() => setIsModalOpen(true)}>
+          <button className={styles.createPostBtn} onClick={
+
+            () => {
+              const token = localStorage.getItem('token');
+              if (!token) {
+                toast.error("You need to log in first.");
+                setTimeout(() => {
+                  window.location.href = "/signin";
+                }, 2000);
+              }
+              setIsModalOpen(true)
+            }
+
+          }>
             Create Post
           </button>
+          {isModalOpen && userRole === "admin" && (
+            <div className={styles.modal}>
+              <div className={styles.modalContent}>
+                <form onSubmit={handleSubmit}>
+                  <h2>Create a New Post</h2>
 
-          {isModalOpen && (
+                  <input
+                    type="text"
+                    name="title"
+                    placeholder="Post Title"
+                    value={form.title}
+                    onChange={handleInputChange}
+                    required
+                  />
+
+                  <textarea
+                    name="content"
+                    placeholder="Post Content"
+                    value={form.content}
+                    onChange={handleInputChange}
+                    required
+                  />
+
+                  <select
+                    name="careerCategory"
+                    value={form.careerCategory}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((category, index) => (
+                      <option key={index} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    name="location"
+                    value={form.location}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="">Select City</option>
+                    <option value="Jerusalem">Jerusalem</option>
+                    <option value="Gaza">Gaza</option>
+                    <option value="Ramallah">Ramallah</option>
+                    <option value="Nablus">Nablus</option>
+                    <option value="Hebron">Hebron</option>
+                    <option value="Bethlehem">Bethlehem</option>
+                    <option value="Jenin">Jenin</option>
+                    <option value="Tulkarem">Tulkarem</option>
+                    <option value="Qalqilya">Qalqilya</option>
+                    <option value="Salfit">Salfit</option>
+                    <option value="Nablus">Nablus</option>
+                    <option value="Khan Younis">Khan Younis</option>
+                    <option value="Rafah">Rafah</option>
+                    <option value="Tubas">Tubas</option>
+                    <option value="Jericho">Jericho</option>
+                    <option value="Ariha">Ariha</option>
+                  </select>
+
+
+                  <input type="number"
+                    placeholder="number of Worker"
+                    onChange={handleInputChange}
+                    required name="numberOfWorker"
+                    value={form.numberOfWorker}
+                  />
+
+
+                  <button type="submit" className={styles.submitBtn}>
+                    Post
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.cancelBtn}
+                    onClick={() => setIsModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+          {isModalOpen && userRole === "user" && (
             <div className={styles.modal}>
               <div className={styles.modalContent}>
                 <form onSubmit={handleSubmit}>
@@ -181,40 +305,22 @@ const Community = ({ userCareer }) => {
                 <p>{post.content}</p>
                 <p><strong>Category:</strong> {post.careerCategory}</p>
                 <p><strong>Location:</strong> {post.location}</p>
+                <p><strong>Number of Worker rquired:</strong> {post.numberOfWorker}</p>
+                <p><strong>Role:</strong> {post.userRole === "admin" ? "Service Provider" : "Client"}</p>
                 <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
 
+
                 <div className={styles.actions}>
-                  {/* Apply button logic */}
                   {post.userRole === "admin" && userRole === "admin" && (
-                    <button className={styles.applyBtn}>
-                      Apply for this Job
-                    </button>
+                    <button className={styles.applyBtn}>Apply for this Job</button>
                   )}
                   {post.userRole !== "admin" && userRole === "admin" && (
-                    <button className={styles.applyBtn}>
-                      Apply for this Job
-                    </button>
+                    <button className={styles.applyBtn}>Apply for this Job</button>
                   )}
                 </div>
               </div>
             ))}
           </div>
-        </div>
-
-        <div className={styles.rightSection}>
-          <h3>Featured Categories</h3>
-          <ul>
-            {categories.map((category, index) => (
-              <li key={index}>{category}</li>
-            ))}
-          </ul>
-
-          <h3>Popular Cities</h3>
-          <ul>
-            {cities.map((city, index) => (
-              <li key={index}>{city}</li>
-            ))}
-          </ul>
         </div>
       </div>
     </div>

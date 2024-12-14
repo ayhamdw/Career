@@ -7,6 +7,11 @@ const postSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    userRole: {
+      type: String,
+      enum: ["admin", "user"], 
+      required: true, 
+    },
     title: {
       type: String,
       required: true,
@@ -34,6 +39,10 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+    },
+    numberOfWorker: {
+      type: Number,
+      required: true,
     },
     postDate: {
       type: Date,

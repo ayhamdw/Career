@@ -23,7 +23,11 @@ const app = express();
 app.use(express.json());
 app.use(generalRateLimiter);
 app.use(userRouter);
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({
+  origin: true,  
+  methods: 'GET,POST,PUT,DELETE',  
+  allowedHeaders: 'Content-Type,Authorization', 
+}));
 app.use(
   "/assets/images",
   express.static(path.join(__dirname, "assets/images"))

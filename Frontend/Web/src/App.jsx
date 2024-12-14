@@ -29,7 +29,7 @@ const router = createBrowserRouter([
       { path: "/verify", element: <Verify /> },
       { path: "/messages", element: <ProtectedRoute><Messages /></ProtectedRoute> },
       { path: "/service-provider", element: <ProtectedRoute><ServiceProvider /></ProtectedRoute> },
-      { path: "/community", element: <ProtectedRoute><Community /></ProtectedRoute> },
+      { path: "/community", element: <Community /> },
       { path: "/requests", element: <ProtectedRoute><Requests /></ProtectedRoute> },
       { path: "settings/*", element: <ProtectedRoute><Settings /></ProtectedRoute> },
       { path: "*", element: <NotFound /> },
