@@ -3,27 +3,26 @@ import axios from "axios";
 import styles from "./Community.module.css";
 
 const Community = ({ userImage, userCareer }) => {
+  const token = localStorage.getItem('authToken'); 
   const [posts, setPosts] = useState([]);
   const [form, setForm] = useState({
-    type: "",
+    title: "",
+    content: "",
+    careerCategory: "",
     location: "",
-    workersNeeded: "",
-    description: "",
-    city: "",
   });
+  const [commentForm, setCommentForm] = useState({}); // Track comments for each post
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
 
-  const [commentText, setCommentText] = useState(""); // State for the comment input
-
-  // Define categories and cities
   const categories = [
-    "Home Improvement",
-    "Electronics",
-    "Transportation",
-    "Health & Fitness",
-    "Education",
-    "Gardening",
+    "Home Services",
+    "Technical Services",
+    "Educational Services",
+    "Healthcare",
+    "Creative Services",
+    "Legal & Financial Services",
+    "Other",
   ];
 
   const cities = [
@@ -51,43 +50,79 @@ const Community = ({ userImage, userCareer }) => {
     };
 
     fetchUserRole();
+    fetchPosts();
   }, []);
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get("http://localhost:7777/api/community/posts");
+      setPosts(response.data);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
 
+  const handleCommentChange = (e, postId) => {
+    const { value } = e.target;
+    setCommentForm({ ...commentForm, [postId]: value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newPost = {
-      role: userRole,
-      ...form,
-      posterImage: userImage,
-      posterCareer: userCareer,
-      date: new Date().toLocaleString(),
-      liked: false, // Adding a liked state for heart button
-      comments: [] // Array to store comments
-    };
+    try {
+      const post = {
+        title: form.title,
+        content: form.content,
+        careerCategory: form.careerCategory,
+        location: form.location,
+      };
 
-    setPosts([newPost, ...posts]);
-    setForm({ type: "", location: "", workersNeeded: "", description: "", city: "" });
-    setIsModalOpen(false);
+      const response = await axios.post(
+        "http://localhost:7777/api/community/post", 
+        post, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      );
+
+      setPosts([response.data, ...posts]);
+      setForm({ title: "", content: "", careerCategory: "", location: "" });
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error creating post:", error.response ? error.response.data : error.message);
+    }
   };
 
-  const toggleLike = (index) => {
-    const updatedPosts = [...posts];
-    updatedPosts[index].liked = !updatedPosts[index].liked;
-    setPosts(updatedPosts);
-  };
+  const handleAddComment = async (postId) => {
+    const commentText = commentForm[postId]?.trim();
+    if (commentText && commentText !== "") {
+      try {
+        const response = await axios.post(
+          `http://localhost:7777/api/posts/${postId}/comments`, 
+          { commentText },
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            }
+          }
+        );
 
-  const handleAddComment = (index) => {
-    if (commentText.trim() !== "") {
-      const updatedPosts = [...posts];
-      updatedPosts[index].comments.push(commentText);
-      setPosts(updatedPosts);
-      setCommentText(""); // Clear the input field after adding the comment
+        const updatedPosts = posts.map((post) =>
+          post._id === postId ? { ...post, comments: response.data.comments } : post
+        );
+        setPosts(updatedPosts);
+        setCommentForm({ ...commentForm, [postId]: "" }); // Reset comment input
+      } catch (error) {
+        console.error("Error adding comment:", error);
+      }
     }
   };
 
@@ -98,12 +133,8 @@ const Community = ({ userImage, userCareer }) => {
       </header>
 
       <div className={styles.mainContent}>
-        {/* Left Section with Posts */}
         <div className={styles.postsSection}>
-          <button
-            className={styles.createPostBtn}
-            onClick={() => setIsModalOpen(true)}
-          >
+          <button className={styles.createPostBtn} onClick={() => setIsModalOpen(true)}>
             Create Post
           </button>
 
@@ -111,62 +142,44 @@ const Community = ({ userImage, userCareer }) => {
             <div className={styles.modal}>
               <div className={styles.modalContent}>
                 <form onSubmit={handleSubmit}>
-                  {userRole === "admin" && (
-                    <>
-                      <h2>Request workers</h2>
-                      <select name="city" value={form.city} onChange={handleInputChange} required>
-                        <option value="">Select a city</option>
-                        {cities.map((city, index) => (
-                          <option key={index} value={city}>
-                            {city}
-                          </option>
-                        ))}
-                      </select>
-                      <input
-                        type="number"
-                        name="workersNeeded"
-                        placeholder="Number of workers needed"
-                        value={form.workersNeeded}
-                        onChange={handleInputChange}
-                        required
-                      />
-                      <select name="type" value={form.type} onChange={handleInputChange} required>
-                        <option value="">Select a category</option>
-                        {categories.map((category, index) => (
-                          <option key={index} value={category}>
-                            {category}
-                          </option>
-                        ))}
-                      </select>
-                    </>
-                  )}
+                  <h2>Create a New Post</h2>
 
-                  {userRole === "user" && (
-                    <>
-                      <h2>Request Service Provider</h2>
-                      <input
-                        type="text"
-                        name="location"
-                        placeholder="Your location"
-                        value={form.location}
-                        onChange={handleInputChange}
-                        required
-                      />
-                      <select name="type" value={form.type} onChange={handleInputChange} required>
-                        <option value="">Select a category</option>
-                        {categories.map((category, index) => (
-                          <option key={index} value={category}>
-                            {category}
-                          </option>
-                        ))}
-                      </select>
-                    </>
-                  )}
+                  <input
+                    type="text"
+                    name="title"
+                    placeholder="Post Title"
+                    value={form.title}
+                    onChange={handleInputChange}
+                    required
+                  />
 
                   <textarea
-                    name="description"
-                    placeholder="Describe your request"
-                    value={form.description}
+                    name="content"
+                    placeholder="Post Content"
+                    value={form.content}
+                    onChange={handleInputChange}
+                    required
+                  />
+
+                  <select
+                    name="careerCategory"
+                    value={form.careerCategory}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((category, index) => (
+                      <option key={index} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+
+                  <input
+                    type="text"
+                    name="location"
+                    placeholder="Location"
+                    value={form.location}
                     onChange={handleInputChange}
                     required
                   />
@@ -187,62 +200,40 @@ const Community = ({ userImage, userCareer }) => {
           )}
 
           <div className={styles.postList}>
-            {posts.map((post, index) => (
-              <div className={styles.postCard} key={index}>
+            {posts.map((post) => (
+              <div className={styles.postCard} key={post._id}>
                 <div className={styles.posterInfo}>
-                  <img src={post.posterImage} alt="Poster" className={styles.posterImage} />
-                  <p className={styles.posterCareer}>{post.posterCareer}</p>
+                  <img src={userImage} alt="User" className={styles.posterImage} />
+                  <p className={styles.posterCareer}>{userCareer}</p>
                 </div>
-                <p>
-                  <strong>Role:</strong> {post.role}
-                </p>
-                <p>
-                  <strong>Description:</strong> {post.description}
-                </p>
-                {post.role === "admin" && (
-                  <>
-                    <p>
-                      <strong>City:</strong> {post.city}
-                    </p>
-                    <p>
-                      <strong>Workers Needed:</strong> {post.workersNeeded}
-                    </p>
-                  </>
-                )}
-                <p>
-                  <strong>Posted on:</strong> {post.date}
-                </p>
+
+                <h3>{post.title}</h3>
+                <p>{post.content}</p>
+                <p><strong>Category:</strong> {post.careerCategory}</p>
+                <p><strong>Location:</strong> {post.location}</p>
+                <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
+
                 <div className={styles.actions}>
-                  {/* Comment Section */}
                   <textarea
                     className={styles.commentTextarea}
                     placeholder="Add your comment..."
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
+                    value={commentForm[post._id] || ""}
+                    onChange={(e) => handleCommentChange(e, post._id)}
                   />
                   <button
                     className={styles.addCommentBtn}
-                    onClick={() => handleAddComment(index)}
+                    onClick={() => handleAddComment(post._id)}
                   >
                     Add Comment
                   </button>
-
-                  {/* Like Button */}
-                  <button
-                    className={`${styles.likeBtn} ${post.liked ? styles.liked : ""}`}
-                    onClick={() => toggleLike(index)}
-                  >
-                    ❤️ Like
-                  </button>
                 </div>
 
-                {/* Display Comments */}
-                {post.comments.length > 0 && (
+                {post.comments && post.comments.length > 0 && (
                   <div className={styles.comments}>
                     <h4>Comments:</h4>
                     <ul>
                       {post.comments.map((comment, i) => (
-                        <li key={i}>{comment}</li>
+                        <li key={i}>{comment.text}</li>
                       ))}
                     </ul>
                   </div>
@@ -252,7 +243,6 @@ const Community = ({ userImage, userCareer }) => {
           </div>
         </div>
 
-        {/* Right Section */}
         <div className={styles.rightSection}>
           <h3>Featured Categories</h3>
           <ul>

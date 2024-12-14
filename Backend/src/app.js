@@ -16,6 +16,7 @@ const checkInformationRouter = require("./routers/checkInformationRouter");
 const proficientRouter = require("./routers/proficientRouter");
 const sendVerificationCode = require("./routers/accountRouter");
 const personInformationRouter = require("./routers/personInformationRouter");
+const postRouter = require("./routers/postRoutes");
 
 const app = express();
 
@@ -38,5 +39,6 @@ app.use("/api/user", userRouter);
 app.use("/api/proficient", proficientRouter);
 app.use("/api/send",sendVerificationCode);
 app.use("/api/user", personInformationRouter);
+app.use("/api/community",postRouter);
 app.use(errorHandler);
 module.exports = app;

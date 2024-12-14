@@ -14,6 +14,14 @@ const createPost = async (req, res) => {
       careerCategory: req.body.careerCategory,
       location: req.body.location,
     });
+
+    if (req.body.commentText) {
+      post.comments.push({
+        text: req.body.commentText,
+        user: user._id,
+        commentDate: new Date(),
+      });
+    }
     await post.save();
     res.status(201).send(post);
   } catch (error) {
@@ -21,13 +29,6 @@ const createPost = async (req, res) => {
     res.status(400).send({ error: "Error creating post" });
   }
 };
-
-module.exports = {
-  createPost,
-};
-
-
-const Post = require("../models/posts.js");
 
 const getAllPosts = async (req, res) => {
   try {
