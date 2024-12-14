@@ -1,0 +1,219 @@
+.communityContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px;
+  font-family: Arial, sans-serif;
+  max-width: 2000px;
+  width: 100%;
+  margin: auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  font-size: 2rem;
+  color: #2f2f2f;
+  font-weight: 700;
+}
+
+.mainContent {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  /* max-width: 1200px; */
+  gap:20px;
+}
+
+.postsSection {
+  flex: 3;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  margin-right: 20px;
+}
+
+.createPostBtn {
+  background-color: #6dc97e;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+  width: fit-content;
+}
+
+.createPostBtn:hover {
+  background-color: #5bb26d;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+textarea {
+  height: 150px;
+}
+
+.submitBtn,
+.cancelBtn {
+  
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  
+}
+
+.submitBtn {
+  background-color: #6dc97e;
+}
+
+.submitBtn:hover,
+.cancelBtn:hover {
+  background-color: #5bb26d;
+}
+
+.cancelBtn {
+  background-color: #e04d09;
+}
+
+.cancelBtn:hover {
+  background-color: #c54306;
+}
+
+.postList {
+  margin-top: 30px;
+}
+
+.postCard {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.postCard h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.postCard p {
+  font-size: 1rem;
+  color: #555;
+  margin: 5px 0;
+}
+
+.posterInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.posterImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.posterCareer {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.actions {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.applyBtn {
+  background-color: #d45a3b;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: fit-content;
+}
+
+.applyBtn:hover {
+  background-color: #9e3116;
+}
+
+.rightSection {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.rightSection h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.rightSection ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.rightSection li {
+  font-size: 1rem;
+  padding: 8px 0;
+  color: #555;
+}
+
+.rightSection li:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+  border-radius: 6px;
+}

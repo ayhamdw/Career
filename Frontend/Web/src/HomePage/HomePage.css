@@ -5,6 +5,10 @@
     font-family: "Arial", sans-serif; 
   }
 
+/* .bodyHome{
+    background-color: rgb(224, 235, 240);
+} */
+
 .containerHome{
     /* margin-top: -80px; */
     /* background-color: red; */
@@ -12,11 +16,12 @@
     width: 80%;
     margin: auto;
     /* height: 600px; */
-    /* background-color: cadetblue; */
+    
     display: flex;
     justify-content: center;
     flex-direction: column;
     /* align-items: center; */
+
 
     
 }
