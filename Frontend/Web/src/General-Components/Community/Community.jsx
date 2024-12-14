@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./Community.module.css";
+import userImage from './poster.png';
 
-const Community = ({ userImage, userCareer }) => {
-  const token = localStorage.getItem('authToken'); 
+const Community = ({ userCareer }) => {
+  const token = localStorage.getItem('authToken');
   const [posts, setPosts] = useState([]);
   const [form, setForm] = useState({
     title: "",
@@ -11,7 +12,6 @@ const Community = ({ userImage, userCareer }) => {
     careerCategory: "",
     location: "",
   });
-  const [commentForm, setCommentForm] = useState({}); // Track comments for each post
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
 
@@ -67,11 +67,6 @@ const Community = ({ userImage, userCareer }) => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleCommentChange = (e, postId) => {
-    const { value } = e.target;
-    setCommentForm({ ...commentForm, [postId]: value });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -84,8 +79,8 @@ const Community = ({ userImage, userCareer }) => {
       };
 
       const response = await axios.post(
-        "http://localhost:7777/api/community/post", 
-        post, 
+        "http://localhost:7777/api/community/post",
+        post,
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -98,31 +93,6 @@ const Community = ({ userImage, userCareer }) => {
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error creating post:", error.response ? error.response.data : error.message);
-    }
-  };
-
-  const handleAddComment = async (postId) => {
-    const commentText = commentForm[postId]?.trim();
-    if (commentText && commentText !== "") {
-      try {
-        const response = await axios.post(
-          `http://localhost:7777/api/posts/${postId}/comments`, 
-          { commentText },
-          {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            }
-          }
-        );
-
-        const updatedPosts = posts.map((post) =>
-          post._id === postId ? { ...post, comments: response.data.comments } : post
-        );
-        setPosts(updatedPosts);
-        setCommentForm({ ...commentForm, [postId]: "" }); // Reset comment input
-      } catch (error) {
-        console.error("Error adding comment:", error);
-      }
     }
   };
 
@@ -214,30 +184,18 @@ const Community = ({ userImage, userCareer }) => {
                 <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
 
                 <div className={styles.actions}>
-                  <textarea
-                    className={styles.commentTextarea}
-                    placeholder="Add your comment..."
-                    value={commentForm[post._id] || ""}
-                    onChange={(e) => handleCommentChange(e, post._id)}
-                  />
-                  <button
-                    className={styles.addCommentBtn}
-                    onClick={() => handleAddComment(post._id)}
-                  >
-                    Add Comment
-                  </button>
+                  {/* Apply button logic */}
+                  {post.userRole === "admin" && userRole === "admin" && (
+                    <button className={styles.applyBtn}>
+                      Apply for this Job
+                    </button>
+                  )}
+                  {post.userRole !== "admin" && userRole === "admin" && (
+                    <button className={styles.applyBtn}>
+                      Apply for this Job
+                    </button>
+                  )}
                 </div>
-
-                {post.comments && post.comments.length > 0 && (
-                  <div className={styles.comments}>
-                    <h4>Comments:</h4>
-                    <ul>
-                      {post.comments.map((comment, i) => (
-                        <li key={i}>{comment.text}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
               </div>
             ))}
           </div>

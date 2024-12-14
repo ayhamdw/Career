@@ -20,6 +20,7 @@ import CategoriesSection from './CategoriesSection/CategoriesSection'
 function HomePage() {
   return (
     <>
+    <div className='bodyHome'>
     <div className='containerHome'>
       <div className='imagessw flex items-center justify-center flex-col mt-10 w-full'>
         <Swiper
@@ -77,6 +78,7 @@ function HomePage() {
     <AboutUs/>
     
     <CategoriesSection/>
+    </div>
     </>
     
   );
