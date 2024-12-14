@@ -25,3 +25,21 @@ const createPost = async (req, res) => {
 module.exports = {
   createPost,
 };
+
+
+const Post = require("../models/posts.js");
+
+const getAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.find().populate("user", "username firstName lastName");
+    res.status(200).send(posts);
+  } catch (error) {
+    res.status(400).send({ error: "Error fetching posts" });
+  }
+};
+
+module.exports = {
+  createPost,
+  getAllPosts,
+};
+
