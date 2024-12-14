@@ -1,0 +1,161 @@
+.communityContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  width: 90%;
+  background-color: rgb(235, 235, 235);
+  margin:auto;
+  height: 70vh;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 2rem;
+  color: #333;
+  margin: 0;
+}
+
+.createPostBtn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: rgb(109, 201, 126);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: fit-content;
+  padding:10px
+}
+
+.createPostBtn:hover {
+  background-color: #097b4c;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modalContent h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.modalContent select,
+.modalContent input,
+.modalContent textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.modalContent textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 10px;
+  background-color: rgb(109, 201, 126);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background-color 0.3s;
+}
+
+.submitBtn:hover {
+  background-color: #097b4c;
+}
+
+.cancelBtn {
+  width: 100%;
+  padding: 10px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.postList {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+.postCard {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.postCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.posterInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.posterImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.posterCareer {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.postCard p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.postCard strong {
+  color: #333;
+}

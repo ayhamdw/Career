@@ -14,7 +14,8 @@ const authRouter = require("./routers/authRouter");
 const passwordRouter = require("./routers/passwordRouter");
 const checkInformationRouter = require("./routers/checkInformationRouter");
 const proficientRouter = require("./routers/proficientRouter");
-const sendVerificationCode = require("./routers/accountRouter")
+const sendVerificationCode = require("./routers/accountRouter");
+const personInformationRouter = require("./routers/personInformationRouter");
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use("/api/password", passwordRouter);
 app.use("/api/check", checkInformationRouter);
 app.use("/api/user", userRouter);
 app.use("/api/proficient", proficientRouter);
-app.use("/api/send",sendVerificationCode)
+app.use("/api/send",sendVerificationCode);
+app.use("/api/user", personInformationRouter);
 app.use(errorHandler);
 module.exports = app;
