@@ -171,8 +171,8 @@ textarea {
   text-align: center;
 }
 
-.applyBtn {
-  background-color: #d45a3b;
+.applyBtn,.DeleteBtn {
+  background-color: rgb(109, 201, 126);
   color: white;
   padding: 10px 20px;
   font-size: 1rem;
@@ -184,8 +184,12 @@ textarea {
 }
 
 .applyBtn:hover {
-  background-color: #9e3116;
+  background-color: rgb(84, 192, 104);
 }
+.DeleteBtn{
+  background-color: #c54306;
+}
+
 
 .rightSection {
   flex: 1;
@@ -217,3 +221,9 @@ textarea {
   cursor: pointer;
   border-radius: 6px;
 }
+
+.myPost {
+  border: 2px solid rgb(109, 201, 126);
+  background-color: rgba(109, 201, 126, 0.1);
+}
+

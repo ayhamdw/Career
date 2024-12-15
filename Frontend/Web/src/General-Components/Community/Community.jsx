@@ -4,7 +4,11 @@ import styles from "./Community.module.css";
 import userImage from './poster.png';
 import { toast } from 'react-toastify';
 
+
+
+
 const Community = ({ userCareer }) => {
+
   const token = localStorage.getItem('token');
   const [posts, setPosts] = useState([]);
   const [form, setForm] = useState({
@@ -16,6 +20,7 @@ const Community = ({ userCareer }) => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
+  const [currentUserId, setCurrentUserId] = useState("");
 
   const categories = [
     "Home Services",
@@ -28,20 +33,35 @@ const Community = ({ userCareer }) => {
   ];
 
   const cities = [
-    "New York",
-    "Los Angeles",
-    "Chicago",
-    "Houston",
-    "Phoenix",
-    "San Diego",
-    "Dallas",
-    "Austin",
-    "Seattle",
-    "Miami",
+    "Nablus",
+    "Ramallah",
+    "Jerusalem",
+    "Hebron",
+    "Jenin",
+    "Bethlehem",
+    "Tulkarm",
+    "Qalqilya",
+    "Jericho",
+    "Gaza",
   ];
 
 
+
+
+
   useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const email = localStorage.getItem("userEmail");
+        const response = await axios.post("http://localhost:7777/api/user/id", { email });
+        setCurrentUserId(response.data.userId);
+        // console.log(response.data.userId);
+      } catch (error) {
+        console.error("Error fetching user ID:", error);
+      }
+    };
+
+
     const fetchUserRole = async () => {
       try {
         const email = localStorage.getItem("userEmail");
@@ -52,19 +72,27 @@ const Community = ({ userCareer }) => {
       }
     };
 
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get("http://localhost:7777/api/community/posts");
+        setPosts(response.data);
+        // console.log("posts: ", JSON.stringify(response.data, null, 2));
+        response.data.forEach(post => {
+          console.log("Post data: ", post.user._id);
+        });
+
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+
+    fetchCurrentUser();
     fetchUserRole();
     fetchPosts();
   }, []);
 
 
-  const fetchPosts = async () => {
-    try {
-      const response = await axios.get("http://localhost:7777/api/community/posts");
-      setPosts(response.data);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    }
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -91,6 +119,7 @@ const Community = ({ userCareer }) => {
         location: form.location,
         numberOfWorker: form.numberOfWorker,
         userRole: userRole,
+
       };
 
       const response = await axios.post(
@@ -295,7 +324,7 @@ const Community = ({ userCareer }) => {
 
           <div className={styles.postList}>
             {posts.map((post) => (
-              <div className={styles.postCard} key={post._id}>
+              <div className={`${styles.postCard} ${post.user._id === currentUserId ? styles.myPost : ""}`} key={post._id}>
                 <div className={styles.posterInfo}>
                   <img src={userImage} alt="User" className={styles.posterImage} />
                   <p className={styles.posterCareer}>{userCareer}</p>
@@ -311,11 +340,17 @@ const Community = ({ userCareer }) => {
 
 
                 <div className={styles.actions}>
-                  {post.userRole === "admin" && userRole === "admin" && (
+                  {post.userRole === "admin" && userRole === "admin" && (post.user._id !== currentUserId) && (
                     <button className={styles.applyBtn}>Apply for this Job</button>
                   )}
-                  {post.userRole !== "admin" && userRole === "admin" && (
+                  {post.userRole !== "admin" && userRole === "admin" && (post.user._id !== currentUserId) &&(
                     <button className={styles.applyBtn}>Apply for this Job</button>
+                  )}
+                  {post.userRole !== "admin" && userRole === "admin" && (post.user._id === currentUserId) &&(
+                    <button className={styles.DeleteBtn}>Delete post </button>
+                  )}
+                  {post.userRole === "admin" && userRole === "admin" && (post.user._id === currentUserId) &&(
+                    <button className={styles.DeleteBtn}>Delete post </button>
                   )}
                 </div>
               </div>
