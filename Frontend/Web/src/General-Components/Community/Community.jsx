@@ -181,7 +181,7 @@ const Community = ({ userCareer }) => {
           }>
             Create Post
           </button>
-          {isModalOpen && userRole === "admin" && (
+          {isModalOpen /*&& userRole === "admin"*/ && (
             <div className={styles.modal}>
               <div className={styles.modalContent}>
                 <form onSubmit={handleSubmit}>
@@ -266,7 +266,7 @@ const Community = ({ userCareer }) => {
               </div>
             </div>
           )}
-          {isModalOpen && userRole === "user" && (
+          {/* {isModalOpen && userRole === "user" && (
             <div className={styles.modal}>
               <div className={styles.modalContent}>
                 <form onSubmit={handleSubmit}>
@@ -325,40 +325,42 @@ const Community = ({ userCareer }) => {
                 </form>
               </div>
             </div>
-          )}
+          )} */}
 
           <div className={styles.postList}>
             {posts.slice().reverse().map((post) => (
               <div className={`${styles.postCard} ${post.user._id === currentUserId ? styles.myPost : ""}`} key={post._id}>
-                <div className={styles.posterInfo}>
-                  <img src={userImage} alt="User" className={styles.posterImage} />
-                  <p className={styles.posterCareer}>{userCareer}</p>
-                </div>
-
-                <h3>{post.title}</h3>
-                <p>{post.content}</p>
-                <p><strong>Category:</strong> {post.careerCategory}</p>
-                <p><strong>Location:</strong> {post.location}</p>
-                <p><strong>Number of Worker rquired:</strong> {post.numberOfWorker}</p>
-                <p><strong>Role:</strong> {post.userRole === "admin" ? "Service Provider" : "Client"}</p>
-                <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
-
-
-                <div className={styles.actions}>
-                  {post.userRole === "admin" && userRole === "admin" && (post.user._id !== currentUserId) && (
-                    <button className={styles.applyBtn}>Apply for this Job</button>
-                  )}
-                  {post.userRole !== "admin" && userRole === "admin" && (post.user._id !== currentUserId) &&(
-                    <button className={styles.applyBtn}>Apply for this Job</button>
-                  )}
-                  {post.userRole !== "admin" && userRole === "admin" && (post.user._id === currentUserId) &&(
-                    <button className={styles.DeleteBtn}>Delete post </button>
-                  )}
-                  {post.userRole === "admin" && userRole === "admin" && (post.user._id === currentUserId) &&(
-                    <button className={styles.DeleteBtn}>Delete post </button>
-                  )}
+              <div className={styles.posterInfo}>
+                <img src={userImage} alt="User" className={styles.posterImage} />
+                <div>
+                  <p className={styles.posterName}>Posted by {post.user.name}</p>
+                  <p className={styles.posterCareer}>{post.userRole === "admin" ? "Service Provider" : "Client"}</p>
                 </div>
               </div>
+            
+              <h3 className={styles.postTitle}>{post.title}</h3>
+              <p className={styles.postContent}>{post.content}</p>
+              
+              <div className={styles.postDetails}>
+                <p><strong>Category:</strong> {post.careerCategory}</p>
+                <p><strong>Location:</strong> {post.location}</p>
+                <p><strong>Number of Workers Required:</strong> {post.numberOfWorker}</p>
+                <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
+              </div>
+            
+              <div className={styles.actions}>
+                {post.userRole === "admin" && userRole === "admin" && (post.user._id !== currentUserId) && (
+                  <button className={styles.applyBtn}>Apply for this Job</button>
+                )}
+                {post.userRole !== "admin" && userRole === "admin" && (post.user._id !== currentUserId) && (
+                  <button className={styles.applyBtn}>Apply for this Job</button>
+                )}
+                {(post.user._id === currentUserId) && (
+                  <button className={styles.deleteBtn}>Delete post</button>
+                )}
+              </div>
+            </div>
+            
             ))}
           </div>
         </div>
