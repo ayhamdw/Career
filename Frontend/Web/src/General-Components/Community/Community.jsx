@@ -132,7 +132,12 @@ const Community = ({ userCareer }) => {
         }
       );
 
+      window.location.reload();
+
+
+      
       setPosts([response.data, ...posts]);
+      
       setForm({ title: "", content: "", careerCategory: "", location: "" });
       setIsModalOpen(false);
     } catch (error) {
@@ -323,7 +328,7 @@ const Community = ({ userCareer }) => {
           )}
 
           <div className={styles.postList}>
-            {posts.map((post) => (
+            {posts.slice().reverse().map((post) => (
               <div className={`${styles.postCard} ${post.user._id === currentUserId ? styles.myPost : ""}`} key={post._id}>
                 <div className={styles.posterInfo}>
                   <img src={userImage} alt="User" className={styles.posterImage} />
