@@ -145,6 +145,29 @@ const Community = ({ userCareer }) => {
     }
   };
 
+
+
+  const handleDeletePost = async (postId) => {
+    const token = localStorage.getItem('token');
+  
+    if (!token) {
+      toast.error("You need to log in first.");
+      setTimeout(() => {
+        window.location.href = "/signin";
+      }, 2000);
+      return;
+    }
+  
+    try {
+      const response = await axios.delete(`http://localhost:7777/api/community/deletePost/${postId}`);
+      toast.success(response.data.message);
+      setPosts(posts.filter(post => post._id !== postId));
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      toast.error(error.response?.data?.message || 'Failed to delete post.');
+    }
+  };
+
   return (
     <div className={styles.communityContainer}>
       <div className={styles.mainContent}>
@@ -356,7 +379,7 @@ const Community = ({ userCareer }) => {
                   <button className={styles.applyBtn}>Apply for this Job</button>
                 )}
                 {(post.user._id === currentUserId) && (
-                  <button className={styles.deleteBtn}>Delete post</button>
+                  <button className={styles.deleteBtn} onClick={()=>handleDeletePost(post._id)}>Delete post</button>
                 )}
               </div>
             </div>
