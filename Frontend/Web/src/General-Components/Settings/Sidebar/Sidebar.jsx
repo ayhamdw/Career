@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import style from "./Sidebar.module.css";
 import { FaProjectDiagram, FaImage, FaUserEdit, FaUserFriends, FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from "../../../AuthContext";
+import axios from "axios"
 
 
 const Sidebar = () => {
@@ -14,6 +15,40 @@ const handleLogout = () => {
   navigate("/signin"); 
   window.location.reload();
 };
+
+
+const [userFirstName,setUserFirstName] = useState("");
+const [userLastName,setUserLastName] = useState("");
+
+useEffect(()=>{
+  
+  const fetchFirstName = async () =>{
+    try{
+      const email = localStorage.getItem("userEmail");
+      const response = await axios.post("http://localhost:7777/api/user/firstName",{email});
+      setUserFirstName(response.data.firstName);
+      console.log(response.data.firstName)
+      
+    }catch(error){
+        console.error("Error Fetching user FirstName: ", error);
+    }
+  }
+  const fetchLastName = async () =>{
+    try{
+      const email = localStorage.getItem("userEmail");
+      const response = await axios.post("http://localhost:7777/api/user/lastName",{email});
+      setUserLastName(response.data.lastName);
+      console.log(response.data.lastName)
+      
+    }catch(error){
+        console.error("Error Fetching user LastName: ", error);
+    }
+  }
+
+  fetchFirstName();
+  fetchLastName();
+
+},[]);
   return (
     <div className={style.sidebarContainer}>
       <div className={style.userInfo}>
@@ -22,7 +57,7 @@ const handleLogout = () => {
           alt="User"
           className={style.userPicture}
         />
-        <h2 className={style.userName}>Shareef</h2>
+        <h2 className={style.userName}>{userFirstName} {userLastName}</h2>
       </div>
       <ul className={style.sidebarLinks}>
         <Link to="/settings/projects" className={style.sidebarLink}>
