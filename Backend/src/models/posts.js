@@ -12,6 +12,14 @@ const postSchema = new mongoose.Schema(
       enum: ["admin", "user"], 
       required: true, 
     },
+    userFirstName:{
+      type:String,
+      required:true,
+    },
+    userLastName:{
+      type:String,
+      required:true,
+    },
     title: {
       type: String,
       required: true,

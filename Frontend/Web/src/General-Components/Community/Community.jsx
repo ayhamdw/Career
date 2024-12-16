@@ -21,7 +21,8 @@ const Community = ({ userCareer }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
   const [currentUserId, setCurrentUserId] = useState("");
-  const [deletePostModal, setDeletePostModal] = useState(false);
+  const [userFirstName, setUserFirstName] = useState("");
+  const [userLastName, setUserLasttName] = useState("");
 
   const categories = [
     "Home Services",
@@ -87,10 +88,35 @@ const Community = ({ userCareer }) => {
       }
     };
 
+    const fetchFirstName = async () =>{
+      try{
+        const email = localStorage.getItem("userEmail");
+        const response = await axios.post("http://localhost:7777/api/user/firstName",{email});
+        setUserFirstName(response.data.firstName);
+        console.log(response.data.firstName)
+        
+      }catch(error){
+          console.error("Error Fetching user FirstName: ", error);
+      }
+    }
+    const fetchLastName = async () =>{
+      try{
+        const email = localStorage.getItem("userEmail");
+        const response = await axios.post("http://localhost:7777/api/user/lastName",{email});
+        setUserLasttName(response.data.lastName);
+        console.log(response.data.lastName)
+        
+      }catch(error){
+          console.error("Error Fetching user LastName: ", error);
+      }
+    }
+
 
     fetchCurrentUser();
     fetchUserRole();
     fetchPosts();
+    fetchFirstName();
+    fetchLastName();
   }, []);
 
 
@@ -120,6 +146,8 @@ const Community = ({ userCareer }) => {
         location: form.location,
         numberOfWorker: form.numberOfWorker,
         userRole: userRole,
+        userFirstName: userFirstName,
+        userLastName: userLastName,
 
       };
 
@@ -363,7 +391,7 @@ const Community = ({ userCareer }) => {
               <div className={styles.posterInfo}>
                 <img src={userImage} alt="User" className={styles.posterImage} />
                 <div>
-                  <p className={styles.posterName}>Posted by {post.user.name}</p>
+                  <p className={styles.posterName}>{post.userFirstName} {post.userLastName}</p>
                   <p className={styles.posterCareer}>{post.userRole === "admin" ? "Service Provider" : "Client"}</p>
                 </div>
               </div>
@@ -372,6 +400,7 @@ const Community = ({ userCareer }) => {
               <p className={styles.postContent}>{post.content}</p>
               
               <div className={styles.postDetails}>
+                {/* <p><strong>Name</strong> {post.userFirstName} {post.userLastName}</p> */}
                 <p><strong>Category:</strong> {post.careerCategory}</p>
                 <p><strong>Location:</strong> {post.location}</p>
                 <p><strong>Number of Workers Required:</strong> {post.numberOfWorker}</p>
