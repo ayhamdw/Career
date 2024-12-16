@@ -1,0 +1,54 @@
+/* DeletePostModal.module.css */
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modalActions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  
+  .cancelBtn,
+  .deleteBtn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .cancelBtn {
+    background-color: #ccc;
+  }
+  
+  .deleteBtn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .cancelBtn:hover {
+    background-color: #999;
+  }
+  
+  .deleteBtn:hover {
+    background-color: #d32f2f;
+  }
+  

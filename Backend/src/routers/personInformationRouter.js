@@ -1,8 +1,15 @@
 const express = require('express');
-const { getUserRoleByEmail , getUserIdByEmail} = require('../controllers/getPersonInformation'); 
+const { getUserRoleByEmail,
+   getUserIdByEmail,
+   getUserFirstNmaeByEmail,
+   getUserLastNmaeByEmail
+  } = require('../controllers/getPersonInformation'); 
 const router = express.Router();
 
 
 router.post('/role', getUserRoleByEmail);
 router.post('/id', getUserIdByEmail);
+router.post('/firstName', getUserFirstNmaeByEmail);
+router.post('/lastName', getUserLastNmaeByEmail);
+
   module.exports = router;

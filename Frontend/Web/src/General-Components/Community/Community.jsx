@@ -21,6 +21,8 @@ const Community = ({ userCareer }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
   const [currentUserId, setCurrentUserId] = useState("");
+  const [userFirstName, setUserFirstName] = useState("");
+  const [userLastName, setUserLasttName] = useState("");
 
   const categories = [
     "Home Services",
@@ -86,10 +88,35 @@ const Community = ({ userCareer }) => {
       }
     };
 
+    const fetchFirstName = async () =>{
+      try{
+        const email = localStorage.getItem("userEmail");
+        const response = await axios.post("http://localhost:7777/api/user/firstName",{email});
+        setUserFirstName(response.data.firstName);
+        console.log(response.data.firstName)
+        
+      }catch(error){
+          console.error("Error Fetching user FirstName: ", error);
+      }
+    }
+    const fetchLastName = async () =>{
+      try{
+        const email = localStorage.getItem("userEmail");
+        const response = await axios.post("http://localhost:7777/api/user/lastName",{email});
+        setUserLasttName(response.data.lastName);
+        console.log(response.data.lastName)
+        
+      }catch(error){
+          console.error("Error Fetching user LastName: ", error);
+      }
+    }
+
 
     fetchCurrentUser();
     fetchUserRole();
     fetchPosts();
+    fetchFirstName();
+    fetchLastName();
   }, []);
 
 
@@ -119,6 +146,8 @@ const Community = ({ userCareer }) => {
         location: form.location,
         numberOfWorker: form.numberOfWorker,
         userRole: userRole,
+        userFirstName: userFirstName,
+        userLastName: userLastName,
 
       };
 
@@ -143,6 +172,35 @@ const Community = ({ userCareer }) => {
     } catch (error) {
       console.error("Error creating post:", error.response ? error.response.data : error.message);
     }
+  };
+
+
+
+  const handleDeletePost = async (postId) => {
+
+    const isConfirmed = window.confirm("Are you sure you want to delete this post?");
+    if(isConfirmed){
+          const token = localStorage.getItem('token');
+  
+    if (!token) {
+      toast.error("You need to log in first.");
+      setTimeout(() => {
+        window.location.href = "/signin";
+      }, 2000);
+      return;
+    }
+  
+    try {
+      const response = await axios.delete(`http://localhost:7777/api/community/deletePost/${postId}`);
+      toast.success(response.data.message);
+      setPosts(posts.filter(post => post._id !== postId));
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      toast.error(error.response?.data?.message || 'Failed to delete post.');
+    }
+
+    }
+
   };
 
   return (
@@ -333,7 +391,7 @@ const Community = ({ userCareer }) => {
               <div className={styles.posterInfo}>
                 <img src={userImage} alt="User" className={styles.posterImage} />
                 <div>
-                  <p className={styles.posterName}>Posted by {post.user.name}</p>
+                  <p className={styles.posterName}>{post.userFirstName} {post.userLastName}</p>
                   <p className={styles.posterCareer}>{post.userRole === "admin" ? "Service Provider" : "Client"}</p>
                 </div>
               </div>
@@ -342,6 +400,7 @@ const Community = ({ userCareer }) => {
               <p className={styles.postContent}>{post.content}</p>
               
               <div className={styles.postDetails}>
+                {/* <p><strong>Name</strong> {post.userFirstName} {post.userLastName}</p> */}
                 <p><strong>Category:</strong> {post.careerCategory}</p>
                 <p><strong>Location:</strong> {post.location}</p>
                 <p><strong>Number of Workers Required:</strong> {post.numberOfWorker}</p>
@@ -356,7 +415,7 @@ const Community = ({ userCareer }) => {
                   <button className={styles.applyBtn}>Apply for this Job</button>
                 )}
                 {(post.user._id === currentUserId) && (
-                  <button className={styles.deleteBtn}>Delete post</button>
+                  <button className={styles.deleteBtn} onClick={()=>handleDeletePost(post._id)}>Delete post</button>
                 )}
               </div>
             </div>
