@@ -171,8 +171,8 @@ textarea {
   text-align: center;
 }
 
-.applyBtn {
-  background-color: #d45a3b;
+.applyBtn,.DeleteBtn {
+  background-color: rgb(109, 201, 126);
   color: white;
   padding: 10px 20px;
   font-size: 1rem;
@@ -184,8 +184,12 @@ textarea {
 }
 
 .applyBtn:hover {
-  background-color: #9e3116;
+  background-color: rgb(84, 192, 104);
 }
+.DeleteBtn{
+  background-color: #c54306;
+}
+
 
 .rightSection {
   flex: 1;
@@ -217,3 +221,103 @@ textarea {
   cursor: pointer;
   border-radius: 6px;
 }
+
+.myPost {
+  border: 2px solid rgb(109, 201, 126);
+  background-color: rgba(109, 201, 126, 0.1);
+}
+
+
+.postCard {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.posterInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.posterImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.posterName {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.posterCareer {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.postTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.postContent {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.postDetails {
+  font-size: 0.95rem;
+  color: #444;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.applyBtn,
+.deleteBtn {
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.applyBtn {
+  background-color: #6dc97e;
+  color: #fff;
+}
+
+.applyBtn:hover {
+  background-color: #5bb26d;
+}
+
+.deleteBtn {
+  background-color: #df4314;
+  color: #fff;
+}
+
+.deleteBtn:hover {
+  background-color: #b83710;
+}
+
+.myPost {
+  border-left: 5px solid #6dc97e;
+}
+

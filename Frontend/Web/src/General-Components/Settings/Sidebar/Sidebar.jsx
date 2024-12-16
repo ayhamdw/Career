@@ -12,6 +12,7 @@ const navigate = useNavigate();
 const handleLogout = () => {
   logout(); 
   navigate("/signin"); 
+  window.location.reload();
 };
   return (
     <div className={style.sidebarContainer}>

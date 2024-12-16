@@ -34,6 +34,7 @@ function Signin() {
     finally{
       setLoading(false);
     }
+    window.location.reload();
 };
 
   
