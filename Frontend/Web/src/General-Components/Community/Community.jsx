@@ -21,6 +21,7 @@ const Community = ({ userCareer }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
   const [currentUserId, setCurrentUserId] = useState("");
+  const [deletePostModal, setDeletePostModal] = useState(false);
 
   const categories = [
     "Home Services",
@@ -148,7 +149,10 @@ const Community = ({ userCareer }) => {
 
 
   const handleDeletePost = async (postId) => {
-    const token = localStorage.getItem('token');
+
+    const isConfirmed = window.confirm("Are you sure you want to delete this post?");
+    if(isConfirmed){
+          const token = localStorage.getItem('token');
   
     if (!token) {
       toast.error("You need to log in first.");
@@ -166,6 +170,9 @@ const Community = ({ userCareer }) => {
       console.error('Error deleting post:', error);
       toast.error(error.response?.data?.message || 'Failed to delete post.');
     }
+
+    }
+
   };
 
   return (
