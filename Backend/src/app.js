@@ -23,7 +23,7 @@ const app = express();
 app.use(express.json());
 app.use(generalRateLimiter);
 app.use(userRouter);
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(
   "/assets/images",
   express.static(path.join(__dirname, "assets/images"))

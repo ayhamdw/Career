@@ -6,19 +6,36 @@ import { FaCheckCircle, FaTimesCircle, FaEnvelope } from 'react-icons/fa';
 const ServiceProvider = () => {
   const [selectedCategory, setSelectedCategory] = useState('Home Services');
   const [providers, setProviders] = useState([]);
+  const [error, setError] = useState('');
   
   useEffect(() => {
-    // Fetch the service providers from your API
-    axios.get('http://localhost:5000/api/users') // Adjust API URL if necessary
-      .then((response) => {
-        setProviders(response.data); // Set the providers state with data from the API
-      })
-      .catch((error) => {
-        console.error('Error fetching providers:', error);
-      });
-  }, []); // The empty array ensures this runs only once when the component mounts
+    const fetchProviders = async () => {
+      try {
+        const response = await axios.post('http://localhost:7777/api/user/users', {
+          category: selectedCategory,
+        });
+        console.log(response.data);
+        setProviders(response.data);
+        setError('');
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status === 404) {
+            setError('No users found for this category');
+            setProviders([]);
+          } else {
+            setError('An unexpected error occurred');
+          }
+        } else if (error.request) {
+          setError('No response from server');
+        } else {
+          setError('Error Fetching Providers');
+        }
+      }
+    };
+    
 
-  const filteredProviders = providers.filter(provider => provider.category === selectedCategory);
+    fetchProviders();
+  }, [selectedCategory]); 
 
   const renderRatingStars = (rating) => {
     const fullStars = Math.floor(rating);
@@ -69,44 +86,50 @@ const ServiceProvider = () => {
       </div>
 
       <div className={styles.providersList}>
-        {filteredProviders.map((provider, index) => (
-          <div key={index} className={styles.providerCard}>
-            <img
-              src={provider.photo}
-              alt={`${provider.name}'s photo`}
-              className={styles.providerPhoto}
-            />
-            <div className={styles.providerInfo}>
-              <h3>{provider.name}</h3>
-              <p className={styles.career}>{provider.career}</p>
-              {renderRatingStars(provider.rating)}
-              <p className={styles.experience}>Experience: {provider.experience} years</p>
-              <p className={`${styles.certificate} ${provider.verified ? styles.verified : styles.notVerified}`}>
-                {provider.verified ? (
-                  <FaCheckCircle className={styles.icon} />
-                ) : (
-                  <FaTimesCircle className={styles.icon} />
-                )}
-                {provider.verified ? 'Verified by Practical Certificate' : 'Not Verified'}
-              </p>
+        {error && <p className={styles.error}>{error}</p>} 
+        
+        {providers.length > 0 ? (
+          providers.map((provider, index) => (
+            <div key={index} className={styles.providerCard}>
+              <img
+                src={provider.profile.profileImage}
+                alt={provider.profile.firstName}
+                className={styles.providerPhoto}
+              />
+              <div className={styles.providerInfo}>
+                <h3>{provider.profile.firstName} {provider.profile.lastName}</h3>
+                <p className={styles.career}>{provider.career}</p>
+                {renderRatingStars}
+                <p className={styles.experience}>Experience: {provider.profile.experience} years</p>
+                <p className={`${styles.certificate} ${provider.verificationStatus ? styles.verified : styles.notVerified}`}> {/* Edit with certificate */}
+                  {provider.verificationStatus ? (
+                    <FaCheckCircle className={styles.icon} />
+                  ) : (
+                    <FaTimesCircle className={styles.icon} />
+                  )}
+                  {provider.verificationStatus ? 'Verified by Practical Certificate' : 'Not Verified'}
+                </p>
 
-              <div className={styles.buttons}>
-                <button
-                  onClick={() => handleProfileClick(provider._id)} 
-                  className={styles.profileButton}
-                >
-                  View Profile
-                </button>
-                <button
-                  onClick={() => handleContactClick(provider.name)}
-                  className={styles.contactButton}
-                >
-                  <FaEnvelope className={styles.icon} /> Contact
-                </button>
+                <div className={styles.buttons}>
+                  <button
+                    onClick={() => handleProfileClick(provider._id)}
+                    className={styles.profileButton}
+                  >
+                    View Profile
+                  </button>
+                  <button
+                    onClick={() => handleContactClick(provider.firstName)}
+                    className={styles.contactButton}
+                  >
+                    <FaEnvelope className={styles.icon} /> Contact
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p>No providers found for this category.</p>
+        )}
       </div>
     </div>
   );
