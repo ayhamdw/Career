@@ -133,25 +133,31 @@ const getCoordinatesByEmail = async (req, res) => {
 
 
 const getUsersByCategory = async (req, res) => {
-  const { category } = req.body; 
+  const { category } = req.body;
 
   if (!category) {
     return res.status(400).json({ message: 'Category is required' });
   }
 
   try {
-    const users = await User.find({ careerCategory: category });
+    let users;
+    if (category === "All Providers") {
+      users = await User.find({});
+    } else {
+      users = await User.find({ careerCategory: category });
+    }
 
     if (users.length === 0) {
       return res.status(200).json({ message: 'No users found for this category' });
     }
 
-    res.status(200).json(users); 
+    res.status(200).json(users);
   } catch (err) {
     console.error('Error fetching users:', err);
     res.status(500).json({ message: 'Error fetching users' });
   }
 };
+
 
 module.exports = {
    getUserRoleByEmail,

@@ -60,6 +60,7 @@ const ServiceProvider = () => {
   };
 
   const categories = [
+    'All Providers',
     'Home Services',
     'Legal & Financial Services',
     'Creative Services',
