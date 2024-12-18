@@ -7,21 +7,23 @@ const ServiceProvider = () => {
   const [selectedCategory, setSelectedCategory] = useState('Home Services');
   const [providers, setProviders] = useState([]);
   const [error, setError] = useState('');
-  
+  const [searchQuery, setSearchQuery] = useState('');
+
   useEffect(() => {
     const fetchProviders = async () => {
       try {
         const response = await axios.post('http://localhost:7777/api/user/users', {
           category: selectedCategory,
         });
-        console.log(response.data);
-        setProviders(response.data);
-        setError('');
+        console.log('Providers fetched:', response.data); 
+        setProviders(Array.isArray(response.data) ? response.data : []); 
+        setError('');  
       } catch (error) {
+        console.error('Error fetching providers:', error); 
         if (error.response) {
           if (error.response.status === 404) {
             setError('No users found for this category');
-            setProviders([]);
+            setProviders([]);  
           } else {
             setError('An unexpected error occurred');
           }
@@ -32,10 +34,9 @@ const ServiceProvider = () => {
         }
       }
     };
-    
 
     fetchProviders();
-  }, [selectedCategory]); 
+  }, [selectedCategory]);
 
   const renderRatingStars = (rating) => {
     const fullStars = Math.floor(rating);
@@ -69,6 +70,15 @@ const ServiceProvider = () => {
     'Technical Services',
   ];
 
+  const filteredProviders = Array.isArray(providers) ? providers.filter((provider) =>
+    `${provider.profile.firstName} ${provider.profile.lastName}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  ) : [];
+
+  console.log('Selected Category:', selectedCategory);
+  console.log('Providers:', providers);
+
   return (
     <div className={styles.container}>
       <div className={styles.sidebar}>
@@ -87,10 +97,18 @@ const ServiceProvider = () => {
       </div>
 
       <div className={styles.providersList}>
-        {error && <p className={styles.error}>{error}</p>} 
-        
-        {providers.length > 0 ? (
-          providers.map((provider, index) => (
+        {error && <p className={styles.error}>{error}</p>}
+        <div className={styles.searchContainer}>
+          <input
+            type="text"
+            placeholder="Search for a provider by name"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className={styles.searchInput}
+          />
+        </div>
+        {filteredProviders.length > 0 ? (
+          filteredProviders.map((provider, index) => (
             <div key={index} className={styles.providerCard}>
               <img
                 src={provider.profile.profileImage}
@@ -100,9 +118,9 @@ const ServiceProvider = () => {
               <div className={styles.providerInfo}>
                 <h3>{provider.profile.firstName} {provider.profile.lastName}</h3>
                 <p className={styles.career}>{provider.career}</p>
-                {renderRatingStars}
+                {renderRatingStars(provider.rating)} 
                 <p className={styles.experience}>Experience: {provider.profile.experience} years</p>
-                <p className={`${styles.certificate} ${provider.verificationStatus ? styles.verified : styles.notVerified}`}> {/* Edit with certificate */}
+                <p className={`${styles.certificate} ${provider.verificationStatus ? styles.verified : styles.notVerified}`}>
                   {provider.verificationStatus ? (
                     <FaCheckCircle className={styles.icon} />
                   ) : (
@@ -119,7 +137,7 @@ const ServiceProvider = () => {
                     View Profile
                   </button>
                   <button
-                    onClick={() => handleContactClick(provider.firstName)}
+                    onClick={() => handleContactClick(provider.profile.firstName)}
                     className={styles.contactButton}
                   >
                     <FaEnvelope className={styles.icon} /> Contact
@@ -129,7 +147,7 @@ const ServiceProvider = () => {
             </div>
           ))
         ) : (
-          <p>No providers found for this category.</p>
+          <p>No providers found for this category.</p>  
         )}
       </div>
     </div>
