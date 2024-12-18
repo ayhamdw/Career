@@ -1,40 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styles from './ServiceProvider.module.css';
 import { FaCheckCircle, FaTimesCircle, FaEnvelope } from 'react-icons/fa';
 
 const ServiceProvider = () => {
   const [selectedCategory, setSelectedCategory] = useState('Home Services');
+  const [providers, setProviders] = useState([]);
   
-  const providers = [
-    {
-      name: 'Shareef Mwafy',
-      photo: 'https://via.placeholder.com/120',
-      career: 'Web Developer',
-      rating: 4.5,
-      experience: 5,
-      verified: true,
-      category: 'Technical Services',
-    },
-    {
-      name: 'Ayham Duwairy',
-      photo: 'https://via.placeholder.com/120',
-      career: 'Graphic Designer',
-      rating: 3.5,
-      experience: 3,
-      verified: false,
-      category: 'Creative Services',
-    },
-    {
-      name: 'Khalid Omar',
-      photo: 'https://via.placeholder.com/120',
-      career: 'Project Manager',
-      rating: 4.0,
-      experience: 7,
-      verified: false,
-      category: 'Technical Services',
-    },
-
-  ];
+  useEffect(() => {
+    // Fetch the service providers from your API
+    axios.get('http://localhost:5000/api/users') // Adjust API URL if necessary
+      .then((response) => {
+        setProviders(response.data); // Set the providers state with data from the API
+      })
+      .catch((error) => {
+        console.error('Error fetching providers:', error);
+      });
+  }, []); // The empty array ensures this runs only once when the component mounts
 
   const filteredProviders = providers.filter(provider => provider.category === selectedCategory);
 
@@ -110,7 +92,7 @@ const ServiceProvider = () => {
 
               <div className={styles.buttons}>
                 <button
-                  onClick={() => handleProfileClick(provider.id)}
+                  onClick={() => handleProfileClick(provider._id)} 
                   className={styles.profileButton}
                 >
                   View Profile
