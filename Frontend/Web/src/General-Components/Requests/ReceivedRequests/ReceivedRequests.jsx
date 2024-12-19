@@ -1,71 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import styles from './ReceivedRequests.module.css'; 
-import axios from 'axios'
-
-const mockRequests = [
-  {
-    id: 1,
-    customerName: 'John Doe',
-    customerPhoto: 'https://via.placeholder.com/50',
-    location: 'New York, USA',
-    details: 'Request for plumbing service',
-  },
-  {
-    id: 2,
-    customerName: 'Jane Smith',
-    customerPhoto: 'https://via.placeholder.com/50',
-    location: 'Los Angeles, USA',
-    details: 'Request for electrical maintenance',
-  },
-  {
-    id: 3,
-    customerName: 'Ali Hassan',
-    customerPhoto: 'https://via.placeholder.com/50',
-    location: 'Amman, Jordan',
-    details: 'Request for air conditioning repair',
-  },
-  {
-    id: 4,
-    customerName: 'Maryam Abu Ali',
-    customerPhoto: 'https://via.placeholder.com/50',
-    location: 'Ramallah, Palestine',
-    details: 'Request for general cleaning service',
-  },
-];
+import styles from './ReceivedRequests.module.css';
+import axios from 'axios';
 
 const Requests = () => {
-  const [incomingRequests, setIncomingRequests] = useState(mockRequests);
+  const [incomingRequests, setIncomingRequests] = useState([]);
   const [acceptedRequests, setAcceptedRequests] = useState([]);
   const [rejectedRequests, setRejectedRequests] = useState([]);
 
   const [usersReceived, setUserReceived] = useState([]);
 
   const handleAccept = (id) => {
-    const request = incomingRequests.find((req) => req.id === id);
-    setIncomingRequests(incomingRequests.filter((req) => req.id !== id));
+    const request = incomingRequests.find((req) => req._id === id);
+    setIncomingRequests(incomingRequests.filter((req) => req._id !== id));
     setAcceptedRequests([...acceptedRequests, request]);
   };
 
   const handleReject = (id) => {
-    const request = incomingRequests.find((req) => req.id === id);
-    setIncomingRequests(incomingRequests.filter((req) => req.id !== id));
+    const request = incomingRequests.find((req) => req._id === id);
+    setIncomingRequests(incomingRequests.filter((req) => req._id !== id));
     setRejectedRequests([...rejectedRequests, request]);
   };
 
-
-  useEffect( ()=>{
-    const getProficientData = async () =>{
-      try{
-        const response = await axios.get("http://localhost:7777/api/proficient/proficient-data");
+  useEffect(() => {
+    const getProficientData = async () => {
+      const email = localStorage.getItem("userEmail");
+      try {
+        const response = await axios.post("http://localhost:7777/api/user/ReceiveProficient", { email });
         setUserReceived(response.data);
-        console.log(response.data)
+        console.log(response.data);
+        setIncomingRequests(response.data); 
+      } catch (error) {
+        console.log("Error Fetching Received Requests: ", error);
       }
-      catch(error){
-        console.log("Error Fetch Received Requests: ",error);
-      }
-    }
+    };
     getProficientData();
-  },[]);
+  }, []);
 
   return (
     <div className={styles.requestsPage}>
@@ -75,14 +44,14 @@ const Requests = () => {
         <h2>Incoming Requests</h2>
         {incomingRequests.length > 0 ? (
           incomingRequests.map((request) => (
-            <div key={request.id} className={styles.requestCard}>
-              <img src={request.customerPhoto} alt={request.customerName} className={styles.customerPhoto} />
-              <h3>{request.customerName}</h3>
-              <p><strong>Request:</strong> {request.details}</p>
-              <p><strong>Location:</strong> {request.location}</p>
+            <div key={request._id} className={styles.requestCard}>
+              <img src={request.profile.profileImage} alt={request.profile.firstName} className={styles.customerPhoto} />
+              <h3>{request.profile.firstName} {request.profile.lastName}</h3>
+              <p><strong>Request:</strong> {request.career}</p> 
+              <p><strong>Location:</strong> {request.city}</p>
               <div className={styles.requestActions}>
-                <button onClick={() => handleAccept(request.id)} className={styles.acceptBtn}>Accept</button>
-                <button onClick={() => handleReject(request.id)} className={styles.rejectBtn}>Reject</button>
+                <button onClick={() => handleAccept(request._id)} className={styles.acceptBtn}>Accept</button>
+                <button onClick={() => handleReject(request._id)} className={styles.rejectBtn}>Reject</button>
               </div>
             </div>
           ))
@@ -95,11 +64,11 @@ const Requests = () => {
         <h2>Accepted Requests</h2>
         {acceptedRequests.length > 0 ? (
           acceptedRequests.map((request) => (
-            <div key={request.id} className={styles.requestCard}>
-              <img src={request.customerPhoto} alt={request.customerName} className={styles.customerPhoto} />
-              <h3>{request.customerName}</h3>
-              <p><strong>Request:</strong> {request.details}</p>
-              <p><strong>Location:</strong> {request.location}</p>
+            <div key={request._id} className={styles.requestCard}>
+              <img src={request.profile.profileImage} alt={request.profile.firstName} className={styles.customerPhoto} />
+              <h3>{request.profile.firstName} {request.profile.lastName}</h3>
+              <p><strong>Request:</strong> {request.career}</p>
+              <p><strong>Location:</strong> {request.city}</p>
             </div>
           ))
         ) : (
@@ -111,11 +80,11 @@ const Requests = () => {
         <h2>Rejected Requests</h2>
         {rejectedRequests.length > 0 ? (
           rejectedRequests.map((request) => (
-            <div key={request.id} className={styles.requestCard}>
-              <img src={request.customerPhoto} alt={request.customerName} className={styles.customerPhoto} />
-              <h3>{request.customerName}</h3>
-              <p><strong>Request:</strong> {request.details}</p>
-              <p><strong>Location:</strong> {request.location}</p>
+            <div key={request._id} className={styles.requestCard}>
+              <img src={request.profile.profileImage} alt={request.profile.firstName} className={styles.customerPhoto} />
+              <h3>{request.profile.firstName} {request.profile.lastName}</h3>
+              <p><strong>Request:</strong> {request.career}</p>
+              <p><strong>Location:</strong> {request.city}</p>
             </div>
           ))
         ) : (
