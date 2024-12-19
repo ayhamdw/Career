@@ -23,6 +23,7 @@ const Community = ({ userCareer }) => {
   const [currentUserId, setCurrentUserId] = useState("");
   const [userFirstName, setUserFirstName] = useState("");
   const [userLastName, setUserLasttName] = useState("");
+  const [userCoordinates, setUserCoordinates] = useState([]);
 
   const categories = [
     "Home Services",
@@ -111,12 +112,26 @@ const Community = ({ userCareer }) => {
       }
     }
 
+    const fetchCoordinates = async () => {
+      try{
+        const email = localStorage.getItem("userEmail");
+        const response = await axios.post(`http://localhost:7777/api/user/coordinates`,{email});
+        const {longitude, latitude} = response.data;
+        setUserCoordinates([longitude,latitude]);
+        console.log(userCoordinates);
+      }
+      catch(error){
+        console.error("Coordinates Error: ",error);
+      }
+    }
+
 
     fetchCurrentUser();
     fetchUserRole();
     fetchPosts();
     fetchFirstName();
     fetchLastName();
+    fetchCoordinates();
   }, []);
 
 
@@ -125,6 +140,7 @@ const Community = ({ userCareer }) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -202,6 +218,38 @@ const Community = ({ userCareer }) => {
     }
 
   };
+
+  const handleApplyForThisJop = async (proficientId, userId, requestDateTime, [longitude,latitude]) => {
+    try {
+      const token = localStorage.getItem("token"); 
+  
+      if (!token) {
+        console.log("No token found. Please log in again.");
+        return;
+      }
+        const response = await axios.post(
+        `http://localhost:7777/api/proficient/booking-proficient`, 
+        {
+          proficientId,
+          userId,
+          requestDateTime,
+          location:{
+            latitude,
+            longitude
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        
+      );
+    } catch (error) {
+      console.log("Error Apply Job: ", error);
+    }
+  };
+  
 
   return (
     <div className={styles.communityContainer}>
@@ -408,11 +456,8 @@ const Community = ({ userCareer }) => {
               </div>
             
               <div className={styles.actions}>
-                {post.userRole === "admin" && userRole === "admin" && (post.user._id !== currentUserId) && (
-                  <button className={styles.applyBtn}>Apply for this Job</button>
-                )}
-                {post.userRole !== "admin" && userRole === "admin" && (post.user._id !== currentUserId) && (
-                  <button className={styles.applyBtn}>Apply for this Job</button>
+                {(post.user._id !== currentUserId) && (
+                  <button className={styles.applyBtn} onClick={()=> handleApplyForThisJop(post.user._id,currentUserId, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
                 )}
                 {(post.user._id === currentUserId) && (
                   <button className={styles.deleteBtn} onClick={()=>handleDeletePost(post._id)}>Delete post</button>

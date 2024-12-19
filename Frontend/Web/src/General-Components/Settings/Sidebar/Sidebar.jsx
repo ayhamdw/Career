@@ -6,7 +6,7 @@ import { useAuth } from "../../../AuthContext";
 import axios from "axios"
 
 
-const Sidebar = () => {
+const Sidebar = ({userFirstName,userLastName} ) => {
   const { logout } = useAuth(); 
 const navigate = useNavigate();
 
@@ -17,38 +17,6 @@ const handleLogout = () => {
 };
 
 
-const [userFirstName,setUserFirstName] = useState("");
-const [userLastName,setUserLastName] = useState("");
-
-useEffect(()=>{
-  
-  const fetchFirstName = async () =>{
-    try{
-      const email = localStorage.getItem("userEmail");
-      const response = await axios.post("http://localhost:7777/api/user/firstName",{email});
-      setUserFirstName(response.data.firstName);
-      console.log(response.data.firstName)
-      
-    }catch(error){
-        console.error("Error Fetching user FirstName: ", error);
-    }
-  }
-  const fetchLastName = async () =>{
-    try{
-      const email = localStorage.getItem("userEmail");
-      const response = await axios.post("http://localhost:7777/api/user/lastName",{email});
-      setUserLastName(response.data.lastName);
-      console.log(response.data.lastName)
-      
-    }catch(error){
-        console.error("Error Fetching user LastName: ", error);
-    }
-  }
-
-  fetchFirstName();
-  fetchLastName();
-
-},[]);
   return (
     <div className={style.sidebarContainer}>
       <div className={style.userInfo}>

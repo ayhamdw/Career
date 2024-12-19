@@ -2,13 +2,13 @@ import React from "react";
 import { FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
 import styles from "./Portfolio.module.css";
 
-const Portfolio = () => {
+const Portfolio = ({userFirstName,userLastName,bio}) => {
   return (
     <div className={styles.portfolioWrapper}>
       <header className={styles.headerSection}>
         <div className={styles.headerContent}>
-          <h1>Shareef Mwafy</h1>
-          <p>Full-Stack Developer | Web & Mobile Applications</p>
+          <h1>{userFirstName} {userLastName}</h1>
+            <p>{bio}</p>
         </div>
       </header>
 

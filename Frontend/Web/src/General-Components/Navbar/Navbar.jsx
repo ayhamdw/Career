@@ -13,6 +13,7 @@ function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isRequestsDropdownOpen, setIsRequestsDropdownOpen] = useState(false); 
 
 
   useEffect(() => {
@@ -42,6 +43,11 @@ function Navbar() {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  const toggleRequestsDropdown = () => {
+    setIsRequestsDropdownOpen(!isRequestsDropdownOpen); 
+  };
+
   
   return (
     <header className="navbar">
@@ -57,7 +63,18 @@ function Navbar() {
           >
             <ul>
               <li><Link to="/" className="nav-item">Home</Link></li>
-              <li><Link to="/requests" className="nav-item">Requests</Link></li>
+              <li
+                className="nav-item dropdown"
+                onClick={toggleRequestsDropdown}
+              >
+                Requests
+                {isRequestsDropdownOpen && (
+                  <ul className="dropdown-menu">
+                    <li><Link to="/requests/sent">Sent Requests</Link></li>
+                    <li><Link to="/requests/received">Received Requests</Link></li>
+                  </ul>
+                )}
+              </li>
               <li><Link to="/messages" className="nav-item">Messages</Link></li>
               <li><Link to="/community" className="nav-item">Community</Link></li>
               <li><Link to="/settings" className="nav-item">Profile</Link></li>
