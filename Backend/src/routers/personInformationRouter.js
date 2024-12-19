@@ -7,6 +7,9 @@ const { getUserRoleByEmail,
    getCoordinatesByEmail,
    getUsersByCategory,
    getReceiveProficientRequestByEmail,
+   getSentProficientRequestByEmail,
+   getUserByEmail,
+
   } = require('../controllers/getPersonInformation'); 
 const router = express.Router();
 
@@ -19,5 +22,6 @@ router.post('/bio', getBioByEmail);
 router.post('/coordinates', getCoordinatesByEmail);
 router.post('/users',getUsersByCategory);
 router.post('/ReceiveProficient',getReceiveProficientRequestByEmail);
-
+router.post('/SentProficient',getSentProficientRequestByEmail);
+router.post('/user',getUserByEmail);
   module.exports = router;

@@ -147,7 +147,27 @@ const getReceiveProficientRequestByEmail = async (req, res) => {
     return res.status(200).json(user.receiveProficientRequest);
   } catch (error) {
     console.error('Error retrieving proficient request:', error.message);
-    return res.status(500).json({ message: 'Error retrieving proficient requests' });
+    return res.status(500).json({ message: 'Error retrieving proficient requests Receive' });
+  }
+};
+
+const getSentProficientRequestByEmail = async (req, res) => {
+  const { email } = req.body;
+  if (!email || typeof email !== 'string') {
+    return res.status(400).json({ message: 'Invalid email provided' });
+  }
+
+  try {
+    const user = await User.findOne({ email })
+      .populate('sendProficientRequests')  
+      .exec();
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    return res.status(200).json(user.sendProficientRequests);
+  } catch (error) {
+    console.error('Error retrieving proficient request:', error.message);
+    return res.status(500).json({ message: 'Error retrieving proficient requests Sent' });
   }
 };
 
@@ -177,6 +197,26 @@ const getUsersByCategory = async (req, res) => {
   }
 };
 
+const getUserByEmail = async(req, res) => {
+  const {email} = req.body;
+
+  if(!email){
+    return res.status(400).json({success: false, message: 'Email is required'});
+  }
+
+  try{
+    const user = await User.findOne({email});
+    if(!user){
+      return res.tatus(404).json({success: false, message: 'User Not Found'});
+    }
+    res.status(200).json({success: true, data:user});
+    
+  }
+  catch(error){
+    res.status(500).json({success: false, message:error.message});
+  }
+};
+
 
 module.exports = {
    getUserRoleByEmail,
@@ -187,4 +227,6 @@ module.exports = {
    getCoordinatesByEmail,
    getUsersByCategory,
    getReceiveProficientRequestByEmail,
+   getSentProficientRequestByEmail,
+   getUserByEmail,
   };

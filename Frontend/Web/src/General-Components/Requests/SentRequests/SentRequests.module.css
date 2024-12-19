@@ -1,0 +1,129 @@
+.requestsPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    font-family: 'Roboto', sans-serif;
+    background-color: #eef5f9;
+    margin-top: -30px;
+    gap: 20px;
+  }
+
+  h1 {
+    color: #1a5276;
+    font-size: 2.8em;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  .section {
+    width: 90%;
+    margin-bottom: 40px;
+    background: #ffffff;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 30px;
+  }
+
+  .section h2 {
+    color: #34495e;
+    font-size: 2em;
+    margin-bottom: 25px;
+    border-bottom: 4px solid #2ecc71;
+    display: inline-block;
+    padding-bottom: 10px;
+    text-transform: capitalize;
+  }
+
+  .requestCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fcfcfc;
+    border: 1px solid #d6d6d6;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  /* .requestCard:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+  } */
+
+  .customerPhoto {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 25px;
+    border: 3px solid #2ecc71;
+  }
+
+  .requestCard h3 {
+    font-size: 1.5em;
+    color: #2c3e50;
+    margin: 0;
+    font-weight: bold;
+  }
+
+  .requestCard p {
+    margin: 10px 0;
+    color: #7f8c8d;
+    font-size: 1.1em;
+  }
+
+  .requestActions {
+    display: flex;
+    gap: 15px;
+  }
+
+  button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+  }
+
+  .acceptBtn {
+    background-color: #2ecc71;
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  .acceptBtn:hover {
+    background-color: #27ae60;
+  }
+
+  .rejectBtn {
+    background-color: #e74c3c;
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  .rejectBtn:hover {
+    background-color: #c0392b;
+  }
+
+  .pendingLabel {
+    background-color: #f1c40f;
+    color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    display: inline-block;
+  }
+
+  p {
+    font-size: 1.1em;
+    line-height: 1.8;
+  }
