@@ -1,79 +1,109 @@
 import React, { useState } from 'react';
-import styles from './ReceivedRequests.module.css'; // Importing the CSS Module
+import styles from './ReceivedRequests.module.css'; 
 
-// Mock fake data with customer location and additional details
 const mockRequests = [
   {
     id: 1,
     customerName: 'John Doe',
-    customerEmail: 'johndoe@example.com',
+    customerPhoto: 'https://via.placeholder.com/50',
     location: 'New York, USA',
     details: 'Request for plumbing service',
   },
   {
     id: 2,
     customerName: 'Jane Smith',
-    customerEmail: 'janesmith@example.com',
+    customerPhoto: 'https://via.placeholder.com/50',
     location: 'Los Angeles, USA',
     details: 'Request for electrical maintenance',
   },
   {
     id: 3,
     customerName: 'Ali Hassan',
-    customerEmail: 'alihassan@example.com',
+    customerPhoto: 'https://via.placeholder.com/50',
     location: 'Amman, Jordan',
     details: 'Request for air conditioning repair',
   },
   {
     id: 4,
     customerName: 'Maryam Abu Ali',
-    customerEmail: 'maryam@example.com',
+    customerPhoto: 'https://via.placeholder.com/50',
     location: 'Ramallah, Palestine',
     details: 'Request for general cleaning service',
   },
 ];
 
 const Requests = () => {
-  const [requests, setRequests] = useState(mockRequests);
+  const [incomingRequests, setIncomingRequests] = useState(mockRequests);
+  const [acceptedRequests, setAcceptedRequests] = useState([]);
+  const [rejectedRequests, setRejectedRequests] = useState([]);
 
-  // Function to handle request acceptance
   const handleAccept = (id) => {
-    alert(`Request from ${id} has been accepted!`);
+    const request = incomingRequests.find((req) => req.id === id);
+    setIncomingRequests(incomingRequests.filter((req) => req.id !== id));
+    setAcceptedRequests([...acceptedRequests, request]);
   };
 
-  // Function to handle request rejection
   const handleReject = (id) => {
-    alert(`Request from ${id} has been rejected!`);
-  };
-
-  // Function to contact the customer
-  const handleContact = (email) => {
-    alert(`You can contact ${email}`);
+    const request = incomingRequests.find((req) => req.id === id);
+    setIncomingRequests(incomingRequests.filter((req) => req.id !== id));
+    setRejectedRequests([...rejectedRequests, request]);
   };
 
   return (
     <div className={styles.requestsPage}>
       <h1>Requests</h1>
-      {requests.length > 0 ? (
-        <div className={styles.requestsList}>
-          {requests.map((request) => (
+
+      <div className={styles.section}>
+        <h2>Incoming Requests</h2>
+        {incomingRequests.length > 0 ? (
+          incomingRequests.map((request) => (
             <div key={request.id} className={styles.requestCard}>
-              <h2>{request.customerName}</h2>
+              <img src={request.customerPhoto} alt={request.customerName} className={styles.customerPhoto} />
+              <h3>{request.customerName}</h3>
               <p><strong>Request:</strong> {request.details}</p>
               <p><strong>Location:</strong> {request.location}</p>
-              <p><strong>Email:</strong> {request.customerEmail}</p>
-
               <div className={styles.requestActions}>
                 <button onClick={() => handleAccept(request.id)} className={styles.acceptBtn}>Accept</button>
                 <button onClick={() => handleReject(request.id)} className={styles.rejectBtn}>Reject</button>
-                <button onClick={() => handleContact(request.customerEmail)} className={styles.contactBtn}>Contact</button>
               </div>
             </div>
-          ))}
-        </div>
-      ) : (
-        <p>No requests submitted yet.</p>
-      )}
+          ))
+        ) : (
+          <p>No incoming requests.</p>
+        )}
+      </div>
+
+      <div className={styles.section}>
+        <h2>Accepted Requests</h2>
+        {acceptedRequests.length > 0 ? (
+          acceptedRequests.map((request) => (
+            <div key={request.id} className={styles.requestCard}>
+              <img src={request.customerPhoto} alt={request.customerName} className={styles.customerPhoto} />
+              <h3>{request.customerName}</h3>
+              <p><strong>Request:</strong> {request.details}</p>
+              <p><strong>Location:</strong> {request.location}</p>
+            </div>
+          ))
+        ) : (
+          <p>No accepted requests.</p>
+        )}
+      </div>
+
+      <div className={styles.section}>
+        <h2>Rejected Requests</h2>
+        {rejectedRequests.length > 0 ? (
+          rejectedRequests.map((request) => (
+            <div key={request.id} className={styles.requestCard}>
+              <img src={request.customerPhoto} alt={request.customerName} className={styles.customerPhoto} />
+              <h3>{request.customerName}</h3>
+              <p><strong>Request:</strong> {request.details}</p>
+              <p><strong>Location:</strong> {request.location}</p>
+            </div>
+          ))
+        ) : (
+          <p>No rejected requests.</p>
+        )}
+      </div>
     </div>
   );
 };
