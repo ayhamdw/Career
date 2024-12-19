@@ -15,6 +15,8 @@ const Settings = () => {
   const [userFirstName,setUserFirstName] = useState("");
   const [userLastName,setUserLastName] = useState("");
   const [bio,setBio] = useState("");
+  const [userInfo,setUserInfo] = useState([]);
+
 
 useEffect(()=>{
   
@@ -55,14 +57,32 @@ useEffect(()=>{
 },[]);
 
 
+
+useEffect(()=>{
+  const fetchUserInfo = async() =>{
+    const email = localStorage.getItem("userEmail");
+    try{
+      const response = await axios.post(`http://localhost:7777/api/user/user`,{email});
+      setUserInfo(response.data.data);
+      console.log(userInfo.profile.firstName)
+      console.log(response.data.data)
+    }
+    catch(error){
+      console.log("Error Fetch User Info:",error);
+    }
+  }
+  fetchUserInfo();
+},[]);
+
+
   return (
     <div className="settings-container">
-      <Sidebar userFirstName={userFirstName} userLastName={userLastName}  />
+      <Sidebar user={userInfo}/>
       
         <Routes>
           <Route path="projects" element={<Projects />} />
           <Route path="portfolio" element={<Portfolio userFirstName={userFirstName} userLastName={userLastName} bio={bio}/>} />
-          <Route path="change-info" element={<ChangeInfo />} />
+          <Route path="change-info" element={<ChangeInfo user={userInfo}/>} />
           <Route path="friend-requests" element={<FriendRequests />} />
           <Route path="friends" element={<Friends />} />
           <Route

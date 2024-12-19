@@ -177,6 +177,26 @@ const getUsersByCategory = async (req, res) => {
   }
 };
 
+const getUserByEmail = async(req, res) => {
+  const {email} = req.body;
+
+  if(!email){
+    return res.status(400).json({success: false, message: 'Email is required'});
+  }
+
+  try{
+    const user = await User.findOne({email});
+    if(!user){
+      return res.tatus(404).json({success: false, message: 'User Not Found'});
+    }
+    res.status(200).json({success: true, data:user});
+    
+  }
+  catch(error){
+    res.status(500).json({success: false, message:error.message});
+  }
+};
+
 
 module.exports = {
    getUserRoleByEmail,
@@ -187,4 +207,5 @@ module.exports = {
    getCoordinatesByEmail,
    getUsersByCategory,
    getReceiveProficientRequestByEmail,
+   getUserByEmail,
   };

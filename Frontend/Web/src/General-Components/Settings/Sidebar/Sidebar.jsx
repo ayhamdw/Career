@@ -1,31 +1,30 @@
-import React, { useEffect,useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import style from "./Sidebar.module.css";
 import { FaProjectDiagram, FaImage, FaUserEdit, FaUserFriends, FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from "../../../AuthContext";
-import axios from "axios"
 
+const Sidebar = ({ user }) => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
-const Sidebar = ({userFirstName,userLastName} ) => {
-  const { logout } = useAuth(); 
-const navigate = useNavigate();
-
-const handleLogout = () => {
-  logout(); 
-  navigate("/signin"); 
-  window.location.reload();
-};
-
+  const handleLogout = () => {
+    logout();
+    navigate("/signin");
+  };
 
   return (
     <div className={style.sidebarContainer}>
       <div className={style.userInfo}>
         <img
-          src="https://via.placeholder.com/100"
+          src={user?.profile?.profileImage || "https://via.placeholder.com/100"}
           alt="User"
           className={style.userPicture}
         />
-        <h2 className={style.userName}>{userFirstName} {userLastName}</h2>
+        <h2 className={style.userName}>
+          {user?.profile?.firstName || "Guest"} {user?.profile?.lastName || ""}
+        </h2>
       </div>
       <ul className={style.sidebarLinks}>
         <Link to="/settings/projects" className={style.sidebarLink}>
@@ -58,17 +57,35 @@ const handleLogout = () => {
             <span>Friends</span>
           </li>
         </Link>
-        
-        {/* Replace Link with a button or div for logout */}
-        <div className={style.sidebarLink} onClick={handleLogout}>
+        <Link className={style.sidebarLink} onClick={handleLogout}>
           <li>
             <FaSignOutAlt className={style.icon} />
             <span>Logout</span>
           </li>
-        </div>
+        </Link>
       </ul>
     </div>
   );
+};
+
+Sidebar.propTypes = {
+  user: PropTypes.shape({
+    profile: PropTypes.shape({
+      firstName: PropTypes.string.isRequired,
+      lastName: PropTypes.string.isRequired,
+      profileImage: PropTypes.string,
+    }),
+  }),
+};
+
+Sidebar.defaultProps = {
+  user: {
+    profile: {
+      firstName: "Guest",
+      lastName: "",
+      profilePicture: null,
+    },
+  },
 };
 
 export default Sidebar;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './ReceivedRequests.module.css';
 import axios from 'axios';
 
@@ -7,7 +7,6 @@ const Requests = () => {
   const [acceptedRequests, setAcceptedRequests] = useState([]);
   const [rejectedRequests, setRejectedRequests] = useState([]);
 
-  const [usersReceived, setUserReceived] = useState([]);
 
   const handleAccept = (id) => {
     const request = incomingRequests.find((req) => req._id === id);
@@ -26,7 +25,6 @@ const Requests = () => {
       const email = localStorage.getItem("userEmail");
       try {
         const response = await axios.post("http://localhost:7777/api/user/ReceiveProficient", { email });
-        setUserReceived(response.data);
         console.log(response.data);
         setIncomingRequests(response.data); 
       } catch (error) {
