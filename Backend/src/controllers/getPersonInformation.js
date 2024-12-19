@@ -131,6 +131,25 @@ const getCoordinatesByEmail = async (req, res) => {
 };
 
 
+const getReceiveProficientRequestByEmail = async (req, res) => {
+  const { email } = req.body;
+  if (!email || typeof email !== 'string') {
+    return res.status(400).json({ message: 'Invalid email provided' });
+  }
+
+  try {
+    const user = await User.findOne({ email })
+      .populate('receiveProficientRequest')  
+      .exec();
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    return res.status(200).json(user.receiveProficientRequest);
+  } catch (error) {
+    console.error('Error retrieving proficient request:', error.message);
+    return res.status(500).json({ message: 'Error retrieving proficient requests' });
+  }
+};
 
 const getUsersByCategory = async (req, res) => {
   const { category } = req.body;
@@ -167,4 +186,5 @@ module.exports = {
    getBioByEmail,
    getCoordinatesByEmail,
    getUsersByCategory,
+   getReceiveProficientRequestByEmail,
   };
