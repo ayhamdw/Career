@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './Requests.module.css'; // Importing the CSS Module
+import styles from './ReceivedRequests.module.css'; // Importing the CSS Module
 
 // Mock fake data with customer location and additional details
 const mockRequests = [

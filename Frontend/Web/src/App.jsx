@@ -12,11 +12,13 @@ import Signup from './Components/Signup/Signup'
 import Verify from './Components/Verify/Verify'
 import Messages from './General-Components/Messages/Messages'
 import Settings from './General-Components/Settings/Settings.jsx';
-import Requests from './General-Components/Requests/Requests.jsx'
+import ReceivedRequests from './General-Components/Requests/ReceivedRequests/ReceivedRequests.jsx';
+import SentRequests from './General-Components/Requests/SentRequests/SentRequests.jsx';
 import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 import ServiceProvider from './Components/ServiceProvider/ServiceProvider.jsx'
 import Community from './General-Components/Community/Community.jsx';
+// import Resiv
 const router = createBrowserRouter([
   {
     path: "/",
@@ -30,7 +32,8 @@ const router = createBrowserRouter([
       { path: "/messages", element: <ProtectedRoute><Messages /></ProtectedRoute> },
       { path: "/service-provider", element: <ProtectedRoute><ServiceProvider /></ProtectedRoute> },
       { path: "/community", element: <Community /> },
-      { path: "/requests", element: <ProtectedRoute><Requests /></ProtectedRoute> },
+      { path: "/requests/sent", element: <ProtectedRoute><SentRequests /></ProtectedRoute> },
+      { path: "/requests/received", element: <ProtectedRoute><ReceivedRequests /></ProtectedRoute> },
       { path: "settings/*", element: <ProtectedRoute><Settings /></ProtectedRoute> },
       { path: "*", element: <NotFound /> },
       
