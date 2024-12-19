@@ -456,10 +456,7 @@ const Community = ({ userCareer }) => {
               </div>
             
               <div className={styles.actions}>
-                {post.userRole === "admin" && userRole === "admin" && (post.user._id !== currentUserId) && (
-                  <button className={styles.applyBtn} onClick={()=> handleApplyForThisJop(post.user._id,currentUserId, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
-                )}
-                {post.userRole !== "admin" && userRole === "admin" && (post.user._id !== currentUserId) && (
+                {(post.user._id !== currentUserId) && (
                   <button className={styles.applyBtn} onClick={()=> handleApplyForThisJop(post.user._id,currentUserId, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
                 )}
                 {(post.user._id === currentUserId) && (
