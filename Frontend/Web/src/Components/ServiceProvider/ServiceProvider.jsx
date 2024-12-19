@@ -96,9 +96,7 @@ const ServiceProvider = () => {
         </ul>
       </div>
 
-      <div className={styles.providersList}>
-        {error && <p className={styles.error}>{error}</p>}
-        <div className={styles.searchContainer}>
+      <div className={styles.searchContainer}>
           <input
             type="text"
             placeholder="Search for a provider by name"
@@ -107,6 +105,10 @@ const ServiceProvider = () => {
             className={styles.searchInput}
           />
         </div>
+
+      <div className={styles.providersList}>
+        {error && <p className={styles.error}>{error}</p>}
+        
         {filteredProviders.length > 0 ? (
           filteredProviders.map((provider, index) => (
             <div key={index} className={styles.providerCard}>
@@ -128,7 +130,6 @@ const ServiceProvider = () => {
                   )}
                   {provider.verificationStatus ? 'Verified by Practical Certificate' : 'Not Verified'}
                 </p>
-
                 <div className={styles.buttons}>
                   <button
                     onClick={() => handleProfileClick(provider._id)}

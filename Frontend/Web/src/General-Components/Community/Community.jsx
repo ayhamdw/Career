@@ -219,7 +219,7 @@ const Community = ({ userCareer }) => {
 
   };
 
-  const handleApplyForThisJop = async (postId, userId, date, [longitude,latitude]) => {
+  const handleApplyForThisJop = async (proficientId, userId, requestDateTime, [longitude,latitude]) => {
     try {
       const token = localStorage.getItem("token"); 
   
@@ -230,12 +230,12 @@ const Community = ({ userCareer }) => {
         const response = await axios.post(
         `http://localhost:7777/api/proficient/booking-proficient`, 
         {
-          postId,
+          proficientId,
           userId,
-          date,
+          requestDateTime,
           location:{
-            longitude,
             latitude,
+            longitude
           }
         },
         {
@@ -245,11 +245,6 @@ const Community = ({ userCareer }) => {
         }
         
       );
-        console.log("postId: ",postId);
-        console.log("userId: ",userId);
-        console.log("Date ",date);
-        console.log("location [",longitude," , ",latitude,"]");
-        // console.log("Successfully applied for the job:", response.data);
     } catch (error) {
       console.log("Error Apply Job: ", error);
     }
@@ -462,10 +457,10 @@ const Community = ({ userCareer }) => {
             
               <div className={styles.actions}>
                 {post.userRole === "admin" && userRole === "admin" && (post.user._id !== currentUserId) && (
-                  <button className={styles.applyBtn} onClick={()=> handleApplyForThisJop(post._id,post.user._id, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
+                  <button className={styles.applyBtn} onClick={()=> handleApplyForThisJop(post.user._id,currentUserId, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
                 )}
                 {post.userRole !== "admin" && userRole === "admin" && (post.user._id !== currentUserId) && (
-                  <button className={styles.applyBtn} onClick={()=> handleApplyForThisJop(post._id,post.user._id, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
+                  <button className={styles.applyBtn} onClick={()=> handleApplyForThisJop(post.user._id,currentUserId, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
                 )}
                 {(post.user._id === currentUserId) && (
                   <button className={styles.deleteBtn} onClick={()=>handleDeletePost(post._id)}>Delete post</button>
