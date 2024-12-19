@@ -1,6 +1,7 @@
 const User = require("../models/user2");
 const Booking = require("../models/Booking");
 const axios = require("axios");
+
 const getProficientData = async (req, res) => {
   try {
     const { id, careerCategory } = req.query;

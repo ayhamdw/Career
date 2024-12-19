@@ -58,7 +58,6 @@ const Community = ({ userCareer }) => {
         const email = localStorage.getItem("userEmail");
         const response = await axios.post("http://localhost:7777/api/user/id", { email });
         setCurrentUserId(response.data.userId);
-        // console.log(response.data.userId);
       } catch (error) {
         console.error("Error fetching user ID:", error);
       }

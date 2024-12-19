@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './ReceivedRequests.module.css'; 
+import axios from 'axios'
 
 const mockRequests = [
   {
@@ -37,6 +38,8 @@ const Requests = () => {
   const [acceptedRequests, setAcceptedRequests] = useState([]);
   const [rejectedRequests, setRejectedRequests] = useState([]);
 
+  const [usersReceived, setUserReceived] = useState([]);
+
   const handleAccept = (id) => {
     const request = incomingRequests.find((req) => req.id === id);
     setIncomingRequests(incomingRequests.filter((req) => req.id !== id));
@@ -49,9 +52,24 @@ const Requests = () => {
     setRejectedRequests([...rejectedRequests, request]);
   };
 
+
+  useEffect( ()=>{
+    const getProficientData = async () =>{
+      try{
+        const response = await axios.get("http://localhost:7777/api/proficient/proficient-data");
+        setUserReceived(response.data);
+        console.log(response.data)
+      }
+      catch(error){
+        console.log("Error Fetch Received Requests: ",error);
+      }
+    }
+    getProficientData();
+  },[]);
+
   return (
     <div className={styles.requestsPage}>
-      <h1>Requests</h1>
+      <h1>Received Requests</h1>
 
       <div className={styles.section}>
         <h2>Incoming Requests</h2>
