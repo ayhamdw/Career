@@ -207,25 +207,25 @@ const userSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-    acceptRequestsSent: [
+    acceptedRequestsSent: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
     ],
-    acceptRequestReceived: [
+    acceptedRequestReceived: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
     ],
-    acceptRequestCurrently: [
+    acceptedRequestCurrently: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
     ],
-    acceptRequestFinished: [
+    acceptedRequestFinished: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

@@ -29,7 +29,9 @@ const createPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().populate("user", "username firstName lastName");
+    const posts = await Post.find()
+      .populate("user", "username profile email role city") 
+      .exec();
     res.status(200).send(posts);
   } catch (error) {
     res.status(400).send({ error: "Error fetching posts" });

@@ -17,6 +17,7 @@ function Navbar() {
   const [isRequestsDropdownOpen, setIsRequestsDropdownOpen] = useState(false); 
 
   const [profileImage,setProfileImage] = useState(null);
+  const [userName, setUserName] = useState('');
 
 useEffect(()=>{
   const email = localStorage.getItem("userEmail");
@@ -25,6 +26,8 @@ useEffect(()=>{
       try{
       const response = await axios.post("http://localhost:7777/api/user/user",{email});
       setProfileImage(response.data.data.profile.profileImage);
+      const {firstName, lastName} = response.data.data.profile;
+      setUserName(firstName + " "+ lastName);
       console.lof(response.data)
       }
   catch(error){
@@ -112,6 +115,7 @@ useEffect(()=>{
             {isAuthenticated ? (
               <Link to="/settings" className="profile-icon-link">
                 <img src={profileImage} alt="Profile" className="profile-icon" />
+                <p>{userName}</p>
               </Link>
             ) : (
               <>

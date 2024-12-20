@@ -438,11 +438,11 @@ const Community = ({ userCareer }) => {
               <div className={styles.posterInfo}>
                 <img src={userImage} alt="User" className={styles.posterImage} />
                 <div>
-                  <p className={styles.posterName}>{post.userFirstName} {post.userLastName}</p>
+                  <p className={styles.posterName}>{post.user.profile.firstName} {post.user.profile.lastName}</p>
                   <p className={styles.posterCareer}>{post.userRole === "admin" ? "Service Provider" : "Client"}</p>
                 </div>
               </div>
-            
+              <p className={styles.postContent}>{post.user.city}</p>
               <h3 className={styles.postTitle}>{post.title}</h3>
               <p className={styles.postContent}>{post.content}</p>
               
