@@ -66,6 +66,7 @@ const userSchema = new mongoose.Schema(
     dateOfBirth: {
       type: Date,
       required: true,
+      // default: '00-00-0000',
     },
     career: {
       type: String,
@@ -89,7 +90,7 @@ const userSchema = new mongoose.Schema(
     profile: {
       firstName: { type: String, required: true, trim: true },
       lastName: { type: String, required: true, trim: true },
-      phone: { type: Number, required: true, trim: true },
+      phone: { type: Number, default:0, trim: true },
       numberOfRequest: {
         type: Number,
         default: 0,
