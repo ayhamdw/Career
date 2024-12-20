@@ -1,7 +1,14 @@
+import React, { useEffect } from "react";
+import {
+  View,
+  ScrollView,
+  Modal,
+  Text,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import Header from "@/components/HomePage/Header";
 import SearchBar from "@/components/HomePage/SearchBar";
-import React, { useEffect } from "react";
-import { View, ScrollView } from "react-native";
 import TipsHeader from "@/components/HomePage/TipsHeader";
 import TipsImage from "@/components/HomePage/TipsImage";
 import ProfRecommendation from "@/components/HomePage/ProfRecommendation";
@@ -11,6 +18,7 @@ import { ayhamWifiUrl } from "@/constants/Urls";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
+import SearchModal from "@/components/HomePage/Modal";
 
 interface Location {
   type: string;
@@ -58,6 +66,7 @@ interface User {
 const HomePage = ({ user }: { user: User }) => {
   const navigation = useNavigation();
   const [search, setSearch] = React.useState<string>("");
+  const [isModalVisible, setIsModalVisible] = React.useState<boolean>(false);
   const [selectedFilter, setSelectedFilter] =
     React.useState<string>("All Proficient");
   const [users, setUsers] = React.useState<User[]>([]);
@@ -71,6 +80,7 @@ const HomePage = ({ user }: { user: User }) => {
     "Legal & Financial Services",
     "Other",
   ];
+
   const handleCardPress = (proficientDetails: {
     profile: {
       firstName: string;
@@ -116,6 +126,7 @@ const HomePage = ({ user }: { user: User }) => {
       console.log("Error fetching user:", error);
     }
   };
+
   const handleFilterPress = (filter: string) => {
     console.log("Filter:", filter);
     setSelectedFilter(filter);
@@ -125,22 +136,26 @@ const HomePage = ({ user }: { user: User }) => {
   useEffect(() => {
     fetchUser(selectedFilter);
   }, [user]);
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <Header name={user.profile.firstName + " " + user.profile.lastName} />
-
         <SearchBar
           placeholder="Search for jobs"
           value={search}
           onChangeText={setSearch}
+          onFocus={() => setIsModalVisible(true)} // Show modal on focus
         />
-
+        <SearchModal
+          isVisible={isModalVisible}
+          onClose={() => setIsModalVisible(false)}
+        />{" "}
+        {/* Modal Component */}
         <View style={styles.tipsSection}>
           <TipsHeader title="Tips For You" buttonText="See All" />
           <TipsImage />
         </View>
-
         <View style={styles.proficientRecommendationStyle}>
           <TipsHeader title="Proficient Recommendation" buttonText="See All" />
           <ProfRecommendation

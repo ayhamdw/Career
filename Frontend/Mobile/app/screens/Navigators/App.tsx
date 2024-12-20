@@ -11,6 +11,7 @@ import Main from "./Main";
 import CustomTabNavigator from "./CustomTabNavigator";
 import { NavigationIndependentTree } from "@react-navigation/native";
 import { StatusBar } from "react-native";
+import Modal from "@/components/HomePage/Modal";
 
 const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);

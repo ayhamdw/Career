@@ -82,7 +82,7 @@ const userSchema = new mongoose.Schema(
         "Creative Services",
         "Legal & Financial Services",
         "Other",
-      ], // Define specific categories
+      ],
       trim: true,
     },
     profile: {
