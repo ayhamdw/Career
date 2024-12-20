@@ -7,12 +7,14 @@ interface SearchBarProps {
   placeholder: string;
   value: string;
   onChangeText: (text: string) => void;
+  onFocus?: () => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
   placeholder,
   value,
   onChangeText,
+  onFocus,
 }) => {
   return (
     <View style={styles.searchBarContainer}>
@@ -21,6 +23,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         value={value}
         onChangeText={onChangeText}
         style={styles.SearchBarStyle}
+        onFocus={onFocus}
       />
       <AntDesign
         name="search1"
