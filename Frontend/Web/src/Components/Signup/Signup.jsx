@@ -441,7 +441,7 @@ function Signup() {
 
             {/* Profile Image */}
             <div className={style.imageField}>
-              <label htmlFor="profileImage">Profile Image</label>
+              <label htmlFor="profileImage">Profile Image (Optional)</label>
               <input type="file" name="profileImage" id="profileImage" accept="image/*" onChange={handleFileChange} />
             </div>
 
