@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const signupValidation = (data) => {
   const schema = Joi.object({
-    username: Joi.string().min(3).max(20).required().trim().messages({
+    username: Joi.string().messages({
       "string.base": "Username must be a string.",
       "string.empty": "Username cannot be empty.",
       "string.min": "Username must have at least 3 characters.",
