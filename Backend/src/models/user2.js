@@ -20,9 +20,10 @@ const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      required: true,
+      // required: true,
       unique: true,
       trim: true,
+      default: ''
     },
     email: {
       type: String,
@@ -129,6 +130,28 @@ const userSchema = new mongoose.Schema(
       default: "",
       required: false,
     },
+    rating: {
+      type: [Number],  
+      default: [],
+      required: false,
+    },
+    certificate: {
+      isCertified: {
+        type: Boolean,
+        default: false 
+      },
+      certificateFile: {
+        type: String, 
+        default: ''
+      },
+      verificationStatus: {
+        type: String,
+        enum: ['pending', 'verified', 'rejected'],
+        default: 'pending'
+      }
+    },
+
+
     tokens: [
       {
         token: {

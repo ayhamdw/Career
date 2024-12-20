@@ -28,13 +28,13 @@ const signinController = async (req, res, next) => {
     const token = await user.generateAuthToken();
     // await User.generateFakeData();
     // sendWelcomeEmail(user.email, user.profile.firstName);
-    res.send({
+    res.status(200).send({
       user,
       token,
       verificationStatus: user.verificationStatus,
     });
   } catch (error) {
-    console.log("Error inside the Login");
+    console.log("Error inside the Login",error);
     next(error);
   }
 };

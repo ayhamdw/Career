@@ -310,7 +310,7 @@ function Signup() {
             {/* Username */}
             <div className={style.field}>
               <label>Username</label>
-              <input type="text" name="username" value={user.username} onChange={handleChange} required
+              <input type="text" name="username" value={user.username} onChange={handleChange} 
                 style={{ border: usernameExist ? '1px solid red' : '' }}
               />
               {usernameExist === true && <p style={{ color: 'red' }}>Username Already Exist</p>}
@@ -338,7 +338,7 @@ function Signup() {
             {/* Role */}
             <div className={style.field}>
               <label>Role</label>
-              <select name="role" value={user.role} onChange={handleChange} required>
+              <select name="role" value={user.role} onChange={handleChange} >
                 <option value="">Select Role</option>
                 <option value="user">user</option>
                 <option value="admin">admin</option>
