@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const customError = require("../middleware/error/customError");
 const { faker } = require("@faker-js/faker");
-const { required } = require("joi");
+const { required, string } = require("joi");
 require("dotenv").config();
 const careerCategories = [
   "Technical Services",
@@ -20,10 +20,10 @@ const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      // required: true,
-      unique: true,
+      // required: false,
+      unique: false,
       trim: true,
-      default: ''
+      default: "",
     },
     email: {
       type: String,
@@ -136,6 +136,10 @@ const userSchema = new mongoose.Schema(
       default: [],
       required: false,
     },
+    houreRate:{
+      type: Number,
+      default: 0,
+    },
     certificate: {
       isCertified: {
         type: Boolean,
@@ -186,6 +190,42 @@ const userSchema = new mongoose.Schema(
       },
     ],
     receiveProficientRequest: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    rejectedRequestSent: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    rejectedRequestReceived: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    acceptedRequestsSent: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    acceptedRequestReceived: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    acceptedRequestCurrently: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    acceptedRequestFinished: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
