@@ -1,6 +1,7 @@
 const User = require("../models/user2");
 const Booking = require("../models/Booking");
 const axios = require("axios");
+
 const getProficientData = async (req, res) => {
   try {
     const { id, careerCategory } = req.query;
@@ -56,8 +57,7 @@ const createBooking = async (req, res) => {
     const locationAPI = await axios.get(
       `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=en`
     );
-    const city = locationAPI.data.address.city;
-
+    const city = locationAPI.data.address.city || "Unknown City";
     const user = await User.findById(userId);
     const provider = await User.findById(proficientId);
 
@@ -82,6 +82,7 @@ const createBooking = async (req, res) => {
     await provider.save();
     await booking.save();
     res.status(200).json({ message: "Booking request sent" });
+    console.log("Booking request sent")
   } catch (error) {
     console.log(error);
   }

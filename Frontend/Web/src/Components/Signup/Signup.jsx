@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
+
+
 function Signup() {
   const [user, setUser] = useState({
     username: "",
@@ -127,12 +129,45 @@ function Signup() {
     }
   };
 
-  const handleFileChange = (e) => {
+
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
+  
     if (file) {
-      setUser((prev) => ({ ...prev, profileImage: file }));
+      if (file.type.startsWith('image/')) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'your_upload_preset'); // Cloudinary upload preset
+  
+        try {
+          // Upload the file to Cloudinary (replace with your API for other services)
+          const response = await fetch('https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', {
+            method: 'POST',
+            body: formData,
+          });
+  
+          const data = await response.json();
+          if (data.secure_url) {
+            setUser((prev) => ({
+              ...prev,
+              profileImage: data.secure_url, // Store the image URL in state
+            }));
+            toast.success('Image uploaded successfully!');
+          }
+        } catch (error) {
+          toast.error('Error uploading image');
+        }
+      } else {
+        toast.error('Please upload a valid image file');
+      }
     }
   };
+  
+
+
+  
+
+
   const notifySuccess = () => {
     toast.success("Successfully registered!", {
       position: "top-right",
@@ -191,18 +226,24 @@ function Signup() {
     formData.append("dateOfBirth", user.dateOfBirth);
     formData.append("careerCategory", user.careerCategory);
 
+    formData.append('username', user.username);
+    formData.append('email', user.email);
+    formData.append('password', user.password);
+    formData.append('role', 'user');
+    formData.append('gender', user.gender);
+    formData.append('city', user.city);
+    formData.append('dateOfBirth', user.dateOfBirth);
+    formData.append('careerCategory', user.careerCategory);
+    
     // Send profile data as a nested object
-    formData.append("profile[firstName]", user.firstName);
-    formData.append("profile[lastName]", user.lastName);
-    formData.append("profile[phone]", user.phone);
-    formData.append("profile[bio]", user.bio);
-    formData.append("profile[experience]", user.experience);
-    formData.append(
-      "profile[profileImage]",
-      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA..."
-    );
-
-    formData.append("profile[location][type]", "Point");
+    formData.append('profile[firstName]', user.firstName);
+    formData.append('profile[lastName]', user.lastName);
+    formData.append('profile[phone]', user.phone);
+    formData.append('profile[bio]', '');
+    formData.append('profile[experience]', user.experience);
+    formData.append('profile[profileImage]', 'https://placehold.co/400');
+    
+    formData.append('profile[location][type]', "Point");
     // Send profileImage if it exists
     // if (user.profileImage) {
     //   formData.append('profile[profileImage]', user.profileImage);
@@ -211,15 +252,18 @@ function Signup() {
     formData.append("profile[location][coordinates][0]", user.coordinates[0]);
     formData.append("profile[location][coordinates][1]", user.coordinates[1]);
 
-    formData.append("friendRequests[0]", "5f9a8b8f8c8d8e8b8f8a8b8c");
-    formData.append("friends[0]", "5f9a8b8f8c8d8e8b8f8a8b8c");
-    formData.append("sendRequests[0]", "5f9a8b8f8c8d8e8b8f8a8b8c");
-    formData.append("tokens[0][token]", "replace with actual api");
-    formData.append("sendProficientRequests[]", user.sendProficientRequests[0]);
-    formData.append(
-      "receiveProficientRequest[]",
-      user.receiveProficientRequest[0]
-    );
+
+    formData.append('profile[location][coordinates][0]', user.coordinates[0]);
+    formData.append('profile[location][coordinates][1]', user.coordinates[1]);
+
+
+    formData.append('friendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c');
+    formData.append('friends[0]', '5f9a8b8f8c8d8e8b8f8a8b8c');
+    formData.append('sendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c');
+    formData.append('tokens[0][token]', "actual api");
+    formData.append('sendProficientRequests[]', user.sendProficientRequests[0]);
+    formData.append('receiveProficientRequest[]', user.receiveProficientRequest[0]);
+
 
     if (!user.verificationCode) {
       sendVerificationCode(user.email);
@@ -280,20 +324,9 @@ function Signup() {
           </div>
           <form onSubmit={handleSubmit} className={style.inputFields}>
             {/* Username */}
-            <div className={style.field}>
+            {/* <div className={style.field}>
               <label>Username</label>
-              <input
-                type="text"
-                name="username"
-                value={user.username}
-                onChange={handleChange}
-                required
-                style={{ border: usernameExist ? "1px solid red" : "" }}
-              />
-              {usernameExist === true && (
-                <p style={{ color: "red" }}>Username Already Exist</p>
-              )}
-            </div>
+
 
             {/* Email */}
             <div className={style.field}>
@@ -322,19 +355,10 @@ function Signup() {
             </div>
 
             {/* Role */}
-            <div className={style.field}>
+            {/* <div className={style.field}>
               <label>Role</label>
-              <select
-                name="role"
-                value={user.role}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Role</option>
-                <option value="user">user</option>
-                <option value="admin">admin</option>
-              </select>
-            </div>
+
+            </div> */}
 
             {/* Gender */}
             <div className={style.field}>
@@ -462,41 +486,11 @@ function Signup() {
             </div>
 
             {/* Phone */}
-            <div className={style.field}>
+            {/* <div className={style.field}>
               <label>Phone</label>
-              <input
-                type="text"
-                name="phone"
-                value={user.phone}
-                onChange={handleChange}
-                required
-              />
-            </div>
 
-            {/* Bio */}
-            <div className={style.field}>
-              <label>Bio</label>
-              <textarea
-                name="bio"
-                value={user.bio}
-                onChange={handleChange}
-                placeholder="Tell us a little about yourself"
-                rows="4"
-                required
-              />
-            </div>
-
-            {/* Experience */}
-            <div className={style.field}>
               <label>Your Experience (Number of Years)</label>
-              <input
-                type="text"
-                name="experience"
-                value={user.experience}
-                onChange={handleChange}
-                required
-              />
-            </div>
+
 
             {/* Profile Image */}
             <div className={style.imageField}>
@@ -508,6 +502,14 @@ function Signup() {
                 accept="image/*"
                 onChange={handleFileChange}
               />
+
+              <input type="text" name="experience" value={user.experience} onChange={handleChange} required />
+            </div> */}
+
+            {/* Profile Image */}
+            <div className={style.imageField}>
+              <label htmlFor="profileImage">Profile Image (Optional)</label>
+              <input type="file" name="profileImage" id="profileImage" accept="image/*" onChange={handleFileChange} />
             </div>
 
             <button type="submit" className={style.signUpButton}>

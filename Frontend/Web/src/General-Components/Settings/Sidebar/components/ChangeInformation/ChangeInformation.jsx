@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ChangeInformation.css';
 
-const ChangeInformation = () => {
+const ChangeInformation = ({user}) => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -35,8 +35,6 @@ const ChangeInformation = () => {
     <div className="change-information-container">
       <h1>Change Your Information</h1>
       <form onSubmit={handleSubmit}>
-
-        {/* Personal Information Card */}
         <div className="card">
           <div className="card-header">
             <h2>Personal Information</h2>
@@ -49,7 +47,7 @@ const ChangeInformation = () => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-                placeholder="Enter your first name"
+                placeholder={user.profile.firstName}
               />
             </div>
             <div className="form-group">
@@ -59,7 +57,7 @@ const ChangeInformation = () => {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                placeholder="Enter your last name"
+                placeholder={user.profile.lastName}
               />
             </div>
             <div className="form-group">
@@ -100,7 +98,7 @@ const ChangeInformation = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your email"
+                placeholder={user.email}
               />
             </div>
             <div className="form-group">
@@ -110,7 +108,7 @@ const ChangeInformation = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                placeholder="Enter your phone number"
+                placeholder={user.profile.phone}
               />
             </div>
             <div className="form-group">
@@ -120,7 +118,7 @@ const ChangeInformation = () => {
                 name="city"
                 value={formData.city}
                 onChange={handleChange}
-                placeholder="Enter your city"
+                placeholder={user.city}
               />
             </div>
           </div>
@@ -139,7 +137,7 @@ const ChangeInformation = () => {
                 name="career"
                 value={formData.career}
                 onChange={handleChange}
-                placeholder="Enter your career"
+                placeholder={user.career}
               />
             </div>
             <div className="form-group">
@@ -149,7 +147,7 @@ const ChangeInformation = () => {
                 name="careerCategory"
                 value={formData.careerCategory}
                 onChange={handleChange}
-                placeholder="Enter your career category"
+                placeholder={user.careerCategory}
               />
             </div>
           </div>
@@ -168,7 +166,7 @@ const ChangeInformation = () => {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                placeholder="Enter your username"
+                placeholder={user.username}
               />
             </div>
             <div className="form-group">
@@ -178,7 +176,7 @@ const ChangeInformation = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Enter a new password"
+                
               />
             </div>
           </div>
@@ -196,7 +194,7 @@ const ChangeInformation = () => {
                 name="bio"
                 value={formData.bio}
                 onChange={handleChange}
-                placeholder="Write a short bio"
+                placeholder={user.profile.bio}
               />
             </div>
             <div className="form-group">
@@ -205,7 +203,7 @@ const ChangeInformation = () => {
                 name="experience"
                 value={formData.experience}
                 onChange={handleChange}
-                placeholder="Describe your experience"
+                placeholder={user.profile.experience}
               />
             </div>
           </div>

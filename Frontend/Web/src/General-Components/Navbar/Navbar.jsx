@@ -5,6 +5,7 @@ import '../../main.css'
 import { Link } from 'react-router-dom'
 import logo from '../../../src/assets/logo.png'
 import ProfileIcon from './profile.png'; 
+import axios from "axios";
 
 
 
@@ -13,6 +14,25 @@ function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isRequestsDropdownOpen, setIsRequestsDropdownOpen] = useState(false); 
+
+  const [profileImage,setProfileImage] = useState(null);
+
+useEffect(()=>{
+  const email = localStorage.getItem("userEmail");
+  
+    const fetchImage= async()=>{
+      try{
+      const response = await axios.post("http://localhost:7777/api/user/user",{email});
+      setProfileImage(response.data.data.profile.profileImage);
+      console.lof(response.data)
+      }
+  catch(error){
+    console.log("Error");
+  }
+}
+  fetchImage();
+},[]);
 
 
   useEffect(() => {
@@ -42,6 +62,11 @@ function Navbar() {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  const toggleRequestsDropdown = () => {
+    setIsRequestsDropdownOpen(!isRequestsDropdownOpen); 
+  };
+
   
   return (
     <header className="navbar">
@@ -57,7 +82,18 @@ function Navbar() {
           >
             <ul>
               <li><Link to="/" className="nav-item">Home</Link></li>
-              <li><Link to="/requests" className="nav-item">Requests</Link></li>
+              <li
+                className="nav-item dropdown"
+                onClick={toggleRequestsDropdown}
+              >
+                Requests
+                {isRequestsDropdownOpen && (
+                  <ul className="dropdown-menu">
+                    <li><Link to="/requests/sent">Sent Requests</Link></li>
+                    <li><Link to="/requests/received">Received Requests</Link></li>
+                  </ul>
+                )}
+              </li>
               <li><Link to="/messages" className="nav-item">Messages</Link></li>
               <li><Link to="/community" className="nav-item">Community</Link></li>
               <li><Link to="/settings" className="nav-item">Profile</Link></li>
@@ -75,7 +111,7 @@ function Navbar() {
           <div className="auth-links">
             {isAuthenticated ? (
               <Link to="/settings" className="profile-icon-link">
-                <img src={ProfileIcon} alt="Profile" className="profile-icon" />
+                <img src={profileImage} alt="Profile" className="profile-icon" />
               </Link>
             ) : (
               <>

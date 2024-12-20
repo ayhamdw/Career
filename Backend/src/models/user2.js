@@ -20,9 +20,10 @@ const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      required: true,
+      // required: true,
       unique: true,
       trim: true,
+      default: ''
     },
     email: {
       type: String,
@@ -65,6 +66,7 @@ const userSchema = new mongoose.Schema(
     dateOfBirth: {
       type: Date,
       required: true,
+      // default: '00-00-0000',
     },
     career: {
       type: String,
@@ -88,7 +90,7 @@ const userSchema = new mongoose.Schema(
     profile: {
       firstName: { type: String, required: true, trim: true },
       lastName: { type: String, required: true, trim: true },
-      phone: { type: String, required: true, trim: true },
+      phone: { type: Number, default:0, trim: true },
       numberOfRequest: {
         type: Number,
         default: 0,
@@ -105,11 +107,11 @@ const userSchema = new mongoose.Schema(
         },
       },
       bio: { type: String, trim: true },
-      experience: { type: String, trim: true, default: "" },
+      experience: { type: Number, trim: true, default: "" },
       profileImage: { type: String, trim: true, default: "" },
       ratings: [
         {
-          rating: { type: Number, required: true, default: 0 },
+          ratings: { type: Number, required: true, default: 0 },
           review: { type: String, trim: true, default: "" },
           userId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -129,6 +131,28 @@ const userSchema = new mongoose.Schema(
       default: "",
       required: false,
     },
+    rating: {
+      type: [Number],  
+      default: [],
+      required: false,
+    },
+    certificate: {
+      isCertified: {
+        type: Boolean,
+        default: false 
+      },
+      certificateFile: {
+        type: String, 
+        default: ''
+      },
+      verificationStatus: {
+        type: String,
+        enum: ['pending', 'verified', 'rejected'],
+        default: 'pending'
+      }
+    },
+
+
     tokens: [
       {
         token: {
