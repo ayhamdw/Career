@@ -24,6 +24,7 @@ const Community = ({ userCareer }) => {
   const [userFirstName, setUserFirstName] = useState("");
   const [userLastName, setUserLasttName] = useState("");
   const [userCoordinates, setUserCoordinates] = useState([]);
+  const [isRequestSent, setIsRequestSent] = useState(false);
 
   const categories = [
     "Home Services",
@@ -88,39 +89,39 @@ const Community = ({ userCareer }) => {
       }
     };
 
-    const fetchFirstName = async () =>{
-      try{
+    const fetchFirstName = async () => {
+      try {
         const email = localStorage.getItem("userEmail");
-        const response = await axios.post("http://localhost:7777/api/user/firstName",{email});
+        const response = await axios.post("http://localhost:7777/api/user/firstName", { email });
         setUserFirstName(response.data.firstName);
         console.log(response.data.firstName)
-        
-      }catch(error){
-          console.error("Error Fetching user FirstName: ", error);
+
+      } catch (error) {
+        console.error("Error Fetching user FirstName: ", error);
       }
     }
-    const fetchLastName = async () =>{
-      try{
+    const fetchLastName = async () => {
+      try {
         const email = localStorage.getItem("userEmail");
-        const response = await axios.post("http://localhost:7777/api/user/lastName",{email});
+        const response = await axios.post("http://localhost:7777/api/user/lastName", { email });
         setUserLasttName(response.data.lastName);
         console.log(response.data.lastName)
-        
-      }catch(error){
-          console.error("Error Fetching user LastName: ", error);
+
+      } catch (error) {
+        console.error("Error Fetching user LastName: ", error);
       }
     }
 
     const fetchCoordinates = async () => {
-      try{
+      try {
         const email = localStorage.getItem("userEmail");
-        const response = await axios.post(`http://localhost:7777/api/user/coordinates`,{email});
-        const {longitude, latitude} = response.data;
-        setUserCoordinates([longitude,latitude]);
+        const response = await axios.post(`http://localhost:7777/api/user/coordinates`, { email });
+        const { longitude, latitude } = response.data;
+        setUserCoordinates([longitude, latitude]);
         console.log(userCoordinates);
       }
-      catch(error){
-        console.error("Coordinates Error: ",error);
+      catch (error) {
+        console.error("Coordinates Error: ", error);
       }
     }
 
@@ -179,9 +180,9 @@ const Community = ({ userCareer }) => {
       window.location.reload();
 
 
-      
+
       setPosts([response.data, ...posts]);
-      
+
       setForm({ title: "", content: "", careerCategory: "", location: "" });
       setIsModalOpen(false);
     } catch (error) {
@@ -194,45 +195,45 @@ const Community = ({ userCareer }) => {
   const handleDeletePost = async (postId) => {
 
     const isConfirmed = window.confirm("Are you sure you want to delete this post?");
-    if(isConfirmed){
-          const token = localStorage.getItem('token');
-  
-    if (!token) {
-      toast.error("You need to log in first.");
-      setTimeout(() => {
-        window.location.href = "/signin";
-      }, 2000);
-      return;
-    }
-  
-    try {
-      const response = await axios.delete(`http://localhost:7777/api/community/deletePost/${postId}`);
-      toast.success(response.data.message);
-      setPosts(posts.filter(post => post._id !== postId));
-    } catch (error) {
-      console.error('Error deleting post:', error);
-      toast.error(error.response?.data?.message || 'Failed to delete post.');
-    }
+    if (isConfirmed) {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        toast.error("You need to log in first.");
+        setTimeout(() => {
+          window.location.href = "/signin";
+        }, 2000);
+        return;
+      }
+
+      try {
+        const response = await axios.delete(`http://localhost:7777/api/community/deletePost/${postId}`);
+        toast.success(response.data.message);
+        setPosts(posts.filter(post => post._id !== postId));
+      } catch (error) {
+        console.error('Error deleting post:', error);
+        toast.error(error.response?.data?.message || 'Failed to delete post.');
+      }
 
     }
 
   };
 
-  const handleApplyForThisJop = async (proficientId, userId, requestDateTime, [longitude,latitude]) => {
+  const handleApplyForThisJop = async (proficientId, userId, requestDateTime, [longitude, latitude]) => {
     try {
-      const token = localStorage.getItem("token"); 
-  
+      const token = localStorage.getItem("token");
+
       if (!token) {
         console.log("No token found. Please log in again.");
         return;
       }
-        const response = await axios.post(
-        `http://localhost:7777/api/proficient/booking-proficient`, 
+      const response = await axios.post(
+        `http://localhost:7777/api/proficient/booking-proficient`,
         {
           proficientId,
           userId,
           requestDateTime,
-          location:{
+          location: {
             latitude,
             longitude
           }
@@ -242,13 +243,16 @@ const Community = ({ userCareer }) => {
             Authorization: `Bearer ${token}`,
           },
         }
-        
+
       );
+      if (response.status === 200) {
+        toast.success("Request Sent Successfully")
+      }
     } catch (error) {
       console.log("Error Apply Job: ", error);
     }
   };
-  
+
 
   return (
     <div className={styles.communityContainer}>
@@ -371,103 +375,48 @@ const Community = ({ userCareer }) => {
               </div>
             </div>
           )}
-          {/* {isModalOpen && userRole === "user" && (
-            <div className={styles.modal}>
-              <div className={styles.modalContent}>
-                <form onSubmit={handleSubmit}>
-                  <h2>Create a New Post</h2>
-
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder="Post Title"
-                    value={form.title}
-                    onChange={handleInputChange}
-                    required
-                  />
-
-                  <textarea
-                    name="content"
-                    placeholder="Post Content"
-                    value={form.content}
-                    onChange={handleInputChange}
-                    required
-                  />
-
-                  <select
-                    name="careerCategory"
-                    value={form.careerCategory}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Select Category</option>
-                    {categories.map((category, index) => (
-                      <option key={index} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-
-                  <input
-                    type="text"
-                    name="location"
-                    placeholder="Location"
-                    value={form.location}
-                    onChange={handleInputChange}
-                    required
-                  />
-
-                  <button type="submit" className={styles.submitBtn}>
-                    Post
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.cancelBtn}
-                    onClick={() => setIsModalOpen(false)}
-                  >
-                    Cancel
-                  </button>
-                </form>
-              </div>
-            </div>
-          )} */}
-
           <div className={styles.postList}>
             {posts.slice().reverse().map((post) => (
               <div className={`${styles.postCard} ${post.user._id === currentUserId ? styles.myPost : ""}`} key={post._id}>
-              <div className={styles.posterInfo}>
-                <img src={userImage} alt="User" className={styles.posterImage} />
-                <div>
-                  <p className={styles.posterName}>{post.userFirstName} {post.userLastName}</p>
-                  <p className={styles.posterCareer}>{post.userRole === "admin" ? "Service Provider" : "Client"}</p>
+                <div className={styles.posterInfo}>
+                  <img src={userImage} alt="User" className={styles.posterImage} />
+                  <div>
+                    <p className={styles.posterName}>{post.userFirstName} {post.userLastName}</p>
+                    <p className={styles.posterCareer}>{post.userRole === "admin" ? "Service Provider" : "Client"}</p>
+                  </div>
+                </div>
+
+                <h3 className={styles.postTitle}>{post.title}</h3>
+                <p className={styles.postContent}>{post.content}</p>
+
+                <div className={styles.postDetails}>
+                  {/* <p><strong>Name</strong> {post.userFirstName} {post.userLastName}</p> */}
+                  <p><strong>Category:</strong> {post.careerCategory}</p>
+                  <p><strong>Location:</strong> {post.location}</p>
+                  <p><strong>Number of Workers Required:</strong> {post.numberOfWorker}</p>
+                  <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
+                </div>
+
+                <div className={styles.actions}>
+
+                  {(post.user._id !== currentUserId) && (
+                    <button className={styles.applyBtn} onClick={() => handleApplyForThisJop(post.user._id, currentUserId, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
+
+
+                  )}
+
+                  {(post.user._id === currentUserId) && (
+                    <button className={styles.deleteBtn} onClick={() => handleDeletePost(post._id)}>Delete post</button>
+                  )}
                 </div>
               </div>
-            
-              <h3 className={styles.postTitle}>{post.title}</h3>
-              <p className={styles.postContent}>{post.content}</p>
-              
-              <div className={styles.postDetails}>
-                {/* <p><strong>Name</strong> {post.userFirstName} {post.userLastName}</p> */}
-                <p><strong>Category:</strong> {post.careerCategory}</p>
-                <p><strong>Location:</strong> {post.location}</p>
-                <p><strong>Number of Workers Required:</strong> {post.numberOfWorker}</p>
-                <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
-              </div>
-            
-              <div className={styles.actions}>
-                {(post.user._id !== currentUserId) && (
-                  <button className={styles.applyBtn} onClick={()=> handleApplyForThisJop(post.user._id,currentUserId, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
-                )}
-                {(post.user._id === currentUserId) && (
-                  <button className={styles.deleteBtn} onClick={()=>handleDeletePost(post._id)}>Delete post</button>
-                )}
-              </div>
-            </div>
-            
             ))}
           </div>
         </div>
+
+
       </div>
+
     </div>
   );
 };
