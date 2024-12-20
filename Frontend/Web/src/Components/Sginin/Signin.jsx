@@ -20,22 +20,23 @@ function Signin() {
     }
     try {
       const response = await axios.post('http://localhost:7777/api/auth/login', { email, password });
-      localStorage.setItem('token', response.data.token);
-      console.log(response.data.verificationStatus);
+  
       if (response.status === 200) {
         const { token, verificationStatus } = response.data;
+        localStorage.setItem('token', token);
         login(token); 
         localStorage.setItem('userEmail', email);
         navigate(verificationStatus ? '/' : '/verify');
+        window.location.reload();
       }
+      
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
-    window.location.reload();
-};
+  };
+  
 
   
 

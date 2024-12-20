@@ -11,7 +11,9 @@ const Sidebar = ({ user }) => {
 
   const handleLogout = () => {
     logout();
+    localStorage.clear();
     navigate("/signin");
+    window.location.reload();
   };
 
   return (
