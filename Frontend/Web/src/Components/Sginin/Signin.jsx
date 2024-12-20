@@ -28,13 +28,14 @@ function Signin() {
         localStorage.setItem('userEmail', email);
         navigate(verificationStatus ? '/' : '/verify');
       }
+      window.location.reload();
+
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');
     }
     finally{
       setLoading(false);
     }
-    window.location.reload();
 };
 
   

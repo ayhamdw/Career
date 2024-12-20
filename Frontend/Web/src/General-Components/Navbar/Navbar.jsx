@@ -5,6 +5,7 @@ import '../../main.css'
 import { Link } from 'react-router-dom'
 import logo from '../../../src/assets/logo.png'
 import ProfileIcon from './profile.png'; 
+import axios from "axios";
 
 
 
@@ -14,6 +15,24 @@ function Navbar() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isRequestsDropdownOpen, setIsRequestsDropdownOpen] = useState(false); 
+
+  const [profileImage,setProfileImage] = useState(null);
+
+useEffect(()=>{
+  const email = localStorage.getItem("userEmail");
+  
+    const fetchImage= async()=>{
+      try{
+      const response = await axios.post("http://localhost:7777/api/user/user",{email});
+      setProfileImage(response.data.data.profile.profileImage);
+      console.lof(response.data)
+      }
+  catch(error){
+    console.log("Error");
+  }
+}
+  fetchImage();
+},[]);
 
 
   useEffect(() => {
@@ -92,7 +111,7 @@ function Navbar() {
           <div className="auth-links">
             {isAuthenticated ? (
               <Link to="/settings" className="profile-icon-link">
-                <img src={ProfileIcon} alt="Profile" className="profile-icon" />
+                <img src={profileImage} alt="Profile" className="profile-icon" />
               </Link>
             ) : (
               <>

@@ -12,6 +12,7 @@ const Sidebar = ({ user }) => {
   const handleLogout = () => {
     logout();
     navigate("/signin");
+    window.location.reload();
   };
 
   return (

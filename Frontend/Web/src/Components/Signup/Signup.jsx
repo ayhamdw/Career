@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 
+
+
 function Signup() {
   const [user, setUser] = useState({
     username: '',
@@ -34,7 +36,6 @@ function Signup() {
 
   });
 
-  let code = "";
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -136,12 +137,44 @@ function Signup() {
   };
 
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
+  
     if (file) {
-      setUser((prev) => ({ ...prev, profileImage: file }));
+      if (file.type.startsWith('image/')) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'your_upload_preset'); // Cloudinary upload preset
+  
+        try {
+          // Upload the file to Cloudinary (replace with your API for other services)
+          const response = await fetch('https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', {
+            method: 'POST',
+            body: formData,
+          });
+  
+          const data = await response.json();
+          if (data.secure_url) {
+            setUser((prev) => ({
+              ...prev,
+              profileImage: data.secure_url, // Store the image URL in state
+            }));
+            toast.success('Image uploaded successfully!');
+          }
+        } catch (error) {
+          toast.error('Error uploading image');
+        }
+      } else {
+        toast.error('Please upload a valid image file');
+      }
     }
   };
+  
+
+
+  
+
+
   const notifySuccess = () => {
     toast.success('Successfully registered!', {
       position: "top-right",
@@ -207,7 +240,7 @@ function Signup() {
     formData.append('profile[phone]', user.phone);
     formData.append('profile[bio]', user.bio);
     formData.append('profile[experience]', user.experience);
-    formData.append('profile[profileImage]', "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...");
+    formData.append('profile[profileImage]', 'https://placehold.co/400');
     
     formData.append('profile[location][type]', "Point");
     // Send profileImage if it exists
@@ -223,7 +256,7 @@ function Signup() {
     formData.append('friendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c');
     formData.append('friends[0]', '5f9a8b8f8c8d8e8b8f8a8b8c');
     formData.append('sendRequests[0]', '5f9a8b8f8c8d8e8b8f8a8b8c');
-    formData.append('tokens[0][token]', "replace with actual api");
+    formData.append('tokens[0][token]', "actual api");
     formData.append('sendProficientRequests[]', user.sendProficientRequests[0]);
     formData.append('receiveProficientRequest[]', user.receiveProficientRequest[0]);
 
