@@ -89,7 +89,7 @@ const userSchema = new mongoose.Schema(
     profile: {
       firstName: { type: String, required: true, trim: true },
       lastName: { type: String, required: true, trim: true },
-      phone: { type: String, required: true, trim: true },
+      phone: { type: Number, required: true, trim: true },
       numberOfRequest: {
         type: Number,
         default: 0,
@@ -106,11 +106,11 @@ const userSchema = new mongoose.Schema(
         },
       },
       bio: { type: String, trim: true },
-      experience: { type: String, trim: true, default: "" },
+      experience: { type: Number, trim: true, default: "" },
       profileImage: { type: String, trim: true, default: "" },
       ratings: [
         {
-          rating: { type: Number, required: true, default: 0 },
+          ratings: { type: Number, required: true, default: 0 },
           review: { type: String, trim: true, default: "" },
           userId: {
             type: mongoose.Schema.Types.ObjectId,

@@ -228,7 +228,7 @@ function Signup() {
     formData.append('username', user.username);
     formData.append('email', user.email);
     formData.append('password', user.password);
-    formData.append('role', user.role);
+    formData.append('role', 'user');
     formData.append('gender', user.gender);
     formData.append('city', user.city);
     formData.append('dateOfBirth', user.dateOfBirth);
@@ -238,7 +238,7 @@ function Signup() {
     formData.append('profile[firstName]', user.firstName);
     formData.append('profile[lastName]', user.lastName);
     formData.append('profile[phone]', user.phone);
-    formData.append('profile[bio]', user.bio);
+    formData.append('profile[bio]', '');
     formData.append('profile[experience]', user.experience);
     formData.append('profile[profileImage]', 'https://placehold.co/400');
     
@@ -308,15 +308,13 @@ function Signup() {
           </div>
           <form onSubmit={handleSubmit} className={style.inputFields}>
             {/* Username */}
-            <div className={style.field}>
+            {/* <div className={style.field}>
               <label>Username</label>
               <input type="text" name="username" value={user.username} onChange={handleChange} 
                 style={{ border: usernameExist ? '1px solid red' : '' }}
               />
               {usernameExist === true && <p style={{ color: 'red' }}>Username Already Exist</p>}
-
-
-            </div>
+            </div> */}
 
             {/* Email */}
             <div className={style.field}>
@@ -336,14 +334,14 @@ function Signup() {
             </div>
 
             {/* Role */}
-            <div className={style.field}>
+            {/* <div className={style.field}>
               <label>Role</label>
               <select name="role" value={user.role} onChange={handleChange} >
                 <option value="">Select Role</option>
                 <option value="user">user</option>
                 <option value="admin">admin</option>
               </select>
-            </div>
+            </div> */}
 
             {/* Gender */}
             <div className={style.field}>
@@ -424,22 +422,22 @@ function Signup() {
             </div>
 
             {/* Phone */}
-            <div className={style.field}>
+            {/* <div className={style.field}>
               <label>Phone</label>
               <input type="text" name="phone" value={user.phone} onChange={handleChange} required />
-            </div>
+            </div> */}
 
             {/* Bio */}
-            <div className={style.field}>
+            {/* <div className={style.field}>
               <label>Bio</label>
               <textarea name="bio" value={user.bio} onChange={handleChange} placeholder="Tell us a little about yourself" rows="4" required />
-            </div>
+            </div> */}
 
             {/* Experience */}
-            <div className={style.field}>
+            {/* <div className={style.field}>
               <label>Your Experience (Number of Years)</label>
               <input type="text" name="experience" value={user.experience} onChange={handleChange} required />
-            </div>
+            </div> */}
 
             {/* Profile Image */}
             <div className={style.imageField}>
