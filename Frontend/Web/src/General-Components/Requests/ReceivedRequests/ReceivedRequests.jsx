@@ -20,10 +20,16 @@ const Requests = () => {
     }
   };
 
-  const handleReject = (id) => {
+  const handleReject = async(id) => {
     const request = incomingRequests.find((req) => req._id === id);
     setIncomingRequests(incomingRequests.filter((req) => req._id !== id));
     setRejectedRequests([...rejectedRequests, request]);
+    try{
+      const response = await axios.post("http://localhost:7777/api/request/RejectRequestReceived",{userId:id});
+    }
+    catch(error){
+      console.log("Error acceptedRequestReceived: ",error)
+    }
   };
 
   useEffect(() => {
