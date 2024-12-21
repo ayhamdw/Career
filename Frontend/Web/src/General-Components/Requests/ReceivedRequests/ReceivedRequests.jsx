@@ -27,6 +27,19 @@ const Requests = () => {
   };
 
   useEffect(() => {
+    const getProficientData = async () => {
+      const email = localStorage.getItem("userEmail");
+      try {
+        const response = await axios.post("http://localhost:7777/api/user/ReceiveProficient", { email });
+        console.log(response.data);
+        setIncomingRequests(response.data); 
+      } catch (error) {
+        console.log("Error Fetching Received Requests: ", error);
+      }
+    };
+    getProficientData();
+  }, []);
+  useEffect(() => {
     const getAcceptedReceivedRequest = async () => {
       const email = localStorage.getItem("userEmail");
       try {
