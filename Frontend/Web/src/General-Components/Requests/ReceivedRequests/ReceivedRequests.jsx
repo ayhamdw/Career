@@ -39,6 +39,7 @@ const Requests = () => {
     };
     getProficientData();
   }, []);
+
   useEffect(() => {
     const getAcceptedReceivedRequest = async () => {
       const email = localStorage.getItem("userEmail");
@@ -51,6 +52,19 @@ const Requests = () => {
       }
     };
     getAcceptedReceivedRequest();
+  }, []);
+  useEffect(() => {
+    const getRejectedReceivedRequest = async () => {
+      const email = localStorage.getItem("userEmail");
+      try {
+        const response = await axios.post("http://localhost:7777/api/request/getRejectedReceivedRequest", { email });
+        console.log(response.data);
+        setRejectedRequests(response.data); 
+      } catch (error) {
+        console.log("Error Fetching Received Requests: ", error);
+      }
+    };
+    getRejectedReceivedRequest();
   }, []);
 
   return (

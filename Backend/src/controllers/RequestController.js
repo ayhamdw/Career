@@ -58,9 +58,30 @@ const getAcceptedReceivedRequestByEmail = async (req, res) => {
   }
 };
 
+const getRejectedReceivedRequestByEmail = async (req, res) => {
+  const { email } = req.body;
+  if (!email || typeof email !== 'string') {
+    return res.status(400).json({ message: 'Invalid email provided' });
+  }
+
+  try {
+    const user = await User.findOne({ email })
+      .populate('rejectedRequestReceived')  
+      .exec();
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    return res.status(200).json(user.rejectedRequestReceived);
+  } catch (error) {
+    console.error('Error rejectedRequestReceived:', error.message);
+    return res.status(500).json({ message: 'Error rejectedRequestReceived' });
+  }
+};
+
 
 
 module.exports = {
   addToaAceptedRequestReceived,
   getAcceptedReceivedRequestByEmail,
+  getRejectedReceivedRequestByEmail,
 }
