@@ -27,8 +27,9 @@ const Requests = () => {
     const request = incomingRequests.find((req) => req._id === id);
     setIncomingRequests(incomingRequests.filter((req) => req._id !== id));
     setRejectedRequests([...rejectedRequests, request]);
+    const myId = localStorage.getItem("id");
     try{
-      const response = await axios.post("http://localhost:7777/api/request/RejectRequestReceived",{userId:id});
+      const response = await axios.post("http://localhost:7777/api/request/RejectRequestReceived",{userId:id,myId});
       
     }
     catch(error){

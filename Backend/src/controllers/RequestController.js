@@ -41,32 +41,36 @@ const addToaAceptedRequestReceived = async (req, res) => {
 };
 
 const addToRejectRequestReceived = async (req, res) => {
-  const { userId } = req.body;
+  const { userId, myId } = req.body;
 
   try {
-    if (!userId) {
-      return res.status(400).json({ message: "User ID is required." });
+    if (!userId || !myId) {
+      return res.status(400).json({ message: "User ID and My ID are required." });
     }
-
     const user = await User.findOne({ receiveProficientRequest: userId });
 
     if (!user) {
       return res.status(404).json({ message: "User not found or no such request exists." });
     }
-
     if (!user.rejectedRequestReceived.includes(userId)) {
       user.rejectedRequestReceived.push(userId);
     }
-
     user.receiveProficientRequest = user.receiveProficientRequest.filter(
       (id) => id.toString() !== userId
     );
-
+    const recipientUser = await User.findById(userId);
+    if (!recipientUser) {
+      return res.status(404).json({ message: "Recipient user not found." });
+    }
+    if (!recipientUser.rejectedRequestSent.includes(myId)) {
+      recipientUser.rejectedRequestSent.push(myId);
+    }
     await user.save();
-
+    await recipientUser.save();
     return res.status(200).json({
-      message: "Request successfully moved to rejectedRequestReceived.",
+      message: "Request successfully moved to acceptedRequestReceived, and myId added to acceptedRequestsSent.",
       user,
+      recipientUser,
     });
   } catch (error) {
     console.error(error);
