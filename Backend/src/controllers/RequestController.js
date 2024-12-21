@@ -27,10 +27,13 @@ const addToaAceptedRequestReceived = async (req, res) => {
     if (!recipientUser.acceptedRequestsSent.includes(myId)) {
       recipientUser.acceptedRequestsSent.push(myId);
     }
+    recipientUser.sendProficientRequests = recipientUser.sendProficientRequests.filter(
+      (id) => id.toString() !== myId
+    );
     await user.save();
     await recipientUser.save();
     return res.status(200).json({
-      message: "Request successfully moved to acceptedRequestReceived, and myId added to acceptedRequestsSent.",
+      message: "Request successfully moved to acceptedRequestReceived, myId added to acceptedRequestsSent, and removed from sendProficientRequest.",
       user,
       recipientUser,
     });
@@ -65,6 +68,10 @@ const addToRejectRequestReceived = async (req, res) => {
     if (!recipientUser.rejectedRequestSent.includes(myId)) {
       recipientUser.rejectedRequestSent.push(myId);
     }
+
+    recipientUser.sendProficientRequests = recipientUser.sendProficientRequests.filter(
+      (id) => id.toString() !== myId
+    );
     await user.save();
     await recipientUser.save();
     return res.status(200).json({
@@ -120,6 +127,58 @@ const getRejectedReceivedRequestByEmail = async (req, res) => {
   }
 };
 
+const getAcceptedSentRequest = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    if (!email) {
+      return res.status(400).json({ message: "Email is required." });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const acceptedRequestsSentUsers = await User.find({
+      _id: { $in: user.acceptedRequestsSent },
+    });
+
+    return res.status(200).json({
+      user: acceptedRequestsSentUsers,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "An error occurred.", error });
+  }
+};
+const getRejectedSentRequest = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    if (!email) {
+      return res.status(400).json({ message: "Email is required." });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const rejectedSentRequesttUsers = await User.find({
+      _id: { $in: user.rejectedSentRequest },
+    });
+
+    return res.status(200).json({
+      user: rejectedSentRequest,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "An error occurred.", error });
+  }
+};
 
 
 module.exports = {
@@ -127,4 +186,6 @@ module.exports = {
   getAcceptedReceivedRequestByEmail,
   getRejectedReceivedRequestByEmail,
   addToRejectRequestReceived,
+  getAcceptedSentRequest,
+  getRejectedSentRequest,
 }
