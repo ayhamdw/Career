@@ -4,11 +4,12 @@ const styles = StyleSheet.create({
   searchBarContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    marginVertical: 15,
-    marginHorizontal: 5,
-    backgroundColor: "#ddfcea",
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    backgroundColor: "#f9f9f9",
+    marginVertical: 10,
   },
   SearchBarStyle: {
     flex: 1,
@@ -18,6 +19,11 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     marginRight: 10,
+  },
+  placeholderText: {
+    flex: 1,
+    color: "#aaa",
+    fontSize: 16,
   },
 });
 
