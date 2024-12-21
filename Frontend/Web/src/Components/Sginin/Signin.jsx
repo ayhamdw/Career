@@ -22,8 +22,9 @@ function Signin() {
       const response = await axios.post('http://localhost:7777/api/auth/login', { email, password });
   
       if (response.status === 200) {
-        const { token, verificationStatus } = response.data;
+        const { token, verificationStatus ,user} = response.data;
         localStorage.setItem('token', token);
+        localStorage.setItem('id', user._id);
         login(token); 
         localStorage.setItem('userEmail', email);
         navigate(verificationStatus ? '/' : '/verify');

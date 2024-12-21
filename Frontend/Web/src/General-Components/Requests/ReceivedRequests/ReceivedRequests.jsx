@@ -8,12 +8,15 @@ const Requests = () => {
   const [rejectedRequests, setRejectedRequests] = useState([]);
 
 
-  const handleAccept = async(id) => {
-    const request = incomingRequests.find((req) => req._id === id);
-    setIncomingRequests(incomingRequests.filter((req) => req._id !== id));
+  const handleAccept = async(userId) => {
+    const request = incomingRequests.find((req) => req._id === userId);
+    setIncomingRequests(incomingRequests.filter((req) => req._id !== userId));
     setAcceptedRequests([...acceptedRequests, request]);
+    const myId = localStorage.getItem("id");
+
     try{
-      const response = await axios.post("http://localhost:7777/api/request/acceptedRequestReceived",{userId:id});
+      const response = await axios.post("http://localhost:7777/api/request/acceptedRequestReceived",{userId:userId, myId});
+      console.log(userId)
     }
     catch(error){
       console.log("Error acceptedRequestReceived: ",error)
@@ -26,6 +29,7 @@ const Requests = () => {
     setRejectedRequests([...rejectedRequests, request]);
     try{
       const response = await axios.post("http://localhost:7777/api/request/RejectRequestReceived",{userId:id});
+      
     }
     catch(error){
       console.log("Error acceptedRequestReceived: ",error)
@@ -37,7 +41,6 @@ const Requests = () => {
       const email = localStorage.getItem("userEmail");
       try {
         const response = await axios.post("http://localhost:7777/api/user/ReceiveProficient", { email });
-        console.log(response.data);
         setIncomingRequests(response.data); 
       } catch (error) {
         console.log("Error Fetching Received Requests: ", error);
@@ -51,7 +54,8 @@ const Requests = () => {
       const email = localStorage.getItem("userEmail");
       try {
         const response = await axios.post("http://localhost:7777/api/request/getAcceptedReceivedRequest", { email });
-        console.log(response.data);
+        console.log(response.data)
+
         setAcceptedRequests(response.data); 
       } catch (error) {
         console.log("Error Fetching Received Requests: ", error);
@@ -64,7 +68,6 @@ const Requests = () => {
       const email = localStorage.getItem("userEmail");
       try {
         const response = await axios.post("http://localhost:7777/api/request/getRejectedReceivedRequest", { email });
-        console.log(response.data);
         setRejectedRequests(response.data); 
       } catch (error) {
         console.log("Error Fetching Received Requests: ", error);
