@@ -1,12 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  View,
-  ScrollView,
-  Modal,
-  Text,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { View, ScrollView, FlatList } from "react-native";
 import Header from "@/components/HomePage/Header";
 import SearchBar from "@/components/HomePage/SearchBar";
 import TipsHeader from "@/components/HomePage/TipsHeader";
@@ -70,6 +63,7 @@ const HomePage = ({ user }: { user: User }) => {
   const [selectedFilter, setSelectedFilter] =
     React.useState<string>("All Proficient");
   const [users, setUsers] = React.useState<User[]>([]);
+  console.log(users);
   const filters = [
     "All Proficient",
     "Home Services",
@@ -140,18 +134,31 @@ const HomePage = ({ user }: { user: User }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Header name={user.profile.firstName + " " + user.profile.lastName} />
+        <Header name={`${user.profile.firstName} ${user.profile.lastName}`} />
         <SearchBar
           placeholder="Search for jobs"
           value={search}
-          onChangeText={setSearch}
-          onFocus={() => setIsModalVisible(true)} // Show modal on focus
+          onChangeText={(text) => {
+            setSearch(text);
+            if (!isModalVisible) {
+              setIsModalVisible(true);
+            }
+          }}
+          onFocus={() => {
+            if (!isModalVisible) {
+              setIsModalVisible(true);
+            }
+          }}
         />
         <SearchModal
           isVisible={isModalVisible}
-          onClose={() => setIsModalVisible(false)}
-        />{" "}
-        {/* Modal Component */}
+          onClose={() => {
+            setSearch("");
+            setIsModalVisible(false);
+          }}
+          searchValue={search}
+          onSearchChange={(value) => setSearch(value)}
+        />
         <View style={styles.tipsSection}>
           <TipsHeader title="Tips For You" buttonText="See All" />
           <TipsImage />
@@ -164,9 +171,7 @@ const HomePage = ({ user }: { user: User }) => {
             onPress={handleFilterPress}
           />
         </View>
-        <ScrollView>
-          <ProfList jobs={users} onCardPress={handleCardPress} />
-        </ScrollView>
+        <ProfList jobs={users} onCardPress={handleCardPress} />
       </View>
     </ScrollView>
   );

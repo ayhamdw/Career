@@ -90,7 +90,7 @@ const userSchema = new mongoose.Schema(
     profile: {
       firstName: { type: String, required: true, trim: true },
       lastName: { type: String, required: true, trim: true },
-      phone: { type: Number, default:0, trim: true },
+      phone: { type: Number, default: 0, trim: true },
       numberOfRequest: {
         type: Number,
         default: 0,
@@ -107,7 +107,7 @@ const userSchema = new mongoose.Schema(
         },
       },
       bio: { type: String, trim: true },
-      experience: { type: Number, trim: true, default: "" },
+      experience: { type: String, trim: true, default: "" },
       profileImage: { type: String, trim: true, default: "" },
       ratings: [
         {
@@ -132,30 +132,29 @@ const userSchema = new mongoose.Schema(
       required: false,
     },
     rating: {
-      type: [Number],  
+      type: [Number],
       default: [],
       required: false,
     },
-    houreRate:{
+    houreRate: {
       type: Number,
       default: 0,
     },
     certificate: {
       isCertified: {
         type: Boolean,
-        default: false 
+        default: false,
       },
       certificateFile: {
-        type: String, 
-        default: ''
+        type: String,
+        default: "",
       },
       verificationStatus: {
         type: String,
-        enum: ['pending', 'verified', 'rejected'],
-        default: 'pending'
-      }
+        enum: ["pending", "verified", "rejected"],
+        default: "pending",
+      },
     },
-
 
     tokens: [
       {
