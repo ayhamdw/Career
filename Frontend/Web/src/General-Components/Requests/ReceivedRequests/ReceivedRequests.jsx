@@ -8,10 +8,16 @@ const Requests = () => {
   const [rejectedRequests, setRejectedRequests] = useState([]);
 
 
-  const handleAccept = (id) => {
+  const handleAccept = async(id) => {
     const request = incomingRequests.find((req) => req._id === id);
     setIncomingRequests(incomingRequests.filter((req) => req._id !== id));
     setAcceptedRequests([...acceptedRequests, request]);
+    try{
+      const response = await axios.post("http://localhost:7777/api/request/acceptedRequestReceived",{userId:id});
+    }
+    catch(error){
+      console.log("Error acceptedRequestReceived: ",error)
+    }
   };
 
   const handleReject = (id) => {
@@ -21,17 +27,17 @@ const Requests = () => {
   };
 
   useEffect(() => {
-    const getProficientData = async () => {
+    const getAcceptedReceivedRequest = async () => {
       const email = localStorage.getItem("userEmail");
       try {
-        const response = await axios.post("http://localhost:7777/api/user/ReceiveProficient", { email });
+        const response = await axios.post("http://localhost:7777/api/request/getAcceptedReceivedRequest", { email });
         console.log(response.data);
-        setIncomingRequests(response.data); 
+        setAcceptedRequests(response.data); 
       } catch (error) {
         console.log("Error Fetching Received Requests: ", error);
       }
     };
-    getProficientData();
+    getAcceptedReceivedRequest();
   }, []);
 
   return (
