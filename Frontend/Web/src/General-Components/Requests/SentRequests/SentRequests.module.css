@@ -131,6 +131,15 @@
     font-weight: bold;
     display: inline-block;
   }
+  .rejectedLabel{
+    background-color: #e81818;
+    color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    display: inline-block;
+  }
 
   p {
     font-size: 1.1em;
