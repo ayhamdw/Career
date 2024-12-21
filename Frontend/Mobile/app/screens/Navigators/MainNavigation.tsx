@@ -4,6 +4,7 @@ import Main from "./Main";
 import IntroductionNavigation from "./IntroductionNavigation2";
 import ForgotPassword from "../ForgetPassword";
 import SignUpNavigator from "./SignupNavigation";
+import JobList from "@/components/HomePage/JobList";
 
 const Stack = createNativeStackNavigator();
 const MainNavigation = () => {
@@ -33,6 +34,11 @@ const MainNavigation = () => {
       <Stack.Screen
         name="ForgotPassword"
         component={ForgotPassword}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="JobList"
+        component={JobList}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

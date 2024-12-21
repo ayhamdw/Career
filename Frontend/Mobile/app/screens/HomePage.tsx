@@ -12,6 +12,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
 import SearchModal from "@/components/HomePage/Modal";
+import ModalNavigator from "./Navigators/ModalNavigator";
 
 interface Location {
   type: string;
@@ -63,7 +64,6 @@ const HomePage = ({ user }: { user: User }) => {
   const [selectedFilter, setSelectedFilter] =
     React.useState<string>("All Proficient");
   const [users, setUsers] = React.useState<User[]>([]);
-  console.log(users);
   const filters = [
     "All Proficient",
     "Home Services",
@@ -158,6 +158,7 @@ const HomePage = ({ user }: { user: User }) => {
           }}
           searchValue={search}
           onSearchChange={(value) => setSearch(value)}
+          user={user._id}
         />
         <View style={styles.tipsSection}>
           <TipsHeader title="Tips For You" buttonText="See All" />

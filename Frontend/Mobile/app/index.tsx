@@ -8,5 +8,4 @@ import SearchModal from "@/components/HomePage/Modal";
 export default function HomeScreen() {
   enableScreens();
   return <App />;
-  // return <SearchModal isVisible={true} onClose={false} />;
 }

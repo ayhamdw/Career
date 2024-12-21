@@ -9,8 +9,15 @@ import {
   Modal,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { useNavigation } from "expo-router";
 
-const SearchModal = ({ isVisible, onClose, searchValue, onSearchChange }) => {
+const SearchModal = ({
+  isVisible,
+  onClose,
+  searchValue,
+  onSearchChange,
+  user,
+}) => {
   const [filteredResults, setFilteredResults] = useState([]);
   const data = [
     "Frontend Developer",
@@ -23,6 +30,8 @@ const SearchModal = ({ isVisible, onClose, searchValue, onSearchChange }) => {
     "Product Manager",
   ];
 
+  const navigation = useNavigation();
+
   useEffect(() => {
     if (searchValue.trim() === "") {
       setFilteredResults([]);
@@ -33,7 +42,6 @@ const SearchModal = ({ isVisible, onClose, searchValue, onSearchChange }) => {
       setFilteredResults(results);
     }
   }, [searchValue]);
-
   return (
     <Modal visible={isVisible} animationType="fade" transparent={true}>
       <View style={styles.modalContainer}>
@@ -58,6 +66,7 @@ const SearchModal = ({ isVisible, onClose, searchValue, onSearchChange }) => {
               value={searchValue}
               onChangeText={onSearchChange} // Controlled input
               placeholderTextColor="#aaa"
+              autoFocus={true}
             />
           </View>
 
@@ -65,7 +74,13 @@ const SearchModal = ({ isVisible, onClose, searchValue, onSearchChange }) => {
             data={filteredResults}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.listItem}>
+              <TouchableOpacity
+                style={styles.listItem}
+                onPress={() => {
+                  console.log(item);
+                  navigation.navigate("JobList", { user, job: item });
+                }}
+              >
                 <Text style={styles.listItemText}>{item}</Text>
               </TouchableOpacity>
             )}
