@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomePage from "../HomePage";
 import ProfProfile from "../Proficient/ProfProfile";
 import ProfNavigator from "../Proficient/ProfNavigator";
+import JobList from "@/components/HomePage/JobList";
 const Stack = createNativeStackNavigator();
 export default function HomePageNavigation({ user }) {
   const screenData = useMemo(
@@ -24,6 +25,11 @@ export default function HomePageNavigation({ user }) {
       <Stack.Screen
         name="ProfNavigator"
         component={screenData.ProfNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="JobList"
+        component={JobList}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
