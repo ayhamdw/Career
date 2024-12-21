@@ -168,11 +168,37 @@ const getRejectedSentRequest = async (req, res) => {
     }
 
     const rejectedSentRequesttUsers = await User.find({
-      _id: { $in: user.rejectedSentRequest },
+      _id: { $in: user.rejectedRequestSent },
     });
 
     return res.status(200).json({
-      user: rejectedSentRequest,
+      user: rejectedSentRequesttUsers,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "An error occurred.", error });
+  }
+};
+const getSendProficientRequests = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    if (!email) {
+      return res.status(400).json({ message: "Email is required." });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const sendProficientRequestsUsers = await User.find({
+      _id: { $in: user.sendProficientRequests },
+    });
+
+    return res.status(200).json({
+      user: sendProficientRequestsUsers,
     });
   } catch (error) {
     console.error(error);
@@ -188,4 +214,5 @@ module.exports = {
   addToRejectRequestReceived,
   getAcceptedSentRequest,
   getRejectedSentRequest,
+  getSendProficientRequests,
 }

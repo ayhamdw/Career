@@ -8,6 +8,7 @@ const {
     getRejectedReceivedRequestByEmail,
     getAcceptedSentRequest,
     getRejectedSentRequest,
+    getSendProficientRequests,
 } = require("../controllers/RequestController");
 
 
@@ -17,6 +18,7 @@ router.post('/getAcceptedReceivedRequest',getAcceptedReceivedRequestByEmail);
 router.post('/getRejectedReceivedRequest',getRejectedReceivedRequestByEmail);
 router.post('/acceptedSentRequest',getAcceptedSentRequest);
 router.post('/RejectedSentRequest',getRejectedSentRequest);
+router.post('/SendProficientRequests',getSendProficientRequests);
 
 
 

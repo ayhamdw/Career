@@ -21,7 +21,7 @@ const SentRequests = () => {
     };
 
     fetchRequests(
-      "http://localhost:7777/api/user/SentProficient",
+      "http://localhost:7777/api/request/SendProficientRequests",
       setPendingRequests
     );
     fetchRequests(
