@@ -42,6 +42,7 @@ const SearchModal = ({
       setFilteredResults(results);
     }
   }, [searchValue]);
+
   return (
     <Modal visible={isVisible} animationType="fade" transparent={true}>
       <View style={styles.modalContainer}>
@@ -64,7 +65,7 @@ const SearchModal = ({
               style={styles.searchInput}
               placeholder="Type to search..."
               value={searchValue}
-              onChangeText={onSearchChange} // Controlled input
+              onChangeText={onSearchChange}
               placeholderTextColor="#aaa"
               autoFocus={true}
             />
@@ -77,6 +78,8 @@ const SearchModal = ({
               <TouchableOpacity
                 style={styles.listItem}
                 onPress={() => {
+                  onClose(true);
+
                   console.log(item);
                   navigation.navigate("JobList", { user, job: item });
                 }}

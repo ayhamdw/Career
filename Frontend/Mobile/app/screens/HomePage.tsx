@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, ScrollView, FlatList } from "react-native";
 import Header from "@/components/HomePage/Header";
 import SearchBar from "@/components/HomePage/SearchBar";
@@ -12,7 +12,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
 import SearchModal from "@/components/HomePage/Modal";
-import ModalNavigator from "./Navigators/ModalNavigator";
+import { useFocusEffect } from "@react-navigation/native";
 
 interface Location {
   type: string;
@@ -61,9 +61,12 @@ const HomePage = ({ user }: { user: User }) => {
   const navigation = useNavigation();
   const [search, setSearch] = React.useState<string>("");
   const [isModalVisible, setIsModalVisible] = React.useState<boolean>(false);
+  const [isSearchFocused, setSearchFocused] = useState<boolean>(false);
+
   const [selectedFilter, setSelectedFilter] =
     React.useState<string>("All Proficient");
   const [users, setUsers] = React.useState<User[]>([]);
+  const [ref, setRef] = useState<boolean>(true);
   const filters = [
     "All Proficient",
     "Home Services",
@@ -131,34 +134,20 @@ const HomePage = ({ user }: { user: User }) => {
     fetchUser(selectedFilter);
   }, [user]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      // Reset search focus when HomePage comes into view
+      setSearchFocused(false);
+    }, [])
+  );
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <Header name={`${user.profile.firstName} ${user.profile.lastName}`} />
         <SearchBar
           placeholder="Search for jobs"
-          value={search}
-          onChangeText={(text) => {
-            setSearch(text);
-            if (!isModalVisible) {
-              setIsModalVisible(true);
-            }
-          }}
-          onFocus={() => {
-            if (!isModalVisible) {
-              setIsModalVisible(true);
-            }
-          }}
-        />
-        <SearchModal
-          isVisible={isModalVisible}
-          onClose={() => {
-            setSearch("");
-            setIsModalVisible(false);
-          }}
-          searchValue={search}
-          onSearchChange={(value) => setSearch(value)}
-          user={user._id}
+          onPress={() => navigation.navigate("JobList", { user })}
         />
         <View style={styles.tipsSection}>
           <TipsHeader title="Tips For You" buttonText="See All" />

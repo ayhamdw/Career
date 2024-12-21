@@ -1,37 +1,24 @@
-import { View, TextInput } from "react-native";
 import React from "react";
+import { View, TouchableOpacity, Text } from "react-native";
 import styles from "@/assets/styles/HomePage/SearchBarStyle";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 interface SearchBarProps {
   placeholder: string;
-  value: string;
-  onChangeText: (text: string) => void;
-  onFocus?: () => void;
+  onPress: () => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({
-  placeholder,
-  value,
-  onChangeText,
-  onFocus,
-}) => {
+const SearchBar: React.FC<SearchBarProps> = ({ placeholder, onPress }) => {
   return (
-    <View style={styles.searchBarContainer}>
-      <TextInput
-        placeholder={placeholder}
-        value={value}
-        onChangeText={onChangeText}
-        style={styles.SearchBarStyle}
-        onFocus={onFocus}
-      />
+    <TouchableOpacity style={styles.searchBarContainer} onPress={onPress}>
+      <Text style={styles.placeholderText}>{placeholder}</Text>
       <AntDesign
         name="search1"
         size={20}
         color="gray"
         style={styles.searchIcon}
       />
-    </View>
+    </TouchableOpacity>
   );
 };
 
