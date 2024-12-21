@@ -122,6 +122,15 @@
     font-weight: bold;
     display: inline-block;
   }
+  .acceptedLabel{
+    background-color: #09ba4a;
+    color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    display: inline-block;
+  }
 
   p {
     font-size: 1.1em;
