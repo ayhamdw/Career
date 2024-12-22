@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styles from "./sentRequests.module.css";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import SentRequestDetails from "../SentRequestDetails/SentRequestDetails";
 
 const SentRequests = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [acceptedSentRequests, setAcceptedSentRequests] = useState([]);
   const [rejectedRequests, setRejectedRequests] = useState([]);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchRequests = async (url, setState) => {
@@ -33,6 +36,11 @@ const SentRequests = () => {
       setRejectedRequests
     );
   }, []);
+
+  const handleRequestDetails = (request) => {
+    console.log("Navigating with request:", request);  // Debug log
+    navigate("/requestdetails", { state: { requestDetails: request } });
+  };
 
   const RequestSection = ({ title, requests }) => (
     <div className={styles.section}>
@@ -66,6 +74,13 @@ const SentRequests = () => {
             {title === "Accepted" && (
               <div className={styles.requestStatus}>
                 <span className={styles.acceptedLabel}>Accepted</span>
+                {/* Link to SentRequestDetails and pass request data */}
+                <Link
+                  to="/requestdetails"
+                  onClick={() => handleRequestDetails(request)}
+                >
+                  Details
+                </Link>
               </div>
             )}
             {title === "Rejected" && (
