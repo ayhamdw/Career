@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView, StatusBar } from "react-native";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  StatusBar,
+  Pressable,
+} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ayhamWifiUrl } from "@/constants/Urls";
@@ -9,6 +15,8 @@ import AboutSection from "@/components/ProficientPage/AboutSection";
 import ReviewsSection from "@/components/ProficientPage/ReviewsSection";
 import Action from "@/components/ProficientPage/Action";
 import { useNavigation } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface Job {
   profile: {

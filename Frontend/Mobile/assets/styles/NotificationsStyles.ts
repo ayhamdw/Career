@@ -9,12 +9,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 25,
   },
   actions: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 15,
+    marginBottom: 20,
   },
   actionButton: {
     flexDirection: "row",
