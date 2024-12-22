@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import styles from "../../../assets/styles/NotificationsStyles";
+import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "expo-router";
 
 const notifications = [
   {
@@ -25,6 +27,25 @@ const notifications = [
 ];
 
 const Notifications = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const id = route.params;
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "",
+      headerLeft: () => (
+        <View>
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="black"
+            onPress={() => navigation.goBack()}
+          />
+        </View>
+      ),
+    });
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Notifications</Text>
