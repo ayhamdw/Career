@@ -111,7 +111,6 @@ export default function JobList() {
           placeholder="Search for jobs"
           value={searchText}
           onChangeText={(text) => setSearchText(text)}
-          autoFocus={true}
         />
         <TouchableOpacity onPress={toggleModal}>
           <Ionicons name="filter" size={24} color="black" />
