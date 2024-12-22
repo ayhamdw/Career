@@ -1,19 +1,20 @@
 import React from "react";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { COLORS } from "../../../assets/styles/Dimensions";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import MessageNavigator from "./MessageNavigator"; // Import MessageNavigator
+import { View, StyleSheet } from "react-native";
+import MessageNavigator from "./MessageNavigator";
+import CommunityNavigator from "../Community/CommunityNavigator";
 import ProfRequestNavigation from "../Proficient/ProfRequestNavigation";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
-const TabIcon = ({ route, color, size }) => {
+const TabIcon = ({ route, color, size, focused }) => {
   let iconName;
   let IconComponent;
 
   switch (route.name) {
-    case "HomePage":
+    case "Home":
       iconName = "home";
       IconComponent = Ionicons;
       break;
@@ -29,15 +30,19 @@ const TabIcon = ({ route, color, size }) => {
       iconName = "chatbubbles";
       IconComponent = Ionicons;
       break;
-    case "FriendRequests":
-      iconName = "people";
-      IconComponent = MaterialIcons;
+    case "Community":
+      iconName = "users";
+      IconComponent = FontAwesome5;
       break;
     default:
       break;
   }
 
-  return <IconComponent name={iconName} size={size} color={color} />;
+  return (
+    <View style={[styles.iconContainer, focused && styles.activeIconContainer]}>
+      <IconComponent name={iconName} size={size} color={color} />
+    </View>
+  );
 };
 
 const CustomTabNavigator = ({ screenData, user }) => (
@@ -45,47 +50,59 @@ const CustomTabNavigator = ({ screenData, user }) => (
     screenOptions={({ route }) => {
       const routeName = getFocusedRouteNameFromRoute(route) ?? route.name;
       return {
-        tabBarIcon: ({ color, size }) => (
-          <TabIcon route={route} color={color} size={size} />
+        tabBarIcon: ({ color, size, focused }) => (
+          <TabIcon
+            route={route}
+            color={focused ? "#58d68d" : "#6b6b6b"}
+            size={24}
+            focused={focused}
+          />
         ),
-        tabBarLabelStyle: {
-          marginTop: 20,
-          fontSize: 12,
-          fontWeight: "bold",
-        },
-        tabBarStyle: {
-          backgroundColor: "#fff",
-          paddingBottom: 5,
-          borderTopWidth: 0,
-          display: routeName === "ChatUser" ? "none" : "flex",
-        },
-        tabBarActiveTintColor: COLORS.tabBarActiveTintColor,
-        tabBarInactiveTintColor: COLORS.tabBarInActiveTintColor,
+        tabBarStyle: [
+          styles.tabBarStyle,
+          { display: routeName === "ChatUser" ? "none" : "flex" },
+        ],
+        tabBarShowLabel: false,
+        headerShown: false,
       };
     }}
   >
-    <Tab.Screen
-      name="HomePage"
-      component={screenData.HomePage}
-      options={{ headerShown: false }}
-    />
-    <Tab.Screen
-      name="Requests"
-      component={screenData.Requests}
-      options={{ headerShown: false }}
-    />
-    <Tab.Screen name="Chat" options={{ headerShown: false }}>
+    <Tab.Screen name="Home" component={screenData.HomePage} />
+    <Tab.Screen name="Requests" component={screenData.Requests} />
+    <Tab.Screen name="Chat">
       {() => <MessageNavigator user={user} />}
     </Tab.Screen>
-    <Tab.Screen name="FriendRequests" options={{ headerShown: false }}>
+    <Tab.Screen name="Community">
       {() => <ProfRequestNavigation user={user} />}
     </Tab.Screen>
-    <Tab.Screen
-      name="Setting"
-      component={screenData.Setting}
-      options={{ headerShown: false }}
-    />
+    <Tab.Screen name="Setting" component={screenData.Setting} />
   </Tab.Navigator>
 );
 
 export default CustomTabNavigator;
+
+const styles = StyleSheet.create({
+  tabBarStyle: {
+    position: "absolute",
+    left: 10,
+    right: 10,
+    bottom: 10,
+    borderRadius: 30,
+    backgroundColor: "#fff",
+    height: 60,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  iconContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  activeIconContainer: {
+    borderRadius: 15,
+  },
+});
