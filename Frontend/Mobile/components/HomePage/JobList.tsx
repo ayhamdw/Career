@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -16,6 +16,9 @@ import { Checkbox } from "react-native-paper";
 
 export default function JobList() {
   const route = useRoute();
+  const { job, user } = route.params;
+  console.log("Job:", job);
+  console.log("User:", user);
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedCities, setSelectedCities] = useState([]);
@@ -55,6 +58,10 @@ export default function JobList() {
     "Legal & Financial Services",
     "Other",
   ];
+
+  useEffect(() => {
+    setSearchText(job);
+  }, []);
 
   const toggleModal = () => setModalVisible(!isModalVisible);
 
@@ -171,8 +178,8 @@ export default function JobList() {
               </View>
             </ScrollView>
             <View style={styles.modalButtons}>
-              <Button title="Apply" onPress={toggleModal} />
               <Button title="Cancel" color="red" onPress={toggleModal} />
+              <Button title="Apply" onPress={toggleModal} />
             </View>
           </View>
         </View>
