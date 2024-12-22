@@ -1,10 +1,13 @@
-import { View, Text } from "react-native";
-import React, { useMemo } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import React, { useLayoutEffect, useMemo } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProfProfile from "./ProfProfile";
 import RequestDetailsPage from "./RequestDetailsPage";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import MapTracker from "./MapTracker";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "expo-router";
 
 const Stack = createNativeStackNavigator();
 
@@ -66,7 +69,7 @@ type ProfNavigatorParams = {
 export default function ProfNavigator({ user }: { user: User }) {
   const route = useRoute<RouteProp<ProfNavigatorParams, "ProfProfile">>();
   const { proficientDetails } = route.params;
-
+  const navigation = useNavigation();
   const screenData = useMemo(
     () => ({
       ProfProfile: (props: any) => (
@@ -86,7 +89,33 @@ export default function ProfNavigator({ user }: { user: User }) {
     }),
     [proficientDetails, user]
   );
-
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "",
+      headerBackground: () => (
+        <LinearGradient
+          colors={["#96c93d", "#00b09b"]}
+          style={styles.headerGradient}
+        ></LinearGradient>
+      ),
+      headerStyle: {
+        backgroundColor: "transparent",
+      },
+      headerLeft: () => {
+        return (
+          <View style={styles.headerContainer}>
+            <Ionicons
+              name="arrow-back"
+              size={24}
+              color="white"
+              onPress={() => navigation.goBack()}
+              style={styles.backIcon}
+            />
+          </View>
+        );
+      },
+    });
+  }, []);
   return (
     <Stack.Navigator initialRouteName="ProfProfile">
       <Stack.Screen
@@ -97,13 +126,34 @@ export default function ProfNavigator({ user }: { user: User }) {
       <Stack.Screen
         name="RequestDetailsPage"
         component={screenData.RequestDetailsPage}
-        options={{ headerShown: false }}
+        options={{ headerShadowVisible: false }}
       />
       <Stack.Screen
         name="MapTracker"
         component={MapTracker}
-        options={{ headerShown: false }}
+        options={{ headerShadowVisible: false }}
       />
     </Stack.Navigator>
   );
 }
+const styles = StyleSheet.create({
+  headerGradient: {
+    flex: 1,
+    paddingHorizontal: 10,
+    justifyContent: "center",
+  },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    paddingVertical: 10,
+  },
+  backIcon: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 4,
+    zIndex: 30,
+  },
+});

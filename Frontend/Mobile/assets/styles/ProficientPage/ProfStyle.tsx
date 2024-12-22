@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     marginBottom: 10,
+    height: 160,
   },
   profileImage: {
     width: 100,
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 3,
     borderColor: "#fff",
-    marginTop: 10,
+    marginTop: -20,
   },
   headerContent: {
     alignItems: "center",
