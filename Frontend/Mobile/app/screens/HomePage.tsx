@@ -162,7 +162,11 @@ const HomePage = ({ user }: { user: User }) => {
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
-        <Header name={`${user.profile.firstName} ${user.profile.lastName}`} />
+        <Header
+          name={`${user.profile.firstName} ${user.profile.lastName}`}
+          navigation={navigation}
+          userId={user._id}
+        />
 
         <TouchableOpacity
           style={styles.searchBar}

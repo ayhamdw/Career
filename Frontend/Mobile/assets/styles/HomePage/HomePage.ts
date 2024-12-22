@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginBottom: 20,
         alignSelf: "center",
+        marginTop: 20,
       },
       section: {
         marginBottom: 30,
