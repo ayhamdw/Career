@@ -9,7 +9,6 @@ const SentRequestDetails = () => {
     const [myCoordinates, setMyCoordinates] = useState([]);
 
     useEffect(() => {
-        // Check if the Google Maps API script is already loaded
         if (document.getElementById("google-maps-script")) return;
 
         const script = document.createElement('script');
@@ -19,7 +18,6 @@ const SentRequestDetails = () => {
         script.defer = true;
         document.body.appendChild(script);
 
-        // Define the initMap function as a global callback after script is loaded
         window.initMap = function () {
             if (window.google && request && myCoordinates.length > 0) {
                 const coordinates = request.profile.location.coordinates;
@@ -28,10 +26,8 @@ const SentRequestDetails = () => {
                 const map = new google.maps.Map(document.getElementById('map'), {
                     center: { lat: coordinates[0], lng: coordinates[1] },
                     zoom: 12,
-                    // styles: realisticMapStyle (optional: if you want custom map styles)
                 });
 
-                // Create a DirectionsService and DirectionsRenderer
                 const directionsService = new google.maps.DirectionsService();
                 const directionsRenderer = new google.maps.DirectionsRenderer({
                     map: map,
@@ -42,42 +38,38 @@ const SentRequestDetails = () => {
                     },
                 });
 
-                // Marker for request's location
                 new google.maps.Marker({
                     position: { lat: coordinates[0], lng: coordinates[1] },
                     map,
                     title: fName + " Location",
                     icon: {
-                        fillColor: 'rgb(109, 201, 126)',  // Your main color
+                        fillColor: 'rgb(109, 201, 126)',  
                         fillOpacity: 0.9,
-                        strokeColor: 'rgb(109, 201, 126)', // Border color
-                        strokeWeight: 2,  // Border thickness
-                        scale: 8,  // Adjust size of the marker
+                        strokeColor: 'rgb(109, 201, 126)',
+                        strokeWeight: 2,  
+                        scale: 8, 
                     }
                 });
 
-                // Marker for "My Location" with enhanced design
                 new google.maps.Marker({
                     position: { lat: myCoordinates[0], lng: myCoordinates[1] },
                     map,
                     title: "My Location",
                     icon: {
-                        fillColor: 'rgb(109, 201, 126)',  // Use your main color
+                        fillColor: 'rgb(109, 201, 126)', 
                         fillOpacity: 1,
-                        strokeColor: 'rgb(109, 201, 126)', // Border color
-                        strokeWeight: 3,  // Slightly thicker border
-                        scale: 10,  // Increase size of the marker
+                        strokeColor: 'rgb(109, 201, 126)',
+                        strokeWeight: 3,  
+                        scale: 10,  
                     }
                 });
 
-                // Request the directions from "My Location" to the request's location
                 const requestDirections = {
                     origin: { lat: myCoordinates[0], lng: myCoordinates[1] },
                     destination: { lat: coordinates[0], lng: coordinates[1] },
-                    travelMode: google.maps.TravelMode.DRIVING, // You can change this to WALKING, BICYCLING, etc.
+                    travelMode: google.maps.TravelMode.DRIVING,
                 };
 
-                // Get directions and display on the map
                 directionsService.route(requestDirections, (result, status) => {
                     if (status === google.maps.DirectionsStatus.OK) {
                         directionsRenderer.setDirections(result);
@@ -89,13 +81,12 @@ const SentRequestDetails = () => {
         };
 
         return () => {
-            // Cleanup: remove the script element when the component unmounts to avoid memory leaks
             const scriptTag = document.getElementById("google-maps-script");
             if (scriptTag) {
                 document.body.removeChild(scriptTag);
             }
         };
-    }, [request, myCoordinates]); // Ensure that Google Maps is initialized only after `request` and `myCoordinates`
+    }, [request, myCoordinates]); 
 
     useEffect(() => {
         const fetchMyCoordinates = async () => {

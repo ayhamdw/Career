@@ -74,12 +74,12 @@ const SentRequests = () => {
             {title === "Accepted" && (
               <div className={styles.requestStatus}>
                 <span className={styles.acceptedLabel}>Accepted</span>
-                <div
+                <button
+                  className={styles.detailsBtn}
                   onClick={() => handleRequestDetails(request)}
-                  style={{ cursor: "pointer", textDecoration: "underline" }}
                 >
                   Details
-                </div>
+                </button>
               </div>
             )}
             {title === "Rejected" && (
