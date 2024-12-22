@@ -1,0 +1,129 @@
+.container {
+    padding: 50px;
+    margin: 0 auto;
+    border-radius: 20px;
+    font-family: 'Roboto', sans-serif;
+    background-color: #ffffff;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.title {
+    font-size: 3rem;
+    color: rgb(109, 201, 126);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cardContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+}
+
+.profileCard {
+    background: linear-gradient(135deg, rgba(109, 201, 126, 0.1), rgba(255, 255, 255, 0.5));
+    padding: 35px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    overflow: hidden;
+    border: 1px solid rgba(109, 201, 126, 0.2);
+    min-width: 280px;
+}
+
+.requestCard {
+    background: linear-gradient(135deg, rgba(109, 201, 126, 0.1), rgba(255, 255, 255, 0.5));
+    padding: 35px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    overflow: hidden;
+    border: 1px solid rgba(109, 201, 126, 0.2);
+    min-width: 280px;
+}
+
+.profileImageContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.profileImage {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 6px solid rgb(109, 201, 126);
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out, border 0.3s ease-in-out;
+}
+
+.profileImage:hover {
+    transform: scale(1.1);
+    border-color: rgba(109, 201, 126, 0.8);
+}
+
+.profileInfo {
+    padding-left: 25px;
+}
+
+.profileText {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.requestInfoList p {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.requestInfoList strong {
+    color: rgb(109, 201, 126);
+}
+
+.mapSection {
+    margin-top: 50px;
+    position: relative;
+    height: 500px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(109, 201, 126, 0.2);
+}
+
+.map {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .cardContainer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profileCard, .requestCard {
+        margin-bottom: 25px;
+        width: 100%;
+    }
+
+    .profileImage {
+        width: 120px;
+        height: 120px;
+    }
+}

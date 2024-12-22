@@ -34,7 +34,7 @@ const router = createBrowserRouter([
       { path: "/service-provider", element: <ProtectedRoute><ServiceProvider /></ProtectedRoute> },
       { path: "/community", element: <Community /> },
       { path: "/requests/sent/", element: <ProtectedRoute><SentRequests /></ProtectedRoute> },
-      { path: "/requestdetails", element: <ProtectedRoute><SentRequestDetails /></ProtectedRoute> }, 
+      { path: "/requestdetails", element: <SentRequestDetails /> }, 
       { path: "/requests/received", element: <ProtectedRoute><ReceivedRequests /></ProtectedRoute> },
       { path: "settings/*", element: <ProtectedRoute><Settings /></ProtectedRoute> },
       { path: "*", element: <NotFound /> },

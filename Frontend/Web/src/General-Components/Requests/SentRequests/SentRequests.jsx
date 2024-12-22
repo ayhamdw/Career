@@ -9,7 +9,7 @@ const SentRequests = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [acceptedSentRequests, setAcceptedSentRequests] = useState([]);
   const [rejectedRequests, setRejectedRequests] = useState([]);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRequests = async (url, setState) => {
@@ -38,7 +38,7 @@ const SentRequests = () => {
   }, []);
 
   const handleRequestDetails = (request) => {
-    console.log("Navigating with request:", request);  // Debug log
+    console.log("Navigating with request:", request);
     navigate("/requestdetails", { state: { requestDetails: request } });
   };
 
@@ -74,13 +74,12 @@ const SentRequests = () => {
             {title === "Accepted" && (
               <div className={styles.requestStatus}>
                 <span className={styles.acceptedLabel}>Accepted</span>
-                {/* Link to SentRequestDetails and pass request data */}
-                <Link
-                  to="/requestdetails"
+                <div
                   onClick={() => handleRequestDetails(request)}
+                  style={{ cursor: "pointer", textDecoration: "underline" }}
                 >
                   Details
-                </Link>
+                </div>
               </div>
             )}
             {title === "Rejected" && (
