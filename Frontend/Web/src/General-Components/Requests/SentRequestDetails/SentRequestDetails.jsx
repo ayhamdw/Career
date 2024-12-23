@@ -11,6 +11,11 @@ const SentRequestDetails = () => {
     const [selectedRating, setSelectedRating] = useState(0);
     const [review, setReview] = useState("")
     const myId = localStorage.getItem("id")
+    const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
+    const [toasterMessage, setToasterMessage] = useState('');
+    const [isUserRated, setIsUserRated] = useState(false);
+    const [openRated, setOpenRated] = useState(false);
+
 
     useEffect(() => {
         if (document.getElementById("google-maps-script")) return;
@@ -41,7 +46,7 @@ const SentRequestDetails = () => {
                 });
 
                 new google.maps.Marker({
-                    position: {  lng: coordinates[0] ,lat: coordinates[1]},
+                    position: { lng: coordinates[0], lat: coordinates[1] },
                     map,
                     title: `${request.profile.firstName} Location`,
                     icon: {
@@ -88,6 +93,7 @@ const SentRequestDetails = () => {
                 document.body.removeChild(scriptTag);
             }
         };
+
     }, [request, myCoordinates]);
 
     useEffect(() => {
@@ -116,10 +122,30 @@ const SentRequestDetails = () => {
     if (!request || myCoordinates.length === 0) {
         return <p>Loading request details...</p>;
     }
+    else {
+        const userId = myId
+        const targetUserId = request._id;
+        const checkUserRated = async () => {
+            try {
+                const response = await axios.post("http://localhost:7777/api/user/userRated", {
+                    userId,
+                    targetUserId
+                })
+                setIsUserRated(response.data.success);
+            }
+            catch (error) {
+                console.log("Error isUser Rated", error)
+            }
+        }
+        checkUserRated();
+    }
 
     const handleStarClick = (rating) => {
         setSelectedRating(rating);
     };
+    const handleRatedCloseButton = () => {
+        setOpenRated(!openRated);
+    }
 
     const handleSubmitRating = async (userId, targetUserId, rating, review) => {
         try {
@@ -130,13 +156,27 @@ const SentRequestDetails = () => {
                 review
             });
             console.log("Rating submitted:", response);
+            setIsRattingModelOpen(false);
+            setIsRatingSubmitted(true)
+            setToasterMessage("Rating submitted successfully!");
+            setReview('');
         } catch (error) {
             console.log("Error Rating:", error);
+            setToasterMessage("Error submitting rating. Please try again.");
         }
     };
 
     const finishJobButton = () => {
-        setIsRattingModelOpen(!isRattingModelOpen);
+        if(isUserRated){
+            setOpenRated(!openRated)
+
+        }
+        else{
+            setIsRattingModelOpen(!isRattingModelOpen);
+
+        }
+
+
     };
     const handleCancelButton = () => {
         setIsRattingModelOpen(!isRattingModelOpen)
@@ -185,40 +225,59 @@ const SentRequestDetails = () => {
 
 
 
-                {isRattingModelOpen && (
-            <div className={styles.overlay}>
-                <div className={styles.ratePerson}>
-                    <p>Please Rate {request.profile.firstName}</p>
-                    <div className={styles.starsRate}>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                            <span
-                                key={star}
-                                className={`${styles.star} ${selectedRating >= star ? styles.selected : ""}`}
-                                onClick={() => handleStarClick(star)}
-                            >
-                                ★
-                            </span>
-                        ))}
+                {isUserRated ? (
+                    openRated && (<div className={styles.overlay}>
+                        <div className={styles.ratePerson}>
+                            <p>You have already done the evaluation process</p>
+                            <br></br>
+                            <button onClick={handleRatedCloseButton} className={styles.cancelButton}>
+                                Close
+                            </button>
+                        </div>
+                    </div>)
+                ) : (
+                    isRattingModelOpen && (
+                        <div className={styles.overlay}>
+                            <div className={styles.ratePerson}>
+                                <p>Please Rate {request.profile.firstName}</p>
+                                <div className={styles.starsRate}>
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <span
+                                            key={star}
+                                            className={`${styles.star} ${selectedRating >= star ? styles.selected : ""}`}
+                                            onClick={() => handleStarClick(star)}
+                                        >
+                                            ★
+                                        </span>
+                                    ))}
+                                </div>
+                                <textarea
+                                    value={review}
+                                    onChange={(e) => setReview(e.target.value)}
+                                    placeholder="Let us know about your feedback"
+                                />
+                                <div className={styles.buttonsSubmit}>
+                                    <button
+                                        onClick={() => handleSubmitRating(myId, request._id, selectedRating, review)}
+                                        className={styles.submitButton}
+                                    >
+                                        Submit
+                                    </button>
+                                    <button onClick={handleCancelButton} className={styles.cancelButton}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                )}
+
+
+                {toasterMessage && (
+                    <div className={styles.toaster}>
+                        <p>{toasterMessage}</p>
                     </div>
-                    <textarea
-                        value={review} 
-                        onChange={(e) => setReview(e.target.value)} 
-                        placeholder="Let us know about your feedback"
-                    />
-                    <div className={styles.buttonsSubmit}>
-                        <button
-                            onClick={() => handleSubmitRating(myId, request._id, selectedRating, review)} 
-                            className={styles.submitButton}
-                        >
-                            Submit
-                        </button>
-                        <button onClick={handleCancelButton} className={styles.cancelButton}>
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        )}
+                )}
 
                 <section className={styles.mapSection}>
                     <div id="map" className={styles.map}></div>
