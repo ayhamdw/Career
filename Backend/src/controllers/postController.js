@@ -2,7 +2,6 @@ const Post = require("../models/posts");
 const User = require("../models/user2");
 
 const createPost = async (req, res) => {
-<<<<<<< HEAD
   const { title, content, careerCategory, location,numberOfWorker} = req.body;
   const user = req.user; 
   const userRole = user.role; 
@@ -10,8 +9,6 @@ const createPost = async (req, res) => {
     const newPost = new Post({
       user: user._id, 
       userRole: userRole, 
-=======
->>>>>>> e3f5cce8ebe887782e8d8c24c8b17277853656f7
       title,
       content,
       careerCategory,
