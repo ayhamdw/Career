@@ -194,6 +194,7 @@ const SentRequestDetails = () => {
                                     </span>
                                 ))}
                             </div>
+                            <textarea name="" id="" placeholder='Let us know about your feedback'></textarea>
                             <div className={styles.buttonsSubmit}>
                                 <button onClick={handleSubmitRating} className={styles.submitButton}>
                                     Submit
@@ -201,7 +202,9 @@ const SentRequestDetails = () => {
                                 <button onClick={handleCancelButton} className={styles.cancelButton}>
                                     Cancel
                                 </button>
+                                
                             </div>
+                            
                         </div>
                     </div>
                 )}
