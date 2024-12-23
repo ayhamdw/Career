@@ -4,11 +4,13 @@ const router = new express.Router();
 const {
   updateUserProfile,
   getUserDetails,
+  rateUser,
 } = require("../controllers/userController");
 const Auth = require("../middleware/auth");
 
 router.get("/me/:userId", Auth, getUserDetails);
 router.put("/update/profile", Auth, updateUserProfile);
+router.post("/rateUser", rateUser);
 
 // router.patch("/users/me", Auth, async (req, res) => {
 //   const updates = Object.keys(req.body);
