@@ -4,6 +4,11 @@ import Main from "./Main";
 import IntroductionNavigation from "./IntroductionNavigation2";
 import ForgotPassword from "../ForgetPassword";
 import SignUpNavigator from "./SignupNavigation";
+import JobList from "@/components/HomePage/JobList";
+import Notifications from "../Setting/Notifications";
+import PostDetails from "../Community/postDetails";
+import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
 const MainNavigation = () => {
@@ -34,6 +39,21 @@ const MainNavigation = () => {
         name="ForgotPassword"
         component={ForgotPassword}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="JobList"
+        component={JobList}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Notifications"
+        component={Notifications}
+        options={{ headerShadowVisible: false }}
+      />
+      <Stack.Screen
+        name="postDetails"
+        component={PostDetails}
+        options={{ headerShadowVisible: false }}
       />
     </Stack.Navigator>
   );

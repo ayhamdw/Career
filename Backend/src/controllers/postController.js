@@ -14,7 +14,6 @@ const createPost = async (req, res) => {
       careerCategory,
       location,
       numberOfWorker,
-      
     });
     await newPost.save();
     res.status(201).json(newPost);
@@ -24,11 +23,10 @@ const createPost = async (req, res) => {
   }
 };
 
-
 const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate("user", "username profile email role city") 
+      .populate("user", "username profile email role city")
       .exec();
     res.status(200).send(posts);
   } catch (error) {
@@ -38,27 +36,21 @@ const getAllPosts = async (req, res) => {
 
 const deletePost = async (req, res) => {
   try {
-    const postId = req.params.id; 
-    const userId = req.userId;
+    const postId = req.params.id;
     const post = await Post.findById(postId);
     if (!post) {
-      return res.status(404).json({ message: 'Post not found.' });
+      return res.status(404).json({ message: "Post not found." });
     }
-    // if (post.user !== userId) {
-    //   return res.status(403).json({ message: 'You are not authorized to delete this post.' });
-    // }
     await Post.findByIdAndDelete(postId);
-    return res.status(200).json({ message: 'Post deleted successfully.' });
+    return res.status(200).json({ message: "Post deleted successfully." });
   } catch (error) {
-    console.error('Error deleting post:', error);
-    return res.status(500).json({ message: 'Internal server error.' });
+    console.error("Error deleting post:", error);
+    return res.status(500).json({ message: "Internal server error." });
   }
 };
-
 
 module.exports = {
   createPost,
   getAllPosts,
   deletePost,
 };
-

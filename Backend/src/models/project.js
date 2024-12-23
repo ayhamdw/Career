@@ -12,6 +12,11 @@ const projectSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    content: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     location: {
       type: String,
       required: true,
@@ -21,17 +26,17 @@ const projectSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 0,
-      max: 5, 
+      max: 5,
     },
     images: [
       {
-        type: String,
+        type: [String],
         required: true,
       },
     ],
   },
   {
-    timestamps: true, 
+    timestamps: true,
   }
 );
 

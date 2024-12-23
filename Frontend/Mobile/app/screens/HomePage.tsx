@@ -1,7 +1,15 @@
-import React, { useEffect } from "react";
-import { View, ScrollView, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  Modal,
+  TextInput,
+  Pressable,
+} from "react-native";
 import Header from "@/components/HomePage/Header";
-import SearchBar from "@/components/HomePage/SearchBar";
 import TipsHeader from "@/components/HomePage/TipsHeader";
 import TipsImage from "@/components/HomePage/TipsImage";
 import ProfRecommendation from "@/components/HomePage/ProfRecommendation";
@@ -11,8 +19,7 @@ import { ayhamWifiUrl } from "@/constants/Urls";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
-import SearchModal from "@/components/HomePage/Modal";
-
+import jobs from "@/constants/Jobs";
 interface Location {
   type: string;
   coordinates: [number, number];
@@ -59,11 +66,11 @@ interface User {
 const HomePage = ({ user }: { user: User }) => {
   const navigation = useNavigation();
   const [search, setSearch] = React.useState<string>("");
-  const [isModalVisible, setIsModalVisible] = React.useState<boolean>(false);
   const [selectedFilter, setSelectedFilter] =
     React.useState<string>("All Proficient");
   const [users, setUsers] = React.useState<User[]>([]);
-  console.log(users);
+  const [searchResults, setSearchResults] = React.useState<string[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
   const filters = [
     "All Proficient",
     "Home Services",
@@ -131,39 +138,98 @@ const HomePage = ({ user }: { user: User }) => {
     fetchUser(selectedFilter);
   }, [user]);
 
+  const handleSearch = (data: string) => {
+    setSearch(data);
+    if (data === "") {
+      setSearchResults([]);
+    } else {
+      const result = jobs.filter((job) =>
+        job.toLowerCase().includes(data.toLowerCase())
+      );
+      setSearchResults(result);
+    }
+  };
+
+  const chooseJob = (item: string) => {
+    setModalVisible(false);
+    setSearch("");
+    navigation.navigate("JobList", {
+      job: item,
+      user: user._id,
+    });
+  };
+
   return (
-    <ScrollView>
+    <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
-        <Header name={`${user.profile.firstName} ${user.profile.lastName}`} />
-        <SearchBar
-          placeholder="Search for jobs"
-          value={search}
-          onChangeText={(text) => {
-            setSearch(text);
-            if (!isModalVisible) {
-              setIsModalVisible(true);
-            }
-          }}
-          onFocus={() => {
-            if (!isModalVisible) {
-              setIsModalVisible(true);
-            }
-          }}
+        <Header
+          name={`${user.profile.firstName} ${user.profile.lastName}`}
+          navigation={navigation}
+          userId={user._id}
         />
-        <SearchModal
-          isVisible={isModalVisible}
-          onClose={() => {
+
+        <TouchableOpacity
+          style={styles.searchBar}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.placeholderText}>
+            {search || "Search for jobs"}
+          </Text>
+        </TouchableOpacity>
+
+        <Modal
+          visible={modalVisible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={() => {
+            setModalVisible(false);
             setSearch("");
-            setIsModalVisible(false);
           }}
-          searchValue={search}
-          onSearchChange={(value) => setSearch(value)}
-        />
-        <View style={styles.tipsSection}>
+        >
+          <View style={styles.modalBackdrop}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Search for Jobs</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Type to search"
+                value={search}
+                onChangeText={handleSearch}
+                autoFocus={true}
+              />
+              <FlatList
+                data={searchResults}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.listItem}
+                    onPress={() => chooseJob(item)} // Wrap in an arrow function
+                  >
+                    <Text>{item}</Text>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+                ListEmptyComponent={() =>
+                  search.trim() !== "" && (
+                    <Text style={styles.emptyText}>No results found</Text>
+                  )
+                }
+              />
+              ;
+              <Pressable
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.closeButtonText}>Close</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+
+        <View style={styles.section}>
           <TipsHeader title="Tips For You" buttonText="See All" />
           <TipsImage />
         </View>
-        <View style={styles.proficientRecommendationStyle}>
+
+        <View style={styles.section}>
           <TipsHeader title="Proficient Recommendation" buttonText="See All" />
           <ProfRecommendation
             data={filters}
@@ -171,7 +237,10 @@ const HomePage = ({ user }: { user: User }) => {
             onPress={handleFilterPress}
           />
         </View>
-        <ProfList jobs={users} onCardPress={handleCardPress} />
+
+        <View style={styles.section}>
+          <ProfList jobs={users} onCardPress={handleCardPress} />
+        </View>
       </View>
     </ScrollView>
   );
