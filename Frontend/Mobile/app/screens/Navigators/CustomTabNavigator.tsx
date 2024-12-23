@@ -3,7 +3,6 @@ import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, StyleSheet } from "react-native";
 import MessageNavigator from "./MessageNavigator";
-import CommunityNavigator from "../Community/CommunityNavigator";
 import ProfRequestNavigation from "../Proficient/ProfRequestNavigation";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
@@ -23,8 +22,8 @@ const TabIcon = ({ route, color, size, focused }) => {
       IconComponent = Ionicons;
       break;
     case "Requests":
-      iconName = "check-box";
-      IconComponent = MaterialIcons;
+      iconName = "clipboard-check";
+      IconComponent = FontAwesome5;
       break;
     case "Chat":
       iconName = "chatbubbles";
@@ -68,12 +67,12 @@ const CustomTabNavigator = ({ screenData, user }) => (
     }}
   >
     <Tab.Screen name="Home" component={screenData.HomePage} />
-    <Tab.Screen name="Requests" component={screenData.Requests} />
+    <Tab.Screen name="Requests">
+      {() => <ProfRequestNavigation user={user} />}
+    </Tab.Screen>
+    <Tab.Screen name="Community" component={screenData.Community} />
     <Tab.Screen name="Chat">
       {() => <MessageNavigator user={user} />}
-    </Tab.Screen>
-    <Tab.Screen name="Community">
-      {() => <ProfRequestNavigation user={user} />}
     </Tab.Screen>
     <Tab.Screen name="Setting" component={screenData.Setting} />
   </Tab.Navigator>
