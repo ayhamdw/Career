@@ -89,9 +89,9 @@
     transition: background-color 0.3s, color 0.3s, transform 0.2s;
   }
 
-  button:hover {
+  /* button:hover {
     transform: scale(1.05);
-  }
+  } */
 
   .acceptBtn {
     background-color: #2ecc71;
@@ -144,4 +144,27 @@
   p {
     font-size: 1.1em;
     line-height: 1.8;
+  }
+
+  .detailsBtn {
+    background-color: #109dff;
+    color: white;
+    padding: 10px 15px;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  .detailsBtn:hover {
+    background-color: #0d82d1;
+  }
+  
+  .requestStatus{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:5px;
   }
