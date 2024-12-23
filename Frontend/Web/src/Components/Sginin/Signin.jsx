@@ -19,7 +19,7 @@ function Signin() {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:7777/api/auth/login', { email, password });
+      const response = await axios.post(`${import.meta.env.VITE_API}/auth/login`, { email, password });
   
       if (response.status === 200) {
         const { token, verificationStatus ,user} = response.data;

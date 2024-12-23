@@ -101,7 +101,7 @@ const SentRequestDetails = () => {
             const email = localStorage.getItem("userEmail");
 
             try {
-                const response = await axios.post("http://localhost:7777/api/user/coordinates", { email });
+                const response = await axios.post(`${import.meta.env.VITE_API}/user/coordinates`, { email });
                 const { longitude, latitude } = response.data;
                 setMyCoordinates([longitude, latitude]);
             } catch (error) {
@@ -127,7 +127,7 @@ const SentRequestDetails = () => {
         const targetUserId = request._id;
         const checkUserRated = async () => {
             try {
-                const response = await axios.post("http://localhost:7777/api/user/userRated", {
+                const response = await axios.post(`${import.meta.env.VITE_API}/user/userRated`, {
                     userId,
                     targetUserId
                 })
@@ -149,7 +149,7 @@ const SentRequestDetails = () => {
 
     const handleSubmitRating = async (userId, targetUserId, rating, review) => {
         try {
-            const response = await axios.post("http://localhost:7777/api/user/rateUser", {
+            const response = await axios.post(`${import.meta.env.VITE_API}/user/rateUser`, {
                 userId,
                 targetUserId,
                 rating,

@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import style from './Verify.module.css';
 import verifyLogo from './verifyLogo.png';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';  // Import axios for HTTP requests
+import axios from 'axios';  
 
 function Verify() {
   const [values, setValues] = useState(['', '', '', '', '', '']);
-  const [errorMessage, setErrorMessage] = useState('');  // Error handling
+  const [errorMessage, setErrorMessage] = useState('');  
   const navigate = useNavigate();
-  const userEmail = localStorage.getItem('userEmail');  // Example storage
+  const userEmail = localStorage.getItem('userEmail');  
 
   const handleChange = (index, newValue) => {
     const updatedValues = [...values];
@@ -36,7 +36,7 @@ function Verify() {
     const code = values.join('');  
     
     try {
-      const response = await axios.post('http://localhost:7777/api/auth/verify-code', {
+      const response = await axios.post(`${import.meta.env.VITE_API}/auth/verify-code`, {
         email: userEmail,
         code: code,
       });
@@ -71,7 +71,7 @@ function Verify() {
             />
           ))}
         </div>
-        {errorMessage && <p className={style.error}>{errorMessage}</p>}  {/* Error message */}
+        {errorMessage && <p className={style.error}>{errorMessage}</p>}
         <button className={style.cancelButton} onClick={() => navigate('/signin')}>Cancel</button>
         <button className={style.verifyButton} onClick={handleVerify}>Verify</button>
       </div>
