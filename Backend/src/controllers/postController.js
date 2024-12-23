@@ -2,23 +2,6 @@ const Post = require("../models/posts");
 const User = require("../models/user2");
 
 const createPost = async (req, res) => {
-  const {
-    title,
-    content,
-    careerCategory,
-    location,
-    numberOfWorker,
-    userFirstName,
-    userLastName,
-  } = req.body;
-  const user = req.user;
-  const userRole = user.role;
-  try {
-    const newPost = new Post({
-      user: user._id,
-      userRole: userRole,
-      userFirstName,
-      userLastName,
       title,
       content,
       careerCategory,

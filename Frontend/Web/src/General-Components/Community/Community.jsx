@@ -161,9 +161,6 @@ const Community = ({ userCareer }) => {
         location: form.location,
         numberOfWorker: form.numberOfWorker,
         userRole: userRole,
-        userFirstName: userFirstName,
-        userLastName: userLastName,
-
       };
 
       const response = await axios.post(
