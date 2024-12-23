@@ -5,7 +5,7 @@ import ProfileNavigator from "./ProfileNavigator";
 import MessageNavigator from "./MessageNavigator";
 import HomePageNavigation from "./HomePageNavigation";
 import ProfRequestNavigation from "../Proficient/ProfRequestNavigation";
-import Community from "../Community";
+import Community from "../Community/Community";
 
 const Main = ({ route }) => {
   const { user } = route?.params || {};
