@@ -23,7 +23,7 @@ useEffect(()=>{
   const fetchFirstName = async () =>{
     try{
       const email = localStorage.getItem("userEmail");
-      const response = await axios.post("http://localhost:7777/api/user/firstName",{email});
+      const response = await axios.post(`${import.meta.env.VITE_API}/user/firstName`,{email});
       setUserFirstName(response.data.firstName);
       
     }catch(error){
@@ -33,7 +33,7 @@ useEffect(()=>{
   const fetchLastName = async () =>{
     try{
       const email = localStorage.getItem("userEmail");
-      const response = await axios.post("http://localhost:7777/api/user/lastName",{email});
+      const response = await axios.post(`${import.meta.env.VITE_API}/user/lastName`,{email});
       setUserLastName(response.data.lastName);
       
     }catch(error){
@@ -43,7 +43,7 @@ useEffect(()=>{
   const fetchBio = async () =>{
     try{
       const email = localStorage.getItem("userEmail");
-      const response = await axios.post("http://localhost:7777/api/user/bio",{email});
+      const response = await axios.post(`${import.meta.env.VITE_API}/user/bio`,{email});
       setBio(response.data.bio);      
     }catch(error){
         console.error("Error Fetching user LastName: ", error);
@@ -62,7 +62,7 @@ useEffect(()=>{
   const fetchUserInfo = async() =>{
     const email = localStorage.getItem("userEmail");
     try{
-      const response = await axios.post(`http://localhost:7777/api/user/user`,{email});
+      const response = await axios.post(`${import.meta.env.VITE_API}/user/user`,{email});
       setUserInfo(response.data.data);
       console.log(userInfo.profile.firstName)
       console.log(response.data.data)

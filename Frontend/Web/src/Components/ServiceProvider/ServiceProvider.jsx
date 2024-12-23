@@ -12,7 +12,7 @@ const ServiceProvider = () => {
   useEffect(() => {
     const fetchProviders = async () => {
       try {
-        const response = await axios.post('http://localhost:7777/api/user/users', {
+        const response = await axios.post(`${import.meta.env.VITE_API}/user/users`, {
           category: selectedCategory,
         });
         console.log('Providers fetched:', response.data); 
