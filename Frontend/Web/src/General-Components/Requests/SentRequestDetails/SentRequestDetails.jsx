@@ -131,7 +131,7 @@ const SentRequestDetails = () => {
     const finishJobButton = () => {
         setIsRattingModelOpen(!isRattingModelOpen);
     };
-    const handleCancelButton = () =>{
+    const handleCancelButton = () => {
         setIsRattingModelOpen(!isRattingModelOpen)
     }
 
@@ -140,7 +140,7 @@ const SentRequestDetails = () => {
             <header className={styles.header}>
                 <h1 className={styles.title}>Request Details</h1>
             </header>
-    
+
             <div className={styles.content}>
                 <section className={styles.profileSection}>
                     <div className={styles.profileCard}>
@@ -159,25 +159,25 @@ const SentRequestDetails = () => {
                             <p><strong>Experience:</strong> {request.profile.experience || "No experience listed"}</p>
                         </div>
                     </div>
-                    <section className={styles.requestSection}>
-                    <h2 className={styles.subheading}>Request Information</h2>
-                    <ul className={styles.requestList}>
-                        <li><strong>Service Requested:</strong> {request.careerCategory}</li>
-                        <li><strong>City:</strong> {request.city}</li>
-                        <li><strong>Gender:</strong> {request.gender}</li>
-                    </ul>
+                    <div className={styles.requestSection}>
+                        <h2 className={styles.subheading}>Request Information</h2>
+                        <ul className={styles.requestList}>
+                            <li><strong>Service Requested:</strong> {request.careerCategory}</li>
+                            <li><strong>City:</strong> {request.city}</li>
+                        </ul>
+                    </div>
+
+                    <div className={styles.finishButton}>
+                        <p>submit your feedback</p>
+                        <button onClick={finishJobButton}>Finish This Job</button>
+                    </div>
+
                 </section>
 
-                <div className={styles.finishButton}>
-                    <button onClick={finishJobButton}>Finish This Job</button>
-                </div>
 
-                </section>
-    
 
-    
-                
-    
+
+
                 {isRattingModelOpen && (
                     <div className={styles.overlay}>
                         <div className={styles.ratePerson}>
@@ -186,9 +186,8 @@ const SentRequestDetails = () => {
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <span
                                         key={star}
-                                        className={`${styles.star} ${
-                                            selectedRating >= star ? styles.selected : ""
-                                        }`}
+                                        className={`${styles.star} ${selectedRating >= star ? styles.selected : ""
+                                            }`}
                                         onClick={() => handleStarClick(star)}
                                     >
                                         ★
@@ -197,7 +196,7 @@ const SentRequestDetails = () => {
                             </div>
                             <div className={styles.buttonsSubmit}>
                                 <button onClick={handleSubmitRating} className={styles.submitButton}>
-                                    Submit 
+                                    Submit
                                 </button>
                                 <button onClick={handleCancelButton} className={styles.cancelButton}>
                                     Cancel
@@ -206,14 +205,14 @@ const SentRequestDetails = () => {
                         </div>
                     </div>
                 )}
-    
+
                 <section className={styles.mapSection}>
                     <div id="map" className={styles.map}></div>
                 </section>
             </div>
         </div>
     );
-    
+
 };
 
 export default SentRequestDetails;
