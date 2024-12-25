@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
@@ -50,7 +57,11 @@ export default function FriendRequests({ user }: { user: any }) {
     fetchUserData();
   }, [id]);
 
-  const requestAction = async (action: string, bookId: string) => {
+  const requestAction = async (
+    action: string,
+    bookId: string,
+    clientId: string
+  ) => {
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await axios.post(
@@ -67,6 +78,73 @@ export default function FriendRequests({ user }: { user: any }) {
       }
     } catch (error) {
       console.error("Error processing request:", error);
+    }
+
+    const actionsMap = {
+      Accepted: async () => {
+        console.log("Handling Accepted action");
+        await sendNotification(
+          "🎉 Request Accepted! 🎉",
+          `Your request has been accepted! We're excited to start working on it. 💪`,
+          clientId
+        );
+      },
+      Cancelled: async () => {
+        console.log("Handling Cancelled action");
+        await sendNotification(
+          "🚫 Request Cancelled 🚫",
+          `The request has been cancelled. Let us know if you'd like to try again or need assistance. 😊`,
+          clientId
+        );
+      },
+      Rejected: async () => {
+        console.log("Handling Reject action");
+        await sendNotification(
+          "❌ Request Rejected ❌",
+          `Unfortunately, your request was rejected. Don't worry, there are always more opportunities ahead! 💡`,
+          clientId
+        );
+      },
+      Completed: async () => {
+        console.log("Handling Completed action");
+        await sendNotification(
+          "🏆 Request Completed! 🏆",
+          `Your request has been successfully completed! 🎉 We hope you are satisfied with the result. 💯`,
+          clientId
+        );
+      },
+    };
+    if (actionsMap[action]) {
+      await actionsMap[action]();
+    } else {
+      console.error("Unknown action:", action);
+    }
+  };
+
+  const sendNotification = async (
+    title: string,
+    message: string,
+    clientId: string
+  ) => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.post(
+        `${ayhamWifiUrl}/api/notification/add-notification`,
+        {
+          proficientId: clientId,
+          userId: id,
+          title: title,
+          message: message,
+          status: "Unread",
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.status === 200) {
+        console.log("Notification sent successfully");
+      }
+    } catch (error) {
+      console.log("Error submitting request:", error);
+      Alert.alert("Error", "Failed to submit the request.");
     }
   };
 
@@ -133,13 +211,13 @@ export default function FriendRequests({ user }: { user: any }) {
             <>
               <TouchableOpacity
                 style={[styles.button, styles.acceptButton]}
-                onPress={() => requestAction("Accepted", bookId)}
+                onPress={() => requestAction("Accepted", bookId, sender._id)}
               >
                 <Text style={styles.buttonText}>Accept</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.rejectButton]}
-                onPress={() => requestAction("Rejected", bookId)}
+                onPress={() => requestAction("Rejected", bookId, sender._id)}
               >
                 <Text style={styles.buttonText}>Reject</Text>
               </TouchableOpacity>
@@ -149,13 +227,13 @@ export default function FriendRequests({ user }: { user: any }) {
             <>
               <TouchableOpacity
                 style={[styles.button, styles.cancelButton]}
-                onPress={() => requestAction("Cancelled", bookId)}
+                onPress={() => requestAction("Cancelled", bookId, sender._id)}
               >
                 <Text style={styles.buttonText}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.completeButton]}
-                onPress={() => requestAction("Completed", bookId)}
+                onPress={() => requestAction("Completed", bookId, sender._id)}
               >
                 <Text style={styles.buttonText}>Complete</Text>
               </TouchableOpacity>

@@ -167,7 +167,6 @@ const HomePage = ({ user }: { user: User }) => {
           navigation={navigation}
           userId={id}
         />
-
         <TouchableOpacity
           style={styles.searchBar}
           onPress={() => setModalVisible(true)}

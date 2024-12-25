@@ -42,25 +42,17 @@ const RequestScreen = ({ user }: { user: any }) => {
   const fetchRequests = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-
-      const [proficientResponse, projectResponse] = await Promise.all([
-        axios.get(`${ayhamWifiUrl}/api/proficient/requestDetails/${id}`, {
+      const proficientResponse = await axios.get(
+        `${ayhamWifiUrl}/api/proficient/requestDetails/${id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }),
-        axios.get(`${ayhamWifiUrl}/api/project/requestDetails/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }),
-      ]);
+        }
+      );
 
       if (proficientResponse.status === 200) {
         setProficientRequests(proficientResponse.data.proficientInfo);
-      }
-      if (projectResponse.status === 200) {
-        setProjectRequests(projectResponse.data.projectInfo);
       }
     } catch (error) {
       console.log("Error fetching requests:", error);
@@ -133,26 +125,7 @@ const RequestScreen = ({ user }: { user: any }) => {
 
   return (
     <View style={styles.container}>
-      {/* Tabs */}
-      <View style={styles.tabContainer}>
-        <TouchableWithoutFeedback onPress={() => setSelectedTab("proficient")}>
-          <Text
-            style={[
-              styles.tab,
-              selectedTab === "proficient" && styles.activeTab,
-            ]}
-          >
-            Proficient Requests
-          </Text>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => setSelectedTab("project")}>
-          <Text
-            style={[styles.tab, selectedTab === "project" && styles.activeTab]}
-          >
-            Project Requests
-          </Text>
-        </TouchableWithoutFeedback>
-      </View>
+      <View style={styles.tabContainer}></View>
 
       <FlatList
         data={

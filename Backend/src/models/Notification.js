@@ -12,13 +12,6 @@ const schema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    // projectId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Project",
-    //   required: false,
-    //   trim: true,
-    //   default: null,
-    // },
     title: {
       type: String,
       required: true,
@@ -33,11 +26,6 @@ const schema = mongoose.Schema(
       type: String,
       enum: ["Unread", "Read"],
       default: "Unread",
-    },
-    type: {
-      type: String,
-      enum: ["Project Request", "Proficient Request"],
-      required: true,
     },
   },
   {

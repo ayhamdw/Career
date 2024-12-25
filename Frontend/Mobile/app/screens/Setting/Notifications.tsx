@@ -93,6 +93,7 @@ const Notifications = () => {
       <TouchableOpacity
         style={styles.notificationCard}
         onPress={() => updateNotification(id)}
+        disabled={status === "Read"}
       >
         <View style={styles.row}>
           <Image
@@ -107,7 +108,7 @@ const Notifications = () => {
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.message}>{message}</Text>
             <Text style={styles.details}>
-              From: {firstName} {lastName} | {type}
+              From: {firstName} {lastName}
             </Text>
             <Text style={styles.date}>{formatTime(date)}</Text>
           </View>
