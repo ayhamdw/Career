@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
   Dimensions,
+  Alert,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import PagerView from "react-native-pager-view";
@@ -40,18 +41,26 @@ export default function PostDetails() {
   }, []);
 
   const applyForThisJob = async () => {
+    console.log(user.profile.location.coordinates);
     const postId = post._id; //! This is the project Id
     const receiverId = post.user._id; //! This is the user Id of the post owner
     const senderId = user._id; //! This is the user Id of the logged in user
-
+    console.log("user city:", user.city);
     try {
+      const date = new Date();
+      console.log("Date:", date);
       const token = await AsyncStorage.getItem("token");
       const response = await axios.post(
-        `${ayhamWifiUrl}/api/community/applyForProject`,
+        `${ayhamWifiUrl}/api/proficient/booking-proficient`,
         {
-          postId,
-          receiverId,
-          senderId,
+          proficientId: receiverId,
+          userId: senderId,
+          requestDateTime: date,
+          location: {
+            latitude: user.profile.location.coordinates[1],
+            longitude: user.profile.location.coordinates[0],
+          },
+          postId: postId,
         },
         {
           headers: {
@@ -61,7 +70,7 @@ export default function PostDetails() {
       );
 
       if (response.status === 200) {
-        console.log("Applied for the job successfully");
+        Alert.alert("Success", "You have successfully applied for this job");
       }
     } catch (error) {
       console.error("Error applying for the job:", error);

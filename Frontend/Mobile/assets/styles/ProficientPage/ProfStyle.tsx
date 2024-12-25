@@ -94,6 +94,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     paddingVertical: 15,
     backgroundColor: "#fff",
+    marginBottom: 20,
+    borderRadius: 15,
   },
   button: {
     flexDirection: "row",

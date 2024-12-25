@@ -229,30 +229,7 @@ const userSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-    sendProjectRequests: [
-      {
-        projectId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Project",
-        },
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
-      },
-    ],
-    receiveProjectRequests: [
-      {
-        projectId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Project",
-        },
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
-      },
-    ],
+
     resetCode: {
       type: Number,
       default: 0,

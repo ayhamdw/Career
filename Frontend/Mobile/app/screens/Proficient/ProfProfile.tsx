@@ -5,6 +5,7 @@ import {
   ScrollView,
   StatusBar,
   Pressable,
+  Text,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -74,7 +75,6 @@ export default function ProfProfile({ proficientDetails, user }) {
       );
       if (response.status === 200) {
         alert("Friend request accepted");
-        console.log("Friend request accepted");
       }
     } catch (error) {
       console.log("Error accepting friend request:", error);
@@ -98,7 +98,6 @@ export default function ProfProfile({ proficientDetails, user }) {
           }
         );
         setReviews(response.data.reviews);
-        console.log("Reviews:", response.data.reviews);
       } catch (error) {
         console.log("Error fetching reviews:", error);
       }
@@ -119,6 +118,10 @@ export default function ProfProfile({ proficientDetails, user }) {
       <StatusBar barStyle="dark-content" />
       <Header job={proficientDetails} />
       <ScrollView contentContainerStyle={{ padding: 20 }}>
+        <Action
+          onMessagePress={onMessagePress}
+          onRequestPress={onRequestPress}
+        />
         <AboutSection section={proficientDetails.profile.bio} title="About" />
 
         <AboutSection
@@ -132,7 +135,6 @@ export default function ProfProfile({ proficientDetails, user }) {
 
         <ReviewsSection reviews={reviews} />
       </ScrollView>
-      <Action onMessagePress={onMessagePress} onRequestPress={onRequestPress} />
     </View>
   );
 }

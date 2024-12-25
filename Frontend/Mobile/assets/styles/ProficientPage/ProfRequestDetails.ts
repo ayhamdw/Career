@@ -1,147 +1,166 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from "react-native";
+
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
-      paddingHorizontal: 16,
-      paddingTop: 16,
-    },
-    headerText: {
-      fontSize: 24,
-      fontWeight: "bold",
-      color: "#333",
-      marginBottom: 16,
-    },
-    radioContainer: {
-      flexDirection: "row",
-      marginBottom: 16,
-    },
-    nameContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 4,
-      gap: 20,
-    },
-    statusBadge: {
-      paddingHorizontal: 10,
-      paddingVertical: 4,
-      borderRadius: 12,
-      alignItems: "center",
-    },
-    cancelledStatus: {
-      backgroundColor: "#ff6b6b",
-    },
-    completedStatus: {
-      backgroundColor: "#3498db",
-    },
-    statusText: {
-      color: "#fff",
-      fontSize: 12,
-      fontWeight: "bold",
-    },
-    radioButton: {
-      flex: 1,
-      paddingVertical: 12,
-      borderRadius: 8,
-      backgroundColor: "#f0f0f0",
-      alignItems: "center",
-      marginHorizontal: 4,
-    },
-    radioButtonActive: {
-      backgroundColor: "#58d68d",
-    },
-    radioText: {
-      fontSize: 16,
-      color: "#333",
-      fontWeight: "500",
-    },
-    radioTextActive: {
-      color: "#fff",
-      fontWeight: "bold",
-    },
-    list: {
-      paddingBottom: 16,
-    },
-    card: {
-      backgroundColor: "#f9f9f9",
-      borderRadius: 8,
-      padding: 16,
-      marginBottom: 12,
-      elevation: 3,
-    },
-    header: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginBottom: 8,
-    },
-    profileImage: {
-      width: 50,
-      height: 50,
-      borderRadius: 25,
-      marginRight: 12,
-    },
-    name: {
-      fontSize: 18,
-      fontWeight: "bold",
-      color: "#333",
-    },
-    profession: {
-      fontSize: 14,
-      color: "#58d68d",
-    },
-    email: {
-      fontSize: 14,
-      color: "#888",
-      marginVertical: 4,
-    },
-    row: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginVertical: 2,
-    },
-    location: {
-      marginLeft: 4,
-      fontSize: 14,
-      color: "#333",
-    },
-    time: {
-      marginLeft: 4,
-      fontSize: 14,
-      color: "#333",
-    },
-    actions: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      marginTop: 12,
-    },
-    button: {
-      flex: 1,
-      paddingVertical: 10,
-      borderRadius: 8,
-      alignItems: "center",
-      marginHorizontal: 4,
-      width: "100%",
-    },
-    acceptButton: {
-      backgroundColor: "#58d68d",
-    },
-    rejectButton: {
-      backgroundColor: "#ff6b6b",
-    },
-    cancelButton: {
-      backgroundColor: "#f39c12",
-    },
-    completeButton: {
-      backgroundColor: "#3498db",
-    },
-    mapButton: {
-      backgroundColor: "#985174",
-    },
-    buttonText: {
-      color: "#fff",
-      fontSize: 14,
-      fontWeight: "bold",
-    },
-  });
-  export default styles;
+  container: {
+    flex: 1,
+    backgroundColor: "#f8f9fa",
+    padding: 16,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 16,
+  },
+  radioContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  radioButton: {
+    flex: 1,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    alignItems: "center",
+    marginHorizontal: 4,
+  },
+  radioButtonActive: {
+    backgroundColor: "#007bff",
+    borderColor: "#007bff",
+  },
+  radioText: {
+    fontSize: 14,
+    color: "#333",
+  },
+  radioTextActive: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  list: {
+    paddingBottom: 16,
+  },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    elevation: 2, // Shadow for Android
+    shadowColor: "#000", // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  shadow: {
+    elevation: 4,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  profileImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    marginRight: 12,
+  },
+  nameContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flex: 1,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  badge: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 12,
+    marginLeft: 8,
+  },
+  proficientBadge: {
+    backgroundColor: "#28a745", 
+  },
+  projectBadge: {
+    backgroundColor: "#17a2b8", 
+  },
+  badgeText: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  profession: {
+    fontSize: 14,
+    color: "#666",
+  },
+  email: {
+    fontSize: 14,
+    color: "#555",
+    marginBottom: 8,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  location: {
+    fontSize: 14,
+    color: "#888",
+    marginLeft: 4,
+  },
+  time: {
+    fontSize: 14,
+    color: "#888",
+    marginLeft: 4,
+  },
+  projectInfo: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 8,
+    backgroundColor: "#f0f0f0",
+    padding: 8,
+    borderRadius: 8,
+  },
+  actions: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 12,
+  },
+  button: {
+    flex: 1,
+    padding: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginHorizontal: 4,
+  },
+  acceptButton: {
+    backgroundColor: "#28a745",
+  },
+  rejectButton: {
+    backgroundColor: "#dc3545",
+  },
+  cancelButton: {
+    backgroundColor: "#ffc107",
+  },
+  completeButton: {
+    backgroundColor: "#007bff",
+  },
+  mapButton: {
+    backgroundColor: "#17a2b8",
+  },
+  buttonText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+});
+
+export default styles;
