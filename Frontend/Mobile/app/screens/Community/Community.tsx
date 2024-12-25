@@ -11,10 +11,52 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { ayhamWifiUrl } from "@/constants/Urls";
 
-export default function Community() {
+interface Location {
+  type: string;
+  coordinates: [number, number];
+}
+
+interface Profile {
+  firstName: string;
+  lastName: string;
+  bio: string;
+  experience: string;
+  phone: string;
+  location: Location;
+  ratings: {
+    rating: number;
+    review: string;
+    userId: string;
+    date: Date;
+  };
+  numberOfRequest: number;
+}
+
+interface User {
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+  gender: string;
+  city: string;
+  dateOfBirth: Date;
+  career: string;
+  careerCategory: string;
+  rating: number;
+  profile: Profile;
+  verificationStatus: boolean;
+  tokens: string[];
+  friendRequests: string[];
+  friends: string[];
+  sendRequests: string[];
+  resetCode: number;
+  resetCodeExpires: Date;
+}
+
+export default function Community({ user }: { user: User }) {
   const [posts, setPosts] = useState([]);
   const navigation = useNavigation();
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,7 +74,9 @@ export default function Community() {
   const renderPost = ({ item }) => (
     <TouchableOpacity
       style={styles.postCard}
-      onPress={() => navigation.navigate("postDetails", { post: item })}
+      onPress={() =>
+        navigation.navigate("postDetails", { post: item, user: user })
+      }
     >
       <Text style={styles.postTitle}>{item.title}</Text>
       <Text style={styles.postCategory}>{item.careerCategory}</Text>

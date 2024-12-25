@@ -14,4 +14,6 @@ router.delete(
   postController.deletePost
 );
 
+router.post("/applyForProject", postController.applyForProject);
+
 module.exports = router;
