@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import styles from "@/assets/styles/ProficientPage/ProfRequestDetails";
 import { useNavigation } from "expo-router";
+
 export default function FriendRequests({ user }: { user: any }) {
   const id = user._id;
-  console.log(id);
   const [senderUserData, setSenderUserData] = useState([]);
   const [filter, setFilter] = useState("active");
   const navigation = useNavigation();
@@ -46,6 +39,7 @@ export default function FriendRequests({ user }: { user: any }) {
       );
       if (response.status === 200) {
         setSenderUserData(response.data.senderDetails);
+        console.log("Sender user data:", response.data.senderDetails);
       }
     } catch (error) {
       console.error("Error fetching sender user data:", error);
@@ -91,9 +85,11 @@ export default function FriendRequests({ user }: { user: any }) {
   };
 
   const renderRequest = ({ item }: { item: any }) => {
-    const { sender, status, bookId, dataRequested, city } = item;
+    const { sender, status, bookId, dataRequested, city, postId } = item;
+    const isProjectRequest = postId !== null;
+
     return (
-      <View style={styles.card}>
+      <View style={[styles.card, styles.shadow]}>
         <View style={styles.header}>
           <Image
             source={{ uri: sender.profile.profileImage }}
@@ -106,13 +102,15 @@ export default function FriendRequests({ user }: { user: any }) {
               </Text>
               <View
                 style={[
-                  styles.statusBadge,
-                  status === "Cancelled"
-                    ? styles.cancelledStatus
-                    : styles.completedStatus,
+                  styles.badge,
+                  isProjectRequest
+                    ? styles.projectBadge
+                    : styles.proficientBadge,
                 ]}
               >
-                <Text style={styles.statusText}>{status}</Text>
+                <Text style={styles.badgeText}>
+                  {isProjectRequest ? "Project Request" : "Proficient Request"}
+                </Text>
               </View>
             </View>
             <Text style={styles.profession}>{sender.career}</Text>
@@ -127,6 +125,9 @@ export default function FriendRequests({ user }: { user: any }) {
           <Ionicons name="time-outline" size={16} color="#888" />
           <Text style={styles.time}>{formatTime(dataRequested)}</Text>
         </View>
+        {isProjectRequest && (
+          <Text style={styles.projectInfo}>Post ID: {postId}</Text>
+        )}
         <View style={styles.actions}>
           {status === "Pending" && (
             <>
@@ -158,19 +159,21 @@ export default function FriendRequests({ user }: { user: any }) {
               >
                 <Text style={styles.buttonText}>Complete</Text>
               </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[styles.button, styles.mapButton]}
-                onPress={() => navigation.navigate("MapTracker", { item })}
-              >
-                <Text style={styles.buttonText}>Map</Text>
-              </TouchableOpacity>
+              {!postId && (
+                <TouchableOpacity
+                  style={[styles.button, styles.mapButton]}
+                  onPress={() => navigation.navigate("MapTracker", { item })}
+                >
+                  <Text style={styles.buttonText}>Map</Text>
+                </TouchableOpacity>
+              )}
             </>
           )}
         </View>
       </View>
     );
   };
+
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Requests</Text>
@@ -217,3 +220,5 @@ export default function FriendRequests({ user }: { user: any }) {
     </View>
   );
 }
+
+// Add updated styles for badges and shadows in the CSS file

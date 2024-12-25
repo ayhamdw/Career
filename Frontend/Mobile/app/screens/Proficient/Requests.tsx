@@ -5,6 +5,7 @@ import {
   View,
   FlatList,
   StyleSheet,
+  TouchableWithoutFeedback,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -13,7 +14,7 @@ import { ayhamWifiUrl } from "@/constants/Urls";
 interface Request {
   city: string;
   dateRequested: string;
-  provider: {
+  provider?: {
     _id: string;
     career: string;
     profile: {
@@ -22,88 +23,151 @@ interface Request {
     };
     status: string;
   };
+  project?: {
+    title: string;
+    description: string;
+    clientName: string;
+    status: string;
+  };
 }
 
-const Request = ({ user }: { user: any }) => {
-  const [requests, setRequests] = useState<Request[]>([]);
+const RequestScreen = ({ user }: { user: any }) => {
+  const [selectedTab, setSelectedTab] = useState<"proficient" | "project">(
+    "proficient"
+  );
+  const [proficientRequests, setProficientRequests] = useState<Request[]>([]);
+  const [projectRequests, setProjectRequests] = useState<Request[]>([]);
   const id = user._id;
 
-  const formatTime = (dateString: string): string => {
-    const date = new Date(dateString);
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const amPm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12 || 12;
-    return `${hours}:${minutes.toString().padStart(2, "0")} ${amPm}`;
+  const fetchRequests = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+
+      const [proficientResponse, projectResponse] = await Promise.all([
+        axios.get(`${ayhamWifiUrl}/api/proficient/requestDetails/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }),
+        axios.get(`${ayhamWifiUrl}/api/project/requestDetails/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }),
+      ]);
+
+      if (proficientResponse.status === 200) {
+        setProficientRequests(proficientResponse.data.proficientInfo);
+      }
+      if (projectResponse.status === 200) {
+        setProjectRequests(projectResponse.data.projectInfo);
+      }
+    } catch (error) {
+      console.log("Error fetching requests:", error);
+    }
   };
 
   useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
-        const response = await axios.get(
-          `${ayhamWifiUrl}/api/proficient/requestDetails/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.status === 200) {
-          setRequests(response.data.proficientInfo);
-        }
-      } catch (error) {
-        console.log("Error fetching requests:", error);
-      }
-    };
     fetchRequests();
   }, [user._id]);
 
+  const renderProficientRequest = (item: Request) => (
+    <View style={styles.card}>
+      <View style={styles.cardHeader}>
+        <Text style={styles.profName}>
+          {item.provider?.profile.firstName +
+            " " +
+            item.provider?.profile.lastName}
+        </Text>
+        <View
+          style={{
+            ...styles.statusBadge,
+            backgroundColor:
+              item.provider?.status === "Pending"
+                ? "#ffc107"
+                : item.provider?.status === "Accepted"
+                ? "#28a745"
+                : item.provider?.status === "In Progress"
+                ? "#007bff"
+                : "#dc3545",
+          }}
+        >
+          <Text style={styles.statusText}>{item.provider?.status}</Text>
+        </View>
+      </View>
+      <Text style={styles.profCareer}>🎓 {item.provider?.career}</Text>
+      <Text style={styles.info}>📍 {item.city}</Text>
+      <Text style={styles.info}>
+        📅 {new Date(item.dateRequested).toLocaleDateString()}
+      </Text>
+    </View>
+  );
+
+  const renderProjectRequest = (item: Request) => (
+    <View style={styles.card}>
+      <View style={styles.cardHeader}>
+        <Text style={styles.profName}>{item.project?.title}</Text>
+        <View
+          style={{
+            ...styles.statusBadge,
+            backgroundColor:
+              item.project?.status === "Pending"
+                ? "#ffc107"
+                : item.project?.status === "Approved"
+                ? "#28a745"
+                : item.project?.status === "In Progress"
+                ? "#007bff"
+                : "#dc3545",
+          }}
+        >
+          <Text style={styles.statusText}>{item.project?.status}</Text>
+        </View>
+      </View>
+      <Text style={styles.info}>👤 {item.project?.clientName}</Text>
+      <Text style={styles.info}>📝 {item.project?.description}</Text>
+      <Text style={styles.info}>
+        📅 {new Date(item.dateRequested).toLocaleDateString()}
+      </Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sent Requests</Text>
+      {/* Tabs */}
+      <View style={styles.tabContainer}>
+        <TouchableWithoutFeedback onPress={() => setSelectedTab("proficient")}>
+          <Text
+            style={[
+              styles.tab,
+              selectedTab === "proficient" && styles.activeTab,
+            ]}
+          >
+            Proficient Requests
+          </Text>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => setSelectedTab("project")}>
+          <Text
+            style={[styles.tab, selectedTab === "project" && styles.activeTab]}
+          >
+            Project Requests
+          </Text>
+        </TouchableWithoutFeedback>
+      </View>
+
       <FlatList
-        data={requests}
-        keyExtractor={(item) => item.provider._id}
-        contentContainerStyle={styles.list}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.profName}>
-                {item.provider.profile.firstName +
-                  " " +
-                  item.provider.profile.lastName}
-              </Text>
-              <View
-                style={{
-                  ...styles.statusBadge,
-                  backgroundColor:
-                    item.status === "Pending"
-                      ? "#ffc107"
-                      : item.status === "Accepted"
-                      ? "#28a745"
-                      : item.status === "In Progress"
-                      ? "#007bff"
-                      : "#dc3545",
-                }}
-              >
-                <Text style={styles.statusText}>{item.status}</Text>
-              </View>
-            </View>
-            <Text style={styles.profCareer}>🎓 {item.provider.career}</Text>
-            <Text style={styles.info}>📍 {item.city}</Text>
-            <Text style={styles.info}>
-              📅 {new Date(item.dateRequested).toLocaleDateString()}
-            </Text>
-            <Text style={styles.info}>⏰ {formatTime(item.dateRequested)}</Text>
-            <TouchableOpacity
-              style={styles.detailsButton}
-              onPress={() => console.log("View details pressed")}
-            >
-              <Text style={styles.detailsButtonText}>Details</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+        data={
+          selectedTab === "proficient" ? proficientRequests : projectRequests
+        }
+        keyExtractor={(item, index) =>
+          selectedTab === "proficient"
+            ? item.provider?._id || index.toString()
+            : item.project?.title || index.toString()
+        }
+        renderItem={({ item }) =>
+          selectedTab === "proficient"
+            ? renderProficientRequest(item)
+            : renderProjectRequest(item)
+        }
       />
     </View>
   );
@@ -113,17 +177,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 16,
   },
-  title: {
-    fontSize: 26,
-    fontWeight: "700",
-    color: "#333",
-    textAlign: "center",
-    marginBottom: 16,
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#f1f1f1",
+    paddingVertical: 8,
   },
-  list: {
-    paddingBottom: 16,
+  tab: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#555",
+    paddingVertical: 8,
+  },
+  activeTab: {
+    color: "#58d68d",
+    borderBottomWidth: 2,
+    borderBottomColor: "#58d68d",
   },
   card: {
     backgroundColor: "white",
@@ -160,30 +230,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textTransform: "capitalize",
   },
-  profCareer: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#555",
-    marginBottom: 4,
-  },
   info: {
     fontSize: 14,
     color: "#777",
     marginBottom: 6,
   },
-  detailsButton: {
-    marginTop: 12,
-    backgroundColor: "#58d68d",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    alignSelf: "flex-start",
-  },
-  detailsButtonText: {
-    fontSize: 14,
-    color: "white",
-    fontWeight: "bold",
-  },
 });
 
-export default Request;
+export default RequestScreen;

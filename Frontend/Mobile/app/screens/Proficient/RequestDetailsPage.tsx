@@ -59,6 +59,8 @@ export default function RequestDetailsPage({ route, navigation }) {
             latitude: markerLocation.latitude,
             longitude: markerLocation.longitude,
           },
+          postId: null,
+          city: null,
         },
         {
           headers: {

@@ -13,10 +13,16 @@ const bookingSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    postId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+      required: false,
+    },
     dateRequested: {
       type: Date,
       trim: true,
       required: true,
+      default: null,
     },
 
     city: {
@@ -29,10 +35,12 @@ const bookingSchema = mongoose.Schema(
         type: String,
         enum: ["Point"],
         default: "Point",
+        required: false,
       },
       coordinates: {
         type: [Number],
-        required: true,
+        required: false,
+        default: [0, 0],
       },
     },
     status: {

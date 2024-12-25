@@ -2,13 +2,13 @@ const Post = require("../models/posts");
 const User = require("../models/user2");
 
 const createPost = async (req, res) => {
- const { title, content, careerCategory, location,numberOfWorker} = req.body;
-  const user = req.user; 
-  const userRole = user.role; 
+  const { title, content, careerCategory, location, numberOfWorker } = req.body;
+  const user = req.user;
+  const userRole = user.role;
   try {
     const newPost = new Post({
-      user: user._id, 
-      userRole: userRole, 
+      user: user._id,
+      userRole: userRole,
       title,
       content,
       careerCategory,
@@ -69,6 +69,13 @@ const applyForProject = async (req, res) => {
   }
 };
 
+const getRequestDetails = async (req, res) => {
+  const postId = req.params.id;
+  try {
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   createPost,
   getAllPosts,

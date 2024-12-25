@@ -51,7 +51,7 @@ const getReviews = async (req, res) => {
 };
 
 const createBooking = async (req, res) => {
-  const { proficientId, userId, requestDateTime, location } = req.body;
+  const { proficientId, userId, requestDateTime, location, postId } = req.body;
   try {
     const { latitude, longitude } = location;
     const locationAPI = await axios.get(
@@ -61,12 +61,17 @@ const createBooking = async (req, res) => {
     const user = await User.findById(userId);
     const provider = await User.findById(proficientId);
 
+    // console.log(city);
+
+    console.dir(req.body);
+    //
     user.sendProficientRequests.push(proficientId);
     provider.receiveProficientRequest.push(userId);
 
     const booking = new Booking({
       userId: userId,
       providerId: proficientId,
+      postId: postId || null,
       dateRequested: requestDateTime,
       city: city,
       location: {
@@ -91,8 +96,6 @@ const createBooking = async (req, res) => {
 const requestDetails = async (req, res) => {
   try {
     const { id } = req.params;
-    const city = await User.findById(id).select("city");
-
     const booking = await Booking.find({
       userId: id,
     });
@@ -118,6 +121,7 @@ const requestDetails = async (req, res) => {
 
 const senderDetails = async (req, res) => {
   const { id } = req.params;
+  console.log(id);
   try {
     const booking = await Booking.find({ providerId: id });
     const senderDetails = await Promise.all(
@@ -133,6 +137,7 @@ const senderDetails = async (req, res) => {
           status: book.status,
           city: city,
           location: book.location,
+          postId: book.postId,
         };
       })
     );
