@@ -103,6 +103,7 @@
     "@types/jest": "^29.5.14",
     "@types/react": "~18.3.12",
     "@types/react-native-calendar-picker": "^8.0.0",
+    "@types/react-native-snap-carousel": "^3.8.11",
     "@types/react-test-renderer": "^18.3.0",
     "babel-preset-react-native": "^4.0.1",
     "expo": "^52.0.9",

@@ -82,7 +82,7 @@ const createBooking = async (req, res) => {
     await provider.save();
     await booking.save();
     res.status(200).json({ message: "Booking request sent" });
-    console.log("Booking request sent")
+    console.log("Booking request sent");
   } catch (error) {
     console.log(error);
   }

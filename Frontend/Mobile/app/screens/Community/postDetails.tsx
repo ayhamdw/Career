@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import {
   View,
   Text,
@@ -9,57 +9,108 @@ import {
   Dimensions,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { FlatList } from "react-native-gesture-handler";
-import Carousel from "react-native-snap-carousel";
+import PagerView from "react-native-pager-view";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default function PostDetails() {
   const route = useRoute();
   const { post } = route.params;
+  const navigation = useNavigation();
 
-  const renderCarouselItem = ({ item }) => (
-    <Image source={{ uri: item }} style={styles.carouselImage} />
-  );
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "",
+      headerLeft: () => (
+        <View>
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="black"
+            onPress={() => navigation.goBack()}
+          />
+        </View>
+      ),
+    });
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.headerContainer}>
+      {/* Header Section */}
+      <LinearGradient
+        colors={["#28a745", "#1d8a3b"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.headerContainer}
+      >
         <Text style={styles.title}>{post.title}</Text>
         <Text style={styles.category}>{post.careerCategory}</Text>
-      </View>
+      </LinearGradient>
 
+      {/* Carousel Section */}
       <View style={styles.carouselContainer}>
         {post.images && post.images.length > 0 ? (
-          <Carousel
-            data={post.images}
-            renderItem={renderCarouselItem}
-            sliderWidth={SCREEN_WIDTH}
-            itemWidth={SCREEN_WIDTH - 60}
-            layout="stack"
-            loop={true}
-          />
+          <PagerView style={styles.pagerView} initialPage={0}>
+            {post.images.map((image, index) => (
+              <View key={index} style={styles.carouselItem}>
+                <Image source={{ uri: image }} style={styles.carouselImage} />
+              </View>
+            ))}
+          </PagerView>
         ) : (
           <Text style={styles.noImages}>No images available</Text>
         )}
+        <View style={styles.carouselDots}>
+          {post.images &&
+            post.images.map((_, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.dot,
+                  index === 3 && styles.activeDot, // First dot is active initially
+                ]}
+              />
+            ))}
+        </View>
       </View>
 
+      {/* Details Section */}
       <View style={styles.detailsContainer}>
         <Text style={styles.content}>{post.content}</Text>
-        <Text style={styles.location}>📍 {post.location}</Text>
-        <Text style={styles.date}>
-          📅 Posted on: {new Date(post.postDate).toLocaleDateString()}
-        </Text>
-        <Text style={styles.workers}>
-          👥 Workers Needed: {post.numberOfWorker}
-        </Text>
+        <View style={styles.detailItem}>
+          <Ionicons name="location-outline" size={20} color="#28a745" />
+          <Text style={styles.detailText}>{post.location}</Text>
+        </View>
+        <View style={styles.detailItem}>
+          <Ionicons name="calendar-outline" size={20} color="#28a745" />
+          <Text style={styles.detailText}>
+            Posted on: {new Date(post.postDate).toLocaleDateString()}
+          </Text>
+        </View>
+        <View style={styles.detailItem}>
+          <Ionicons name="people-outline" size={20} color="#28a745" />
+          <Text style={styles.detailText}>
+            Workers Needed: {post.numberOfWorker}
+          </Text>
+        </View>
       </View>
 
+      {/* Apply Button */}
       <TouchableOpacity
         style={styles.applyButton}
         onPress={() => alert("Applied successfully!")}
       >
-        <Text style={styles.applyButtonText}>Apply for this Job</Text>
+        <LinearGradient
+          colors={["#28a745", "#1d8a3b"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.gradientButton}
+        >
+          <Text style={styles.applyButtonText}>Apply for this Job</Text>
+        </LinearGradient>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -68,16 +119,17 @@ export default function PostDetails() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#ffffff",
   },
   headerContainer: {
-    padding: 16,
-    backgroundColor: "#007bff",
+    padding: 24,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: "bold",
     color: "#ffffff",
   },
@@ -87,21 +139,44 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   carouselContainer: {
-    marginVertical: 20,
+    marginTop: 20,
+  },
+  pagerView: {
+    width: SCREEN_WIDTH,
+    height: 250,
+  },
+  carouselItem: {
+    justifyContent: "center",
+    alignItems: "center",
   },
   carouselImage: {
-    width: SCREEN_WIDTH - 60,
+    width: SCREEN_WIDTH - 40,
     height: 250,
     borderRadius: 15,
   },
+  carouselDots: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 10,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    backgroundColor: "#d3d3d3",
+    borderRadius: 4,
+    marginHorizontal: 4,
+  },
+  activeDot: {
+    backgroundColor: "#28a745",
+  },
   detailsContainer: {
     padding: 16,
+    marginHorizontal: 16,
+    marginTop: 20,
     backgroundColor: "#ffffff",
     borderRadius: 15,
-    marginHorizontal: 16,
-    marginBottom: 16,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 4,
@@ -111,20 +186,15 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: "#333333",
   },
-  location: {
-    fontSize: 14,
-    color: "#007bff",
-    marginBottom: 8,
+  detailItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
   },
-  date: {
-    fontSize: 14,
-    color: "#6c757d",
-    marginBottom: 8,
-  },
-  workers: {
+  detailText: {
     fontSize: 14,
     color: "#333333",
-    marginBottom: 16,
+    marginLeft: 8,
   },
   noImages: {
     fontSize: 14,
@@ -133,12 +203,15 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   applyButton: {
-    backgroundColor: "#28a745",
-    padding: 16,
-    borderRadius: 25,
     marginHorizontal: 16,
+    marginVertical: 20,
+    borderRadius: 25,
+    overflow: "hidden",
+    elevation: 5,
+  },
+  gradientButton: {
+    paddingVertical: 16,
     alignItems: "center",
-    marginBottom: 16,
   },
   applyButtonText: {
     fontSize: 18,

@@ -8,6 +8,7 @@ interface AboutSectionProps {
 }
 
 const AboutSection: React.FC<AboutSectionProps> = ({ section, title }) => {
+  console.log(section);
   return (
     <View style={styles.profileSection}>
       <Text style={styles.sectionTitle}>{title}</Text>

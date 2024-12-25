@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      // required: false,
       unique: false,
       trim: true,
       default: "",
@@ -111,7 +110,7 @@ const userSchema = new mongoose.Schema(
       profileImage: { type: String, trim: true, default: "" },
       ratings: [
         {
-          ratings: { type: Number, required: true, default: 0 },
+          rating: { type: Number, required: true, default: 0 },
           review: { type: String, trim: true, default: "" },
           userId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -228,6 +227,30 @@ const userSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+      },
+    ],
+    sendProjectRequests: [
+      {
+        projectId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Project",
+        },
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      },
+    ],
+    receiveProjectRequests: [
+      {
+        projectId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Project",
+        },
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
       },
     ],
     resetCode: {
