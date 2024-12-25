@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 
 
-const Community = ({ userCareer }) => {
+const Community = () => {
 
   const token = localStorage.getItem('token');
   const [posts, setPosts] = useState([]);
@@ -80,7 +80,7 @@ const Community = ({ userCareer }) => {
         setPosts(response.data);
         // console.log("posts: ", JSON.stringify(response.data, null, 2));
         response.data.forEach(post => {
-          console.log("Post data: ", post.user._id);
+          console.log("Post data: ", post.user);
         });
 
       } catch (error) {
@@ -114,7 +114,7 @@ const Community = ({ userCareer }) => {
     const fetchCoordinates = async () => {
       try{
         const email = localStorage.getItem("userEmail");
-        const response = await axios.post(`${import.meta.env.VITE_API}/coordinates`,{email});
+        const response = await axios.post(`${import.meta.env.VITE_API}/user/coordinates`,{email});
         const {longitude, latitude} = response.data;
         setUserCoordinates([longitude,latitude]);
         console.log(userCoordinates);
@@ -368,66 +368,7 @@ const Community = ({ userCareer }) => {
               </div>
             </div>
           )}
-          {/* {isModalOpen && userRole === "user" && (
-            <div className={styles.modal}>
-              <div className={styles.modalContent}>
-                <form onSubmit={handleSubmit}>
-                  <h2>Create a New Post</h2>
 
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder="Post Title"
-                    value={form.title}
-                    onChange={handleInputChange}
-                    required
-                  />
-
-                  <textarea
-                    name="content"
-                    placeholder="Post Content"
-                    value={form.content}
-                    onChange={handleInputChange}
-                    required
-                  />
-
-                  <select
-                    name="careerCategory"
-                    value={form.careerCategory}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Select Category</option>
-                    {categories.map((category, index) => (
-                      <option key={index} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-
-                  <input
-                    type="text"
-                    name="location"
-                    placeholder="Location"
-                    value={form.location}
-                    onChange={handleInputChange}
-                    required
-                  />
-
-                  <button type="submit" className={styles.submitBtn}>
-                    Post
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.cancelBtn}
-                    onClick={() => setIsModalOpen(false)}
-                  >
-                    Cancel
-                  </button>
-                </form>
-              </div>
-            </div>
-          )} */}
 
           <div className={styles.postList}>
             {posts.slice().reverse().map((post) => (
