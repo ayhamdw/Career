@@ -13,14 +13,16 @@ import PagerView from "react-native-pager-view";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import { ayhamWifiUrl } from "@/constants/Urls";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default function PostDetails() {
   const route = useRoute();
-  const { post } = route.params;
+  const { post, user } = route.params;
   const navigation = useNavigation();
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "",
@@ -37,9 +39,37 @@ export default function PostDetails() {
     });
   }, []);
 
+  const applyForThisJob = async () => {
+    const postId = post._id; //! This is the project Id
+    const receiverId = post.user._id; //! This is the user Id of the post owner
+    const senderId = user._id; //! This is the user Id of the logged in user
+
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.post(
+        `${ayhamWifiUrl}/api/community/applyForProject`,
+        {
+          postId,
+          receiverId,
+          senderId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Applied for the job successfully");
+      }
+    } catch (error) {
+      console.error("Error applying for the job:", error);
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
-      {/* Header Section */}
       <LinearGradient
         colors={["#28a745", "#1d8a3b"]}
         start={{ x: 0, y: 0 }}
@@ -50,7 +80,6 @@ export default function PostDetails() {
         <Text style={styles.category}>{post.careerCategory}</Text>
       </LinearGradient>
 
-      {/* Carousel Section */}
       <View style={styles.carouselContainer}>
         {post.images && post.images.length > 0 ? (
           <PagerView style={styles.pagerView} initialPage={0}>
@@ -77,7 +106,6 @@ export default function PostDetails() {
         </View>
       </View>
 
-      {/* Details Section */}
       <View style={styles.detailsContainer}>
         <Text style={styles.content}>{post.content}</Text>
         <View style={styles.detailItem}>
@@ -98,11 +126,7 @@ export default function PostDetails() {
         </View>
       </View>
 
-      {/* Apply Button */}
-      <TouchableOpacity
-        style={styles.applyButton}
-        onPress={() => alert("Applied successfully!")}
-      >
+      <TouchableOpacity style={styles.applyButton} onPress={applyForThisJob}>
         <LinearGradient
           colors={["#28a745", "#1d8a3b"]}
           start={{ x: 0, y: 0 }}

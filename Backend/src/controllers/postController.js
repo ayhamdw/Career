@@ -28,8 +28,8 @@ const createPost = async (req, res) => {
 const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate("user", "username profile email role city")
-      .exec();
+      .populate("user", "_id username profile email role city")
+      .lean();
     res.status(200).send(posts);
   } catch (error) {
     res.status(400).send({ error: "Error fetching posts" });
@@ -51,8 +51,28 @@ const deletePost = async (req, res) => {
   }
 };
 
+const applyForProject = async (req, res) => {
+  const { postId, receiverId, senderId } = req.body;
+  console.log(postId, receiverId, senderId);
+  try {
+    await User.findByIdAndUpdate(senderId, {
+      $push: { sendProjectRequests: { projectId: postId, userId: receiverId } },
+    });
+    await User.findByIdAndUpdate(receiverId, {
+      $push: {
+        receiveProjectRequests: { projectId: postId, userId: senderId },
+      },
+    });
+
+    res.status(200).json({ message: "Applied for project successfully" });
+  } catch (error) {
+    console.log("error while applying for project", error);
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
   deletePost,
+  applyForProject,
 };
