@@ -2,7 +2,7 @@ const Post = require("../models/posts");
 const User = require("../models/user2");
 
 const createPost = async (req, res) => {
-  const { title, content, careerCategory, location, numberOfWorker } = req.body;
+  const { title, content, careerCategory, location, numberOfWorker, images } = req.body;
   const user = req.user;
   const userRole = user.role;
   try {
@@ -14,7 +14,7 @@ const createPost = async (req, res) => {
       careerCategory,
       location,
       numberOfWorker,
-      images,
+      images: images || [],
     });
     await newPost.save();
     res.status(201).json(newPost);

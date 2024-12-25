@@ -45,8 +45,9 @@ const postSchema = new mongoose.Schema(
     },
     images: {
       type: [String],
+      default: [],
       required: false,
-    },
+    }    
   },
   {
     timestamps: true,
