@@ -15,7 +15,7 @@ const Requests = () => {
     const myId = localStorage.getItem("id");
 
     try{
-      const response = await axios.post("http://localhost:7777/api/request/acceptedRequestReceived",{userId:userId, myId});
+      const response = await axios.post(`${import.meta.env.VITE_API}/request/acceptedRequestReceived`,{userId:userId, myId});
       console.log(userId)
     }
     catch(error){
@@ -29,7 +29,7 @@ const Requests = () => {
     setRejectedRequests([...rejectedRequests, request]);
     const myId = localStorage.getItem("id");
     try{
-      const response = await axios.post("http://localhost:7777/api/request/RejectRequestReceived",{userId:id,myId});
+      const response = await axios.post(`${import.meta.env.VITE_API}/request/RejectRequestReceived`,{userId:id,myId});
       
     }
     catch(error){
@@ -41,7 +41,7 @@ const Requests = () => {
     const getProficientData = async () => {
       const email = localStorage.getItem("userEmail");
       try {
-        const response = await axios.post("http://localhost:7777/api/user/ReceiveProficient", { email });
+        const response = await axios.post(`${import.meta.env.VITE_API}/user/ReceiveProficient`, { email });
         setIncomingRequests(response.data); 
       } catch (error) {
         console.log("Error Fetching Received Requests: ", error);
@@ -54,7 +54,7 @@ const Requests = () => {
     const getAcceptedReceivedRequest = async () => {
       const email = localStorage.getItem("userEmail");
       try {
-        const response = await axios.post("http://localhost:7777/api/request/getAcceptedReceivedRequest", { email });
+        const response = await axios.post(`${import.meta.env.VITE_API}/request/getAcceptedReceivedRequest`, { email });
         console.log(response.data)
 
         setAcceptedRequests(response.data); 
@@ -68,7 +68,7 @@ const Requests = () => {
     const getRejectedReceivedRequest = async () => {
       const email = localStorage.getItem("userEmail");
       try {
-        const response = await axios.post("http://localhost:7777/api/request/getRejectedReceivedRequest", { email });
+        const response = await axios.post(`${import.meta.env.VITE_API}/request/getRejectedReceivedRequest`, { email });
         setRejectedRequests(response.data); 
       } catch (error) {
         console.log("Error Fetching Received Requests: ", error);

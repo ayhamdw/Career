@@ -24,7 +24,7 @@ useEffect(()=>{
   
     const fetchImage= async()=>{
       try{
-      const response = await axios.post("http://localhost:7777/api/user/user",{email});
+      const response = await axios.post(`${import.meta.env.VITE_API}/user/user`,{email});
       setProfileImage(response.data.data.profile.profileImage);
       const {firstName, lastName} = response.data.data.profile;
       setUserName(firstName + " "+ lastName);

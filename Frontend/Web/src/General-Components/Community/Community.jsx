@@ -56,7 +56,7 @@ const Community = ({ userCareer }) => {
     const fetchCurrentUser = async () => {
       try {
         const email = localStorage.getItem("userEmail");
-        const response = await axios.post("http://localhost:7777/api/user/id", { email });
+        const response = await axios.post(`${import.meta.env.VITE_API}/user/id`, { email });
         setCurrentUserId(response.data.userId);
       } catch (error) {
         console.error("Error fetching user ID:", error);
@@ -67,7 +67,7 @@ const Community = ({ userCareer }) => {
     const fetchUserRole = async () => {
       try {
         const email = localStorage.getItem("userEmail");
-        const response = await axios.post("http://localhost:7777/api/user/role", { email });
+        const response = await axios.post(`${import.meta.env.VITE_API}/user/role`, { email });
         setUserRole(response.data.role);
       } catch (error) {
         console.error("Error fetching user role:", error);
@@ -76,7 +76,7 @@ const Community = ({ userCareer }) => {
 
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("http://localhost:7777/api/community/posts");
+        const response = await axios.get(`${import.meta.env.VITE_API}/community/posts`);
         setPosts(response.data);
         // console.log("posts: ", JSON.stringify(response.data, null, 2));
         response.data.forEach(post => {
@@ -91,7 +91,7 @@ const Community = ({ userCareer }) => {
     const fetchFirstName = async () =>{
       try{
         const email = localStorage.getItem("userEmail");
-        const response = await axios.post("http://localhost:7777/api/user/firstName",{email});
+        const response = await axios.post(`${import.meta.env.VITE_API}/user/firstName`,{email});
         setUserFirstName(response.data.firstName);
         console.log(response.data.firstName)
         
@@ -102,7 +102,7 @@ const Community = ({ userCareer }) => {
     const fetchLastName = async () =>{
       try{
         const email = localStorage.getItem("userEmail");
-        const response = await axios.post("http://localhost:7777/api/user/lastName",{email});
+        const response = await axios.post(`${import.meta.env.VITE_API}/user/lastName`,{email});
         setUserLasttName(response.data.lastName);
         console.log(response.data.lastName)
         
@@ -114,7 +114,7 @@ const Community = ({ userCareer }) => {
     const fetchCoordinates = async () => {
       try{
         const email = localStorage.getItem("userEmail");
-        const response = await axios.post(`http://localhost:7777/api/user/coordinates`,{email});
+        const response = await axios.post(`${import.meta.env.VITE_API}/coordinates`,{email});
         const {longitude, latitude} = response.data;
         setUserCoordinates([longitude,latitude]);
         console.log(userCoordinates);
@@ -164,7 +164,7 @@ const Community = ({ userCareer }) => {
       };
 
       const response = await axios.post(
-        "http://localhost:7777/api/community/post",
+        `${import.meta.env.VITE_API}/community/post`,
         post,
         {
           headers: {
@@ -224,7 +224,7 @@ const Community = ({ userCareer }) => {
         return;
       }
         const response = await axios.post(
-        `http://localhost:7777/api/proficient/booking-proficient`, 
+        `${import.meta.env.VITE_API}/proficient/booking-proficient`, 
         {
           proficientId,
           userId,

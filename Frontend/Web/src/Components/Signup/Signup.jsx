@@ -73,7 +73,7 @@ function Signup() {
     const fetchEmails = async () => {
       try {
 
-        const response = await axios.get('http://localhost:7777/api/auth/emails');
+        const response = await axios.get(`${import.meta.env.VITE_API}/auth/emails`);
         setEmails(response.data);
       } catch (error) {
         console.log('Error fetching emails: ', error);
@@ -86,7 +86,7 @@ function Signup() {
     const fetchUsernames = async () => {
       try {
 
-        const responseUsers = await axios.get('http://localhost:7777/api/auth/usernames');
+        const responseUsers = await axios.get(`${import.meta.env.VITE_API}/auth/usernames`);
         setUsernames(responseUsers.data);
       } catch (error) {
         console.log('Error fetching Usernames: ', error);
@@ -200,7 +200,7 @@ function Signup() {
     
     
     try {
-      await axios.post('http://localhost:7777/api/send/send-verification', { email, code });
+      await axios.post(`${import.meta.env.VITE_API}/send/send-verification`, { email, code });
       toast.info('Verification code sent to your email!', { position: "top-right" });
       console.log(code)
       
@@ -271,7 +271,7 @@ function Signup() {
     try {
       
 
-      const response = await axios.post('http://localhost:7777/api/auth/register', formData, {
+      const response = await axios.post(`${import.meta.env.VITE_API}/auth/register`, formData, {
 
 
         headers: {

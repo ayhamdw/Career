@@ -24,15 +24,15 @@ const SentRequests = () => {
     };
 
     fetchRequests(
-      "http://localhost:7777/api/request/SendProficientRequests",
+      `${import.meta.env.VITE_API}/request/SendProficientRequests`,
       setPendingRequests
     );
     fetchRequests(
-      "http://localhost:7777/api/request/acceptedSentRequest",
+      `${import.meta.env.VITE_API}/request/acceptedSentRequest`,
       setAcceptedSentRequests
     );
     fetchRequests(
-      "http://localhost:7777/api/request/rejectedSentRequest",
+      `${import.meta.env.VITE_API}request/rejectedSentRequest`,
       setRejectedRequests
     );
   }, []);
