@@ -98,6 +98,7 @@ export default function ProfProfile({ proficientDetails, user }) {
           }
         );
         setReviews(response.data.reviews);
+        console.log("Reviews:", response.data.reviews);
       } catch (error) {
         console.log("Error fetching reviews:", error);
       }

@@ -19,8 +19,8 @@ interface Reviews {
 interface ReviewSectionProps {
   reviews: Reviews[];
 }
-
 const ReviewsSection: React.FC<ReviewSectionProps> = ({ reviews }) => {
+  console.log("Reviews:", reviews);
   return (
     <View style={styles.profileSection}>
       <Text style={styles.sectionTitle}>Reviews</Text>
@@ -35,7 +35,7 @@ const ReviewsSection: React.FC<ReviewSectionProps> = ({ reviews }) => {
               {review.reviewer.profile.firstName}{" "}
               {review.reviewer.profile.lastName}
             </Text>
-            <Text style={styles.rating}>⭐ {review.rating.toFixed(1)}</Text>
+            <Text style={styles.rating}>⭐ {review.rating?.toFixed(1)}</Text>
             <Text style={styles.reviewText}>{review.review}</Text>
           </View>
         </View>

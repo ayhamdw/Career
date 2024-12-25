@@ -19,7 +19,7 @@ interface Prof {
       coordinates: [number, number];
     };
     ratings: {
-      rating: number;
+      ratings: number;
       review: string;
       userId: string;
       date: Date;
