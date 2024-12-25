@@ -38,46 +38,45 @@ export default function RequestDetailsPage({ route, navigation }) {
       Alert.alert("Error", "Please select a date and time.");
       return;
     }
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const requestDateTime = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate(),
+        selectedTime.getHours(),
+        selectedTime.getMinutes()
+      ).toISOString();
 
-    // try {
-    //   const token = await AsyncStorage.getItem("token");
-    //   const requestDateTime = new Date(
-    //     selectedDate.getFullYear(),
-    //     selectedDate.getMonth(),
-    //     selectedDate.getDate(),
-    //     selectedTime.getHours(),
-    //     selectedTime.getMinutes()
-    //   ).toISOString();
+      const response = await axios.post(
+        `${ayhamWifiUrl}/api/proficient/booking-proficient`,
+        {
+          proficientId,
+          userId,
+          requestDateTime,
+          location: {
+            latitude: markerLocation.latitude,
+            longitude: markerLocation.longitude,
+          },
+          postId: null,
+          city: null,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    //   const response = await axios.post(
-    //     `${ayhamWifiUrl}/api/proficient/booking-proficient`,
-    //     {
-    //       proficientId,
-    //       userId,
-    //       requestDateTime,
-    //       location: {
-    //         latitude: markerLocation.latitude,
-    //         longitude: markerLocation.longitude,
-    //       },
-    //       postId: null,
-    //       city: null,
-    //     },
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     }
-    //   );
-
-    //   if (response.status === 200) {
-    //     Alert.alert("Success", "Request submitted successfully!");
-    //     navigation.goBack();
-    //   }
-    // } catch (error) {
-    //   console.log("Error submitting request:", error);
-    //   Alert.alert("Error", "Failed to submit the request.");
-    // }
-    // console.log(markerLocation.latitude, markerLocation.longitude);
+      if (response.status === 200) {
+        Alert.alert("Success", "Request submitted successfully!");
+        navigation.goBack();
+      }
+    } catch (error) {
+      console.log("Error submitting request:", error);
+      Alert.alert("Error", "Failed to submit the request.");
+    }
+    console.log(markerLocation.latitude, markerLocation.longitude);
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await axios.post(
@@ -85,7 +84,6 @@ export default function RequestDetailsPage({ route, navigation }) {
         {
           proficientId,
           userId,
-          type: "Proficient Request",
           title: "New Request",
           message: "You have a new request from a user, Check it out!",
           status: "Unread",
