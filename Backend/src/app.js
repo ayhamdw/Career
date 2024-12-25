@@ -18,15 +18,18 @@ const sendVerificationCode = require("./routers/accountRouter");
 const personInformationRouter = require("./routers/personInformationRouter");
 const postRouter = require("./routers/postRoutes");
 const RequestRouter = require("./routers/RequestRouter");
+const notificationRouter = require("./routers/notificationRouter");
 
 const app = express();
 
-app.use(cors({
-  origin: 'http://localhost:5173',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
-  allowedHeaders: ['Content-Type', 'Authorization'], 
-  credentials: true, 
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 // app.use(generalRateLimiter);
@@ -36,14 +39,12 @@ app.use(
   express.static(path.join(__dirname, "assets/images"))
 );
 
-app.options('*', cors()); 
+app.options("*", cors());
 
-app.get('/', (req, res) => {
-  res.send('CORS is configured!');
+app.get("/", (req, res) => {
+  res.send("CORS is configured!");
 });
 
-
-// app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/friends", friendsRouter);
 app.use("/api/messages", messagesRouter);
@@ -51,9 +52,10 @@ app.use("/api/password", passwordRouter);
 app.use("/api/check", checkInformationRouter);
 app.use("/api/user", userRouter);
 app.use("/api/proficient", proficientRouter);
-app.use("/api/send",sendVerificationCode);
+app.use("/api/send", sendVerificationCode);
 app.use("/api/user", personInformationRouter);
-app.use("/api/community",postRouter);
-app.use("/api/request",RequestRouter);
+app.use("/api/community", postRouter);
+app.use("/api/request", RequestRouter);
+app.use("/api/notification", notificationRouter);
 app.use(errorHandler);
 module.exports = app;

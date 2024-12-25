@@ -230,6 +230,13 @@ const userSchema = new mongoose.Schema(
       },
     ],
 
+    notifications: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Notification",
+      },
+    ],
+
     resetCode: {
       type: Number,
       default: 0,

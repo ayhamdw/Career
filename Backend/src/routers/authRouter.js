@@ -21,11 +21,10 @@ router.post("/logout", Auth, logoutController);
 
 router.post("/logoutAll", Auth, logoutAllController);
 
-router.get('/emails',getAllEmails);
+router.get("/emails", getAllEmails);
 
-router.get('/usernames',getAllUsernames);
+router.get("/usernames", getAllUsernames);
 
-router.post('/verify-code', verifyCode);
-
+router.post("/verify-code", verifyCode);
 
 module.exports = router;
