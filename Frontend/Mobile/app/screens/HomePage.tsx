@@ -65,6 +65,7 @@ interface User {
 
 const HomePage = ({ user }: { user: User }) => {
   const navigation = useNavigation();
+  const id = user._id;
   const [search, setSearch] = React.useState<string>("");
   const [selectedFilter, setSelectedFilter] =
     React.useState<string>("All Proficient");
@@ -129,7 +130,6 @@ const HomePage = ({ user }: { user: User }) => {
   };
 
   const handleFilterPress = (filter: string) => {
-    console.log("Filter:", filter);
     setSelectedFilter(filter);
     fetchUser(filter);
   };
@@ -165,7 +165,7 @@ const HomePage = ({ user }: { user: User }) => {
         <Header
           name={`${user.profile.firstName} ${user.profile.lastName}`}
           navigation={navigation}
-          userId={user._id}
+          userId={id}
         />
 
         <TouchableOpacity

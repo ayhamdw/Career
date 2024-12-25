@@ -48,7 +48,7 @@ const MainNavigation = () => {
       <Stack.Screen
         name="Notifications"
         component={Notifications}
-        options={{ headerShadowVisible: false }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="postDetails"

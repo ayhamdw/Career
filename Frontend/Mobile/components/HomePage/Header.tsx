@@ -9,6 +9,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ name, navigation, userId }) => {
+  console.log("Id:", userId);
   return (
     <View style={styles.headerStyle}>
       <Text style={styles.textStyle}>Hello, {name}!</Text>

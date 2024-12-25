@@ -84,6 +84,7 @@ export default function RequestDetailsPage({ route, navigation }) {
         `${ayhamWifiUrl}/api/notification/add-notification`,
         {
           proficientId,
+          userId,
           type: "Proficient Request",
           title: "New Request",
           message: "You have a new request from a user, Check it out!",
