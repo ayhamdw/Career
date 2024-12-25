@@ -61,9 +61,64 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const rateUser = async (req, res) => {
+  const { userId, targetUserId, rating, review } = req.body;
+  // targetUserId : the user who receiving the rating
+  try {
+    if (!userId || !targetUserId) {
+      return res.status(400).json({ message: 'Both userId and targetUserId are required.' });
+    }
+    if (rating === undefined || typeof rating !== 'number') {
+      return res.status(400).json({ message: 'Invalid rating value. It must be a number.' });
+    }
+    const user = await User.findById(targetUserId);
+    if (!user) {
+      return res.status(404).json({ message: 'Target user not found.' });
+    }
+    const newRating = {
+      ratings: rating,
+      review: review || '', 
+      userId, 
+    };
+
+    user.profile.ratings.push(newRating);
+    await user.save(); 
+
+    res.status(200).json({ message: 'Rating added successfully.', user });
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding rating.', error: error.message });
+  }
+};
+
+
+
+const checkIfUserRated = async (req, res) => {
+  const { userId, targetUserId } = req.body; 
+
+  try {
+      const user = await User.findOne({
+          _id: targetUserId,
+          'profile.ratings.userId': userId
+      }).exec();
+      if (user) {
+          return res.status(200).json({ success: true, message: 'User has rated the target user' });
+      } else {
+          return res.status(404).json({ success: false, message: 'User has not rated the target user' });
+      }
+  } catch (error) {
+      console.error('Error checking user rating:', error);
+      return res.status(500).json({ success: false, message: 'Error checking rating' });
+  }
+};
+
+
+
+
 module.exports = {
   getUserDetails,
   updateUserProfile,
   deleteUserAccount,
   getAllUsers,
+  rateUser,
+  checkIfUserRated,
 };

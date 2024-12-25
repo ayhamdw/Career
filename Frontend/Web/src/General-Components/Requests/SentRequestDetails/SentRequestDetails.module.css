@@ -38,7 +38,7 @@
     gap: 30px;
     align-items: center;
     justify-content: space-between;
-    height: 300px;
+    /* height: 300px; */
 }
 .requestSection{
     background: #fff;
@@ -278,9 +278,7 @@
     flex-direction: column;
     /* background-color: red; */
 }
-.ratePerson p{
-    align-self: ;
-}
+
 
 .finishButton button {
     z-index: 999;
@@ -324,4 +322,35 @@
 
 .submitButton:hover {
     background-color: rgb(98, 188, 115);
+}
+
+
+/* Add this to your SentRequestDetails.module.css */
+.toaster {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    z-index: 1000;
+    animation: fadeInOut 3s ease-out forwards;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
