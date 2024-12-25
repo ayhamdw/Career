@@ -7,18 +7,13 @@ const schema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    projectId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Project",
-      required: true,
-      trim: true,
-    },
-    bookingId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Booking",
-      required: true,
-      trim: true,
-    },
+    // projectId: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Project",
+    //   required: false,
+    //   trim: true,
+    //   default: null,
+    // },
     title: {
       type: String,
       required: true,

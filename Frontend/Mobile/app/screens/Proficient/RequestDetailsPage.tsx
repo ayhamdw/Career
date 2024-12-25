@@ -39,46 +39,65 @@ export default function RequestDetailsPage({ route, navigation }) {
       return;
     }
 
+    // try {
+    //   const token = await AsyncStorage.getItem("token");
+    //   const requestDateTime = new Date(
+    //     selectedDate.getFullYear(),
+    //     selectedDate.getMonth(),
+    //     selectedDate.getDate(),
+    //     selectedTime.getHours(),
+    //     selectedTime.getMinutes()
+    //   ).toISOString();
+
+    //   const response = await axios.post(
+    //     `${ayhamWifiUrl}/api/proficient/booking-proficient`,
+    //     {
+    //       proficientId,
+    //       userId,
+    //       requestDateTime,
+    //       location: {
+    //         latitude: markerLocation.latitude,
+    //         longitude: markerLocation.longitude,
+    //       },
+    //       postId: null,
+    //       city: null,
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     }
+    //   );
+
+    //   if (response.status === 200) {
+    //     Alert.alert("Success", "Request submitted successfully!");
+    //     navigation.goBack();
+    //   }
+    // } catch (error) {
+    //   console.log("Error submitting request:", error);
+    //   Alert.alert("Error", "Failed to submit the request.");
+    // }
+    // console.log(markerLocation.latitude, markerLocation.longitude);
     try {
       const token = await AsyncStorage.getItem("token");
-      const requestDateTime = new Date(
-        selectedDate.getFullYear(),
-        selectedDate.getMonth(),
-        selectedDate.getDate(),
-        selectedTime.getHours(),
-        selectedTime.getMinutes()
-      ).toISOString();
-
       const response = await axios.post(
-        `${ayhamWifiUrl}/api/proficient/booking-proficient`,
+        `${ayhamWifiUrl}/api/notification/add-notification`,
         {
           proficientId,
-          userId,
-          requestDateTime,
-          location: {
-            latitude: markerLocation.latitude,
-            longitude: markerLocation.longitude,
-          },
-          postId: null,
-          city: null,
+          type: "Proficient Request",
+          title: "New Request",
+          message: "You have a new request from a user, Check it out!",
+          status: "Unread",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
       if (response.status === 200) {
-        Alert.alert("Success", "Request submitted successfully!");
-        navigation.goBack();
+        console.log("Notification sent successfully");
       }
     } catch (error) {
       console.log("Error submitting request:", error);
       Alert.alert("Error", "Failed to submit the request.");
     }
-    console.log(markerLocation.latitude, markerLocation.longitude);
-    console.log(requestDateTime);
   };
 
   return (
@@ -227,6 +246,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
+    height: 200,
   },
   submitButtonText: {
     color: "#fff",
