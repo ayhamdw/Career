@@ -38,7 +38,7 @@ const getFriendsRequest = async (req, res) => {
   console.log("inside Get Friends Request", userId);
   try {
     const user = await User.findById(userId)
-      .populate("friendRequests", "firstName lastName email image")
+      .populate("friendRequests", "profile email image city")
       .lean();
     const friendRequests = user.friendRequests;
     res.status(200).json(friendRequests);

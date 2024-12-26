@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './Friends.module.css';
 
 const Friends = () => {
@@ -27,6 +27,8 @@ const Friends = () => {
     category,
     friends: friendsData.filter((friend) => friend.career === category),
   }));
+
+
 
   return (
     <div className={styles.friendsContainer}>
