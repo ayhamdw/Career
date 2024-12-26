@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styles from './FriendRequests.module.css';
 import axios from 'axios'
-
+import { useNavigate } from 'react-router-dom';
 
 
 
 const FriendRequests = () => {
   const [friendRequests, setFriendRequests] = useState([]);
+  const navigate = useNavigate();
+
   const myId = localStorage.getItem("id");
   const token = localStorage.getItem("token");
 
@@ -18,8 +20,8 @@ const FriendRequests = () => {
     alert(`Friend request from ${id} has been rejected!`);
   };
 
-  const handleContact = (email) => {
-    alert(`You can contact ${email}`);
+  const handleViewProfile = (id) => {
+    navigate(`/profile/${id}`)
   };
 
 
@@ -67,7 +69,7 @@ const FriendRequests = () => {
               <div className={styles.requestActions}>
                 <button onClick={() => handleAccept(request._id)} className={styles.acceptBtn}>Accept</button>
                 <button onClick={() => handleReject(request._id)} className={styles.rejectBtn}>Reject</button>
-                {/* <button onClick={() => handleContact(request.requesterEmail)} className={styles.contactBtn}>Contact</button> */}
+                <button onClick={() => handleViewProfile(request._id)} className={styles.contactBtn}>View Profile</button>
               </div>
             </li>
           ))}

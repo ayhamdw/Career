@@ -94,7 +94,8 @@ button {
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
-  width: 100px;
+  width: fit-content;
+  min-width: 150px;
 }
 
 /* Button Styles */
