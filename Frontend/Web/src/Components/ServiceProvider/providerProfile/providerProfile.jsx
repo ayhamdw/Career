@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import styles from './ProviderProfile.module.css';
-import { FaEnvelope, FaUserPlus, FaStar } from 'react-icons/fa';
+import { FaEnvelope, FaUserPlus, FaStar, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
 const ProviderProfile = () => {
   const { id } = useParams();
@@ -75,7 +75,17 @@ const Details = ({ provider }) => (
       <div className={styles.detailItem}><strong>Email:</strong> {provider.email}</div>
       <div className={styles.detailItem}><strong>Username:</strong> {provider.username}</div>
       <div className={styles.detailItem}><strong>Experience:</strong> {provider.profile.experience || 'Not specified'} years</div>
-      <div className={styles.detailItem}><strong>Verification Status:</strong> {provider.verificationStatus ? 'Verified' : 'Not Verified'}</div>
+      <div className={styles.detailItem}>
+        <strong>Verification Status:</strong>
+        <div className={styles.certificationStatus}>
+          {provider.certificate.isCertified ? (
+            <FaCheckCircle className={styles.certifiedIcon} />
+          ) : (
+            <FaTimesCircle className={styles.notCertifiedIcon} />
+          )}
+          {provider.certificate.isCertified ? 'Verified' : 'Not Verified'}
+        </div>
+      </div>
     </div>
   </section>
 );
