@@ -42,6 +42,30 @@ const ProviderProfile = () => {
   );
 };
 
+const handleSendFriendRequest = async (ProviderId) => {
+  const myId = localStorage.getItem("id")
+  const token = localStorage.getItem("token")
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_API}/friends/send-friend-request`, {
+      currentUserId: myId,
+      selectedUserId: ProviderId
+    },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    console.log(response.data);
+
+  }
+  catch (error) {
+    console.log("Error Send Friend Request: ", error)
+  }
+
+}
+
+
 const Header = ({ provider }) => (
   <div className={styles.header}>
     <div className={styles.profileImageWrapper}>
@@ -111,29 +135,7 @@ const Actions = ({ provider, myId, token }) => {
 
   const isFriendRequestSent = friendRequests.some((req) => req._id === provider._id);
 
-  const handleFriendAction = async () => {
-    try {
-      if (isFriendRequestSent) {
-        const response = await axios.post(
-          `${import.meta.env.VITE_API}/friends/accept-friend-request`,
-          { currentUserId: myId, selectedUserId: provider._id },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        alert("Friend request accepted!");
-        console.log(response.data);
-      } else {
-        const response = await axios.post(
-          `${import.meta.env.VITE_API}/friends/send-friend-request`,
-          { currentUserId: myId, selectedUserId: provider._id },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        alert("Friend request sent!");
-        console.log(response.data);
-      }
-    } catch (error) {
-      console.error("Error handling friend action: ", error);
-    }
-  };
+
 
   return (
     <div className={styles.actionsSection}>
@@ -152,7 +154,7 @@ const Actions = ({ provider, myId, token }) => {
         ) : (
           <>
             
-            <button className={styles.addFriendButton}>
+            <button className={styles.addFriendButton} onClick={()=>handleSendFriendRequest(provider._id)}>
             <FaUserPlus /> Add Friend
             </button>
           </>
