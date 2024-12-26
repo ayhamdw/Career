@@ -18,15 +18,15 @@ const ServiceProvider = () => {
         const response = await axios.post(`${import.meta.env.VITE_API}/user/users`, {
           category: selectedCategory,
         });
-        console.log('Providers fetched:', response.data); 
-        setProviders(Array.isArray(response.data) ? response.data : []); 
-        setError('');  
+        console.log('Providers fetched:', response.data);
+        setProviders(Array.isArray(response.data) ? response.data : []);
+        setError('');
       } catch (error) {
-        console.error('Error fetching providers:', error); 
+        console.error('Error fetching providers:', error);
         if (error.response) {
           if (error.response.status === 404) {
             setError('No users found for this category');
-            setProviders([]);  
+            setProviders([]);
           } else {
             setError('An unexpected error occurred');
           }
@@ -99,7 +99,10 @@ const ServiceProvider = () => {
         </ul>
       </div>
 
-      <div className={styles.searchContainer}>
+
+
+      <div className={styles.cards}>
+        <div className={styles.searchContainer}>
           <input
             type="text"
             placeholder="Search for a provider by name"
@@ -108,51 +111,54 @@ const ServiceProvider = () => {
             className={styles.searchInput}
           />
         </div>
+        <div className={styles.providersList}>
 
-      <div className={styles.providersList}>
-        {error && <p className={styles.error}>{error}</p>}
-        
-        {filteredProviders.length > 0 ? (
-          filteredProviders.map((provider, index) => (
-            <div key={index} className={styles.providerCard}>
-              <img
-                src={provider.profile.profileImage}
-                alt={provider.profile.firstName}
-                className={styles.providerPhoto}
-              />
-              <div className={styles.providerInfo}>
-                <h3>{provider.profile.firstName} {provider.profile.lastName}</h3>
-                <p className={styles.career}>{provider.career}</p>
-                {renderRatingStars(provider.rating)} 
-                <p className={styles.experience}>Experience: {provider.profile.experience} years</p>
-                <p className={`${styles.certificate} ${provider.certificate.isCertified ? styles.verified : styles.notVerified}`}>
-                  {provider.certificate.isCertified ? (
-                    <FaCheckCircle className={styles.icon} />
-                  ) : (
-                    <FaTimesCircle className={styles.icon} />
-                  )}
-                  {provider.certificate.isCertified ? 'Verified by Practical Certificate' : 'Not Verified'}
-                </p>
-                <div className={styles.buttons}>
-                  <button
-                    onClick={() => handleProfileClick(provider)}
-                    className={styles.profileButton}
-                  >
-                    View Profile
-                  </button>
-                  <button
-                    onClick={() => handleContactClick(provider.profile.firstName)}
-                    className={styles.contactButton}
-                  >
-                    <FaEnvelope className={styles.icon} /> Contact
-                  </button>
+          <div className={styles.cards}></div>
+          {error && <p className={styles.error}>{error}</p>}
+
+          {filteredProviders.length > 0 ? (
+            filteredProviders.map((provider, index) => (
+              <div key={index} className={styles.providerCard}>
+                <img
+                  src={provider.profile.profileImage}
+                  alt={provider.profile.firstName}
+                  className={styles.providerPhoto}
+                />
+                <div className={styles.providerInfo}>
+                  <h3>{provider.profile.firstName} {provider.profile.lastName}</h3>
+                  <p className={styles.career}>{provider.career}</p>
+                  {renderRatingStars(provider.rating)}
+                  <p className={styles.experience}>Experience: {provider.profile.experience} years</p>
+                  <p className={`${styles.certificate} ${provider.certificate.isCertified ? styles.verified : styles.notVerified}`}>
+                    {provider.certificate.isCertified ? (
+                      <FaCheckCircle className={styles.icon} />
+                    ) : (
+                      <FaTimesCircle className={styles.icon} />
+                    )}
+                    {provider.certificate.isCertified ? 'Verified by Practical Certificate' : 'Not Verified'}
+                  </p>
+                  <div className={styles.buttons}>
+                    <button
+                      onClick={() => handleProfileClick(provider)}
+                      className={styles.profileButton}
+                    >
+                      View Profile
+                    </button>
+                    <button
+                      onClick={() => handleContactClick(provider.profile.firstName)}
+                      className={styles.contactButton}
+                    >
+                      <FaEnvelope className={styles.icon} /> Contact
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <p>No providers found for this category.</p>  
-        )}
+
+            ))
+          ) : (
+            <p>No providers found for this category.</p>
+          )}
+        </div>
       </div>
     </div>
   );
