@@ -7,10 +7,11 @@ import { useNavigate } from 'react-router-dom';
 
 const ServiceProvider = () => {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState('Home Services');
+  const [selectedCategory, setSelectedCategory] = useState('All Providers');
   const [providers, setProviders] = useState([]);
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const myId = localStorage.getItem("id")
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -137,7 +138,9 @@ const ServiceProvider = () => {
                     )}
                     {provider.certificate.isCertified ? 'Verified by Practical Certificate' : 'Not Verified'}
                   </p>
+                  {provider._id !== myId? (
                   <div className={styles.buttons}>
+                    
                     <button
                       onClick={() => handleProfileClick(provider)}
                       className={styles.profileButton}
@@ -151,6 +154,15 @@ const ServiceProvider = () => {
                       <FaEnvelope className={styles.icon} /> Contact
                     </button>
                   </div>
+                  
+                  ):(
+                    
+                      <button className={styles.myProfile}
+                      onClick={() => handleProfileClick(provider)}
+                      
+                      >show your profile</button>
+                    
+                  )}
                 </div>
               </div>
 

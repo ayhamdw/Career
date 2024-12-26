@@ -126,15 +126,22 @@
   margin-top: 15px;
 }
 
+
 .profileButton,
-.contactButton {
+.contactButton, .myProfile {
   padding: 8px 15px;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: 150px;
+  min-width: 150px;
+  width: fit-content;
+}
+.myProfile{
+  background-color: #da6521;
+  color: white;
+  font-weight: 700;
 }
 
 .profileButton {

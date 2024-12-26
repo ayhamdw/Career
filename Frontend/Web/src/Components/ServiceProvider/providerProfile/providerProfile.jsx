@@ -9,7 +9,7 @@ const ProviderProfile = () => {
   const [provider, setProvider] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
+  const myId = localStorage.getItem("id");
   useEffect(() => {
     const fetchProviderData = async () => {
       try {
@@ -34,7 +34,7 @@ const ProviderProfile = () => {
         <Header provider={provider} />
         <About bio={provider.profile.bio} />
         <Details provider={provider} />
-        <Actions />
+        {provider._id !== myId &&(<Actions />)}
       </div>
     </div>
   );
@@ -91,6 +91,7 @@ const Details = ({ provider }) => (
 );
 
 const Actions = () => (
+
   <div className={styles.actionsSection}>
     <button className={styles.messageButton} onClick={() => alert('Messaging feature is under construction!')}>
       <FaEnvelope /> Message
@@ -99,6 +100,7 @@ const Actions = () => (
       <FaUserPlus /> Add Friend
     </button>
   </div>
+
 );
 
 export default ProviderProfile;
