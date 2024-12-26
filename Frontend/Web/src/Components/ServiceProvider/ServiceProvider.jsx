@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './ServiceProvider.module.css';
-import { FaCheckCircle, FaTimesCircle, FaEnvelope } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaEnvelope,FaUserSlash } from 'react-icons/fa';
 import providerProfile from './providerProfile/providerProfile';
 import { useNavigate } from 'react-router-dom';
 
@@ -138,37 +138,45 @@ const ServiceProvider = () => {
                     )}
                     {provider.certificate.isCertified ? 'Verified by Practical Certificate' : 'Not Verified'}
                   </p>
-                  {provider._id !== myId? (
-                  <div className={styles.buttons}>
-                    
-                    <button
+                  {provider._id !== myId ? (
+                    <div className={styles.buttons}>
+
+                      <button
+                        onClick={() => handleProfileClick(provider)}
+                        className={styles.profileButton}
+                      >
+                        View Profile
+                      </button>
+                      <button
+                        onClick={() => handleContactClick(provider.profile.firstName)}
+                        className={styles.contactButton}
+                      >
+                        <FaEnvelope className={styles.icon} /> Contact
+                      </button>
+                    </div>
+
+                  ) : (
+
+                    <button className={styles.myProfile}
                       onClick={() => handleProfileClick(provider)}
-                      className={styles.profileButton}
-                    >
-                      View Profile
-                    </button>
-                    <button
-                      onClick={() => handleContactClick(provider.profile.firstName)}
-                      className={styles.contactButton}
-                    >
-                      <FaEnvelope className={styles.icon} /> Contact
-                    </button>
-                  </div>
-                  
-                  ):(
-                    
-                      <button className={styles.myProfile}
-                      onClick={() => handleProfileClick(provider)}
-                      
-                      >show your profile</button>
-                    
+
+                    >show your profile</button>
+
                   )}
                 </div>
               </div>
 
             ))
           ) : (
-            <p>No providers found for this category.</p>
+            <div className={styles.noProviders}>
+              <div className={styles.noProvidersCard}>
+                <div className={styles.iconWrapper}>
+                  <FaUserSlash className={styles.noProvidersIcon} />
+                </div>
+                <h2>No Providers Found</h2>
+                <p>We couldn't find any service providers for this category. Please try exploring other categories or check back later.</p>
+              </div>
+            </div>
           )}
         </div>
       </div>
