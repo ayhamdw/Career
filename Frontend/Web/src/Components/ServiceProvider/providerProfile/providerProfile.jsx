@@ -28,17 +28,42 @@ const ProviderProfile = () => {
   if (error) return <div className={styles.error}>{error}</div>;
   if (!provider) return <div className={styles.error}>Provider not found.</div>;
 
+ 
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.profileContainer}>
         <Header provider={provider} />
         <About bio={provider.profile.bio} />
         <Details provider={provider} />
-        {provider._id !== myId &&(<Actions />)}
+        {provider._id !== myId &&(<Actions provider={provider} />)}
       </div>
     </div>
   );
 };
+
+const handleSendFriendRequest = async(ProviderId)=>{
+  const myId = localStorage.getItem("id")
+  const token = localStorage.getItem("token")
+  try{
+    const response = await axios.post(`${import.meta.env.VITE_API}/friends/send-friend-request`,{
+      currentUserId:myId,
+      selectedUserId: ProviderId
+    },
+    {
+      headers:{
+        Authorization: `Bearer ${token}`,
+      },
+    }
+    )
+    console.log(response.data);
+
+  }
+  catch(error){
+    console.log("Error Send Friend Request: ",error)
+  }
+
+}
 
 const Header = ({ provider }) => (
   <div className={styles.header}>
@@ -90,13 +115,13 @@ const Details = ({ provider }) => (
   </section>
 );
 
-const Actions = () => (
+const Actions = ({ provider }) => (
 
   <div className={styles.actionsSection}>
     <button className={styles.messageButton} onClick={() => alert('Messaging feature is under construction!')}>
       <FaEnvelope /> Message
     </button>
-    <button className={styles.addFriendButton} onClick={() => alert('Add Friend feature is under construction!')}>
+    <button className={styles.addFriendButton} onClick={() => handleSendFriendRequest(provider._id)}>
       <FaUserPlus /> Add Friend
     </button>
   </div>
