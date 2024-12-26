@@ -247,3 +247,17 @@
     margin-top: 50px;
   }
   
+  .acceptBtn{
+    background-color: #4CAF50;
+    width: fit-content;
+    color: white;
+    font-weight: 700;
+  }
+  .rejectBtn{
+    background-color: rgba(238, 29, 22, 0.8);
+    width: fit-content;
+    color: white;
+    font-weight: 700;
+    
+  }
+  

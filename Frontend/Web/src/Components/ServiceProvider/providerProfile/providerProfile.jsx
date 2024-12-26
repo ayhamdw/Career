@@ -5,11 +5,13 @@ import styles from './ProviderProfile.module.css';
 import { FaEnvelope, FaUserPlus, FaStar, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
 const ProviderProfile = () => {
-  const { id } = useParams();
   const [provider, setProvider] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { id } = useParams();
   const myId = localStorage.getItem("id");
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
     const fetchProviderData = async () => {
       try {
@@ -28,42 +30,17 @@ const ProviderProfile = () => {
   if (error) return <div className={styles.error}>{error}</div>;
   if (!provider) return <div className={styles.error}>Provider not found.</div>;
 
- 
-
   return (
     <div className={styles.pageContainer}>
       <div className={styles.profileContainer}>
         <Header provider={provider} />
         <About bio={provider.profile.bio} />
         <Details provider={provider} />
-        {provider._id !== myId &&(<Actions provider={provider} />)}
+        {provider._id !== myId && <Actions provider={provider} myId={myId} token={token} />}
       </div>
     </div>
   );
 };
-
-const handleSendFriendRequest = async(ProviderId)=>{
-  const myId = localStorage.getItem("id")
-  const token = localStorage.getItem("token")
-  try{
-    const response = await axios.post(`${import.meta.env.VITE_API}/friends/send-friend-request`,{
-      currentUserId:myId,
-      selectedUserId: ProviderId
-    },
-    {
-      headers:{
-        Authorization: `Bearer ${token}`,
-      },
-    }
-    )
-    console.log(response.data);
-
-  }
-  catch(error){
-    console.log("Error Send Friend Request: ",error)
-  }
-
-}
 
 const Header = ({ provider }) => (
   <div className={styles.header}>
@@ -115,17 +92,73 @@ const Details = ({ provider }) => (
   </section>
 );
 
-const Actions = ({ provider }) => (
+const Actions = ({ provider, myId, token }) => {
+  const [friendRequests, setFriendRequests] = useState([]);
 
-  <div className={styles.actionsSection}>
-    <button className={styles.messageButton} onClick={() => alert('Messaging feature is under construction!')}>
-      <FaEnvelope /> Message
-    </button>
-    <button className={styles.addFriendButton} onClick={() => handleSendFriendRequest(provider._id)}>
-      <FaUserPlus /> Add Friend
-    </button>
-  </div>
+  useEffect(() => {
+    const fetchFriendRequests = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API}/friends/getFriendsRequest/${myId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setFriendRequests(response.data);
+      } catch (e) {
+        console.error("Error Fetching Friend Requests: ", e);
+      }
+    };
+    fetchFriendRequests();
+  }, [myId, token]);
 
-);
+  const isFriendRequestSent = friendRequests.some((req) => req._id === provider._id);
+
+  const handleFriendAction = async () => {
+    try {
+      if (isFriendRequestSent) {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API}/friends/accept-friend-request`,
+          { currentUserId: myId, selectedUserId: provider._id },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        alert("Friend request accepted!");
+        console.log(response.data);
+      } else {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API}/friends/send-friend-request`,
+          { currentUserId: myId, selectedUserId: provider._id },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        alert("Friend request sent!");
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.error("Error handling friend action: ", error);
+    }
+  };
+
+  return (
+    <div className={styles.actionsSection}>
+      <button
+        className={styles.messageButton}
+        onClick={() => alert('Messaging feature is under construction!')}
+      >
+        <FaEnvelope /> Message
+      </button>
+        {isFriendRequestSent ? (
+          <>
+            {/* <FaUserPlus /> Accept Request */}
+            <button className={styles.acceptBtn}>Accept Request</button>
+            <button className={styles.rejectBtn}>Reject Request</button>
+          </>
+        ) : (
+          <>
+            
+            <button className={styles.addFriendButton}>
+            <FaUserPlus /> Add Friend
+            </button>
+          </>
+        )}
+    </div>
+  );
+};
 
 export default ProviderProfile;
