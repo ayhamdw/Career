@@ -1,15 +1,15 @@
-import React, {useState} from 'react'
-import style from './Sginin.module.css'
-import {Link, useNavigate } from 'react-router-dom'
-import Logo from '../../assets/logo.png'
+import React, { useState } from 'react';
+import style from './Signin.module.css';
+import { Link, useNavigate } from 'react-router-dom';
+import Logo from '../../assets/logo.png';
 import axios from 'axios';
 import { useAuth } from '../../AuthContext';
 
 function Signin() {
-  const [email, setEmail] = useState(''); 
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -22,25 +22,20 @@ function Signin() {
       const response = await axios.post(`${import.meta.env.VITE_API}/auth/login`, { email, password });
   
       if (response.status === 200) {
-        const { token, verificationStatus ,user} = response.data;
+        const { token, verificationStatus, user } = response.data;
         localStorage.setItem('token', token);
         localStorage.setItem('id', user._id);
-        login(token); 
+        login(token);
         localStorage.setItem('userEmail', email);
         navigate(verificationStatus ? '/' : '/verify');
         window.location.reload();
       }
-      
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');
     } finally {
       setLoading(false);
     }
   };
-  
-
-  
-
 
   return (
     <div className={style.container}>
@@ -52,17 +47,17 @@ function Signin() {
           <div className={style.inputFields}>
             <div className={style.field}>
               <label htmlFor="email">Email</label>
-              <input type="text" name='email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+              <input type="text" name='email' value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className={style.field}>
               <label htmlFor="password">Password</label>
-              <input type="password" name='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+              <input type="password" name='password' value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
           </div>
-          <button className={style.sgininButton} onClick={handleSignin}>Sgin in</button>
+          <button className={style.sgininButton} onClick={handleSignin}>Sign In</button>
           <div className={style.lastLine}>
             <div className={style.remember}>
-              <input type="checkbox" name='remember'/>
+              <input type="checkbox" name='remember' />
               <label htmlFor="remember">Remember Me</label>
             </div>
             <Link>Forgot Password</Link>
@@ -74,12 +69,10 @@ function Signin() {
           <img src={Logo} alt="Career Logo" />
           <p>Don't have an account?</p>
           <Link to='/signup'>Sign Up</Link>
-
         </div>
-
       </div>
     </div>
-  )
+  );
 }
 
-export default Signin
+export default Signin;

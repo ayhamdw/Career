@@ -125,13 +125,13 @@ const ServiceProvider = () => {
                 <p className={styles.career}>{provider.career}</p>
                 {renderRatingStars(provider.rating)} 
                 <p className={styles.experience}>Experience: {provider.profile.experience} years</p>
-                <p className={`${styles.certificate} ${provider.verificationStatus ? styles.verified : styles.notVerified}`}>
-                  {provider.verificationStatus ? (
+                <p className={`${styles.certificate} ${provider.certificate.isCertified ? styles.verified : styles.notVerified}`}>
+                  {provider.certificate.isCertified ? (
                     <FaCheckCircle className={styles.icon} />
                   ) : (
                     <FaTimesCircle className={styles.icon} />
                   )}
-                  {provider.verificationStatus ? 'Verified by Practical Certificate' : 'Not Verified'}
+                  {provider.certificate.isCertified ? 'Verified by Practical Certificate' : 'Not Verified'}
                 </p>
                 <div className={styles.buttons}>
                   <button
