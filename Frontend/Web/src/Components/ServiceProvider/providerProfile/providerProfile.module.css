@@ -1,0 +1,132 @@
+.pageContainer {
+    /* min-height: 100vh; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .profileContainer {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 100%;
+    max-width: 1500px;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    background: #fff;
+    color: #333;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .header {
+    margin-bottom: 30px;
+    position: relative;
+    top: -100px;
+
+  }
+  
+  .profileImageWrapper {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid rgb(109, 201, 126);
+  }
+  
+  .profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .profileName {
+    position: relative;
+    
+    margin: 20px 0 10px;
+    font-size: 32px;
+    font-weight: bold;
+    color: rgb(34, 153, 84);
+  }
+  
+  .profileJobTitle {
+    font-size: 18px;
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  .profileLocation {
+    font-size: 16px;
+    color: #777;
+  }
+  
+  .profileRating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+  }
+  
+  .ratingIcon {
+    color: #ffd700;
+    margin-right: 10px;
+    font-size: 20px;
+  }
+  
+  .ratingValue {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .aboutSection,
+  .detailsSection {
+    margin: 40px 0;
+    text-align: left;
+  }
+  
+  .aboutSection h2,
+  .detailsSection h2 {
+    font-size: 24px;
+    color: rgb(34, 153, 84);
+    margin-bottom: 10px;
+  }
+  
+  .aboutSection p,
+  .detailsSection .details {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .detailsSection .details .detailItem {
+    margin: 10px 0;
+    line-height: 1.6;
+  }
+  
+  .actionsSection {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .messageButton,
+  .addFriendButton {
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    color: #fff;
+    cursor: pointer;
+    background: rgb(109, 201, 126);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .messageButton:hover,
+  .addFriendButton:hover {
+    transform: scale(1.05);
+    background: rgb(34, 153, 84);
+  }
+  

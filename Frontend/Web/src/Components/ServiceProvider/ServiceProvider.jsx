@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './ServiceProvider.module.css';
 import { FaCheckCircle, FaTimesCircle, FaEnvelope } from 'react-icons/fa';
+import providerProfile from './providerProfile/providerProfile';
+import { useNavigate } from 'react-router-dom';
 
 const ServiceProvider = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('Home Services');
   const [providers, setProviders] = useState([]);
   const [error, setError] = useState('');
@@ -52,8 +55,8 @@ const ServiceProvider = () => {
     );
   };
 
-  const handleProfileClick = (id) => {
-    alert(`Navigating to profile of provider with ID: ${id}`);
+  const handleProfileClick = (provider) => {
+    navigate(`/profile/${provider._id}`);
   };
 
   const handleContactClick = (name) => {
@@ -132,7 +135,7 @@ const ServiceProvider = () => {
                 </p>
                 <div className={styles.buttons}>
                   <button
-                    onClick={() => handleProfileClick(provider._id)}
+                    onClick={() => handleProfileClick(provider)}
                     className={styles.profileButton}
                   >
                     View Profile
