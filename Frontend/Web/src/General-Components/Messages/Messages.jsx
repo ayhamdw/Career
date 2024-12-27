@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Messages.module.css";
 import axios from "axios";
+import io from "socket.io-client";
 
 const ChatSystem = () => {
   const [messages, setMessages] = useState([]);
@@ -12,6 +13,8 @@ const ChatSystem = () => {
   const scrollRef = useRef();
   const myId = localStorage.getItem("id");
   const token = localStorage.getItem("token");
+
+  const socket = useRef();
 
   useEffect(() => {
     const myId = localStorage.getItem("id");
@@ -42,7 +45,6 @@ const ChatSystem = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log("Messages: ", response.data);
 
       const processedMessages = response.data.map((msg) => ({
         text: msg.messageText,
@@ -55,7 +57,6 @@ const ChatSystem = () => {
       console.error("Error Fetching Messages: ", e);
     }
   };
-
 
   const sendMessage = async () => {
     if (input.trim() !== "" && activeFriend) {
@@ -75,7 +76,12 @@ const ChatSystem = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log(response.data);
+
+        socket.current.emit("sendMessage", {
+          sender: myId,
+          receiver: activeFriend._id,
+          messageText: input,
+        });
       } catch (error) {
         console.log("Error Send Messages: ", error);
       }
@@ -101,6 +107,25 @@ const ChatSystem = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    socket.current = io("http://localhost:7777", {
+      transports: ["websocket"],
+    });
+
+    socket.current.on("receiveMessage", (message) => {
+      if (message.sender === activeFriend._id) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: message.messageText, sender: "friend" },
+        ]);
+      }
+    });
+
+    return () => {
+      socket.current.disconnect();
+    };
+  }, [activeFriend]);
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -141,6 +166,7 @@ const ChatSystem = () => {
           ))}
         </ul>
       </div>
+
       <div className={styles.chatMain}>
         <div className={styles.chatWindow}>
           <div className={styles.chatHeader}>
@@ -158,7 +184,6 @@ const ChatSystem = () => {
                 key={index}
                 className={`${styles.message} ${msg.sender === "user" ? styles.user : styles.friend}`}
               >
-                {/* Render sender's photo */}
                 {msg.sender === "friend" && (
                   <img
                     src={activeFriend?.profile?.profileImage || "/default-avatar.png"}
@@ -187,6 +212,7 @@ const ChatSystem = () => {
           </div>
         </div>
       </div>
+
       <div className={styles.chatInfo}>
         {activeFriend && (
           <div className={styles.infoHeader}>
