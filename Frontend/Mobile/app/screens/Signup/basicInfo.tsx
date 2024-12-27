@@ -156,12 +156,6 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ navigation }) => {
           />
         </View>
         <ButtonGroup onPrevious={handlePrevious} onNext={handleNext} />
-        <GoogleSignup
-          registerWith="Or Register With"
-          googleSignup="Google Register"
-          onPress={promptAsync}
-          source={google}
-        />
       </View>
     </KeyboardAvoidingView>
   );

@@ -104,7 +104,7 @@ export default function ForgotPassword() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
     >
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flex: 1 }}>
         <SafeAreaView style={styles.container}>
           <Text style={styles.headerText}>Forgot Password</Text>
           <Text style={styles.label}>Username</Text>
