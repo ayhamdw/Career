@@ -89,10 +89,35 @@ const acceptedFriendsController = async (req, res) => {
   }
 };
 
+const deleteFriendFromList = async (req, res) => {
+  const { currentUserId, selectedUserId } = req.body;
+
+  try {
+    await User.findByIdAndUpdate(currentUserId, {
+      $pull: { friends: selectedUserId },
+    });
+    await User.findByIdAndUpdate(selectedUserId, {
+      $pull: { friends: currentUserId },
+    });
+    await User.findByIdAndUpdate(currentUserId, {
+      $pull: { sendRequests: selectedUserId },
+    });
+    await User.findByIdAndUpdate(selectedUserId, {
+      $pull: { friendRequests: currentUserId },
+    });
+
+    res.status(200).json({ message: "Friend deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ Error: error });
+  }
+};
+
+
 module.exports = {
   logInUsers,
   sendFiendRequestController,
   getFriendsRequest,
   acceptFriendRequestController,
   acceptedFriendsController,
+  deleteFriendFromList,
 };

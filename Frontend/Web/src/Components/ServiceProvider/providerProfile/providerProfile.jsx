@@ -12,6 +12,7 @@ const ProviderProfile = () => {
   const myId = localStorage.getItem("id");
   const token = localStorage.getItem("token");
 
+
   useEffect(() => {
     const fetchProviderData = async () => {
       try {
@@ -136,7 +137,58 @@ const Actions = ({ provider, myId, token }) => {
   const isFriendRequestSent = friendRequests.some((req) => req._id === provider._id);
 
 
+  const [friends, setFriends] = useState();
 
+  useEffect(() => {
+    const myId = localStorage.getItem("id")
+    const token = localStorage.getItem("token")
+
+    const fetchFriends = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API}/friends/acceptedFriends/${myId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        console.log(response.data[0]);
+        setFriends(response.data);
+      }
+      catch (e) {
+        console.log("Error Fetch Friends: ", e)
+      }
+
+    }
+    fetchFriends();
+
+  }, []);
+
+  const handleDeleteFriend = async(id)=>{
+    // const myId = localStorage.getItema("id");
+    try{
+      const response = await axios.post(
+        `${import.meta.env.VITE_API}/friends/deleteFriendFromList`,
+        {
+          currentUserId: myId,
+          selectedUserId: id
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      console.log(response)
+      setFriends((prevFriends)=>prevFriends.filter(friend=> friend._id !== id));
+    }
+    catch(error){
+      console.log("Error Delete Friend: ",error)
+    }
+
+    console.log("This is Your id: ",id);
+  }
+
+
+  const isInMyFriends = Array.isArray(friends) && friends.some(friend => friend._id === provider._id);
   return (
     <div className={styles.actionsSection}>
       <button
@@ -145,20 +197,23 @@ const Actions = ({ provider, myId, token }) => {
       >
         <FaEnvelope /> Message
       </button>
-        {isFriendRequestSent ? (
-          <>
-            {/* <FaUserPlus /> Accept Request */}
-            <button className={styles.acceptBtn}>Accept Request</button>
-            <button className={styles.rejectBtn}>Reject Request</button>
-          </>
-        ) : (
-          <>
-            
-            <button className={styles.addFriendButton} onClick={()=>handleSendFriendRequest(provider._id)}>
-            <FaUserPlus /> Add Friend
-            </button>
-          </>
-        )}
+      {isFriendRequestSent ? (
+        <>
+          {/* <FaUserPlus /> Accept Request */}
+          <button className={styles.acceptBtn}>Accept Request</button>
+          <button className={styles.rejectBtn}>Reject Request</button>
+        </>
+      ) : (
+        <>
+
+          <button
+            className={isInMyFriends ? styles.isFriends : styles.addFriendButton}
+            onClick={isInMyFriends? ()=>handleDeleteFriend(provider._id): ()=>handleSendFriendRequest(provider._id) }
+          >
+            {isInMyFriends ? "Delete Friend" : "Add Friend"}
+          </button>
+        </>
+      )}
     </div>
   );
 };
