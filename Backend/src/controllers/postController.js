@@ -105,7 +105,7 @@ const getSavedPosts = async (req, res) => {
       })
       .lean();
     console.log(response);
-    res.status(200).json({ message: "Saved posts fetched successfully" });
+    res.status(200).send(response);
   } catch (error) {
     console.log("error while getting saved posts", error);
   }
