@@ -12,52 +12,12 @@ import { useNavigation } from "@react-navigation/native";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import { Pressable } from "react-native-gesture-handler";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-interface Location {
-  type: string;
-  coordinates: [number, number];
-}
 
-interface Profile {
-  firstName: string;
-  lastName: string;
-  bio: string;
-  experience: string;
-  phone: string;
-  location: Location;
-  ratings: {
-    rating: number;
-    review: string;
-    userId: string;
-    date: Date;
-  };
-  numberOfRequest: number;
-}
-
-interface User {
-  _id: string;
-  username: string;
-  email: string;
-  password: string;
-  role: string;
-  gender: string;
-  city: string;
-  dateOfBirth: Date;
-  career: string;
-  careerCategory: string;
-  rating: number;
-  profile: Profile;
-  verificationStatus: boolean;
-  tokens: string[];
-  friendRequests: string[];
-  friends: string[];
-  sendRequests: string[];
-  resetCode: number;
-  resetCodeExpires: Date;
-}
-
-export default function Community({ user }: { user: User }) {
+export default function Community({ user }) {
   const [posts, setPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState({}); // Object to track saved status for each post
   const navigation = useNavigation();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -71,6 +31,13 @@ export default function Community({ user }: { user: User }) {
     };
     fetchData();
   }, []);
+
+  const handleSave = async (postId: string) => {
+    setSavedPosts((prevState) => ({
+      ...prevState,
+      [postId]: !prevState[postId],
+    }));
+  };
 
   const renderPost = ({ item }) => (
     <View style={styles.cardContainer}>
@@ -87,13 +54,22 @@ export default function Community({ user }: { user: User }) {
           {new Date(item.postDate).toLocaleDateString()}
         </Text>
       </TouchableOpacity>
-      <Pressable onPress={() => console.log("Saved!")}>
-        <FontAwesome
-          name="bookmark-o"
-          size={24}
-          color="black"
-          style={styles.iconStyle}
-        />
+      <Pressable onPress={() => handleSave(item._id)}>
+        {savedPosts[item._id] ? (
+          <FontAwesome
+            name="bookmark"
+            size={24}
+            color="black"
+            style={styles.iconStyle}
+          />
+        ) : (
+          <FontAwesome
+            name="bookmark-o"
+            size={24}
+            color="black"
+            style={styles.iconStyle}
+          />
+        )}
       </Pressable>
     </View>
   );
@@ -132,13 +108,6 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 6,
     height: 100,
-
-    // borderRadius: 8,
-    // shadowColor: "#000",
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.1,
-    // shadowRadius: 4,
-    // elevation: 2,
     width: "100%",
   },
   postTitle: {
