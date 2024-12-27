@@ -18,6 +18,8 @@ router.post("/applyForProject", postController.applyForProject);
 
 router.post("/savePost", postController.savePost);
 
+router.get("/getSavedPosts/:id", postController.getSavedPosts);
+
 // router.get("/requestDetails/:id", postController.getRequestDetails);
 
 module.exports = router;

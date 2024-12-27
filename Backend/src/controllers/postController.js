@@ -93,10 +93,28 @@ const savePost = async (req, res) => {
     console.log("error while saving post", error);
   }
 };
+
+const getSavedPosts = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const response = await User.findById(userId)
+      .select("savedPosts")
+      .populate({
+        path: "savedPosts",
+        select: "title content",
+      })
+      .lean();
+    console.log(response);
+    res.status(200).send(response);
+  } catch (error) {
+    console.log("error while getting saved posts", error);
+  }
+};
 module.exports = {
   createPost,
   getAllPosts,
   deletePost,
   applyForProject,
   savePost,
+  getSavedPosts,
 };
