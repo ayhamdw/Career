@@ -10,6 +10,8 @@ const ChatSystem = () => {
   const [isInfoVisible, setIsInfoVisible] = useState(true);
   const [isFriendsVisible, setIsFriendsVisible] = useState(true);
   const scrollRef = useRef();
+  const myId = localStorage.getItem("id");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const myId = localStorage.getItem("id");
@@ -32,17 +34,51 @@ const ChatSystem = () => {
     fetchFriends();
   }, []);
 
-  const sendMessage = () => {
-    if (input.trim() !== "") {
+  const fetchMessages = async (friendId) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API}/messages/messages/${myId}/${friendId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log("Messages: ", response.data);
+
+      const processedMessages = response.data.map((msg) => ({
+        text: msg.messageText,
+        sender: msg.senderId._id === myId ? "user" : "friend",
+        timeStamp: msg.timeStamp,
+      }));
+
+      setMessages(processedMessages);
+    } catch (e) {
+      console.error("Error Fetching Messages: ", e);
+    }
+  };
+
+
+  const sendMessage = async () => {
+    if (input.trim() !== "" && activeFriend) {
       const newMessage = { text: input, sender: "user" };
       setMessages((prev) => [...prev, newMessage]);
       setInput("");
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          { text: "This is an auto-response.", sender: "bot" },
-        ]);
-      }, 500);
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API}/messages/messages`,
+          {
+            senderId: myId,
+            receiverId: activeFriend._id,
+            messageType: "text",
+            messageText: input,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.log("Error Send Messages: ", error);
+      }
     }
   };
 
@@ -53,6 +89,7 @@ const ChatSystem = () => {
   const handleFriendClick = (friend) => {
     setActiveFriend(friend);
     setMessages([]);
+    fetchMessages(friend._id);
   };
 
   const scrollToBottom = () => {
@@ -119,15 +156,12 @@ const ChatSystem = () => {
             {messages.map((msg, index) => (
               <div
                 key={index}
-                className={`${styles.message} ${
-                  msg.sender === "user" ? styles.user : styles.bot
-                }`}
+                className={`${styles.message} ${msg.sender === "user" ? styles.user : styles.friend}`}
               >
-                {msg.sender === "bot" && (
+                {/* Render sender's photo */}
+                {msg.sender === "friend" && (
                   <img
-                    src={
-                      activeFriend?.profile?.profileImage || "/default-avatar.png"
-                    }
+                    src={activeFriend?.profile?.profileImage || "/default-avatar.png"}
                     alt="friend"
                     className={styles.messageAvatar}
                   />
@@ -136,6 +170,7 @@ const ChatSystem = () => {
               </div>
             ))}
           </div>
+
           <div className={styles.messageInput}>
             <input
               type="text"
