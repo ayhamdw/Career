@@ -33,8 +33,25 @@ const FriendRequests = () => {
     }
   };
 
-  const handleReject = (id) => {
-    alert(`Friend request from ${id} has been rejected!`);
+  const handleReject = async(id) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API}/friends/reject-request`, {
+        senderId: id,
+        receiverId: myId,
+      },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+
+      )
+      setFriendRequests((prevRequests) =>
+        prevRequests.filter((request) => request._id !== id)
+      );
+    }
+    catch (e) {
+      console.log("Error Accept Request: ", e);
+    }
+    
   };
 
   const handleViewProfile = (id) => {

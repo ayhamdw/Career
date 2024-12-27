@@ -129,6 +129,23 @@ const getSendRequests = async (req, res) => {
   }
 };
 
+const rejectFriendRequest = async (req, res) => {
+  const { senderId, receiverId } = req.body;
+  try {
+    await User.findByIdAndUpdate(receiverId, {
+      $pull: { friendRequests: senderId },
+    });
+    await User.findByIdAndUpdate(senderId, {
+      $pull: { sendRequests: receiverId },
+    });
+
+    res.status(200).json({ message: "Friend Request Rejected" });
+  } catch (error) {
+    res.status(500).json({ Error: error });
+  }
+};
+
+
 
 module.exports = {
   logInUsers,
@@ -138,4 +155,5 @@ module.exports = {
   acceptedFriendsController,
   deleteFriendFromList,
   getSendRequests,
+  rejectFriendRequest,
 };

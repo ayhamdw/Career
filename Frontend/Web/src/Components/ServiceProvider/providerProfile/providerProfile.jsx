@@ -220,15 +220,54 @@ const Actions = ({ provider, myId, token }) => {
         }
       );
       console.log(response);
-      setFriends((prevFriends) => prevFriends.filter((friend) => friend._id !== id));
+      setFriends((prevFriends) => prevFriends.filter((reqId) => reqId !== id));
     } catch (error) {
       console.log("Error Delete Friend: ", error);
     }
   };
 
-  const handleCancelSentRequest = ()=>{
-    console.log("handleCancelSentRequest")
+  const handleAcceptRequest = async(ProviderId)=>{
+        try {
+          const response = await axios.post(`${import.meta.env.VITE_API}/friends/acceptFriendRequest`, {
+            senderId: ProviderId,
+            receiverId: myId,
+          },
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+    
+          )
+          setFriends((prevRequests) => [...prevRequests, ProviderId]);
+          setFriendRequests((prevRequests) =>
+            prevRequests.filter((id) => id !== ProviderId)
+          );
+
+        }
+        catch (e) {
+          console.log("Error Accept Request: ", e);
+        }
   }
+
+    const handleRejectRequest = async(ProviderId) => {
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_API}/friends/reject-request`, {
+          senderId: ProviderId,
+          receiverId: myId,
+        },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+  
+        )
+        setFriendRequests((prevRequests) =>
+          prevRequests.filter((id) => id !== ProviderId)
+        );
+      }
+      catch (e) {
+        console.log("Error Accept Request: ", e);
+      }
+      
+    };
 
   const isISentToThisPerson = requestsSent.includes(provider._id);
   const isThisPersonSentMeRequest = friendRequests.includes(provider._id);
@@ -242,8 +281,8 @@ const Actions = ({ provider, myId, token }) => {
       </button>
       {isThisPersonSentMeRequest ? (
         <>
-          <button className={styles.acceptBtn}>Accept Request</button>
-          <button className={styles.rejectBtn}>Reject Request</button>
+          <button className={styles.acceptBtn} onClick={()=>handleAcceptRequest(provider._id)}>Accept Request</button>
+          <button className={styles.rejectBtn} onClick={()=>handleRejectRequest(provider._id)}>Reject Request</button>
         </>
       ) : (
         <>
