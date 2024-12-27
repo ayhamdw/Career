@@ -6,40 +6,6 @@ import { useNavigate } from 'react-router-dom'
 const Friends = () => {
   const navigate = useNavigate();
   
-  const friendsData = [
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      photo: "https://via.placeholder.com/150",
-      career: "Home Services",
-      rating: 4.5,
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
-      photo: "https://via.placeholder.com/150",
-      career: "Technical Services",
-      rating: 4.2,
-    },
-    {
-      id: 3,
-      firstName: "Mark",
-      lastName: "Taylor",
-      photo: "https://via.placeholder.com/150",
-      career: "Home Services",
-      rating: 4.8,
-    },
-    {
-      id: 4,
-      firstName: "Emily",
-      lastName: "Davis",
-      photo: "https://via.placeholder.com/150",
-      career: "Creative Services",
-      rating: 4.6,
-    },
-  ];
   const [friends,setFriends] = useState([]);
 
   const careerCategories = [

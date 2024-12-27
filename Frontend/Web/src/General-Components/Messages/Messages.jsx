@@ -1,53 +1,97 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./ChatSystem.css";
+import styles from "./Messages.module.css";
 import axios from "axios";
-
-import image1 from './profile-images/1.png';
-import image2 from './profile-images/2.png';
-import image3 from './profile-images/3.png';
-import image4 from './profile-images/4.png';
-import image5 from './profile-images/5.png';
-import image6 from './profile-images/6.png';
-import image7 from './profile-images/7.png';
+import io from "socket.io-client";
 
 const ChatSystem = () => {
-
-
-  
-
-
-
-
-  const [friends] = useState([
-    { name: "Khaled", picture: image1, bio: "Coffee enthusiast.", page: "#" },
-    { name: "Mays", picture: image2, bio: "Loves painting.", page: "#" },
-    { name: "Abdullah", picture: image4, bio: "Tech guru.", page: "#" },
-    { name: "Ayham", picture: image6, bio: "Avid reader.", page: "#" },
-    { name: "Shareef", picture: image7, bio: "Loves traveling.", page: "#" },
-    { name: "Dania", picture: image3, bio: "Music lover.", page: "#" },
-    { name: "Abeer", picture: image5, bio: "Fitness fanatic.", page: "#" },
-    { name: "Masa", picture: image3, bio: "Fitness fanatic.", page: "#" },
-    { name: "Lean", picture: image2, bio: "Fitness fanatic.", page: "#" },
-  ]);
-  const [activeFriend, setActiveFriend] = useState(friends[0]);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  
-
+  const [friends, setFriends] = useState([]);
+  const [activeFriend, setActiveFriend] = useState(null);
   const [isInfoVisible, setIsInfoVisible] = useState(true);
   const [isFriendsVisible, setIsFriendsVisible] = useState(true);
+  const [typing, setTyping] = useState(false); // To track typing status
+  const scrollRef = useRef();
+  const myId = localStorage.getItem("id");
+  const token = localStorage.getItem("token");
 
-  const sendMessage = () => {
-    if (input.trim() !== "") {
+  const socket = useRef();
+
+  useEffect(() => {
+    const myId = localStorage.getItem("id");
+    const token = localStorage.getItem("token");
+
+    const fetchFriends = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API}/friends/acceptedFriends/${myId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setFriends(response.data);
+      } catch (e) {
+        setFriends([]);
+        console.error("Error Fetch Friends: ", e);
+      }
+    };
+    fetchFriends();
+  }, []);
+
+  const fetchMessages = async (friendId) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API}/messages/messages/${myId}/${friendId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const processedMessages = response.data.map((msg) => ({
+        text: msg.messageText,
+        sender: msg.senderId._id === myId ? "user" : "friend",
+        timeStamp: msg.timeStamp,
+      }));
+
+      setMessages(processedMessages);
+    } catch (e) {
+      console.error("Error Fetching Messages: ", e);
+    }
+  };
+
+  const sendMessage = async () => {
+    if (input.trim() !== "" && activeFriend) {
       const newMessage = { text: input, sender: "user" };
       setMessages((prev) => [...prev, newMessage]);
       setInput("");
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          { text: "This is an auto-response.", sender: "bot" },
-        ]);
-      }, 500);
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API}/messages/messages`,
+          {
+            senderId: myId,
+            receiverId: activeFriend._id,
+            messageType: "text",
+            messageText: input,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        socket.current.emit("sendMessage", {
+          sender: myId,
+          receiver: activeFriend._id,
+          messageText: input,
+        });
+
+        // Emit 'stopTyping' after sending the message
+        socket.current.emit("stopTyping", {
+          sender: myId,
+          receiver: activeFriend._id,
+        });
+      } catch (error) {
+        console.log("Error Send Messages: ", error);
+      }
     }
   };
 
@@ -58,10 +102,26 @@ const ChatSystem = () => {
   const handleFriendClick = (friend) => {
     setActiveFriend(friend);
     setMessages([]);
+    fetchMessages(friend._id);
   };
 
+  const handleTyping = () => {
+    if (!typing) {
+      setTyping(true);
+      socket.current.emit("typing", {
+        sender: myId,
+        receiver: activeFriend._id,
+      });
+    }
+  };
 
-  const scrollRef = useRef();
+  const handleStopTyping = () => {
+    setTyping(false);
+    socket.current.emit("stopTyping", {
+      sender: myId,
+      receiver: activeFriend._id,
+    });
+  };
 
   const scrollToBottom = () => {
     if (scrollRef.current) {
@@ -73,6 +133,36 @@ const ChatSystem = () => {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    socket.current = io("http://localhost:7777", {
+      transports: ["websocket"],
+    });
+
+    socket.current.on("receiveMessage", (message) => {
+      if (message.sender === activeFriend._id) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: message.messageText, sender: "friend" },
+        ]);
+      }
+    });
+
+    socket.current.on("typing", (data) => {
+      if (data.receiver === myId) {
+        setTyping(true);
+      }
+    });
+
+    socket.current.on("stopTyping", (data) => {
+      if (data.receiver === myId) {
+        setTyping(false);
+      }
+    });
+
+    return () => {
+      socket.current.disconnect();
+    };
+  }, [activeFriend]);
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -82,107 +172,111 @@ const ChatSystem = () => {
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
-    handleResize(); 
+    handleResize();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
   return (
-
-      <div className="chat-system">
-        <div className="friends-list">
-          <h3>Friends</h3>
-          <ul>
-            {friends.map((friend, index) => (
-              <li
-                key={index}
-                className={activeFriend.name === friend.name ? "active" : ""}
-                onClick={() => handleFriendClick(friend)}
-              >
-                <img src={friend.picture} alt={friend.name} />
-                <div className="friend-info">
-                  <span>{friend.name}</span>
-                  <p>{friend.bio}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="chat-main">
-          <div className="chat-window">
-            <div className="chat-header">
-              <img src={activeFriend.picture} alt={activeFriend.name} />
-              <h3>{activeFriend.name}</h3>
-            </div>
-            <div className="messages-list" ref={scrollRef}>
-              
-              {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`message ${msg.sender === "user" ? "user" : "bot"}`}
+    <div className={styles.chatSystem}>
+      <div className={styles.chatMain}>
+        {isFriendsVisible && (
+          <div className={styles.friendsList}>
+            <h3>Friends</h3>
+            <ul>
+              {friends.map((friend) => (
+                <li
+                  key={friend._id}
+                  className={
+                    activeFriend?.profile?.firstName === friend.profile.firstName
+                      ? styles.active
+                      : ""
+                  }
+                  onClick={() => handleFriendClick(friend)}
                 >
-                  {msg.sender === "bot" && (
-                    <img
-                      src={activeFriend.picture}
-                      alt="friend"
-                      className="message-avatar"
-                    />
-                  )}
-                  <span className="message-text">{msg.text}</span>
-                  
-                </div>
+                  <img
+                    src={friend.profile.profileImage}
+                    alt={friend.profile.firstName}
+                  />
+                  <div className={styles.friendInfo}>
+                    <span>{friend.profile.firstName} {friend.profile.lastName}</span>
+                    <p>{friend.profile.bio || "No bio available"}</p>
+                  </div>
+                </li>
               ))}
-            </div>
-            <div className="message-input">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={`Message ${activeFriend.name}...`}
+            </ul>
+          </div>
+        )}
+        <div className={styles.chatWindow}>
+          <div className={styles.chatHeader}>
+            {activeFriend && (
+              <img
+                src={activeFriend?.profile?.profileImage || "/default-avatar.png"}
+                alt={activeFriend?.profile?.firstName || "Friend"}
               />
-              <button onClick={sendMessage}>Send</button>
-            </div>
+            )}
+            <h3>{activeFriend?.profile?.firstName} {activeFriend?.profile?.lastName}</h3>
+          </div>
+          <div className={styles.messagesList} ref={scrollRef}>
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`${styles.message} ${msg.sender === "user" ? styles.user : styles.friend}`}
+              >
+                {msg.sender === "friend" && (
+                  <img
+                    src={activeFriend?.profile?.profileImage || "/default-avatar.png"}
+                    alt="friend"
+                    className={styles.messageAvatar}
+                  />
+                )}
+                <span className={styles.messageText}>{msg.text}</span>
+              </div>
+            ))}
+            {typing && activeFriend && (
+              <div className={styles.typingIndicator}>
+                <span>{activeFriend.profile.firstName} is typing...</span>
+              </div>
+            )}
           </div>
 
-        </div>
-        <div className="chat-info">
-            <div className="info-header">
-              <img src={activeFriend.picture} alt={activeFriend.name} />
-              <div>
-                <h3>{activeFriend.name}</h3>
-                <p>{activeFriend.bio}</p>
-                <a href={activeFriend.page} target="_blank" rel="noopener noreferrer">
-                  View Profile
-                </a>
-              </div>
-            </div>
-            <div className="info-actions">
-              <h4>Conversation Options</h4>
-              <div className="action-icons">
-                <button>
-                  <span role="img" aria-label="photos">
-                    📷
-                  </span>
-                  Photos
-                </button>
-                <button>
-                  <span role="img" aria-label="files">
-                    📁
-                  </span>
-                  Files
-                </button>
-                <button>
-                  <span role="img" aria-label="links">
-                    🔗
-                  </span>
-                  Links
-                </button>
-              </div>
-            </div>
+          <div className={styles.messageInput}>
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onKeyUp={handleTyping}
+              onBlur={handleStopTyping}
+              placeholder={
+                activeFriend
+                  ? `Message ${activeFriend.profile.firstName}...`
+                  : "Select a friend to start chatting"
+              }
+            />
+            <button onClick={sendMessage}>Send</button>
           </div>
+        </div>
       </div>
 
+
+      {isInfoVisible && activeFriend && (
+        <div className={styles.chatInfo}>
+          <div className={styles.infoHeader}>
+            <img
+              src={activeFriend.profile.profileImage}
+              alt={activeFriend.profile.firstName}
+            />
+            <div>
+              <h3>{activeFriend.profile.firstName} {activeFriend?.profile?.lastName}</h3>
+              <p>{activeFriend.profile.bio || "Bio not available"}</p>
+              <a href={`mailto:${activeFriend.email}`}>Contact via Email</a>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+    </div>
   );
 };
 

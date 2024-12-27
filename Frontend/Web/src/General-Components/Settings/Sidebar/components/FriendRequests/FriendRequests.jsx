@@ -13,6 +13,9 @@ const FriendRequests = () => {
   const token = localStorage.getItem("token");
 
   const handleAccept = async (id) => {
+    setFriendRequests((prevRequests) =>
+      prevRequests.filter((request) => request._id !== id)
+    );
     try {
       const response = await axios.post(`${import.meta.env.VITE_API}/friends/acceptFriendRequest`, {
         senderId: id,
@@ -23,9 +26,7 @@ const FriendRequests = () => {
         }
 
       )
-      setFriendRequests((prevRequests) =>
-        prevRequests.filter((request) => request._id !== id)
-      );
+      
       console.log(response.data);
     }
     catch (e) {
@@ -34,6 +35,9 @@ const FriendRequests = () => {
   };
 
   const handleReject = async(id) => {
+    setFriendRequests((prevRequests) =>
+      prevRequests.filter((request) => request._id !== id)
+    );
     try {
       const response = await axios.post(`${import.meta.env.VITE_API}/friends/reject-request`, {
         senderId: id,
@@ -44,9 +48,7 @@ const FriendRequests = () => {
         }
 
       )
-      setFriendRequests((prevRequests) =>
-        prevRequests.filter((request) => request._id !== id)
-      );
+      
     }
     catch (e) {
       console.log("Error Accept Request: ", e);
