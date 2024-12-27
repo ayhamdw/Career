@@ -12,20 +12,23 @@ const FriendRequests = () => {
   const myId = localStorage.getItem("id");
   const token = localStorage.getItem("token");
 
-  const handleAccept = async(id) => {
-    try{
-      const response = await axios.post(`${import.meta.env.VITE_API}/friends/acceptFriendRequest`,{
-        senderId:id,
+  const handleAccept = async (id) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API}/friends/acceptFriendRequest`, {
+        senderId: id,
         receiverId: myId,
       },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    
-    )
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+
+      )
+      setFriendRequests((prevRequests) =>
+        prevRequests.filter((request) => request._id !== id)
+      );
       console.log(response.data);
     }
-    catch(e){
+    catch (e) {
       console.log("Error Accept Request: ", e);
     }
   };
@@ -39,25 +42,29 @@ const FriendRequests = () => {
   };
 
 
-    useEffect( ()=>{
-        const fetchFriendRequest = async() =>{
-          try{
-            const response = await axios.get(`${import.meta.env.VITE_API}/friends/getFriendsRequest/${myId}`,
-              {
-                headers:{
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            )
-            console.log(response.data[0].city)
-            setFriendRequests(response.data)
+  useEffect(() => {
+    const fetchFriendRequest = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API}/friends/getFriendsRequest/${myId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-          catch(e){
-            console.log("Error Fetch Friend Requests: ",e)
-          }
-        }
-        fetchFriendRequest();
-    },[])
+        )
+        console.log(response.data[0].city)
+        setFriendRequests(response.data)
+      }
+      catch (e) {
+        console.log("Error Fetch Friend Requests: ", e)
+      }
+    }
+    fetchFriendRequest();
+  }, [])
+
+  const getMorefriends = () =>{
+    navigate(`/service-provider`)
+  }
 
   return (
     <div className={styles.friendRequestsPage}>
@@ -68,10 +75,10 @@ const FriendRequests = () => {
             <li key={request._id} className={styles.friendRequestItem}>
               <div className={styles.friendRequestContent}>
                 <div className={styles.profilePictureContainer}>
-                  <img 
-                    src={request.profile.profileImage} 
-                    alt={`${request.profile.firstName}'s profile`} 
-                    className={styles.profilePicture} 
+                  <img
+                    src={request.profile.profileImage}
+                    alt={`${request.profile.firstName}'s profile`}
+                    className={styles.profilePicture}
                   />
                 </div>
                 <div className={styles.requestDetails}>
@@ -89,7 +96,23 @@ const FriendRequests = () => {
           ))}
         </ul>
       ) : (
-        <p>No friend requests yet.</p>
+        <div className={styles.noRequestsContainer}>
+          <div className={styles.noRequestsCard}>
+            <div className={styles.noRequestsIcon}>
+              {/* <img
+                src="https://via.placeholder.com/100"
+                alt="No Requests"
+                className={styles.iconImage}
+              /> */}
+            </div>
+            <h2 className={styles.noRequestsTitle}>No Friend Requests Yet</h2>
+            <p className={styles.noRequestsDescription}>
+              It looks like you're all caught up! Check back later to see if anyone wants to connect.
+            </p>
+            <button className={styles.actionButton} onClick={getMorefriends}>Discover New Friends</button>
+          </div>
+        </div>
+
       )}
     </div>
   );
