@@ -97,7 +97,7 @@ const ChatSystem = () => {
                 alt={friend.profile.firstName}
               />
               <div className={styles.friendInfo}>
-                <span>{friend.profile.firstName}</span>
+                <span>{friend.profile.firstName} {friend.profile.lastName}</span>
                 <p>{friend.profile.bio || "No bio available"}</p>
               </div>
             </li>
@@ -113,7 +113,7 @@ const ChatSystem = () => {
                 alt={activeFriend?.profile?.firstName || "Friend"}
               />
             )}
-            <h3>{activeFriend?.profile?.firstName || "Select a friend"}</h3>
+            <h3>{activeFriend?.profile?.firstName} {activeFriend?.profile?.lastName}</h3>
           </div>
           <div className={styles.messagesList} ref={scrollRef}>
             {messages.map((msg, index) => (
@@ -160,7 +160,7 @@ const ChatSystem = () => {
               alt={activeFriend.profile.firstName}
             />
             <div>
-              <h3>{activeFriend.profile.firstName}</h3>
+              <h3>{activeFriend.profile.firstName} {activeFriend?.profile?.lastName}</h3>
               <p>{activeFriend.profile.bio || "Bio not available"}</p>
               <a href={`mailto:${activeFriend.email}`}>Contact via Email</a>
             </div>
