@@ -14,6 +14,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import styles from "@/assets/styles/ProfileStyle";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 const Profile = ({ user }) => {
   const navigation = useNavigation();
   const logoutFunction = async () => {
@@ -110,18 +111,23 @@ const Profile = ({ user }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.option}
-          onPress={() => navigation.navigate("Notifications")}
-        >
-          <Ionicons name="notifications-outline" style={styles.iconStyle} />
-          <Text style={styles.optionText}>Notifications</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.option}
           onPress={() => navigation.navigate("ChangePassword")}
         >
           <Ionicons name="lock-closed-outline" style={styles.iconStyle} />
           <Text style={styles.optionText}>Change Password</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.option}
+          onPress={() => navigation.navigate("Saved")}
+        >
+          <FontAwesome
+            name="bookmark-o"
+            style={[styles.iconStyle, { marginRight: 15 }]}
+          />
+          <Text style={[styles.optionText]}>Saved</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.option} onPress={logoutFunction}>
           <Ionicons name="log-out-outline" style={styles.iconStyle} />
           <Text style={[styles.optionText, { color: "#e74c3c" }]}>Logout</Text>

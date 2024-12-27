@@ -1,18 +1,22 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const User = require('../models/user2');
+const User = require("../models/user2");
 
 const addToaAceptedRequestReceived = async (req, res) => {
   const { userId, myId } = req.body;
 
   try {
     if (!userId || !myId) {
-      return res.status(400).json({ message: "User ID and My ID are required." });
+      return res
+        .status(400)
+        .json({ message: "User ID and My ID are required." });
     }
     const user = await User.findOne({ receiveProficientRequest: userId });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found or no such request exists." });
+      return res
+        .status(404)
+        .json({ message: "User not found or no such request exists." });
     }
     if (!user.acceptedRequestReceived.includes(userId)) {
       user.acceptedRequestReceived.push(userId);
@@ -27,13 +31,15 @@ const addToaAceptedRequestReceived = async (req, res) => {
     if (!recipientUser.acceptedRequestsSent.includes(myId)) {
       recipientUser.acceptedRequestsSent.push(myId);
     }
-    recipientUser.sendProficientRequests = recipientUser.sendProficientRequests.filter(
-      (id) => id.toString() !== myId
-    );
+    recipientUser.sendProficientRequests =
+      recipientUser.sendProficientRequests.filter(
+        (id) => id.toString() !== myId
+      );
     await user.save();
     await recipientUser.save();
     return res.status(200).json({
-      message: "Request successfully moved to acceptedRequestReceived, myId added to acceptedRequestsSent, and removed from sendProficientRequest.",
+      message:
+        "Request successfully moved to acceptedRequestReceived, myId added to acceptedRequestsSent, and removed from sendProficientRequest.",
       user,
       recipientUser,
     });
@@ -48,12 +54,16 @@ const addToRejectRequestReceived = async (req, res) => {
 
   try {
     if (!userId || !myId) {
-      return res.status(400).json({ message: "User ID and My ID are required." });
+      return res
+        .status(400)
+        .json({ message: "User ID and My ID are required." });
     }
     const user = await User.findOne({ receiveProficientRequest: userId });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found or no such request exists." });
+      return res
+        .status(404)
+        .json({ message: "User not found or no such request exists." });
     }
     if (!user.rejectedRequestReceived.includes(userId)) {
       user.rejectedRequestReceived.push(userId);
@@ -69,13 +79,15 @@ const addToRejectRequestReceived = async (req, res) => {
       recipientUser.rejectedRequestSent.push(myId);
     }
 
-    recipientUser.sendProficientRequests = recipientUser.sendProficientRequests.filter(
-      (id) => id.toString() !== myId
-    );
+    recipientUser.sendProficientRequests =
+      recipientUser.sendProficientRequests.filter(
+        (id) => id.toString() !== myId
+      );
     await user.save();
     await recipientUser.save();
     return res.status(200).json({
-      message: "Request successfully moved to acceptedRequestReceived, and myId added to acceptedRequestsSent.",
+      message:
+        "Request successfully moved to acceptedRequestReceived, and myId added to acceptedRequestsSent.",
       user,
       recipientUser,
     });
@@ -85,45 +97,43 @@ const addToRejectRequestReceived = async (req, res) => {
   }
 };
 
-
-
 const getAcceptedReceivedRequestByEmail = async (req, res) => {
   const { email } = req.body;
-  if (!email || typeof email !== 'string') {
-    return res.status(400).json({ message: 'Invalid email provided' });
+  if (!email || typeof email !== "string") {
+    return res.status(400).json({ message: "Invalid email provided" });
   }
 
   try {
     const user = await User.findOne({ email })
-      .populate('acceptedRequestReceived')  
+      .populate("acceptedRequestReceived")
       .exec();
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
     return res.status(200).json(user.acceptedRequestReceived);
   } catch (error) {
-    console.error('Error acceptedRequestReceived:', error.message);
-    return res.status(500).json({ message: 'Error acceptedRequestReceived' });
+    console.error("Error acceptedRequestReceived:", error.message);
+    return res.status(500).json({ message: "Error acceptedRequestReceived" });
   }
 };
 
 const getRejectedReceivedRequestByEmail = async (req, res) => {
   const { email } = req.body;
-  if (!email || typeof email !== 'string') {
-    return res.status(400).json({ message: 'Invalid email provided' });
+  if (!email || typeof email !== "string") {
+    return res.status(400).json({ message: "Invalid email provided" });
   }
 
   try {
     const user = await User.findOne({ email })
-      .populate('rejectedRequestReceived')  
+      .populate("rejectedRequestReceived")
       .exec();
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
     return res.status(200).json(user.rejectedRequestReceived);
   } catch (error) {
-    console.error('Error rejectedRequestReceived:', error.message);
-    return res.status(500).json({ message: 'Error rejectedRequestReceived' });
+    console.error("Error rejectedRequestReceived:", error.message);
+    return res.status(500).json({ message: "Error rejectedRequestReceived" });
   }
 };
 
@@ -206,7 +216,6 @@ const getSendProficientRequests = async (req, res) => {
   }
 };
 
-
 module.exports = {
   addToaAceptedRequestReceived,
   getAcceptedReceivedRequestByEmail,
@@ -215,4 +224,4 @@ module.exports = {
   getAcceptedSentRequest,
   getRejectedSentRequest,
   getSendProficientRequests,
-}
+};

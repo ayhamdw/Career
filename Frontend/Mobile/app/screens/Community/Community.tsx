@@ -10,7 +10,8 @@ import {
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { ayhamWifiUrl } from "@/constants/Urls";
-
+import { Pressable } from "react-native-gesture-handler";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 interface Location {
   type: string;
   coordinates: [number, number];
@@ -72,19 +73,29 @@ export default function Community({ user }: { user: User }) {
   }, []);
 
   const renderPost = ({ item }) => (
-    <TouchableOpacity
-      style={styles.postCard}
-      onPress={() =>
-        navigation.navigate("postDetails", { post: item, user: user })
-      }
-    >
-      <Text style={styles.postTitle}>{item.title}</Text>
-      <Text style={styles.postCategory}>{item.careerCategory}</Text>
-      <Text style={styles.postLocation}>{item.location}</Text>
-      <Text style={styles.postDate}>
-        {new Date(item.postDate).toLocaleDateString()}
-      </Text>
-    </TouchableOpacity>
+    <View style={styles.cardContainer}>
+      <TouchableOpacity
+        style={styles.postCard}
+        onPress={() =>
+          navigation.navigate("postDetails", { post: item, user: user })
+        }
+      >
+        <Text style={styles.postTitle}>{item.title}</Text>
+        <Text style={styles.postCategory}>{item.careerCategory}</Text>
+        <Text style={styles.postLocation}>{item.location}</Text>
+        <Text style={styles.postDate}>
+          {new Date(item.postDate).toLocaleDateString()}
+        </Text>
+      </TouchableOpacity>
+      <Pressable onPress={() => console.log("Saved!")}>
+        <FontAwesome
+          name="bookmark-o"
+          size={24}
+          color="black"
+          style={styles.iconStyle}
+        />
+      </Pressable>
+    </View>
   );
 
   return (
@@ -119,13 +130,16 @@ const styles = StyleSheet.create({
   postCard: {
     backgroundColor: "#ffffff",
     padding: 16,
-    marginBottom: 8,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    marginBottom: 6,
+    height: 100,
+
+    // borderRadius: 8,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
+    // elevation: 2,
+    width: "100%",
   },
   postTitle: {
     fontSize: 18,
@@ -145,5 +159,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#adb5bd",
     marginTop: 4,
+  },
+  cardContainer: {
+    justifyContent: "space-between",
+    backgroundColor: "#ffffff",
+    padding: 16,
+    marginBottom: 8,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    height: 150,
+  },
+  iconStyle: {
+    margin: -5,
+    alignSelf: "flex-end",
+    width: 30,
+    height: 30,
   },
 });
