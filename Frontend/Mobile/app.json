@@ -37,6 +37,13 @@
       "expo-router",
       "expo-font",
       "expo-asset",
+      "expo-font",
+      [
+        "expo-font",
+        {
+          "fonts": ["./assets/fonts/Kavoon-Regular.ttf"]
+        }
+      ],
       "expo-location",
       [
         "expo-image-picker",

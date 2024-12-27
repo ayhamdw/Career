@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -8,16 +8,21 @@ import {
   TouchableOpacity,
   Switch,
   Pressable,
+  Touchable,
 } from "react-native";
 import { lightTheme, darkTheme } from "../../assets/styles/themes";
 import facebook from "../../assets/images/facebook.png";
 import gmail from "../../assets/images/gmail.png";
+import apple from "../../assets/images/apple.png";
+import google from "../../assets/images/google.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import styles from "../../assets/styles/LoginStyle";
 import { COLORS } from "@/assets/styles/Dimensions";
 import { useNavigation } from "@react-navigation/native";
 import { ayhamWifiUrl } from "../../constants/Urls";
+import { useFonts } from "expo-font";
+import { SplashScreen } from "expo-router";
 const Login = () => {
   const navigation = useNavigation();
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -25,6 +30,21 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const toggleSwitch = () => setIsDarkMode((previousState) => !previousState);
+
+  const [loaded, error] = useFonts({
+    "Kavoon-Regular": require("../../assets/fonts/Kavoon-Regular.ttf"),
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
+
   const signInButton = async () => {
     try {
       const response = await axios.post(`${ayhamWifiUrl}/api/auth/login`, {
@@ -40,134 +60,68 @@ const Login = () => {
     }
   };
   return (
-    <SafeAreaView
-      style={[styles.loginPage, { backgroundColor: theme.loginPageBackground }]}
-    >
-      <View
-        style={[
-          styles.container,
-          { backgroundColor: theme.containerBackground },
-        ]}
+    <View style={styles.container}>
+      <Text style={styles.logoText}>Career</Text>
+      <Text style={styles.signInText}>Sign in</Text>
+
+      <View style={styles.form}>
+        <Text style={styles.label}>Email Or Username</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email or Username"
+          value={email}
+          onChangeText={setEmail}
+        />
+      </View>
+
+      <View style={styles.form}>
+        <Text style={styles.label}>Password</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={true}
+        />
+      </View>
+
+      <TouchableOpacity
+        style={styles.forgotButton}
+        onPress={() => navigation.navigate("ForgotPassword")}
       >
-        <View style={styles.signLogo}>
-          <Image
-            style={styles.ImgLogo}
-            source={require("../../assets/images/logo.png")}
-          />
-          <Text style={[styles.signText, { color: theme.textColor }]}>
-            <Text
-              style={[
-                styles.jetakText,
-                { color: COLORS.buttonBackgroundColor },
-              ]}
-            >
-              Career
-            </Text>
-          </Text>
-        </View>
+        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+      </TouchableOpacity>
 
-        <View style={styles.form}>
-          <View style={styles.inputItem}>
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  backgroundColor: theme.inputBackground,
-                  color: theme.textColor,
-                  borderColor: COLORS.buttonBackgroundColor,
-                },
-              ]}
-              placeholder="Email or Username"
-              placeholderTextColor={theme.placeholderTextColor}
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-            />
-          </View>
-          <View style={styles.inputItem}>
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  backgroundColor: theme.inputBackground,
-                  color: theme.textColor,
-                  borderColor: COLORS.buttonBackgroundColor,
-                },
-              ]}
-              placeholder="Enter your password"
-              placeholderTextColor={theme.placeholderTextColor}
-              secureTextEntry={true}
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-            />
-          </View>
+      <Pressable style={styles.signInButton} onPress={signInButton}>
+        <Text style={styles.signInButtonText}>Sign In</Text>
+      </Pressable>
 
-          <TouchableOpacity
-            style={styles.forgotButton}
-            onPress={() => navigation.navigate("ForgotPassword")}
-          >
-            <Text
-              style={[
-                styles.forgotPasswordText,
-                { color: COLORS.buttonBackgroundColor },
-              ]}
-            >
-              Forgot Password?
-            </Text>
-          </TouchableOpacity>
-        </View>
+      <Text style={styles.signInWith}>or sign in with</Text>
 
-        <TouchableOpacity
-          style={[
-            styles.loginButton,
-            { backgroundColor: COLORS.buttonBackgroundColor },
-          ]}
-          onPress={() => signInButton()}
-        >
-          <Text style={[styles.buttonText, { color: theme.buttonText }]}>
-            Sign In
-          </Text>
+      <View style={styles.continueWithContainer}>
+        <TouchableOpacity style={styles.continueWith}>
+          <Image source={apple} style={styles.loginWithIcons} />
+          <Text>Continue with Apple</Text>
         </TouchableOpacity>
 
-        <View style={styles.signUpSection}>
-          <Text style={[styles.par, { color: theme.textColor }]}>
-            Don't have an account?
-          </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-            <Text
-              style={[
-                styles.signUpText,
-                { color: COLORS.buttonBackgroundColor },
-              ]}
-            >
-              Sign Up
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.continueWith}>
+          <Image source={google} style={styles.loginWithIcons} />
+          <Text>Continue with Google</Text>
+        </TouchableOpacity>
 
-        <View>
-          <Text style={{ color: theme.textColor }}>Or Login With ..</Text>
-        </View>
-
-        <View style={styles.loginWith}>
-          <Pressable onPress={() => console.log("Gmail Pressed")}>
-            <Image source={gmail} style={styles.loginWithIcons}></Image>
-          </Pressable>
-          <Pressable onPress={() => console.log("Facebook Pressed")}>
-            <Image source={facebook} style={styles.loginWithIcons}></Image>
-          </Pressable>
-        </View>
-
-        <View style={styles.toggleContainer}>
-          <Text style={[styles.toggleText]}>Dark Mode</Text>
-          <Switch
-            value={isDarkMode}
-            onValueChange={toggleSwitch}
-            thumbColor="#f4f3f4"
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-          />
-        </View>
+        <TouchableOpacity style={styles.continueWith}>
+          <Image source={facebook} style={styles.loginWithIcons} />
+          <Text>Continue with Facebook</Text>
+        </TouchableOpacity>
       </View>
-    </SafeAreaView>
+
+      <TouchableOpacity
+        style={styles.signUpSection}
+        onPress={() => navigation.navigate("SignUp")}
+      >
+        <Text style={styles.signUpText}>Don't have an account? Sign Up</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
