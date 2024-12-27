@@ -19,7 +19,7 @@ import ProtectedRoute from './ProtectedRoute';
 import ServiceProvider from './Components/ServiceProvider/ServiceProvider.jsx'
 import Community from './General-Components/Community/Community.jsx';
 import SentRequestDetails from './General-Components/Requests/SentRequestDetails/SentRequestDetails.jsx';
-// import Resiv
+import ProviderProfile from './Components/ServiceProvider/providerProfile/providerProfile.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -36,6 +36,7 @@ const router = createBrowserRouter([
       { path: "/requests/sent/", element: <ProtectedRoute><SentRequests /></ProtectedRoute> },
       { path: "/requestdetails", element: <SentRequestDetails /> }, 
       { path: "/requests/received", element: <ProtectedRoute><ReceivedRequests /></ProtectedRoute> },
+      { path: "/profile/:id", element: <ProtectedRoute><ProviderProfile /></ProtectedRoute> },
       { path: "settings/*", element: <ProtectedRoute><Settings /></ProtectedRoute> },
       { path: "*", element: <NotFound /> },
       

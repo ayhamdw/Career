@@ -216,6 +216,24 @@ const getUserByEmail = async(req, res) => {
     res.status(500).json({success: false, message:error.message});
   }
 };
+const getUserById = async (req, res) => {
+  const { id } = req.params; 
+
+  if (!id) {
+    return res.status(400).json({ success: false, message: 'User ID is required' });
+  }
+
+  try {
+    const user = await User.findById(id); 
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User Not Found' });
+    }
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 
 
 module.exports = {
@@ -229,4 +247,5 @@ module.exports = {
    getReceiveProficientRequestByEmail,
    getSentProficientRequestByEmail,
    getUserByEmail,
+   getUserById,
   };

@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './ServiceProvider.module.css';
-import { FaCheckCircle, FaTimesCircle, FaEnvelope } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaEnvelope,FaUserSlash } from 'react-icons/fa';
+import providerProfile from './providerProfile/providerProfile';
+import { useNavigate } from 'react-router-dom';
 
 const ServiceProvider = () => {
-  const [selectedCategory, setSelectedCategory] = useState('Home Services');
+  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState('All Providers');
   const [providers, setProviders] = useState([]);
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const myId = localStorage.getItem("id")
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -15,15 +19,15 @@ const ServiceProvider = () => {
         const response = await axios.post(`${import.meta.env.VITE_API}/user/users`, {
           category: selectedCategory,
         });
-        console.log('Providers fetched:', response.data); 
-        setProviders(Array.isArray(response.data) ? response.data : []); 
-        setError('');  
+        console.log('Providers fetched:', response.data);
+        setProviders(Array.isArray(response.data) ? response.data : []);
+        setError('');
       } catch (error) {
-        console.error('Error fetching providers:', error); 
+        console.error('Error fetching providers:', error);
         if (error.response) {
           if (error.response.status === 404) {
             setError('No users found for this category');
-            setProviders([]);  
+            setProviders([]);
           } else {
             setError('An unexpected error occurred');
           }
@@ -52,8 +56,8 @@ const ServiceProvider = () => {
     );
   };
 
-  const handleProfileClick = (id) => {
-    alert(`Navigating to profile of provider with ID: ${id}`);
+  const handleProfileClick = (provider) => {
+    navigate(`/profile/${provider._id}`);
   };
 
   const handleContactClick = (name) => {
@@ -96,7 +100,10 @@ const ServiceProvider = () => {
         </ul>
       </div>
 
-      <div className={styles.searchContainer}>
+
+
+      <div className={styles.cards}>
+        <div className={styles.searchContainer}>
           <input
             type="text"
             placeholder="Search for a provider by name"
@@ -105,51 +112,73 @@ const ServiceProvider = () => {
             className={styles.searchInput}
           />
         </div>
+        <div className={styles.providersList}>
 
-      <div className={styles.providersList}>
-        {error && <p className={styles.error}>{error}</p>}
-        
-        {filteredProviders.length > 0 ? (
-          filteredProviders.map((provider, index) => (
-            <div key={index} className={styles.providerCard}>
-              <img
-                src={provider.profile.profileImage}
-                alt={provider.profile.firstName}
-                className={styles.providerPhoto}
-              />
-              <div className={styles.providerInfo}>
-                <h3>{provider.profile.firstName} {provider.profile.lastName}</h3>
-                <p className={styles.career}>{provider.career}</p>
-                {renderRatingStars(provider.rating)} 
-                <p className={styles.experience}>Experience: {provider.profile.experience} years</p>
-                <p className={`${styles.certificate} ${provider.verificationStatus ? styles.verified : styles.notVerified}`}>
-                  {provider.verificationStatus ? (
-                    <FaCheckCircle className={styles.icon} />
+          <div className={styles.cards}></div>
+          {error && <p className={styles.error}>{error}</p>}
+
+          {filteredProviders.length > 0 ? (
+            filteredProviders.map((provider, index) => (
+              <div key={index} className={styles.providerCard}>
+                <img
+                  src={provider.profile.profileImage}
+                  alt={provider.profile.firstName}
+                  className={styles.providerPhoto}
+                />
+                <div className={styles.providerInfo}>
+                  <h3>{provider.profile.firstName} {provider.profile.lastName}</h3>
+                  <p className={styles.career}>{provider.career}</p>
+                  {renderRatingStars(provider.rating)}
+                  <p className={styles.experience}>Experience: {provider.profile.experience} years</p>
+                  <p className={`${styles.certificate} ${provider.certificate.isCertified ? styles.verified : styles.notVerified}`}>
+                    {provider.certificate.isCertified ? (
+                      <FaCheckCircle className={styles.icon} />
+                    ) : (
+                      <FaTimesCircle className={styles.icon} />
+                    )}
+                    {provider.certificate.isCertified ? 'Verified by Practical Certificate' : 'Not Verified'}
+                  </p>
+                  {provider._id !== myId ? (
+                    <div className={styles.buttons}>
+
+                      <button
+                        onClick={() => handleProfileClick(provider)}
+                        className={styles.profileButton}
+                      >
+                        View Profile
+                      </button>
+                      <button
+                        onClick={() => handleContactClick(provider.profile.firstName)}
+                        className={styles.contactButton}
+                      >
+                        <FaEnvelope className={styles.icon} /> Contact
+                      </button>
+                    </div>
+
                   ) : (
-                    <FaTimesCircle className={styles.icon} />
+
+                    <button className={styles.myProfile}
+                      onClick={() => handleProfileClick(provider)}
+
+                    >show your profile</button>
+
                   )}
-                  {provider.verificationStatus ? 'Verified by Practical Certificate' : 'Not Verified'}
-                </p>
-                <div className={styles.buttons}>
-                  <button
-                    onClick={() => handleProfileClick(provider._id)}
-                    className={styles.profileButton}
-                  >
-                    View Profile
-                  </button>
-                  <button
-                    onClick={() => handleContactClick(provider.profile.firstName)}
-                    className={styles.contactButton}
-                  >
-                    <FaEnvelope className={styles.icon} /> Contact
-                  </button>
                 </div>
               </div>
+
+            ))
+          ) : (
+            <div className={styles.noProviders}>
+              <div className={styles.noProvidersCard}>
+                <div className={styles.iconWrapper}>
+                  <FaUserSlash className={styles.noProvidersIcon} />
+                </div>
+                <h2>No Providers Found</h2>
+                <p>We couldn't find any service providers for this category. Please try exploring other categories or check back later.</p>
+              </div>
             </div>
-          ))
-        ) : (
-          <p>No providers found for this category.</p>  
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

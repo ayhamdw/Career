@@ -13,8 +13,8 @@ const logInUsers = async (req, res) => {
 };
 
 const sendFiendRequestController = async (req, res) => {
-  const { currentUserId, selectedUserId } = JSON.parse(req.body.ids);
-  console.log(JSON.parse(req.body.ids));
+  const { currentUserId, selectedUserId } = req.body;
+  // console.log(JSON.parse(req.body.ids));
   try {
     await User.findByIdAndUpdate(selectedUserId, {
       $push: {
@@ -38,7 +38,7 @@ const getFriendsRequest = async (req, res) => {
   console.log("inside Get Friends Request", userId);
   try {
     const user = await User.findById(userId)
-      .populate("friendRequests", "firstName lastName email image")
+      .populate("friendRequests", "profile email image city")
       .lean();
     const friendRequests = user.friendRequests;
     res.status(200).json(friendRequests);

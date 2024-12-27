@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './SentRequestDetails.module.css';
 import axios from 'axios';
+import Loading from '../../../Loading/Loading'
 
 const SentRequestDetails = () => {
     const location = useLocation();
@@ -120,7 +121,8 @@ const SentRequestDetails = () => {
     }, [location]);
 
     if (!request || myCoordinates.length === 0) {
-        return <p>Loading request details...</p>;
+        // return <p>Loading request details...</p>;
+        return <Loading/>
     }
     else {
         const userId = myId
@@ -201,8 +203,8 @@ const SentRequestDetails = () => {
                                 {request.profile.firstName} {request.profile.lastName}
                             </h2>
                             <p><strong>Username:</strong> {request.username}</p>
-                            <p><strong>Email:</strong> {request.email}</p>
-                            <p><strong>Bio:</strong> {request.profile.bio || "No bio provided"}</p>
+                            {/* <p><strong>Email:</strong> {request.email}</p> */}
+                            {/* <p><strong>Bio:</strong> {request.profile.bio || "No bio provided"}</p> */}
                             <p><strong>Experience:</strong> {request.profile.experience || "No experience listed"}</p>
                         </div>
                     </div>

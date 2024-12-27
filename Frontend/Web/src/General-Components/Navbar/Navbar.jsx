@@ -98,6 +98,7 @@ useEffect(()=>{
                 )}
               </li>
               <li><Link to="/messages" className="nav-item">Messages</Link></li>
+              <li><Link to="/service-provider" className="nav-item">Service Provider</Link></li>
               <li><Link to="/community" className="nav-item">Community</Link></li>
               <li><Link to="/settings" className="nav-item">Profile</Link></li>
             </ul>

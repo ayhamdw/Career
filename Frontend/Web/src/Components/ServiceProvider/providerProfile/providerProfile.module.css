@@ -1,0 +1,263 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  body {
+    background-color: #f4f7fa;
+    color: #333;
+  }
+  
+  .pageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 10px;
+    /* height: 100vh; */
+    background: linear-gradient(135deg, rgba(109, 201, 126, 0.8), rgba(240, 240, 240, 0.8));
+    margin-top: -30px;
+  }
+  
+  .profileContainer {
+    width: 100%;
+    max-width: 1200px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 1s ease-out;
+    transition: all 0.3s ease;
+  }
+  
+  .profileContainer:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+  }
+  
+  .profileImageWrapper {
+    width: 160px;
+    height: 160px;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid #6dc97e;
+    background-color: #fff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .profileName {
+    font-size: 34px;
+    font-weight: 700;
+    color: #333;
+    margin-top: 15px;
+  }
+  
+  .profileJobTitle {
+    font-size: 18px;
+    color: #777;
+  }
+  
+  .profileLocation {
+    font-size: 16px;
+    color: #aaa;
+    margin-bottom: 15px;
+  }
+  
+  .profileRating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .ratingIcon {
+    color: #ffd700;
+    font-size: 20px;
+    margin-right: 8px;
+  }
+  
+  .ratingValue {
+    font-size: 18px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .aboutSection {
+    margin-bottom: 30px;
+    position: relative;
+  }
+  
+  .aboutSection h2 {
+    font-size: 26px;
+    color: #6dc97e;
+    margin-bottom: 20px;
+    position: relative;
+    padding-left: 25px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  
+  .aboutSection h2::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    background: #6dc97e;
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .aboutSection p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: justify;
+  }
+  
+  .detailsSection {
+    margin-bottom: 50px;
+    position: relative;
+  }
+  
+  .detailsSection h2 {
+    font-size: 26px;
+    color: #6dc97e;
+    margin-bottom: 20px;
+    position: relative;
+    padding-left: 25px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  
+  .detailsSection h2::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    background: #6dc97e;
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  .detailItem {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.8;
+    background: linear-gradient(135deg, rgba(109, 201, 126, 0.15), rgba(240, 240, 240, 0.4));
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
+  }
+
+  
+  .certificationStatus {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    gap: 12px;
+    color: #444;
+  }
+  
+  .certifiedIcon {
+    color: #4CAF50;
+    font-size: 22px;
+  }
+  
+  .notCertifiedIcon {
+    color: #f44336;
+    font-size: 22px;
+  }
+  
+  .actionsSection {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 40px;
+  }
+  
+  .messageButton, .addFriendButton {
+    padding: 15px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .messageButton {
+    background: linear-gradient(135deg, #00bcd4, #0097a7);
+    box-shadow: 0 6px 20px rgba(0, 188, 212, 0.3);
+    width: fit-content;
+  }
+  
+  .addFriendButton {
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+    box-shadow: 0 6px 20px rgba(142, 68, 173, 0.3);
+    width: fit-content;
+  }
+  
+  .messageButton:hover {
+    background: linear-gradient(135deg, #0097a7, #00bcd4);
+  }
+  
+  .addFriendButton:hover {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  }
+  
+  /* Loading and Error States */
+  .loading, .error {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 50px;
+  }
+  
+  .acceptBtn{
+    background-color: #4CAF50;
+    width: fit-content;
+    color: white;
+    font-weight: 700;
+  }
+  .rejectBtn{
+    background-color: rgba(238, 29, 22, 0.8);
+    width: fit-content;
+    color: white;
+    font-weight: 700;
+    
+  }
+  
