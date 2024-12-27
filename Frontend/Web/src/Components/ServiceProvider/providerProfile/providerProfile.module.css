@@ -263,9 +263,11 @@
   }
   
 
-  .isFriends{
+  .isFriends,.cancelSent{
     background-color: #e64202;
     color: white;
     font-weight: 700;
 
   }
+
+ 

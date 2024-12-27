@@ -7,6 +7,7 @@ const {
   acceptedFriendsController,
   logInUsers,
   deleteFriendFromList,
+  getSendRequests,
 } = require("../controllers/friendsController");
 const router = new express.Router();
 router.get("/logInUsers/:userId", Auth, logInUsers);
@@ -17,7 +18,7 @@ router.get("/getFriendsRequest/:userId", Auth, getFriendsRequest);
 
 router.post("/acceptFriendRequest", Auth, acceptFriendRequestController);
 router.post("/deleteFriendFromList", Auth, deleteFriendFromList);
-
+router.get("/request-sent/:userId", Auth, getSendRequests);
 router.get("/acceptedFriends/:userId", Auth, acceptedFriendsController);
 
 module.exports = router;

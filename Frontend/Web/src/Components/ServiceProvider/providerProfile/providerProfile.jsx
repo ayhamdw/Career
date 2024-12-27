@@ -43,28 +43,7 @@ const ProviderProfile = () => {
   );
 };
 
-const handleSendFriendRequest = async (ProviderId) => {
-  const myId = localStorage.getItem("id")
-  const token = localStorage.getItem("token")
-  try {
-    const response = await axios.post(`${import.meta.env.VITE_API}/friends/send-friend-request`, {
-      currentUserId: myId,
-      selectedUserId: ProviderId
-    },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
-    console.log(response.data);
 
-  }
-  catch (error) {
-    console.log("Error Send Friend Request: ", error)
-  }
-
-}
 
 
 const Header = ({ provider }) => (
@@ -119,14 +98,43 @@ const Details = ({ provider }) => (
 
 const Actions = ({ provider, myId, token }) => {
   const [friendRequests, setFriendRequests] = useState([]);
+  const [friends, setFriends] = useState([]);
+  const [requestsSent, setRequestsSent] = useState([]);
+
+  useEffect(() => {
+    const fetchFriendRequestsSent = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API}/friends/request-sent/${myId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const ids = response.data.map((item) => item._id);
+        setRequestsSent(ids);
+      } catch (error) {
+        console.log("Error Fetching Friend Request Sent: ", error);
+      }
+    };
+    fetchFriendRequestsSent();
+  }, []);
 
   useEffect(() => {
     const fetchFriendRequests = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API}/friends/getFriendsRequest/${myId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setFriendRequests(response.data);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API}/friends/getFriendsRequest/${myId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        console.log(response.data)
+        const ids = response.data.map((item) => item._id);
+        console.log(ids)
+        setFriendRequests(ids);
+
       } catch (e) {
         console.error("Error Fetching Friend Requests: ", e);
       }
@@ -134,72 +142,106 @@ const Actions = ({ provider, myId, token }) => {
     fetchFriendRequests();
   }, [myId, token]);
 
-  const isFriendRequestSent = friendRequests.some((req) => req._id === provider._id);
-
-
-  const [friends, setFriends] = useState();
+  
 
   useEffect(() => {
-    const myId = localStorage.getItem("id")
-    const token = localStorage.getItem("token")
-
     const fetchFriends = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API}/friends/acceptedFriends/${myId}`,
+        const response = await axios.get(
+          `${import.meta.env.VITE_API}/friends/acceptedFriends/${myId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
-        )
-        console.log(response.data[0]);
-        setFriends(response.data);
+        );
+        const ids = response.data.map((item) => item._id);
+        setFriends(ids);
+      } catch (e) {
+        console.log("Error Fetch Friends: ", e);
       }
-      catch (e) {
-        console.log("Error Fetch Friends: ", e)
-      }
-
-    }
+    };
     fetchFriends();
-
   }, []);
 
-  const handleDeleteFriend = async(id)=>{
-    // const myId = localStorage.getItema("id");
-    try{
-      const response = await axios.post(
-        `${import.meta.env.VITE_API}/friends/deleteFriendFromList`,
+  const handleSendFriendRequest = async (ProviderId) => {
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API}/friends/send-friend-request`,
         {
           currentUserId: myId,
-          selectedUserId: id
+          selectedUserId: ProviderId,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-      )
-      console.log(response)
-      setFriends((prevFriends)=>prevFriends.filter(friend=> friend._id !== id));
+      );
+      setRequestsSent((prevRequests) => [...prevRequests, ProviderId]);
+      // console.log()
+    } catch (error) {
+      console.log("Error Send Friend Request: ", error);
     }
-    catch(error){
-      console.log("Error Delete Friend: ",error)
-    }
+  };
 
-    console.log("This is Your id: ",id);
+  const handleCancelFriendRequest = async (ProviderId) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API}/friends/deleteFriendFromList`,
+        {
+          currentUserId: myId,
+          selectedUserId: ProviderId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setRequestsSent((prevRequests) =>
+        prevRequests.filter((id) => id !== ProviderId)
+      );
+    } catch (error) {
+      console.log("Error Canceling Friend Request: ", error);
+    }
+  };
+
+  const handleDeleteFriend = async (id) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API}/friends/deleteFriendFromList`,
+        {
+          currentUserId: myId,
+          selectedUserId: id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+      setFriends((prevFriends) => prevFriends.filter((friend) => friend._id !== id));
+    } catch (error) {
+      console.log("Error Delete Friend: ", error);
+    }
+  };
+
+  const handleCancelSentRequest = ()=>{
+    console.log("handleCancelSentRequest")
   }
 
+  const isISentToThisPerson = requestsSent.includes(provider._id);
+  const isThisPersonSentMeRequest = friendRequests.includes(provider._id);
+  const isInMyFriends = friends.includes(provider._id);
 
-  const isInMyFriends = Array.isArray(friends) && friends.some(friend => friend._id === provider._id);
+
   return (
     <div className={styles.actionsSection}>
-      <button
-        className={styles.messageButton}
-        onClick={() => alert('Messaging feature is under construction!')}
-      >
+      <button className={styles.messageButton} onClick={() => alert('Messaging feature is under construction!')}>
         <FaEnvelope /> Message
       </button>
-      {isFriendRequestSent ? (
+      {isThisPersonSentMeRequest ? (
         <>
-          {/* <FaUserPlus /> Accept Request */}
           <button className={styles.acceptBtn}>Accept Request</button>
           <button className={styles.rejectBtn}>Reject Request</button>
         </>
@@ -207,15 +249,17 @@ const Actions = ({ provider, myId, token }) => {
         <>
 
           <button
-            className={isInMyFriends ? styles.isFriends : styles.addFriendButton}
-            onClick={isInMyFriends? ()=>handleDeleteFriend(provider._id): ()=>handleSendFriendRequest(provider._id) }
+            className={isISentToThisPerson? styles.cancelSent  :isInMyFriends ? styles.isFriends : styles.addFriendButton}
+            onClick={isISentToThisPerson ? ()=>handleCancelFriendRequest(provider._id) : isInMyFriends ? () => handleDeleteFriend(provider._id) : () => handleSendFriendRequest(provider._id)}
           >
-            {isInMyFriends ? "Delete Friend" : "Add Friend"}
+            {isISentToThisPerson  ? 'Cancel Request' : isInMyFriends ? 'Delete Friend' : 'Add Friend'}
           </button>
         </>
       )}
     </div>
   );
 };
+
+
 
 export default ProviderProfile;

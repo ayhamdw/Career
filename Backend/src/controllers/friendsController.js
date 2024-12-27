@@ -112,6 +112,23 @@ const deleteFriendFromList = async (req, res) => {
   }
 };
 
+const getSendRequests = async (req, res) => {
+  const userId = req.params.userId;
+  console.log("Inside Get Send Requests for User:", userId);
+  
+  try {
+    const user = await User.findById(userId)
+      .populate("sendRequests", "profile email image city") 
+      .lean();
+      
+    const sendRequests = user.sendRequests;
+    res.status(200).json(sendRequests);
+  } catch (error) {
+    console.log("Error fetching send requests:", error);
+    res.status(500).json({ Error: error });
+  }
+};
+
 
 module.exports = {
   logInUsers,
@@ -120,4 +137,5 @@ module.exports = {
   acceptFriendRequestController,
   acceptedFriendsController,
   deleteFriendFromList,
+  getSendRequests,
 };
