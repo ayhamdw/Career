@@ -79,7 +79,7 @@ const acceptedFriendsController = async (req, res) => {
     const user = await User.findById(userId)
       .populate(
         "friends",
-        "profile.firstName profile.lastName email profile.profileImage"
+        "profile.firstName profile.lastName email profile.profileImage careerCategory"
       )
       .lean();
     const friends = user.friends;
