@@ -51,7 +51,9 @@ export default function Community({ user }) {
           },
         }
       );
-      // console.log("Post saved:", response.data);
+      if (response.status === 200) {
+        console.log("Post saved:", response.data);
+      }
     } catch (error) {
       console.error("Error saving post:", error);
     }
