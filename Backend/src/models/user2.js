@@ -237,6 +237,14 @@ const userSchema = new mongoose.Schema(
       },
     ],
 
+    savedPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+        required: false,
+      },
+    ],
+
     resetCode: {
       type: Number,
       default: 0,

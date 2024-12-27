@@ -8,6 +8,7 @@ import Notifications from "../Setting/Notifications";
 import ChangePassword from "../ChangePassword";
 import Login from "../Login";
 import { View } from "react-native-animatable";
+import Saved from "../Setting/Saved";
 
 const Stack = createStackNavigator();
 
@@ -16,7 +17,7 @@ const ProfileNavigator = ({ user }: { user: any }) => {
     () => ({
       Profile: (props: any) => <Profile {...props} user={user} />,
       ProfileInfo: (props: any) => <ProfileInfo {...props} user={user} />,
-      BookmarkJobs: (props: any) => <BookmarkJobs {...props} user={user} />,
+      Saved: (props: any) => <Saved {...props} user={user} />,
       Notifications: (props: any) => <Notifications {...props} user={user} />,
       ChangePassword: (props: any) => <ChangePassword {...props} user={user} />,
       Logout: (props: any) => <Login {...props} />,
@@ -41,25 +42,6 @@ const ProfileNavigator = ({ user }: { user: any }) => {
         }}
       />
       <Stack.Screen
-        name="BookmarkJobs"
-        component={screenData.BookmarkJobs}
-        options={{
-          headerStyle: { backgroundColor: "white" },
-          headerTitle: "",
-          headerShown: false,
-        }}
-      />
-
-      <Stack.Screen
-        name="Notifications"
-        component={screenData.Notifications}
-        options={{
-          headerStyle: { backgroundColor: "white" },
-          headerTitle: "",
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
         name="ChangePassword"
         component={screenData.ChangePassword}
         options={{
@@ -67,6 +49,11 @@ const ProfileNavigator = ({ user }: { user: any }) => {
           headerTitle: "",
           headerShown: false,
         }}
+      />
+      <Stack.Screen
+        name="Saved"
+        component={screenData.Saved}
+        options={{ headerShown: false }}
       />
       <Stack.Screen name="Logout" component={screenData.Logout} />
     </Stack.Navigator>
