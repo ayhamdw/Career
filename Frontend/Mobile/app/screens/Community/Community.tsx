@@ -12,11 +12,13 @@ import { useNavigation } from "@react-navigation/native";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import { Pressable } from "react-native-gesture-handler";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Community({ user }) {
   const [posts, setPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState({}); // Object to track saved status for each post
   const navigation = useNavigation();
+  const userId = user._id;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +39,22 @@ export default function Community({ user }) {
       ...prevState,
       [postId]: !prevState[postId],
     }));
+
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.post(
+        `${ayhamWifiUrl}/api/community/savePost`,
+        { postId, userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // console.log("Post saved:", response.data);
+    } catch (error) {
+      console.error("Error saving post:", error);
+    }
   };
 
   const renderPost = ({ item }) => (

@@ -2,7 +2,8 @@ const Post = require("../models/posts");
 const User = require("../models/user2");
 
 const createPost = async (req, res) => {
-  const { title, content, careerCategory, location, numberOfWorker, images } = req.body;
+  const { title, content, careerCategory, location, numberOfWorker, images } =
+    req.body;
   const user = req.user;
   const userRole = user.role;
   try {
@@ -68,12 +69,28 @@ const applyForProject = async (req, res) => {
     console.log("error while applying for project", error);
   }
 };
-
-const getRequestDetails = async (req, res) => {
-  const postId = req.params.id;
+const savePost = async (req, res) => {
+  const { postId, userId } = req.body;
   try {
+    const response = await User.findOne({
+      _id: userId,
+      savedPosts: postId,
+    }).lean();
+    if (response) {
+      await User.findByIdAndUpdate(userId, {
+        $pull: { savedPosts: postId },
+      });
+      console.log("Post unsaved successfully");
+      return res.status(200).json({ message: "Post unsaved successfully" });
+    } else {
+      await User.findByIdAndUpdate(userId, {
+        $push: { savedPosts: postId },
+      });
+      console.log("Post saved successfully");
+      return res.status(200).json({ message: "Post saved successfully" });
+    }
   } catch (error) {
-    console.log(error);
+    console.log("error while saving post", error);
   }
 };
 module.exports = {
@@ -81,4 +98,5 @@ module.exports = {
   getAllPosts,
   deletePost,
   applyForProject,
+  savePost,
 };

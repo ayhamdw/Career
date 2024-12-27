@@ -16,6 +16,8 @@ router.delete(
 
 router.post("/applyForProject", postController.applyForProject);
 
+router.post("/savePost", postController.savePost);
+
 // router.get("/requestDetails/:id", postController.getRequestDetails);
 
 module.exports = router;
