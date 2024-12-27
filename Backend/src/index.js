@@ -21,6 +21,16 @@ io.on("connection", (socket) => {
     io.emit("receiveMessage", data);
   });
 
+
+  socket.on("typing", (data) => {
+    socket.broadcast.emit("typing", data); 
+  });
+
+  socket.on("stopTyping", (data) => {
+    const { sender, receiver } = data;
+    socket.to(receiver).emit("stopTyping");
+  });
+
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });

@@ -10,6 +10,7 @@ const ChatSystem = () => {
   const [activeFriend, setActiveFriend] = useState(null);
   const [isInfoVisible, setIsInfoVisible] = useState(true);
   const [isFriendsVisible, setIsFriendsVisible] = useState(true);
+  const [typing, setTyping] = useState(false); // To track typing status
   const scrollRef = useRef();
   const myId = localStorage.getItem("id");
   const token = localStorage.getItem("token");
@@ -82,6 +83,12 @@ const ChatSystem = () => {
           receiver: activeFriend._id,
           messageText: input,
         });
+
+        // Emit 'stopTyping' after sending the message
+        socket.current.emit("stopTyping", {
+          sender: myId,
+          receiver: activeFriend._id,
+        });
       } catch (error) {
         console.log("Error Send Messages: ", error);
       }
@@ -96,6 +103,24 @@ const ChatSystem = () => {
     setActiveFriend(friend);
     setMessages([]);
     fetchMessages(friend._id);
+  };
+
+  const handleTyping = () => {
+    if (!typing) {
+      setTyping(true);
+      socket.current.emit("typing", {
+        sender: myId,
+        receiver: activeFriend._id,
+      });
+    }
+  };
+
+  const handleStopTyping = () => {
+    setTyping(false);
+    socket.current.emit("stopTyping", {
+      sender: myId,
+      receiver: activeFriend._id,
+    });
   };
 
   const scrollToBottom = () => {
@@ -122,6 +147,18 @@ const ChatSystem = () => {
       }
     });
 
+    socket.current.on("typing", (data) => {
+      if (data.receiver === myId) {
+        setTyping(true);
+      }
+    });
+
+    socket.current.on("stopTyping", (data) => {
+      if (data.receiver === myId) {
+        setTyping(false);
+      }
+    });
+
     return () => {
       socket.current.disconnect();
     };
@@ -141,33 +178,34 @@ const ChatSystem = () => {
 
   return (
     <div className={styles.chatSystem}>
-      <div className={styles.friendsList}>
-        <h3>Friends</h3>
-        <ul>
-          {friends.map((friend) => (
-            <li
-              key={friend._id}
-              className={
-                activeFriend?.profile?.firstName === friend.profile.firstName
-                  ? styles.active
-                  : ""
-              }
-              onClick={() => handleFriendClick(friend)}
-            >
-              <img
-                src={friend.profile.profileImage}
-                alt={friend.profile.firstName}
-              />
-              <div className={styles.friendInfo}>
-                <span>{friend.profile.firstName} {friend.profile.lastName}</span>
-                <p>{friend.profile.bio || "No bio available"}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-
       <div className={styles.chatMain}>
+        {isFriendsVisible && (
+          <div className={styles.friendsList}>
+            <h3>Friends</h3>
+            <ul>
+              {friends.map((friend) => (
+                <li
+                  key={friend._id}
+                  className={
+                    activeFriend?.profile?.firstName === friend.profile.firstName
+                      ? styles.active
+                      : ""
+                  }
+                  onClick={() => handleFriendClick(friend)}
+                >
+                  <img
+                    src={friend.profile.profileImage}
+                    alt={friend.profile.firstName}
+                  />
+                  <div className={styles.friendInfo}>
+                    <span>{friend.profile.firstName} {friend.profile.lastName}</span>
+                    <p>{friend.profile.bio || "No bio available"}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <div className={styles.chatWindow}>
           <div className={styles.chatHeader}>
             {activeFriend && (
@@ -194,6 +232,11 @@ const ChatSystem = () => {
                 <span className={styles.messageText}>{msg.text}</span>
               </div>
             ))}
+            {typing && activeFriend && (
+              <div className={styles.typingIndicator}>
+                <span>{activeFriend.profile.firstName} is typing...</span>
+              </div>
+            )}
           </div>
 
           <div className={styles.messageInput}>
@@ -202,6 +245,8 @@ const ChatSystem = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
+              onKeyUp={handleTyping}
+              onBlur={handleStopTyping}
               placeholder={
                 activeFriend
                   ? `Message ${activeFriend.profile.firstName}...`
@@ -213,8 +258,9 @@ const ChatSystem = () => {
         </div>
       </div>
 
-      <div className={styles.chatInfo}>
-        {activeFriend && (
+
+      {isInfoVisible && activeFriend && (
+        <div className={styles.chatInfo}>
           <div className={styles.infoHeader}>
             <img
               src={activeFriend.profile.profileImage}
@@ -226,8 +272,10 @@ const ChatSystem = () => {
               <a href={`mailto:${activeFriend.email}`}>Contact via Email</a>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+
     </div>
   );
 };
