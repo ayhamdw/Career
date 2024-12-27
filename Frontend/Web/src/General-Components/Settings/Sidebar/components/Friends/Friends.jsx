@@ -1,19 +1,49 @@
-import React, { useEffect } from 'react';
-import styles from './Friends.module.css';
+import React, { useEffect, useState } from "react";
+import styles from "./Friends.module.css";
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Friends = () => {
+  const navigate = useNavigate();
+  
   const friendsData = [
-    { id: 1, firstName: "John", lastName: "Doe", photo: "https://via.placeholder.com/150", career: "Home Services" },
-    { id: 2, firstName: "Jane", lastName: "Smith", photo: "https://via.placeholder.com/150", career: "Technical Services" },
-    { id: 3, firstName: "Ali", lastName: "Khan", photo: "https://via.placeholder.com/150", career: "Educational Services" },
-    { id: 4, firstName: "Sara", lastName: "Lee", photo: "https://via.placeholder.com/150", career: "Healthcare" },
-    { id: 5, firstName: "Tom", lastName: "Brown", photo: "https://via.placeholder.com/150", career: "Creative Services" },
-    { id: 6, firstName: "Emily", lastName: "Davis", photo: "https://via.placeholder.com/150", career: "Legal & Financial Services" },
-    { id: 7, firstName: "Ahmed", lastName: "Hassan", photo: "https://via.placeholder.com/150", career: "Other" },
-    { id: 8, firstName: "Maria", lastName: "Garcia", photo: "https://via.placeholder.com/150", career: "Home Services" },
+    {
+      id: 1,
+      firstName: "John",
+      lastName: "Doe",
+      photo: "https://via.placeholder.com/150",
+      career: "Home Services",
+      rating: 4.5,
+    },
+    {
+      id: 2,
+      firstName: "Jane",
+      lastName: "Smith",
+      photo: "https://via.placeholder.com/150",
+      career: "Technical Services",
+      rating: 4.2,
+    },
+    {
+      id: 3,
+      firstName: "Mark",
+      lastName: "Taylor",
+      photo: "https://via.placeholder.com/150",
+      career: "Home Services",
+      rating: 4.8,
+    },
+    {
+      id: 4,
+      firstName: "Emily",
+      lastName: "Davis",
+      photo: "https://via.placeholder.com/150",
+      career: "Creative Services",
+      rating: 4.6,
+    },
   ];
+  const [friends,setFriends] = useState([]);
 
   const careerCategories = [
+    "All Categories",
     "Home Services",
     "Technical Services",
     "Educational Services",
@@ -23,41 +53,93 @@ const Friends = () => {
     "Other",
   ];
 
-  const categorizedFriends = careerCategories.map((category) => ({
-    category,
-    friends: friendsData.filter((friend) => friend.career === category),
-  }));
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
 
+  const filteredFriends =
+    selectedCategory === "All Categories"
+      ? friends
+      : friends.filter((friend) => friend.careerCategory === selectedCategory);
 
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
+  const viewProfile = (id) => {
+    navigate(`/profile/${id}`);
+  };
+
+  useEffect (()=>{
+    const myId = localStorage.getItem("id")
+    const token = localStorage.getItem("token")
+
+    const fetchFriends = async()=>{
+      try{
+        const response = await axios.get(`${import.meta.env.VITE_API}/friends/acceptedFriends/${myId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        console.log(response.data[0]);
+        setFriends(response.data);
+      }
+      catch(e){
+        console.log("Error Fetch Friends: ",e)
+      }
+
+    }
+    fetchFriends();
+
+  },[])
 
   return (
     <div className={styles.friendsContainer}>
       <h1 className={styles.friendsTitle}>My Friends</h1>
-      {categorizedFriends.map(({ category, friends }) => (
-        friends.length > 0 && (
-          <div key={category} className={styles.categorySection}>
-            <h2 className={styles.categoryTitle}>{category}</h2>
-            <div className={styles.friendsList}>
-              {friends.map((friend) => (
-                <div key={friend.id} className={styles.friendCard}>
-                  <img
-                    src={friend.photo}
-                    alt={`${friend.firstName} ${friend.lastName}`}
-                    className={styles.friendPhoto}
-                  />
-                  <div className={styles.friendDetails}>
-                    <h3 className={styles.friendName}>
-                      {friend.firstName} {friend.lastName}
-                    </h3>
-                    <p className={styles.friendCareer}>{friend.career}</p>
-                  </div>
-                  <span className={styles.friendBadge}>Friends</span>
-                </div>
-              ))}
+
+      {/* Category Selector */}
+      <div className={styles.categorySelector}>
+        <label htmlFor="category" className={styles.categoryLabel}>
+          Select Category:
+        </label>
+        <select
+          id="category"
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          className={styles.categoryDropdown}
+        >
+          {careerCategories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <ul className={styles.friendsList}>
+        {filteredFriends.map((friend) => (
+          <li key={friend._id} className={styles.friendItem}>
+            <img
+              src={friend.profile.profileImage}
+              alt={`${friend.profile.firstName} ${friend.profile.lastName}`}
+              className={styles.friendPhoto}
+            />
+            <div className={styles.friendDetails}>
+              <h3 className={styles.friendName}>
+                {friend.profile.firstName} {friend.profile.lastName}
+              </h3>
+              <p className={styles.friendCareer}>{friend.careerCategory}</p>
+              <p className={styles.friendRating}>Rating: ⭐ {friend.rating}</p>
             </div>
-          </div>
-        )
-      ))}
+            <div className={styles.friendActions}>
+              <button
+                className={styles.viewProfileBtn}
+                onClick={() => viewProfile(friend._id)}
+              >
+                View Profile
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
