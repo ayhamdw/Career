@@ -12,8 +12,22 @@ const FriendRequests = () => {
   const myId = localStorage.getItem("id");
   const token = localStorage.getItem("token");
 
-  const handleAccept = (id) => {
-    alert(`Friend request from ${id} has been accepted!`);
+  const handleAccept = async(id) => {
+    try{
+      const response = await axios.post(`${import.meta.env.VITE_API}/friends/acceptFriendRequest`,{
+        senderId:id,
+        receiverId: myId,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    
+    )
+      console.log(response.data);
+    }
+    catch(e){
+      console.log("Error Accept Request: ", e);
+    }
   };
 
   const handleReject = (id) => {
