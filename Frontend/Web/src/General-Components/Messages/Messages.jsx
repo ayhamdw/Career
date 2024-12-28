@@ -234,7 +234,10 @@ const ChatSystem = () => {
             ))}
             {typing && activeFriend && (
               <div className={styles.typingIndicator}>
-                <span>{activeFriend.profile.firstName} is typing...</span>
+                <span>{activeFriend.profile.firstName} is typing</span>
+                <div className={styles.typingDot}></div>
+                <div className={styles.typingDot}></div>
+                <div className={styles.typingDot}></div>
               </div>
             )}
           </div>
