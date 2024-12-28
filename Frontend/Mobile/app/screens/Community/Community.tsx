@@ -13,12 +13,35 @@ import { ayhamWifiUrl } from "@/constants/Urls";
 import { Pressable } from "react-native-gesture-handler";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "expo-router";
 
 export default function Community({ user }) {
   const [posts, setPosts] = useState([]);
-  const [savedPosts, setSavedPosts] = useState({}); // Object to track saved status for each post
+  const [savedPosts, setSavedPosts] = useState({});
+  const [mySavedPosts, setMySavedPosts] = useState([]);
   const navigation = useNavigation();
   const userId = user._id;
+
+  const fetchSavedPostsIds = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const response = await axios.get(
+      `${ayhamWifiUrl}/api/community/getSavedPostsIds/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.status === 200) {
+      console.log(response.data.savedPosts);
+      setMySavedPosts(response.data.savedPosts);
+      const savedPostsObj = response.data.savedPosts.reduce((acc, postId) => {
+        acc[postId] = true;
+        return acc;
+      }, {});
+      setSavedPosts(savedPostsObj);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +56,12 @@ export default function Community({ user }) {
     };
     fetchData();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchSavedPostsIds();
+    }, [user])
+  );
 
   const handleSave = async (postId: string) => {
     setSavedPosts((prevState) => ({

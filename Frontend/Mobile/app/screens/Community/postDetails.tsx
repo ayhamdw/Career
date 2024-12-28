@@ -23,7 +23,6 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 export default function PostDetails() {
   const route = useRoute();
   const { post, user } = route.params;
-  console.log("Post:", post);
 
   const navigation = useNavigation();
   useLayoutEffect(() => {
