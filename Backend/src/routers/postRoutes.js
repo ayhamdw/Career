@@ -20,6 +20,8 @@ router.post("/savePost", postController.savePost);
 
 router.get("/getSavedPosts/:id", postController.getSavedPosts);
 
+router.get("/getSavedPostsIds/:userId", postController.getSavedPostsIds);
+
 // router.get("/requestDetails/:id", postController.getRequestDetails);
 
 module.exports = router;

@@ -33,7 +33,6 @@ export default function Community({ user }) {
       }
     );
     if (response.status === 200) {
-      console.log(response.data.savedPosts);
       setMySavedPosts(response.data.savedPosts);
       const savedPostsObj = response.data.savedPosts.reduce((acc, postId) => {
         acc[postId] = true;
@@ -55,6 +54,7 @@ export default function Community({ user }) {
       }
     };
     fetchData();
+    console.log(savedPosts);
   }, []);
 
   useFocusEffect(
@@ -62,6 +62,10 @@ export default function Community({ user }) {
       fetchSavedPostsIds();
     }, [user])
   );
+
+  const handleCreatePost = () => {
+    navigation.navigate("createPost", { user: user });
+  };
 
   const handleSave = async (postId: string) => {
     setSavedPosts((prevState) => ({
@@ -131,11 +135,12 @@ export default function Community({ user }) {
         renderItem={renderPost}
         keyExtractor={(item) => item._id}
       />
-      <Button
-        title="Create a Post"
-        onPress={() => navigation.navigate("CreatePost")}
-        color="#007bff"
-      />
+      <Pressable
+        style={styles.createPostButton}
+        onPress={() => handleCreatePost()}
+      >
+        <Text style={styles.textCreatePost}>Create a Post</Text>
+      </Pressable>
     </View>
   );
 }
@@ -143,7 +148,7 @@ export default function Community({ user }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#fcfefc",
     padding: 16,
   },
   header: {
@@ -195,5 +200,19 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     width: 30,
     height: 30,
+  },
+  createPostButton: {
+    backgroundColor: "#28a745",
+    padding: 16,
+    borderRadius: 25,
+    alignItems: "center",
+    marginHorizontal: 16,
+    marginVertical: 20,
+    bottom: 20,
+  },
+  textCreatePost: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

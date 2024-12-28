@@ -9,6 +9,7 @@ import Notifications from "../Setting/Notifications";
 import PostDetails from "../Community/postDetails";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import CreatePost from "../Community/CreatePost";
 
 const Stack = createNativeStackNavigator();
 const MainNavigation = () => {
@@ -53,6 +54,12 @@ const MainNavigation = () => {
       <Stack.Screen
         name="postDetails"
         component={PostDetails}
+        options={{ headerShadowVisible: false }}
+      />
+
+      <Stack.Screen
+        name="createPost"
+        component={CreatePost}
         options={{ headerShadowVisible: false }}
       />
     </Stack.Navigator>
