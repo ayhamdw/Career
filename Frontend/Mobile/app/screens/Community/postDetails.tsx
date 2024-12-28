@@ -23,6 +23,8 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 export default function PostDetails() {
   const route = useRoute();
   const { post, user } = route.params;
+  console.log("Post:", post);
+
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -41,7 +43,6 @@ export default function PostDetails() {
   }, []);
 
   const applyForThisJob = async () => {
-    console.log(user.profile.location.coordinates);
     const postId = post._id; //! This is the project Id
     const receiverId = post.user._id; //! This is the user Id of the post owner
     const senderId = user._id; //! This is the user Id of the logged in user
