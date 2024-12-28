@@ -10,14 +10,14 @@ import {
 } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "expo-router";
-import { useNavigation } from "@react-navigation/native";
-import { ayhamWifiUrl } from "@/constants/Urls";
+import { useFocusEffect, useNavigation } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
+import { ayhamWifiUrl } from "@/constants/Urls";
 
 export default function Saved({ user }) {
   const userId = user._id;
   const [savedPosts, setSavedPosts] = useState([]);
+  const scaleAnim = useState(new Animated.Value(1))[0];
   const navigation = useNavigation();
 
   const fetchData = async () => {
@@ -32,7 +32,6 @@ export default function Saved({ user }) {
     );
     if (response.status === 200) {
       setSavedPosts(response.data.savedPosts);
-      console.log("Saved posts:", response.data);
     } else {
       setSavedPosts([]);
     }
@@ -44,34 +43,51 @@ export default function Saved({ user }) {
     }, [userId])
   );
 
+  const handlePressIn = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 0.95,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePress = (item: string) => {
+    // console.log("Post pressed:", item);
+    navigation.navigate("PostDetails", { post: item, user: user });
+  };
+
   const renderPost = ({ item }) => (
     <Pressable
-      style={({ pressed }) => [
-        styles.card,
-        pressed && { transform: [{ scale: 0.98 }], opacity: 0.9 },
-      ]}
-      onPress={() => console.log("Post pressed:", item._id)}
+      style={styles.pressable}
+      onPress={() => handlePress(item)}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
     >
-      <ImageBackground
-        source={{
-          uri: "https://source.unsplash.com/featured/?city,landscape",
-        }}
-        style={styles.cardBackground}
-        imageStyle={styles.cardImage}
+      <Animated.View
+        style={[styles.card, { transform: [{ scale: scaleAnim }] }]}
       >
-        <View style={styles.cardContent}>
-          <FontAwesome
-            name="bookmark"
-            size={24}
-            color="#ffffff"
-            style={styles.icon}
-          />
-          <Text style={styles.postTitle}>{item.title}</Text>
-          <Text style={styles.postContent} numberOfLines={2}>
-            {item.content}
-          </Text>
-        </View>
-      </ImageBackground>
+        <ImageBackground
+          source={{
+            uri: item.image || "https://via.placeholder.com/150",
+          }}
+          style={styles.cardBackground}
+        >
+          <View style={styles.cardContent}>
+            <Text style={styles.postTitle} numberOfLines={1}>
+              {item.title}
+            </Text>
+            <Text style={styles.postContent} numberOfLines={2}>
+              {item.content}
+            </Text>
+          </View>
+        </ImageBackground>
+      </Animated.View>
     </Pressable>
   );
 
@@ -80,7 +96,7 @@ export default function Saved({ user }) {
       <Text style={styles.header}>Saved Posts</Text>
       {savedPosts && savedPosts.length === 0 ? (
         <View style={styles.emptyState}>
-          <FontAwesome name="bookmark-o" size={64} color="#6c757d" />
+          <FontAwesome name="bookmark-o" size={48} color="#6c757d" />
           <Text style={styles.noDataText}>No saved posts yet!</Text>
         </View>
       ) : (
@@ -98,21 +114,21 @@ export default function Saved({ user }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f1f5f9",
-    padding: 16,
+    backgroundColor: "#f1f3f2",
+    padding: 10,
   },
   header: {
-    fontSize: 26,
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 10,
     textAlign: "center",
-    color: "#374151",
+    color: "#333",
   },
   noDataText: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#6c757d",
     textAlign: "center",
-    marginTop: 16,
+    marginTop: 10,
   },
   emptyState: {
     flex: 1,
@@ -120,40 +136,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   list: {
-    paddingBottom: 16,
+    paddingBottom: 10,
+  },
+  pressable: {
+    marginBottom: 10,
   },
   card: {
-    borderRadius: 12,
-    marginBottom: 16,
+    borderRadius: 8,
     overflow: "hidden",
-    elevation: 3,
+    elevation: 2,
+    backgroundColor: "#464646",
   },
   cardBackground: {
-    height: 180,
+    height: 120,
     justifyContent: "flex-end",
-  },
-  cardImage: {
-    borderRadius: 12,
   },
   cardContent: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    padding: 16,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
+    padding: 8,
   },
   postTitle: {
-    fontSize: 20,
+    fontSize: 14,
     fontWeight: "bold",
-    color: "#ffffff",
-    marginBottom: 8,
+    color: "#fff",
+    marginBottom: 4,
   },
   postContent: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#d1d5db",
-  },
-  icon: {
-    position: "absolute",
-    top: 16,
-    right: 16,
   },
 });

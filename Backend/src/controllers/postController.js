@@ -53,7 +53,6 @@ const deletePost = async (req, res) => {
 
 const applyForProject = async (req, res) => {
   const { postId, receiverId, senderId } = req.body;
-  console.log(postId, receiverId, senderId);
   try {
     await User.findByIdAndUpdate(senderId, {
       $push: { sendProjectRequests: { projectId: postId, userId: receiverId } },
@@ -94,17 +93,35 @@ const savePost = async (req, res) => {
   }
 };
 
+const getSavedPostsIds = async (req, res) => {
+  try {
+    console.log(req.params.userId);
+    const userId = req.params.userId;
+    await User.findById(userId)
+      .select("savedPosts")
+      .lean()
+      .then((response) => {
+        res.status(200).send(response);
+      })
+      .catch((error) => {
+        console.log("error while getting saved posts", error);
+        res.status(400).send({ error: "Error fetching saved posts" });
+      });
+  } catch (error) {
+    console.log("error while getting saved posts", error);
+  }
+};
+
 const getSavedPosts = async (req, res) => {
   const userId = req.params.id;
   try {
     const response = await User.findById(userId)
-      .select("savedPosts")
       .populate({
         path: "savedPosts",
-        select: "title content",
+        select:
+          "user title content careerCategory location numberOfWorker postDate images",
       })
       .lean();
-    console.log(response);
     res.status(200).send(response);
   } catch (error) {
     console.log("error while getting saved posts", error);
@@ -117,4 +134,5 @@ module.exports = {
   applyForProject,
   savePost,
   getSavedPosts,
+  getSavedPostsIds,
 };

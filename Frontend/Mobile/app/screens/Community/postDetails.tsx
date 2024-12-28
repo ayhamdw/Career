@@ -41,7 +41,6 @@ export default function PostDetails() {
   }, []);
 
   const applyForThisJob = async () => {
-    console.log(user.profile.location.coordinates);
     const postId = post._id; //! This is the project Id
     const receiverId = post.user._id; //! This is the user Id of the post owner
     const senderId = user._id; //! This is the user Id of the logged in user
