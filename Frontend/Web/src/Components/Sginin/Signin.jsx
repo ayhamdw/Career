@@ -25,6 +25,7 @@ function Signin() {
         const { token, verificationStatus, user } = response.data;
         localStorage.setItem('token', token);
         localStorage.setItem('id', user._id);
+        localStorage.setItem('firstName', user.profile.firstName);
         login(token);
         localStorage.setItem('userEmail', email);
         navigate(verificationStatus ? '/' : '/verify');
