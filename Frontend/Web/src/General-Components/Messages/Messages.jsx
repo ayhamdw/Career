@@ -10,11 +10,12 @@ const ChatSystem = () => {
   const [activeFriend, setActiveFriend] = useState(null);
   const [isInfoVisible, setIsInfoVisible] = useState(true);
   const [isFriendsVisible, setIsFriendsVisible] = useState(true);
-  const [typing, setTyping] = useState(false); // To track typing status
+  const [typing, setTyping] = useState(false);
   const scrollRef = useRef();
   const myId = localStorage.getItem("id");
   const token = localStorage.getItem("token");
 
+  const [reactionWindow, setReactionWindow] = useState(false);
   const socket = useRef();
 
   useEffect(() => {
@@ -176,6 +177,10 @@ const ChatSystem = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const handlereaction = (index) => {
+    setReactionWindow(reactionWindow === index ? null : index);
+  }
+
   return (
     <div className={styles.chatSystem}>
       <div className={styles.chatMain}>
@@ -221,6 +226,7 @@ const ChatSystem = () => {
               <div
                 key={index}
                 className={`${styles.message} ${msg.sender === "user" ? styles.user : styles.friend}`}
+                onClick={() => handlereaction(index)}
               >
                 {msg.sender === "friend" && (
                   <img
@@ -229,15 +235,47 @@ const ChatSystem = () => {
                     className={styles.messageAvatar}
                   />
                 )}
+
+
+                {reactionWindow === index && msg.sender === "user" && (
+                  <div className={msg.sender === "user" ? styles.reactionWindowUser : styles.reactionWindowFriend}>
+                    <div>
+                      <button>👍</button>
+                      <button>❤️</button>
+                      <button>😂</button>
+                      <button>😢</button>
+                    </div>
+                    <div>
+                      <button>😎</button>
+                      <button>🔥</button>
+                      <button>🎉</button>
+                      <button>👏</button>
+                    </div>
+                  </div>
+                )}
+
                 <span className={styles.messageText}>{msg.text}</span>
+                {reactionWindow === index && msg.sender !== "user" && (
+                  <div className={msg.sender === "user" ? styles.reactionWindowUser : styles.reactionWindowFriend}>
+                    <div>
+                      <button>👍</button>
+                      <button>❤️</button>
+                      <button>😂</button>
+                      <button>😢</button>
+                    </div>
+                    <div>
+                      <button>😎</button>
+                      <button>🔥</button>
+                      <button>🎉</button>
+                      <button>👏</button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
             {typing && activeFriend && (
               <div className={styles.typingIndicator}>
-                <span>{activeFriend.profile.firstName} is typing</span>
-                <div className={styles.typingDot}></div>
-                <div className={styles.typingDot}></div>
-                <div className={styles.typingDot}></div>
+                <span>{activeFriend.profile.firstName} is typing...</span>
               </div>
             )}
           </div>
