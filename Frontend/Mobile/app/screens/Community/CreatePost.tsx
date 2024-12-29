@@ -1,4 +1,9 @@
-import React, { useLayoutEffect, useState, useCallback } from "react";
+import React, {
+  useLayoutEffect,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
 import {
   View,
   Text,
@@ -12,11 +17,17 @@ import {
 } from "react-native";
 import { useNavigation } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { Dropdown } from "react-native-element-dropdown";
 import * as ImagePicker from "expo-image-picker";
+import Amazon from "@/app/Services/Amazon";
+import uuid from "react-native-uuid";
+import axios from "axios";
+import { ayhamWifiUrl } from "@/constants/Urls";
+import { useRoute } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
+import * as ImageManipulator from "expo-image-manipulator";
 
-// Constants
 const GOOGLE_API = process.env.EXPO_PUBLIC_GOOGLE_APIS_KEY;
 const CAREER_CATEGORIES = [
   { title: "Technical Services", value: "Technical Services" },
@@ -26,6 +37,24 @@ const CAREER_CATEGORIES = [
   { title: "Creative Services", value: "Creative Services" },
   { title: "Legal & Financial Services", value: "Legal & Financial Services" },
   { title: "Other", value: "Other" },
+];
+
+const PALESTINIAN_CITIES = [
+  { title: "Jerusalem", value: "Jerusalem" },
+  { title: "Gaza", value: "Gaza" },
+  { title: "Nablus", value: "Nablus" },
+  { title: "Ramallah", value: "Ramallah" },
+  { title: "Hebron", value: "Hebron" },
+  { title: "Jenin", value: "Jenin" },
+  { title: "Bethlehem", value: "Bethlehem" },
+  { title: "Tulkarm", value: "Tulkarm" },
+  { title: "Qalqilya", value: "Qalqilya" },
+  { title: "Salfit", value: "Salfit" },
+  { title: "Jericho", value: "Jericho" },
+  { title: "Yatta", value: "Yatta" },
+  { title: "Dura", value: "Dura" },
+  { title: "Halhul", value: "Halhul" },
+  { title: "Tubas", value: "Tubas" },
 ];
 
 const InputField = ({
@@ -68,15 +97,15 @@ const PhotoUploader = ({ photos, onAddPhoto }) => (
 
 export default function CreatePost() {
   const navigation = useNavigation();
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    numberOfWorker: "",
-    category: "",
-    photos: [],
-  });
-  const [region, setRegion] = useState(null);
   const [categoryFocus, setCategoryFocus] = useState(false);
+  const [locationFocus, setLocationFocus] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [numberOfWorker, setNumberOfWorker] = useState("");
+  const [category, setCategory] = useState("");
+  const [photos, setPhotos] = useState([]);
+  const [location, setLocation] = useState(null);
+  const [tempPhotos, setTempPhotos] = useState([]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -100,15 +129,76 @@ export default function CreatePost() {
       quality: 1,
     });
     if (!result.canceled) {
-      setFormData((prev) => ({
-        ...prev,
-        photos: [...prev.photos, result.assets[0].uri],
-      }));
+      setTempPhotos((prev) => [...prev, result.assets[0].uri]);
     }
   }, []);
 
-  const handleInputChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const submit = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const compressedPhotos = await Promise.all(tempPhotos.map(compressImage));
+      const uploadImages = await uploadPhotos(compressedPhotos);
+      const response = await axios.post(
+        `${ayhamWifiUrl}/api/community/post`,
+        {
+          title,
+          content: description,
+          numberOfWorker,
+          careerCategory: category,
+          location,
+          photos: uploadImages,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 201) {
+        Toast.show({
+          type: "success",
+          text1: "Post Created 🎉",
+          text2: "Your post has been successfully published!",
+          position: "top",
+          visibilityTime: 4000,
+        });
+        setTitle("");
+        setDescription("");
+        setNumberOfWorker("");
+        setCategory("");
+        setLocation(null);
+        setTempPhotos([]);
+      }
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Error Creating Post 😢",
+        text2: "An error occurred while creating your post. Please try again",
+        position: "top",
+        visibilityTime: 4000,
+      });
+    }
+  };
+  const compressImage = async (uri) => {
+    const compressed = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { width: 800 } }], // Resize width
+      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // Compress quality
+    );
+    return compressed.uri;
+  };
+
+  const uploadPhotos = async (tempPhotos) => {
+    const photos = [];
+    for (const element of tempPhotos) {
+      const uniqueId = uuid.v4();
+      const photo = element;
+      const ext = photo.split(".").pop();
+      const newFileName = `posts/${uniqueId}.${ext}`.trim();
+      const url = await Amazon.uploadImageToS3(newFileName, photo);
+      photos.push(url);
+    }
+    return photos;
   };
 
   return (
@@ -127,30 +217,29 @@ export default function CreatePost() {
 
           <InputField
             label="Title"
-            value={formData.title}
-            onChangeText={(text) => handleInputChange("title", text)}
+            value={title}
+            onChangeText={(text) => setTitle(text)}
             placeholder="Write Post Title"
             multiline={undefined}
             keyboardType={undefined}
           />
           <InputField
             label="Description"
-            value={formData.description}
-            onChangeText={(text) => handleInputChange("description", text)}
+            value={description}
+            onChangeText={(text) => setDescription(text)}
             placeholder="Write Post Description"
             multiline
             keyboardType={undefined}
           />
           <InputField
             label="Number of Workers"
-            value={formData.numberOfWorker}
-            onChangeText={(text) => handleInputChange("numberOfWorker", text)}
+            value={numberOfWorker}
+            onChangeText={(text) => setNumberOfWorker(text)}
             placeholder="Enter number of workers"
             keyboardType="numeric"
             multiline={undefined}
           />
 
-          {/* Dropdown for Categories */}
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Category</Text>
             <Dropdown
@@ -162,32 +251,37 @@ export default function CreatePost() {
               labelField="title"
               valueField="value"
               placeholder={!categoryFocus ? "Select Category" : "..."}
-              value={formData.category}
+              value={category}
               onFocus={() => setCategoryFocus(true)}
               onBlur={() => setCategoryFocus(false)}
-              onChange={(item) => handleInputChange("category", item.value)}
+              onChange={(item) => setCategory(item.value)}
             />
           </View>
 
-          <GooglePlacesAutocomplete
-            placeholder="Search for a location"
-            onPress={(data, details = null) => {
-              if (details) {
-                const { lat, lng } = details.geometry.location;
-                setRegion({ latitude: lat, longitude: lng });
-              }
-            }}
-            query={{ key: GOOGLE_API, language: "en" }}
-            fetchDetails
-            styles={styles.autocomplete}
-          />
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Location</Text>
+            <Dropdown
+              style={[
+                styles.dropdown,
+                locationFocus && { borderColor: "#58d68d" },
+              ]}
+              data={PALESTINIAN_CITIES}
+              labelField="title"
+              valueField="value"
+              placeholder={!locationFocus ? "Select Location" : "..."}
+              value={location}
+              onFocus={() => setLocationFocus(true)}
+              onBlur={() => setLocationFocus(false)}
+              onChange={(item) => setLocation(item.value)}
+            />
+          </View>
 
-          <PhotoUploader
-            photos={formData.photos}
-            onAddPhoto={handlePhotoUpload}
-          />
+          <PhotoUploader photos={tempPhotos} onAddPhoto={handlePhotoUpload} />
 
-          <TouchableOpacity style={styles.submitButton}>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={() => submit()}
+          >
             <Text style={styles.buttonText}>Submit</Text>
           </TouchableOpacity>
         </View>

@@ -19,6 +19,7 @@ export default function Community({ user }) {
   const [posts, setPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState({});
   const [mySavedPosts, setMySavedPosts] = useState([]);
+  const [myPosts, setMyPosts] = useState([]);
   const navigation = useNavigation();
   const userId = user._id;
 
@@ -42,24 +43,40 @@ export default function Community({ user }) {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${ayhamWifiUrl}/api/community/posts`);
-        if (response.status === 200) {
-          setPosts(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching community posts:", error);
+  const fetchMyPostsIds = async () => {
+    try {
+      const response = await axios.get(
+        `${ayhamWifiUrl}/api/community/myPosts/${userId}`
+      );
+      if (response.status === 200) {
+        setMyPosts(response.data);
+        const myPostObj = response.data.reduce((acc, post) => {
+          acc[post._id] = true;
+          return acc;
+        }, {});
+        setMyPosts(myPostObj);
       }
-    };
-    fetchData();
-    console.log(savedPosts);
-  }, []);
 
+      console.log(myPosts);
+    } catch (error) {
+      console.log("Error fetching my posts:", error);
+    }
+  };
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${ayhamWifiUrl}/api/community/posts`);
+      if (response.status === 200) {
+        setPosts(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching community posts:", error);
+    }
+  };
   useFocusEffect(
     React.useCallback(() => {
+      fetchData();
       fetchSavedPostsIds();
+      fetchMyPostsIds();
     }, [user])
   );
 
@@ -96,18 +113,25 @@ export default function Community({ user }) {
     <View style={styles.cardContainer}>
       <TouchableOpacity
         style={styles.postCard}
+        disabled={!!myPosts[item._id]}
         onPress={() =>
           navigation.navigate("postDetails", { post: item, user: user })
         }
       >
-        <Text style={styles.postTitle}>{item.title}</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.postTitle}>{item.title}</Text>
+          {myPosts[item._id] && <Text style={styles.yourPost}>Your Post!</Text>}
+        </View>
         <Text style={styles.postCategory}>{item.careerCategory}</Text>
         <Text style={styles.postLocation}>{item.location}</Text>
         <Text style={styles.postDate}>
           {new Date(item.postDate).toLocaleDateString()}
         </Text>
       </TouchableOpacity>
-      <Pressable onPress={() => handleSave(item._id)}>
+      <Pressable
+        onPress={() => handleSave(item._id)}
+        disabled={!!myPosts[item._id]}
+      >
         {savedPosts[item._id] ? (
           <FontAwesome
             name="bookmark"
@@ -214,5 +238,14 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  yourPost: {
+    color: "#28a745",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });

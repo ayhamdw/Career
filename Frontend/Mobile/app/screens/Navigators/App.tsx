@@ -12,6 +12,10 @@ import CustomTabNavigator from "./CustomTabNavigator";
 import { NavigationIndependentTree } from "@react-navigation/native";
 import { StatusBar } from "react-native";
 import Modal from "@/components/HomePage/Modal";
+import Toast from "react-native-toast-message";
+import { ClerkProvider, ClerkLoaded } from "@clerk/clerk-expo";
+import { Slot } from "expo-router";
+import { tokenCache } from "../utils/cache";
 
 const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);
@@ -38,15 +42,24 @@ const App = () => {
     checkAuthState();
   }, []);
 
+  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+
+  if (!publishableKey) {
+    throw new Error("Add EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY to your .env file");
+  }
+
   return (
-    <GestureHandlerRootView>
-      <NavigationIndependentTree>
-        <StatusBar barStyle="dark-content" />
-        <NavigationContainer>
-          <MainNavigation />
-        </NavigationContainer>
-      </NavigationIndependentTree>
-    </GestureHandlerRootView>
+    <ClerkProvider tokenCache={tokenCache} publishableKey={publishableKey}>
+      <GestureHandlerRootView>
+        <NavigationIndependentTree>
+          <StatusBar barStyle="dark-content" />
+          <NavigationContainer>
+            <MainNavigation />
+            <Toast />
+          </NavigationContainer>
+        </NavigationIndependentTree>
+      </GestureHandlerRootView>
+    </ClerkProvider>
   );
 };
 

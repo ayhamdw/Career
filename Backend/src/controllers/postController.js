@@ -2,10 +2,13 @@ const Post = require("../models/posts");
 const User = require("../models/user2");
 
 const createPost = async (req, res) => {
-  const { title, content, careerCategory, location, numberOfWorker, images } =
+  const { title, content, careerCategory, location, numberOfWorker, photos } =
     req.body;
   const user = req.user;
   const userRole = user.role;
+  console.log(req.body);
+  console.log(user);
+  console.log(userRole);
   try {
     const newPost = new Post({
       user: user._id,
@@ -15,7 +18,7 @@ const createPost = async (req, res) => {
       careerCategory,
       location,
       numberOfWorker,
-      images: images || [],
+      images: photos || [],
     });
     await newPost.save();
     res.status(201).json(newPost);
@@ -127,6 +130,25 @@ const getSavedPosts = async (req, res) => {
     console.log("error while getting saved posts", error);
   }
 };
+
+const getAllPostsExceptMine = async (req, res) => {
+  try {
+    const posts = await Post.find({ user: { $ne: req.user._id } })
+      .populate("user", "_id username profile email role city")
+      .lean();
+    res.status(200).send(posts);
+  } catch (error) {
+    res.status(400).send({ error: "Error fetching posts" });
+  }
+};
+
+const getMyPosts = async (req, res) => {
+  console.log("id", req.params.id);
+  const posts = await Post.find({ user: req.params.id }).select("_id").lean();
+  res.status(200).send(posts);
+  console.log(posts);
+};
+
 module.exports = {
   createPost,
   getAllPosts,
@@ -135,4 +157,5 @@ module.exports = {
   savePost,
   getSavedPosts,
   getSavedPostsIds,
+  getMyPosts,
 };
