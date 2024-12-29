@@ -1,4 +1,9 @@
-import React, { useLayoutEffect, useState, useCallback } from "react";
+import React, {
+  useLayoutEffect,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
 import {
   View,
   Text,
@@ -12,7 +17,6 @@ import {
 } from "react-native";
 import { useNavigation } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { Dropdown } from "react-native-element-dropdown";
 import * as ImagePicker from "expo-image-picker";
 import Amazon from "@/app/Services/Amazon";
@@ -21,6 +25,8 @@ import axios from "axios";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import { useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
+import * as ImageManipulator from "expo-image-manipulator";
 
 const GOOGLE_API = process.env.EXPO_PUBLIC_GOOGLE_APIS_KEY;
 const CAREER_CATEGORIES = [
@@ -130,7 +136,8 @@ export default function CreatePost() {
   const submit = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-      const uploadImages = await uploadPhotos(tempPhotos);
+      const compressedPhotos = await Promise.all(tempPhotos.map(compressImage));
+      const uploadImages = await uploadPhotos(compressedPhotos);
       const response = await axios.post(
         `${ayhamWifiUrl}/api/community/post`,
         {
@@ -147,12 +154,38 @@ export default function CreatePost() {
           },
         }
       );
-      if (response.status === 200) {
-        console.log("Post created successfully");
+      if (response.status === 201) {
+        Toast.show({
+          type: "success",
+          text1: "Post Created 🎉",
+          text2: "Your post has been successfully published!",
+          position: "top",
+          visibilityTime: 4000,
+        });
+        setTitle("");
+        setDescription("");
+        setNumberOfWorker("");
+        setCategory("");
+        setLocation(null);
+        setTempPhotos([]);
       }
     } catch (error) {
-      console.log("Error creating post:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error Creating Post 😢",
+        text2: "An error occurred while creating your post. Please try again",
+        position: "top",
+        visibilityTime: 4000,
+      });
     }
+  };
+  const compressImage = async (uri) => {
+    const compressed = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { width: 800 } }], // Resize width
+      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // Compress quality
+    );
+    return compressed.uri;
   };
 
   const uploadPhotos = async (tempPhotos) => {

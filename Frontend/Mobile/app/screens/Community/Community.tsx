@@ -72,16 +72,11 @@ export default function Community({ user }) {
       console.error("Error fetching community posts:", error);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-    fetchMyPostsIds();
-  }, []);
-
   useFocusEffect(
     React.useCallback(() => {
       fetchData();
       fetchSavedPostsIds();
+      fetchMyPostsIds();
     }, [user])
   );
 

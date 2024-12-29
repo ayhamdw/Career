@@ -12,6 +12,7 @@ import CustomTabNavigator from "./CustomTabNavigator";
 import { NavigationIndependentTree } from "@react-navigation/native";
 import { StatusBar } from "react-native";
 import Modal from "@/components/HomePage/Modal";
+import Toast from "react-native-toast-message";
 
 const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);
@@ -44,6 +45,7 @@ const App = () => {
         <StatusBar barStyle="dark-content" />
         <NavigationContainer>
           <MainNavigation />
+          <Toast />
         </NavigationContainer>
       </NavigationIndependentTree>
     </GestureHandlerRootView>
