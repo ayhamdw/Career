@@ -10,6 +10,7 @@ import styles from "../../assets/styles/LoginStyle";
 import google from "../../assets/images/google.png";
 import facebook from "../../assets/images/facebook.png";
 import apple from "../../assets/images/apple.png";
+import { ayhamWifiUrl } from "@/constants/Urls";
 
 // Configure WebBrowser session handling
 WebBrowser.maybeCompleteAuthSession();
@@ -18,24 +19,46 @@ const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [app, setApp] = useState("apple");
 
-  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
   const { signOut } = useClerk();
 
-  const handleGoogleSignIn = useCallback(async () => {
+  const { startOAuthFlow: startGoogleOAuthFlow } = useOAuth({
+    strategy: "oauth_google",
+  });
+  const { startOAuthFlow: startAppleOAuthFlow } = useOAuth({
+    strategy: "oauth_apple",
+  });
+
+  const handleSignInWithGoogle = useCallback(async () => {
     try {
-      const { createdSessionId, setActive } = await startOAuthFlow({
+      const { createdSessionId, setActive } = await startGoogleOAuthFlow({
         redirectUrl: Linking.createURL("/dashboard", { scheme: "myapp" }),
       });
 
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
-        // navigation.replace("Main");
+        navigation.replace("Main");
       }
     } catch (err) {
       console.error("Google Sign-In failed:", err);
     }
-  }, [startOAuthFlow, navigation]);
+  }, [startGoogleOAuthFlow, navigation]);
+
+  const handleSignInWithApple = useCallback(async () => {
+    try {
+      const { createdSessionId, setActive } = await startAppleOAuthFlow({
+        redirectUrl: Linking.createURL("/dashboard", { scheme: "myapp" }),
+      });
+
+      if (createdSessionId) {
+        setActive!({ session: createdSessionId });
+        navigation.replace("Main");
+      }
+    } catch (err) {
+      console.error("Apple Sign-In failed:", err);
+    }
+  }, [startAppleOAuthFlow, navigation]);
 
   const handleSignOut = async () => {
     try {
@@ -50,7 +73,7 @@ const Login = () => {
 
   const handleSignIn = async () => {
     try {
-      const response = await axios.post("YOUR_BACKEND_URL/api/auth/login", {
+      const response = await axios.post(`${ayhamWifiUrl}/api/auth/login`, {
         email,
         password,
       });
@@ -63,8 +86,7 @@ const Login = () => {
     }
   };
 
-  const { user } = useUser();
-  console.log(user?.externalAccounts[0].id);
+  // const { user } = useUser();
 
   return (
     <View style={styles.container}>
@@ -101,7 +123,10 @@ const Login = () => {
       <View style={styles.continueWithContainer}>
         <TouchableOpacity
           style={styles.continueWith}
-          onPress={() => console.log("Apple Pressed")}
+          onPress={() => {
+            setApp("apple");
+            handleSignInWithApple();
+          }}
         >
           <Image source={apple} style={styles.loginWithIcons} />
           <Text>Continue with Apple</Text>
@@ -109,7 +134,9 @@ const Login = () => {
 
         <TouchableOpacity
           style={styles.continueWith}
-          onPress={handleGoogleSignIn}
+          onPress={() => {
+            handleSignInWithGoogle();
+          }}
         >
           <Image source={google} style={styles.loginWithIcons} />
           <Text>Continue with Google</Text>
