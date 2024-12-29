@@ -22,6 +22,8 @@ router.get("/getSavedPosts/:id", postController.getSavedPosts);
 
 router.get("/getSavedPostsIds/:userId", postController.getSavedPostsIds);
 
+router.get("/myPosts/:id", postController.getMyPosts);
+
 // router.get("/requestDetails/:id", postController.getRequestDetails);
 
 module.exports = router;
