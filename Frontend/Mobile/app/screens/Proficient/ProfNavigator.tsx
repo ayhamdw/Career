@@ -8,6 +8,8 @@ import MapTracker from "./MapTracker";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
+import Projects from "./Projects";
+import ProjectDetails from "./ProjectDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -89,39 +91,39 @@ export default function ProfNavigator({ user }: { user: User }) {
     }),
     [proficientDetails, user]
   );
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: "",
-      headerBackground: () => (
-        <LinearGradient
-          colors={["#96c93d", "#00b09b"]}
-          style={styles.headerGradient}
-        ></LinearGradient>
-      ),
-      headerStyle: {
-        backgroundColor: "transparent",
-      },
-      headerLeft: () => {
-        return (
-          <View style={styles.headerContainer}>
-            <Ionicons
-              name="arrow-back"
-              size={24}
-              color="white"
-              onPress={() => navigation.goBack()}
-              style={styles.backIcon}
-            />
-          </View>
-        );
-      },
-    });
-  }, []);
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerTitle: "",
+  //     headerBackground: () => (
+  //       <LinearGradient
+  //         colors={["#96c93d", "#00b09b"]}
+  //         style={styles.headerGradient}
+  //       ></LinearGradient>
+  //     ),
+  //     headerStyle: {
+  //       backgroundColor: "transparent",
+  //     },
+  //     headerLeft: () => {
+  //       return (
+  //         <View style={styles.headerContainer}>
+  //           <Ionicons
+  //             name="arrow-back"
+  //             size={24}
+  //             color="white"
+  //             onPress={() => navigation.goBack()}
+  //             style={styles.backIcon}
+  //           />
+  //         </View>
+  //       );
+  //     },
+  //   });
+  // }, []);
   return (
     <Stack.Navigator initialRouteName="ProfProfile">
       <Stack.Screen
         name="ProfProfile"
         component={screenData.ProfProfile}
-        options={{ headerShown: false }}
+        options={{ headerShadowVisible: false }}
       />
       <Stack.Screen
         name="RequestDetailsPage"
@@ -131,6 +133,17 @@ export default function ProfNavigator({ user }: { user: User }) {
       <Stack.Screen
         name="MapTracker"
         component={MapTracker}
+        options={{ headerShadowVisible: false }}
+      />
+
+      <Stack.Screen
+        name="Projects"
+        component={Projects}
+        options={{ headerShadowVisible: false }}
+      />
+      <Stack.Screen
+        name="ProjectDetails"
+        component={ProjectDetails}
         options={{ headerShadowVisible: false }}
       />
     </Stack.Navigator>

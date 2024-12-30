@@ -25,7 +25,7 @@ export default function HomePageNavigation({ user }) {
       <Stack.Screen
         name="ProfNavigator"
         component={screenData.ProfNavigator}
-        options={{ headerShadowVisible: false, headerTitle: "" }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="JobList"

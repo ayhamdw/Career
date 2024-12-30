@@ -19,7 +19,6 @@ const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signOut } = useClerk();
   const { user } = useUser();
   const [loaded, error] = useFonts({
     "Kavoon-Regular": require("../../assets/fonts/Kavoon-Regular.ttf"),
@@ -34,7 +33,6 @@ const Login = () => {
   const handleOAuthSignIn = useCallback(
     async (strategy) => {
       try {
-        // Use the correct OAuth flow based on the strategy
         const startOAuth =
           strategy === "oauth_google"
             ? startGoogleOAuthFlow
