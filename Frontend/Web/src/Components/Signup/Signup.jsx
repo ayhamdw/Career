@@ -143,33 +143,36 @@ function Signup() {
 
   const handleFileChange = async (event) => {
     setImage(event.target.files[0]);
+
+
   };
 
+  let imgURL = ''
 
-const handleUpload = async () => {
-  const Reacts3Client = new s3({
-    accessKeyId: "AKIA5MSUBQC3OE6ZOF4Z",
-    secretAccessKey: "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",
-    bucketName: "career-images-s3",
-    dirName: "media",
-    region: "eu-north-1",
-    s3Url: "https://career-images-s3.s3.eu-north-1.amazonaws.com",
-  });
+  const handleUpload = async () => {
+    const Reacts3Client = new s3({
+      accessKeyId: "AKIA5MSUBQC3OE6ZOF4Z",
+      secretAccessKey: "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",
+      bucketName: "career-images-s3",
+      dirName: "media",
+      region: "eu-north-1",
+      s3Url: "https://career-images-s3.s3.eu-north-1.amazonaws.com",
+    });
+  
+    try {
+      const data = await Reacts3Client.uploadFile(image);
+      imgURL = data.location;
 
-  try {
-    const data = await Reacts3Client.uploadFile(image);
+      console.log("imgURL: ",imgURL)
 
-    setUser((prev)=>({
-      ...prev,
-      profileImage: "https://placehold.co/400",
-    }))
+    } catch (err) {
+      console.error("Error uploading image: ", err);
+      throw err;
+    }
+  };
+  
 
-    console.log("Profile Image successfully uploaded: ", user.profileImage);
-  } catch (err) {
-    console.error("Error uploading image: ", err);
-    throw err;
-  }
-};
+
 
 
 
@@ -214,20 +217,18 @@ const handleUpload = async () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
+    try {
       await handleUpload();
 
     }
-    catch(error){
-      console.log("Error upload image: ",error)
+    catch (error) {
+      console.log("Error upload imageSubmit: ", error)
     }
 
     if (user.password.toLowerCase().includes('password')) {
       alert('Password must not contain the word "password".');
       return;
     }
-
-
 
 
     const formData = new FormData();
@@ -245,17 +246,17 @@ const handleUpload = async () => {
     formData.append('profile[bio]', '');
     formData.append('profile[experience]', user.experience);
 
-    formData.append('profile[profileImage]', user.profileImage);
+    formData.append('profile[profileImage]', imgURL);
 
     formData.append('profile[location][type]', "Point");
 
-    if (user.profileImage) {
-      formData.append('profile[profileImage]', user.profileImage);
-    }
-    else{
-      console.log("Error upload image")
-      return;
-    }
+    // if (user.profileImage) {
+    //   formData.append('profile[profileImage]', user.profileImage);
+    // }
+    // else{
+    //   console.log("Error upload image")
+    //   return;
+    // }
 
 
     formData.append('profile[location][coordinates][0]', user.coordinates[0]);
@@ -297,10 +298,13 @@ const handleUpload = async () => {
         dateOfBirth: '', careerCategory: '', firstName: '', lastName: '',
         phone: '', bio: '', experience: '', coordinates: ['', ''],
       });
+
+
     } catch (error) {
       console.error('Error during registration: ', error.response?.data || error.message);
       toast.error('Registration failed.');
     }
+
 
 
   };
