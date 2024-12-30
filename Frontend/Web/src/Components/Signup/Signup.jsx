@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import s3 from 'react-aws-s3-typescript'
 
 
 
@@ -22,9 +23,9 @@ function Signup() {
     lastName: '',
     phone: '',
     bio: '',
-    verificationCode:'',
+    verificationCode: '',
     experience: '',
-    profileImage: null,
+    profileImage: "",
     coordinates: [null, null],
     sendProficientRequests: ['674f0eee59fa49413982b509'],
     receiveProficientRequest: ['674f0eee59fa49413982b509'],
@@ -32,9 +33,9 @@ function Signup() {
     resetCodeExpires: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    
-
   });
+
+  const [imageUrl, setImageUrl] = useState("");
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -42,7 +43,7 @@ function Signup() {
         (position) => {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
-          console.log(latitude+","+longitude);
+          console.log(latitude + "," + longitude);
           setUser((prev) => ({
             ...prev,
             coordinates: [latitude.toString(), longitude.toString()],
@@ -81,7 +82,7 @@ function Signup() {
     };
     fetchEmails();
   }, []);
-  
+
   useEffect(() => {
     const fetchUsernames = async () => {
       try {
@@ -96,10 +97,10 @@ function Signup() {
   }, []);
 
 
-  
+
 
   const handleChange = async (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, files } = e.target;
     if (name === 'coordinates[0]' || name === 'coordinates[1]') {
       setUser((prev) => ({
         ...prev,
@@ -123,56 +124,53 @@ function Signup() {
     if (name === 'username') {
       setUser((prev) => ({ ...prev, username: value }));
       const usernameExist = usernames.some((username) => username.username === value);
-      setUsernameExist(usernameExist);      
+      setUsernameExist(usernameExist);
     }
-    
+
+
+
+
     else {
       setUser((prev) => ({
         ...prev,
         [name]: value,
       }));
     }
-    
+  };
 
+  const [image, setImage] = useState(null);
+
+
+  const handleFileChange = async (event) => {
+    setImage(event.target.files[0]);
   };
 
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-  
-    if (file) {
-      if (file.type.startsWith('image/')) {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'your_upload_preset'); // Cloudinary upload preset
-  
-        try {
-          // Upload the file to Cloudinary (replace with your API for other services)
-          const response = await fetch('https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', {
-            method: 'POST',
-            body: formData,
-          });
-  
-          const data = await response.json();
-          if (data.secure_url) {
-            setUser((prev) => ({
-              ...prev,
-              profileImage: data.secure_url, // Store the image URL in state
-            }));
-            toast.success('Image uploaded successfully!');
-          }
-        } catch (error) {
-          toast.error('Error uploading image');
-        }
-      } else {
-        toast.error('Please upload a valid image file');
-      }
-    }
-  };
-  
+const handleUpload = async () => {
+  const Reacts3Client = new s3({
+    accessKeyId: "AKIA5MSUBQC3OE6ZOF4Z",
+    secretAccessKey: "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",
+    bucketName: "career-images-s3",
+    dirName: "media",
+    region: "eu-north-1",
+    s3Url: "https://career-images-s3.s3.eu-north-1.amazonaws.com",
+  });
 
+  try {
+    const data = await Reacts3Client.uploadFile(image);
 
-  
+    setUser((prev)=>({
+      ...prev,
+      profileImage: "https://placehold.co/400",
+    }))
+
+    console.log("Profile Image successfully uploaded: ", user.profileImage);
+  } catch (err) {
+    console.error("Error uploading image: ", err);
+    throw err;
+  }
+};
+
 
 
   const notifySuccess = () => {
@@ -187,44 +185,52 @@ function Signup() {
       theme: "colored",
     });
   };
-  const formData = new FormData();
 
-  
+
   const sendVerificationCode = async (email) => {
-    const code = Math.floor(100000 + Math.random() * 900000); 
+    const code = Math.floor(100000 + Math.random() * 900000);
     user.verificationCode = code;
     setUser((prev) => ({
       ...prev,
-      verificationCode: code, 
+      verificationCode: code,
     }));
-    
-    
+
+
     try {
       await axios.post(`${import.meta.env.VITE_API}/send/send-verification`, { email, code });
       toast.info('Verification code sent to your email!', { position: "top-right" });
       console.log(code)
-      
 
-      
+
+
     } catch (error) {
       console.error('Error sending verification code:', error.response?.data || error.message);
       toast.error('Failed to send verification code.');
-    }    
+    }
   };
 
   const navigate = useNavigate();
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try{
+      await handleUpload();
+
+    }
+    catch(error){
+      console.log("Error upload image: ",error)
+    }
 
     if (user.password.toLowerCase().includes('password')) {
       alert('Password must not contain the word "password".');
       return;
     }
 
-    
-    
 
 
+
+    const formData = new FormData();
     formData.append('username', user.username);
     formData.append('email', user.email);
     formData.append('password', user.password);
@@ -233,20 +239,23 @@ function Signup() {
     formData.append('city', user.city);
     formData.append('dateOfBirth', user.dateOfBirth);
     formData.append('careerCategory', user.careerCategory);
-    
-    // Send profile data as a nested object
     formData.append('profile[firstName]', user.firstName);
     formData.append('profile[lastName]', user.lastName);
     formData.append('profile[phone]', user.phone);
     formData.append('profile[bio]', '');
     formData.append('profile[experience]', user.experience);
-    formData.append('profile[profileImage]', 'https://placehold.co/400');
-    
+
+    formData.append('profile[profileImage]', user.profileImage);
+
     formData.append('profile[location][type]', "Point");
-    // Send profileImage if it exists
-    // if (user.profileImage) {
-    //   formData.append('profile[profileImage]', user.profileImage);
-    // }
+
+    if (user.profileImage) {
+      formData.append('profile[profileImage]', user.profileImage);
+    }
+    else{
+      console.log("Error upload image")
+      return;
+    }
 
 
     formData.append('profile[location][coordinates][0]', user.coordinates[0]);
@@ -262,41 +271,38 @@ function Signup() {
 
 
     if (!user.verificationCode) {
-      sendVerificationCode(user.email);  
+      sendVerificationCode(user.email);
     }
 
     formData.append('verificationCode', user.verificationCode);
-    console.log("verificationCode: "+ user.verificationCode)
+    console.log("verificationCode: " + user.verificationCode)
 
     try {
-      
+
 
       const response = await axios.post(`${import.meta.env.VITE_API}/auth/register`, formData, {
-
-
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
       const { token } = response.data;
       localStorage.setItem('authToken', token);
-      
+
       formData.append('tokens[0][token]', token);
 
-      
-      
+
+
       notifySuccess();
       navigate('/signin');
       setUser({
         username: '', email: '', password: '', role: '', gender: '', city: '',
         dateOfBirth: '', careerCategory: '', firstName: '', lastName: '',
-        phone: '', bio: '', experience: '', profileImage: null, coordinates: ['', ''],
+        phone: '', bio: '', experience: '', coordinates: ['', ''],
       });
     } catch (error) {
       console.error('Error during registration: ', error.response?.data || error.message);
       toast.error('Registration failed.');
     }
-    
+
+
   };
 
   return (
@@ -310,7 +316,7 @@ function Signup() {
             {/* Username */}
             <div className={style.field}>
               <label>Username</label>
-              <input type="text" name="username" value={user.username} onChange={handleChange} 
+              <input type="text" name="username" value={user.username} onChange={handleChange}
                 style={{ border: usernameExist ? '1px solid red' : '' }}
               />
               {usernameExist === true && <p style={{ color: 'red' }}>Username Already Exist</p>}
@@ -442,8 +448,25 @@ function Signup() {
             {/* Profile Image */}
             <div className={style.imageField}>
               <label htmlFor="profileImage">Profile Image (Optional)</label>
-              <input type="file" name="profileImage" id="profileImage" accept="image/*" onChange={handleFileChange} />
+
+              {/* The hidden file input */}
+              <input
+                type="file"
+                name="profileImage"
+                id="profileImage"
+                onChange={handleFileChange}
+              />
+              <label htmlFor="profileImage">Choose File</label>
+
+              {image && (
+                <div className={style.imagePreview}>
+                  <img src={URL.createObjectURL(image)} alt="Profile Preview" className={style.previewImage} />
+                  {/* <button onClick={handleUpload}>Upload Image</button> */}
+                </div>
+              )}
             </div>
+
+
 
             <button type="submit" className={style.signUpButton}>Create an Account</button>
           </form>

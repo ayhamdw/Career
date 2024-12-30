@@ -3,11 +3,13 @@ import axios from "axios";
 import styles from "./Community.module.css";
 import userImage from './poster.png';
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 
 
 
 const Community = () => {
+  const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
   const [posts, setPosts] = useState([]);
@@ -88,39 +90,39 @@ const Community = () => {
       }
     };
 
-    const fetchFirstName = async () =>{
-      try{
+    const fetchFirstName = async () => {
+      try {
         const email = localStorage.getItem("userEmail");
-        const response = await axios.post(`${import.meta.env.VITE_API}/user/firstName`,{email});
+        const response = await axios.post(`${import.meta.env.VITE_API}/user/firstName`, { email });
         setUserFirstName(response.data.firstName);
         console.log(response.data.firstName)
-        
-      }catch(error){
-          console.error("Error Fetching user FirstName: ", error);
+
+      } catch (error) {
+        console.error("Error Fetching user FirstName: ", error);
       }
     }
-    const fetchLastName = async () =>{
-      try{
+    const fetchLastName = async () => {
+      try {
         const email = localStorage.getItem("userEmail");
-        const response = await axios.post(`${import.meta.env.VITE_API}/user/lastName`,{email});
+        const response = await axios.post(`${import.meta.env.VITE_API}/user/lastName`, { email });
         setUserLasttName(response.data.lastName);
         console.log(response.data.lastName)
-        
-      }catch(error){
-          console.error("Error Fetching user LastName: ", error);
+
+      } catch (error) {
+        console.error("Error Fetching user LastName: ", error);
       }
     }
 
     const fetchCoordinates = async () => {
-      try{
+      try {
         const email = localStorage.getItem("userEmail");
-        const response = await axios.post(`${import.meta.env.VITE_API}/user/coordinates`,{email});
-        const {longitude, latitude} = response.data;
-        setUserCoordinates([longitude,latitude]);
+        const response = await axios.post(`${import.meta.env.VITE_API}/user/coordinates`, { email });
+        const { longitude, latitude } = response.data;
+        setUserCoordinates([longitude, latitude]);
         console.log(userCoordinates);
       }
-      catch(error){
-        console.error("Coordinates Error: ",error);
+      catch (error) {
+        console.error("Coordinates Error: ", error);
       }
     }
 
@@ -176,9 +178,9 @@ const Community = () => {
       window.location.reload();
 
 
-      
+
       setPosts([response.data, ...posts]);
-      
+
       setForm({ title: "", content: "", careerCategory: "", location: "" });
       setIsModalOpen(false);
     } catch (error) {
@@ -191,45 +193,49 @@ const Community = () => {
   const handleDeletePost = async (postId) => {
 
     const isConfirmed = window.confirm("Are you sure you want to delete this post?");
-    if(isConfirmed){
-          const token = localStorage.getItem('token');
-  
-    if (!token) {
-      toast.error("You need to log in first.");
-      setTimeout(() => {
-        window.location.href = "/signin";
-      }, 2000);
-      return;
-    }
-  
-    try {
-      const response = await axios.delete(`http://localhost:7777/api/community/deletePost/${postId}`);
-      toast.success(response.data.message);
-      setPosts(posts.filter(post => post._id !== postId));
-    } catch (error) {
-      console.error('Error deleting post:', error);
-      toast.error(error.response?.data?.message || 'Failed to delete post.');
-    }
+    if (isConfirmed) {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        toast.error("You need to log in first.");
+        setTimeout(() => {
+          window.location.href = "/signin";
+        }, 2000);
+        return;
+      }
+
+      try {
+        const response = await axios.delete(`http://localhost:7777/api/community/deletePost/${postId}`);
+        toast.success(response.data.message);
+        setPosts(posts.filter(post => post._id !== postId));
+      } catch (error) {
+        console.error('Error deleting post:', error);
+        toast.error(error.response?.data?.message || 'Failed to delete post.');
+      }
 
     }
 
   };
 
-  const handleApplyForThisJop = async (proficientId, userId, requestDateTime, [longitude,latitude]) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+
+  const handleApplyForThisJop = async (proficientId, userId, requestDateTime, [longitude, latitude]) => {
     try {
-      const token = localStorage.getItem("token"); 
-  
+      const token = localStorage.getItem("token");
+
       if (!token) {
-        console.log("No token found. Please log in again.");
+        setIsModalVisible(true);
         return;
       }
-        const response = await axios.post(
-        `${import.meta.env.VITE_API}/proficient/booking-proficient`, 
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API}/proficient/booking-proficient`,
         {
           proficientId,
           userId,
           requestDateTime,
-          location:{
+          location: {
             latitude,
             longitude
           }
@@ -239,13 +245,20 @@ const Community = () => {
             Authorization: `Bearer ${token}`,
           },
         }
-        
       );
     } catch (error) {
       console.log("Error Apply Job: ", error);
     }
   };
-  
+
+  const loginModal = () => {
+    setIsModalVisible(false);
+    navigate('/signin'); // Redirect to the sign-in page after closing the modal
+  };
+
+  const closeModal = () =>{
+    setIsModalVisible(false);
+  }
 
   return (
     <div className={styles.communityContainer}>
@@ -373,35 +386,38 @@ const Community = () => {
           <div className={styles.postList}>
             {posts.slice().reverse().map((post) => (
               <div className={`${styles.postCard} ${post.user._id === currentUserId ? styles.myPost : ""}`} key={post._id}>
-              <div className={styles.posterInfo}>
-                <img src={userImage} alt="User" className={styles.posterImage} />
-                <div>
-                  <p className={styles.posterName}>{post.user.profile.firstName} {post.user.profile.lastName}</p>
-                  <p className={styles.posterCareer}>{post.userRole === "admin" ? "Service Provider" : "Client"}</p>
+                <div className={styles.posterInfo}>
+                  <img src={userImage} alt="User" className={styles.posterImage} />
+                  <div>
+                    <p className={styles.posterName}>{post.user.profile.firstName} {post.user.profile.lastName}</p>
+                    <p className={styles.posterCareer}>{post.userRole === "admin" ? "Service Provider" : "Client"}</p>
+                  </div>
+                </div>
+                <p className={styles.postContent}>{post.user.city}</p>
+                <h3 className={styles.postTitle}>{post.title}</h3>
+                <p className={styles.postContent}>{post.content}</p>
+
+                <div className={styles.postDetails}>
+                  {/* <p><strong>Name</strong> {post.userFirstName} {post.userLastName}</p> */}
+                  <p><strong>Category:</strong> {post.careerCategory}</p>
+                  <p><strong>Location:</strong> {post.location}</p>
+                  <p><strong>Number of Workers Required:</strong> {post.numberOfWorker}</p>
+                  <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
+                </div>
+
+                <div className={styles.actions}>
+                  {(post.user._id !== currentUserId) && (
+                    <button className={styles.applyBtn} onClick={() => handleApplyForThisJop(post.user._id, currentUserId, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
+                  )}
+                  {isModalVisible && (
+                    <Modal message="You didn't log in. Please log in and try again." onClose={closeModal} onLogin={loginModal} />
+                  )}
+                  {(post.user._id === currentUserId) && (
+                    <button className={styles.deleteBtn} onClick={() => handleDeletePost(post._id)}>Delete post</button>
+                  )}
                 </div>
               </div>
-              <p className={styles.postContent}>{post.user.city}</p>
-              <h3 className={styles.postTitle}>{post.title}</h3>
-              <p className={styles.postContent}>{post.content}</p>
-              
-              <div className={styles.postDetails}>
-                {/* <p><strong>Name</strong> {post.userFirstName} {post.userLastName}</p> */}
-                <p><strong>Category:</strong> {post.careerCategory}</p>
-                <p><strong>Location:</strong> {post.location}</p>
-                <p><strong>Number of Workers Required:</strong> {post.numberOfWorker}</p>
-                <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
-              </div>
-            
-              <div className={styles.actions}>
-                {(post.user._id !== currentUserId) && (
-                  <button className={styles.applyBtn} onClick={()=> handleApplyForThisJop(post.user._id,currentUserId, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
-                )}
-                {(post.user._id === currentUserId) && (
-                  <button className={styles.deleteBtn} onClick={()=>handleDeletePost(post._id)}>Delete post</button>
-                )}
-              </div>
-            </div>
-            
+
             ))}
           </div>
         </div>
@@ -411,3 +427,22 @@ const Community = () => {
 };
 
 export default Community;
+
+
+
+const Modal = ({ message, onClose, onLogin }) => {
+  return (
+<div className={styles.modalOverlay}>
+      <div className={styles.modalContainer}>
+        <div className={styles.modalContentModal}>
+          <h2 className={styles.modalTitle}>Login Required</h2>
+          <p className={styles.modalMessage}>{message}</p>
+          <div className={styles.modalButtons}>
+            <button onClick={onClose} className={styles.modalCloseBtn}>Close</button>
+            <button onClick={onLogin} className={styles.modalLoginBtn}>Go to Login</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
