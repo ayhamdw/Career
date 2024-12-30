@@ -235,6 +235,35 @@ const getUserById = async (req, res) => {
 };
 
 
+const updateImage = async (req, res) => {
+  const { userId, profileImageUrl } = req.body;
+
+  if (!userId || !profileImageUrl) {
+    return res.status(400).json({ message: 'UserId and profileImageUrl are required' });
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { 'profile.profileImage': profileImageUrl },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      message: 'Profile image updated successfully',
+      profileImageUrl: updatedUser.profile.profileImage, 
+    });
+  } catch (err) {
+    console.error('Error updating profile image:', err);
+    res.status(500).json({ message: 'Error updating profile image' });
+  }
+};
+
+
 
 module.exports = {
    getUserRoleByEmail,
@@ -248,4 +277,5 @@ module.exports = {
    getSentProficientRequestByEmail,
    getUserByEmail,
    getUserById,
+   updateImage
   };
