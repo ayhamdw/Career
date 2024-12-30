@@ -50,7 +50,8 @@ const Messages: React.FC<MessagesProps> = ({ user }) => {
             },
           }
         );
-        setUsers(response.data);
+
+        setUsers([...new Set(response.data)]);
         console.log("Users:", response.data);
       } catch (error) {
         console.log("Error fetching users:", error);

@@ -11,18 +11,19 @@ import google from "../../assets/images/google.png";
 import facebook from "../../assets/images/facebook.png";
 import apple from "../../assets/images/apple.png";
 import { ayhamWifiUrl } from "@/constants/Urls";
+import { useFonts } from "expo-font";
 
-// Configure WebBrowser session handling
 WebBrowser.maybeCompleteAuthSession();
 
 const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [app, setApp] = useState("apple");
-
   const { signOut } = useClerk();
-
+  const { user } = useUser();
+  const [loaded, error] = useFonts({
+    "Kavoon-Regular": require("../../assets/fonts/Kavoon-Regular.ttf"),
+  });
   const { startOAuthFlow: startGoogleOAuthFlow } = useOAuth({
     strategy: "oauth_google",
   });
@@ -30,46 +31,56 @@ const Login = () => {
     strategy: "oauth_apple",
   });
 
-  const handleSignInWithGoogle = useCallback(async () => {
-    try {
-      const { createdSessionId, setActive } = await startGoogleOAuthFlow({
-        redirectUrl: Linking.createURL("/dashboard", { scheme: "myapp" }),
-      });
+  const handleOAuthSignIn = useCallback(
+    async (strategy) => {
+      try {
+        // Use the correct OAuth flow based on the strategy
+        const startOAuth =
+          strategy === "oauth_google"
+            ? startGoogleOAuthFlow
+            : startAppleOAuthFlow;
 
-      if (createdSessionId) {
-        setActive!({ session: createdSessionId });
-        navigation.replace("Main");
+        const { createdSessionId, setActive } = await startOAuth({
+          redirectUrl: Linking.createURL("/dashboard", { scheme: "myapp" }),
+        });
+
+        if (createdSessionId) {
+          setActive!({ session: createdSessionId });
+
+          const email = user?.emailAddresses[0].emailAddress;
+          const firstName = user?.firstName;
+          const lastName = user?.lastName;
+          const profileImage = user?.imageUrl;
+
+          console.log("email", email);
+          console.log("firstName", firstName);
+          console.log("lastName", lastName);
+          console.log("profileImage", profileImage);
+
+          const response = await axios.post(
+            `${ayhamWifiUrl}/api/auth/register`,
+            {
+              isOAuth: true,
+              email,
+              firstName,
+              lastName,
+              profileImage,
+            }
+          );
+
+          const { token, user: backendUser } = response.data;
+
+          await AsyncStorage.setItem("token", token);
+          await AsyncStorage.setItem("user", JSON.stringify(backendUser));
+
+          navigation.replace("Main", { user: backendUser });
+        }
+      } catch (err) {
+        console.error(`${strategy} Sign-In failed:`, err);
       }
-    } catch (err) {
-      console.error("Google Sign-In failed:", err);
-    }
-  }, [startGoogleOAuthFlow, navigation]);
-
-  const handleSignInWithApple = useCallback(async () => {
-    try {
-      const { createdSessionId, setActive } = await startAppleOAuthFlow({
-        redirectUrl: Linking.createURL("/dashboard", { scheme: "myapp" }),
-      });
-
-      if (createdSessionId) {
-        setActive!({ session: createdSessionId });
-        navigation.replace("Main");
-      }
-    } catch (err) {
-      console.error("Apple Sign-In failed:", err);
-    }
-  }, [startAppleOAuthFlow, navigation]);
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      // Redirect to your desired page
-    } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
-      console.error(JSON.stringify(err, null, 2));
-    }
-  };
+    },
+    [startGoogleOAuthFlow, startAppleOAuthFlow, navigation]
+  );
 
   const handleSignIn = async () => {
     try {
@@ -78,15 +89,15 @@ const Login = () => {
         password,
       });
       const { token, user } = response.data;
+
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", JSON.stringify(user));
+
       navigation.replace("Main", { user });
     } catch (error) {
       console.error("Login failed:", error);
     }
   };
-
-  // const { user } = useUser();
 
   return (
     <View style={styles.container}>
@@ -114,6 +125,13 @@ const Login = () => {
         />
       </View>
 
+      <TouchableOpacity
+        style={styles.forgotButton}
+        onPress={() => navigation.navigate("ForgotPassword")}
+      >
+        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
         <Text style={styles.signInButtonText}>Sign In</Text>
       </TouchableOpacity>
@@ -124,8 +142,7 @@ const Login = () => {
         <TouchableOpacity
           style={styles.continueWith}
           onPress={() => {
-            setApp("apple");
-            handleSignInWithApple();
+            handleOAuthSignIn("oauth_apple");
           }}
         >
           <Image source={apple} style={styles.loginWithIcons} />
@@ -135,19 +152,11 @@ const Login = () => {
         <TouchableOpacity
           style={styles.continueWith}
           onPress={() => {
-            handleSignInWithGoogle();
+            handleOAuthSignIn("oauth_google");
           }}
         >
           <Image source={google} style={styles.loginWithIcons} />
           <Text>Continue with Google</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.continueWith}
-          onPress={() => handleSignOut()}
-        >
-          <Image source={facebook} style={styles.loginWithIcons} />
-          <Text>Continue with Facebook</Text>
         </TouchableOpacity>
       </View>
 

@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      unique: false,
+      unique: true,
       trim: true,
       default: "",
     },
@@ -37,7 +37,6 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
       minLength: 7,
       trim: true,
       validate(value) {
@@ -49,23 +48,19 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       // enum: ["user", "admin"],
-      required: true,
       default: "user",
     },
     gender: {
       type: String,
-      required: true,
       enum: ["Male", "Female", "male", "female"],
     },
     city: {
       type: String,
-      required: true,
       trim: true,
     },
     dateOfBirth: {
       type: Date,
-      required: true,
-      // default: '00-00-0000',
+      required: false,
     },
     career: {
       type: String,
@@ -74,7 +69,7 @@ const userSchema = new mongoose.Schema(
     },
     careerCategory: {
       type: String,
-      required: true,
+      required: false,
       enum: [
         "Home Services",
         "Technical Services",
@@ -102,7 +97,7 @@ const userSchema = new mongoose.Schema(
         },
         coordinates: {
           type: [Number],
-          required: true,
+          required: false,
         },
       },
       bio: { type: String, trim: true },
@@ -110,7 +105,7 @@ const userSchema = new mongoose.Schema(
       profileImage: { type: String, trim: true, default: "" },
       ratings: [
         {
-          rating: { type: Number, required: true, default: 0 },
+          rating: { type: Number, required: false, default: 0 },
           review: { type: String, trim: true, default: "" },
           userId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -310,7 +305,7 @@ userSchema.statics.generateFakeData = async () => {
     const fakeUsers = [];
 
     for (let i = 0; i < 10; i++) {
-      const careerCategory = faker.helpers.arrayElement(careerCategories); // Randomly pick a career category
+      const careerCategory = faker.helpers.arrayElement(careerCategories);
 
       fakeUsers.push({
         username: faker.internet.username(),
@@ -321,7 +316,7 @@ userSchema.statics.generateFakeData = async () => {
         city: faker.location.city(),
         dateOfBirth: faker.date.birthdate({ min: 18, max: 60, mode: "age" }),
         career: faker.person.jobTitle(),
-        careerCategory: careerCategory, // Use the randomly selected category
+        careerCategory: careerCategory,
         profile: {
           firstName: faker.person.firstName(),
           lastName: faker.person.lastName(),

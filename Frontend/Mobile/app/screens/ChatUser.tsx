@@ -32,9 +32,10 @@ const ChatUser = ({ user }) => {
   const [messages, setMessages] = useState([]);
 
   const scrollViewRef = useRef(null);
-
-  const senderId = user._id;
   const route = useRoute();
+  const { me } = route.params;
+  const userId = user?._id;
+  const senderId = me?._id || userId;
   const receiverId = route.params?.user._id ?? "";
   const image = route.params?.user.profile.profileImage ?? "";
   const navigation = useNavigation();
@@ -128,9 +129,7 @@ const ChatUser = ({ user }) => {
         }
       );
       if (response.status === 200) {
-        // console.log("Messages fetched successfully");
         setMessages(response.data);
-        // console.log(response.data);
       }
     } catch (error) {
       console.log("Error", error);

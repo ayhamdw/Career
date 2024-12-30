@@ -11,6 +11,7 @@ const {
   getAllEmails,
   getAllUsernames,
   verifyCode,
+  signinWithGoogle,
 } = require("../controllers/authController");
 
 router.post("/register", upload.single("imageFile"), signupController);

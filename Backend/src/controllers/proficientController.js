@@ -61,9 +61,6 @@ const createBooking = async (req, res) => {
     const user = await User.findById(userId);
     const provider = await User.findById(proficientId);
 
-    // console.log(city);
-
-    console.dir(req.body);
     //
     user.sendProficientRequests.push(proficientId);
     provider.receiveProficientRequest.push(userId);
@@ -87,7 +84,6 @@ const createBooking = async (req, res) => {
     await provider.save();
     await booking.save();
     res.status(200).json({ message: "Booking request sent" });
-    console.log("Booking request sent");
   } catch (error) {
     console.log(error);
   }
@@ -121,7 +117,6 @@ const requestDetails = async (req, res) => {
 
 const senderDetails = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   try {
     const booking = await Booking.find({ providerId: id });
     const senderDetails = await Promise.all(

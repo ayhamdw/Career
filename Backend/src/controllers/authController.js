@@ -6,11 +6,28 @@ const User = require("../models/user2"); //! User Model Object
 const { sendWelcomeEmail } = require("../emails/account");
 
 const signupController = async (req, res) => {
-  // const { error } = signupValidation(req.body);
-  // if (error) return res.status(400).send("Error" + error.details[0].message);
-  const user = new User(req.body);
   try {
-    await user.save();
+    const { isOAuth, email, firstName, lastName, profileImage } = req.body;
+
+    let user;
+    if (isOAuth) {
+      user = await User.findOne({ email });
+      if (!user) {
+        user = new User({
+          email,
+          profile: {
+            firstName,
+            lastName,
+            profileImage,
+          },
+        });
+        await user.save();
+      }
+    } else {
+      user = new User(req.body);
+      await user.save();
+    }
+
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
   } catch (error) {
@@ -26,9 +43,6 @@ const signinController = async (req, res, next) => {
       req.body.password
     );
     const token = await user.generateAuthToken();
-    // await User.generateFakeData();
-    // sendWelcomeEmail(user.email, user.profile.firstName);
-    console.log(token);
     res.status(200).send({
       user,
       token,
@@ -106,10 +120,14 @@ const verifyCode = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Verification successful" });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "An error occurred. Please try again later.",
-    });
+    console.log("Error inside the Verify Code", error);
+  }
+};
+
+const signinWithGoogle = async (req, res) => {
+  try {
+  } catch (error) {
+    console.log("Error inside the Google Login", error);
   }
 };
 

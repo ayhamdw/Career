@@ -74,7 +74,7 @@ export default function ProfProfile({ proficientDetails, user }) {
         }
       );
       if (response.status === 200) {
-        alert("Friend request accepted");
+        navigation.navigate("ChatUser", { me: user, user: proficientDetails });
       }
     } catch (error) {
       console.log("Error accepting friend request:", error);
