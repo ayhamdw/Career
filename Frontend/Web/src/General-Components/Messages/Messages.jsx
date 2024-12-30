@@ -14,7 +14,6 @@ const ChatSystem = () => {
   const scrollRef = useRef();
   const myId = localStorage.getItem("id");
   const token = localStorage.getItem("token");
-
   const [reactionWindow, setReactionWindow] = useState(false);
   const socket = useRef();
 
