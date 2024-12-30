@@ -332,7 +332,103 @@ textarea {
   display: none;
 }
 
-/* CSS to Show Success Message */
 .successMessage.show {
   display: block;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modalContainer {
+  background: linear-gradient(145deg, #f3f4f6, #e1e2e7); 
+  border-radius: 12px; 
+  padding: 30px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); 
+  animation: slideUp 0.5s ease-out;
+}
+
+.modalContentModal {
+  text-align: center;
+}
+
+.modalTitle {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333; 
+  margin-bottom: 15px;
+}
+
+.modalMessage {
+  font-size: 18px;
+  color: #666;
+  margin: 20px 0;
+  line-height: 1.5;
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.modalCloseBtn,
+.modalLoginBtn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  width: 48%;
+}
+
+.modalCloseBtn {
+  background-color: #dc510b;
+  color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+.modalLoginBtn {
+  background-color: rgb(109, 201, 126);
+  color: white;
+  border: 1px solid #4CAF50;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

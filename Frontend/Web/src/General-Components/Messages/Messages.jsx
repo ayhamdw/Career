@@ -309,7 +309,7 @@ const ChatSystem = () => {
             />
             <div>
               <h3>{activeFriend.profile.firstName} {activeFriend?.profile?.lastName}</h3>
-              <p>{activeFriend.profile.bio || "Bio not available"}</p>
+              <p>{activeFriend.careerCategory || "Bio not available"}</p>
               <a href={`mailto:${activeFriend.email}`}>Contact via Email</a>
             </div>
           </div>
