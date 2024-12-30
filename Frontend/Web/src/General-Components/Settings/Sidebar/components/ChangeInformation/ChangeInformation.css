@@ -1,98 +1,155 @@
+/* General Styles */
 .change-information-container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f4f7f6;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  background-color: #f8f9fa;
+  width: 85%;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.information-form {
+  width: 100%;
+  /* background-color: white; */
+  padding: 20px;
+  border-radius: 8px;
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+  display: flex;
+  flex-wrap: wrap;
+  gap:20px;
   
-  h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 2rem;
-    color: #333;
+}
+
+.card {
+  margin-bottom: 30px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+  width: 450px;
+}
+
+.card-header {
+  background-color: rgb(109, 201, 126);
+  color: white;
+  padding: 10px;
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-body.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.submit-button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #218838;
+}
+
+/* Success Message Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.success-message-container {
+  background-color: #28a745;
+  color: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 400px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.icon svg {
+  width: 50px;
+  height: 50px;
+  fill: white;
+  margin-bottom: 15px;
+}
+
+.message-text p {
+  font-size: 1.2rem;
+}
+
+.close-button {
+  background-color: transparent;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  margin-top: 20px;
+  cursor: pointer;
+  border: 1px solid white;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
   }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+  100% {
+    opacity: 1;
   }
-  
-  .card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-  }
-  
-  .card-header {
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .card-header h2 {
-    font-size: 1.4rem;
-    color: #4CAF50;
-  }
-  
-  .card-body .form-group {
-    margin-bottom: 20px;
-  }
-  
-  label {
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 5px;
-  }
-  
-  input, select, textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    box-sizing: border-box;
-  }
-  
-  textarea {
-    resize: vertical;
-    min-height: 100px;
-  }
-  
-  button[type="submit"] {
-    padding: 12px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    align-self: center;
-    transition: background-color 0.3s ease;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #45a049;
-  }
-  
-  input[type="date"], select {
-    font-size: 1rem;
-  }
-  
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-  
-  .grid-container .form-group {
-    margin-bottom: 0;
-  }
-  
-  @media (max-width: 768px) {
-    .grid-container {
-      grid-template-columns: 1fr;
-    }
-  }
-  
+}

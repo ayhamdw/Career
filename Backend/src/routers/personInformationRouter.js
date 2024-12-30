@@ -11,6 +11,7 @@ const { getUserRoleByEmail,
    getUserByEmail,
    getUserById,
    updateImage,
+   updateInfo,
 
   } = require('../controllers/getPersonInformation'); 
 const router = express.Router();
@@ -28,4 +29,5 @@ router.post('/SentProficient',getSentProficientRequestByEmail);
 router.post('/user',getUserByEmail);
 router.get('/userId/:id',getUserById);
 router.put('/changeImage',updateImage);
+router.put('/updateInfo/:userId',updateInfo);
   module.exports = router;

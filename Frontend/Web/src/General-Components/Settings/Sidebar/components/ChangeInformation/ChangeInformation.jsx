@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './ChangeInformation.css';
 
-const ChangeInformation = ({user}) => {
+const ChangeInformation = ({ user }) => {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    gender: '',
-    city: '',
-    dateOfBirth: '',
-    career: '',
-    careerCategory: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-    bio: '',
-    experience: '',
+    username: user.username || '',
+    email: user.email || '',
+    gender: user.gender || '',
+    city: user.city || '',
+    dateOfBirth: user.dateOfBirth || '',
+    career: user.career || '',
+    careerCategory: user.careerCategory || '',
+    profile: {
+      firstName: user.profile.firstName || '',
+      lastName: user.profile.lastName || '',
+      phone: user.profile.phone || '',
+      bio: user.profile.bio || '',
+      experience: user.profile.experience || '',
+    }
   });
+
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,15 +30,32 @@ const ChangeInformation = ({user}) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_API}/user/updateInfo/${user._id}`,
+        formData
+      );
+
+      if (response.status === 200) {
+        setSuccess(true);
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      alert("Error updating user information");
+    }
+  };
+
+  const handleClose = () => {
+    setSuccess(!success);
   };
 
   return (
     <div className="change-information-container">
-      <h1>Change Your Information</h1>
-      <form onSubmit={handleSubmit}>
+      <h1 className="page-title">Change Your Information</h1>
+      <form onSubmit={handleUpdate} className="information-form">
         <div className="card">
           <div className="card-header">
             <h2>Personal Information</h2>
@@ -176,7 +197,6 @@ const ChangeInformation = ({user}) => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                
               />
             </div>
           </div>
@@ -211,6 +231,24 @@ const ChangeInformation = ({user}) => {
 
         <button type="submit" className="submit-button">Save Changes</button>
       </form>
+
+      {success && (
+        <div className="overlay">
+          <div className="success-message-container">
+            <div className="success-message">
+              <div className="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div className="message-text">
+                <p>Your data has been updated successfully!</p>
+              </div>
+              <button className="close-button" onClick={handleClose}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
