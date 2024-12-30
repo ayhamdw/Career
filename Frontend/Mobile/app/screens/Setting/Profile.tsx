@@ -15,12 +15,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import styles from "@/assets/styles/ProfileStyle";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useClerk } from "@clerk/clerk-expo";
+
 const Profile = ({ user }) => {
+  const { signOut } = useClerk();
   const navigation = useNavigation();
   const logoutFunction = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-
+      await signOut();
       const response = await axios.post(
         `${ayhamWifiUrl}/api/auth/logout`,
         {},

@@ -50,26 +50,39 @@ const getFriendsRequest = async (req, res) => {
 const acceptFriendRequestController = async (req, res) => {
   try {
     const { senderId, receiverId } = req.body;
+
     const sender = await User.findById(senderId);
     const receiver = await User.findById(receiverId);
-    sender.friends.push(receiverId);
-    receiver.friends.push(senderId);
-    console.log("test");
+
+    if (!sender || !receiver) {
+      return res.status(404).json({ message: "User(s) not found" });
+    }
+
+    if (
+      sender.friends.includes(receiverId) &&
+      receiver.friends.includes(senderId)
+    ) {
+      return res
+        .status(200)
+        .json({ message: "Friend Request Already Accepted" });
+    }
 
     sender.sendRequests = sender.sendRequests.filter(
       (request) => request.toString() !== receiverId.toString()
     );
-
     receiver.friendRequests = receiver.friendRequests.filter(
       (request) => request.toString() !== senderId.toString()
     );
+
+    sender.friends.push(receiverId);
+    receiver.friends.push(senderId);
 
     await sender.save();
     await receiver.save();
 
     res.status(200).json({ message: "Friend Request Accepted" });
   } catch (error) {
-    res.status(500).json({ Error: error });
+    res.status(500).json({ error: error.message });
   }
 };
 

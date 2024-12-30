@@ -74,7 +74,7 @@ export default function ProfProfile({ proficientDetails, user }) {
         }
       );
       if (response.status === 200) {
-        alert("Friend request accepted");
+        navigation.navigate("ChatUser", { me: user, user: proficientDetails });
       }
     } catch (error) {
       console.log("Error accepting friend request:", error);
@@ -83,6 +83,10 @@ export default function ProfProfile({ proficientDetails, user }) {
 
   const onRequestPress = async () => {
     navigation.navigate("RequestDetailsPage", { proficientDetails, user });
+  };
+
+  const onProjectPress = async () => {
+    navigation.navigate("Projects", { id: proficientDetails._id });
   };
 
   useEffect(() => {
@@ -113,6 +117,29 @@ export default function ProfProfile({ proficientDetails, user }) {
     return rating / job.length;
   };
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "",
+      headerLeft: () => (
+        <View style={{ marginLeft: 20 }}>
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="black"
+            onPress={() => navigation.goBack()}
+            style={{
+              marginLeft: -10,
+              width: 30,
+              height: 30,
+              borderRadius: 50,
+              backgroundColor: "white",
+            }}
+          />
+        </View>
+      ),
+    });
+  }, []);
+
   return (
     <View style={{ flex: 1, backgroundColor: "#f4f4f4" }}>
       <StatusBar barStyle="dark-content" />
@@ -121,6 +148,7 @@ export default function ProfProfile({ proficientDetails, user }) {
         <Action
           onMessagePress={onMessagePress}
           onRequestPress={onRequestPress}
+          onProjectPress={onProjectPress}
         />
         <AboutSection section={proficientDetails.profile.bio} title="About" />
 
