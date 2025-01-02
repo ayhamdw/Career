@@ -235,6 +235,85 @@ const getUserById = async (req, res) => {
 };
 
 
+const updateImage = async (req, res) => {
+  const { userId, profileImageUrl } = req.body;
+
+  if (!userId || !profileImageUrl) {
+    return res.status(400).json({ message: 'UserId and profileImageUrl are required' });
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { 'profile.profileImage': profileImageUrl },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      message: 'Profile image updated successfully',
+      profileImageUrl: updatedUser.profile.profileImage, 
+    });
+  } catch (err) {
+    console.error('Error updating profile image:', err);
+    res.status(500).json({ message: 'Error updating profile image' });
+  }
+};
+
+
+const updateInfo = async (req, res) => {
+  const userId = req.params.userId;
+  const updateData = req.body;
+
+  try {
+    // Dynamically build the update object
+    const updateFields = {};
+
+    // if (!updateData.password) delete updateData.password;
+    // if (!updateData.gender) delete updateData.gender;
+    // if (!updateData.dateOfBirth) delete updateData.dateOfBirth;
+
+    if (updateData.username !== undefined) updateFields.username = updateData.username;
+    if (updateData.email !== undefined) updateFields.email = updateData.email;
+    if (updateData.gender !== undefined) updateFields.gender = updateData.gender;
+    if (updateData.city !== undefined) updateFields.city = updateData.city;
+    if (updateData.dateOfBirth !== undefined) updateFields.dateOfBirth = updateData.dateOfBirth;
+    if (updateData.career !== undefined) updateFields.career = updateData.career;
+    if (updateData.careerCategory !== undefined) updateFields.careerCategory = updateData.careerCategory;
+
+    // Profile nested fields
+    if (updateData.firstName !== undefined) updateFields['profile.firstName'] = updateData.firstName;
+    if (updateData.lastName !== undefined) updateFields['profile.lastName'] = updateData.lastName;
+    if (updateData.phone !== undefined) updateFields['profile.phone'] = updateData.phone;
+    if (updateData.bio !== undefined) updateFields['profile.bio'] = updateData.bio;
+    if (updateData.experience !== undefined) updateFields['profile.experience'] = updateData.experience;
+
+    // Password handling (if provided, we don't allow empty password)
+    if (updateData.password && updateData.password !== '') {
+      updateFields.password = updateData.password;
+    }
+
+    // Update the user
+    const user = await User.findByIdAndUpdate(userId, updateFields, {
+      new: true, // Return the updated user
+      runValidators: true, // Ensure validators are run during update
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User updated successfully", user });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Error updating user information" });
+  }
+};
+
+
 
 module.exports = {
    getUserRoleByEmail,
@@ -248,4 +327,6 @@ module.exports = {
    getSentProficientRequestByEmail,
    getUserByEmail,
    getUserById,
+   updateImage,
+   updateInfo
   };

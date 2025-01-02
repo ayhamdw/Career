@@ -10,6 +10,8 @@ const { getUserRoleByEmail,
    getSentProficientRequestByEmail,
    getUserByEmail,
    getUserById,
+   updateImage,
+   updateInfo,
 
   } = require('../controllers/getPersonInformation'); 
 const router = express.Router();
@@ -26,4 +28,6 @@ router.post('/ReceiveProficient',getReceiveProficientRequestByEmail);
 router.post('/SentProficient',getSentProficientRequestByEmail);
 router.post('/user',getUserByEmail);
 router.get('/userId/:id',getUserById);
+router.put('/changeImage',updateImage);
+router.put('/updateInfo/:userId',updateInfo);
   module.exports = router;

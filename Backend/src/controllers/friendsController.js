@@ -92,7 +92,7 @@ const acceptedFriendsController = async (req, res) => {
     const user = await User.findById(userId)
       .populate(
         "friends",
-        "profile.firstName profile.lastName email profile.profileImage"
+        "profile.firstName profile.lastName email profile.profileImage careerCategory"
       )
       .lean();
     const friends = user.friends;
@@ -102,10 +102,71 @@ const acceptedFriendsController = async (req, res) => {
   }
 };
 
+const deleteFriendFromList = async (req, res) => {
+  const { currentUserId, selectedUserId } = req.body;
+
+  try {
+    await User.findByIdAndUpdate(currentUserId, {
+      $pull: { friends: selectedUserId },
+    });
+    await User.findByIdAndUpdate(selectedUserId, {
+      $pull: { friends: currentUserId },
+    });
+    await User.findByIdAndUpdate(currentUserId, {
+      $pull: { sendRequests: selectedUserId },
+    });
+    await User.findByIdAndUpdate(selectedUserId, {
+      $pull: { friendRequests: currentUserId },
+    });
+
+    res.status(200).json({ message: "Friend deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ Error: error });
+  }
+};
+
+const getSendRequests = async (req, res) => {
+  const userId = req.params.userId;
+  console.log("Inside Get Send Requests for User:", userId);
+  
+  try {
+    const user = await User.findById(userId)
+      .populate("sendRequests", "profile email image city") 
+      .lean();
+      
+    const sendRequests = user.sendRequests;
+    res.status(200).json(sendRequests);
+  } catch (error) {
+    console.log("Error fetching send requests:", error);
+    res.status(500).json({ Error: error });
+  }
+};
+
+const rejectFriendRequest = async (req, res) => {
+  const { senderId, receiverId } = req.body;
+  try {
+    await User.findByIdAndUpdate(receiverId, {
+      $pull: { friendRequests: senderId },
+    });
+    await User.findByIdAndUpdate(senderId, {
+      $pull: { sendRequests: receiverId },
+    });
+
+    res.status(200).json({ message: "Friend Request Rejected" });
+  } catch (error) {
+    res.status(500).json({ Error: error });
+  }
+};
+
+
+
 module.exports = {
   logInUsers,
   sendFiendRequestController,
   getFriendsRequest,
   acceptFriendRequestController,
   acceptedFriendsController,
+  deleteFriendFromList,
+  getSendRequests,
+  rejectFriendRequest,
 };
