@@ -9,16 +9,27 @@ import {
   Image,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
+import uuid from "react-native-uuid";
+import Amazon from "@/app/Services/Amazon";
+import { useRoute } from "@react-navigation/native";
+import { ayhamWifiUrl } from "@/constants/Urls";
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const CreateProject = ({ navigation }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [images, setImages] = useState([]);
+  const route = useRoute();
+  const { user } = route.params;
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsMultipleSelection: true,
+      quality: 1,
     });
 
     if (!result.canceled) {
@@ -26,15 +37,64 @@ const CreateProject = ({ navigation }) => {
     }
   };
 
-  const handleCreate = () => {
+  const compressImage = async (uri) => {
+    const compressed = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { width: 800 } }],
+      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+    );
+    return compressed.uri;
+  };
+
+  const uploadPhotos = async (tempPhotos) => {
+    const photos = [];
+    for (const element of tempPhotos) {
+      const uniqueId = uuid.v4();
+      const photo = element;
+      const ext = photo.split(".").pop();
+      const newFileName = `projects/${user._id}/${uniqueId}.${ext}`.trim();
+      const url = await Amazon.uploadImageToS3(newFileName, photo);
+      photos.push(url);
+    }
+    return photos;
+  };
+
+  const handleCreate = async () => {
     if (!title || !content || images.length === 0) {
       alert("Please fill out all fields and add at least one image.");
       return;
     }
-    const newPost = { title, content, images };
-    console.log("New Post Created:", newPost);
-    alert("Post created successfully!");
-    navigation.goBack();
+    const token = await AsyncStorage.getItem("token");
+    const compressedPhotos = await Promise.all(images.map(compressImage));
+    const uploadedPhotos = await uploadPhotos(compressedPhotos);
+    const response = await axios.post(
+      `${ayhamWifiUrl}/api/projects/create-project`,
+      {
+        title,
+        content,
+        images: uploadedPhotos,
+        user: user._id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.status === 201) {
+      Toast.show({
+        type: "success",
+        text1: "Project created successfully 🎉",
+        visibilityTime: 3000,
+      });
+      navigation.goBack();
+    } else {
+      Toast.show({
+        type: "error",
+        text1: "Error creating project 😢",
+        visibilityTime: 3000,
+      });
+    }
   };
 
   return (
@@ -74,7 +134,10 @@ const CreateProject = ({ navigation }) => {
         <Text style={styles.imagePickerButtonText}>Add Images</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.createButton} onPress={handleCreate}>
+      <TouchableOpacity
+        style={styles.createButton}
+        onPress={() => handleCreate()}
+      >
         <Text style={styles.createButtonText}>Create Project</Text>
       </TouchableOpacity>
     </ScrollView>

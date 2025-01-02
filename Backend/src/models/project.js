@@ -17,18 +17,10 @@ const projectSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    rating: {
-      type: Number,
+    images: {
+      type: [String],
       required: false,
-      min: 0,
-      max: 5,
     },
-    images: [
-      {
-        type: [String],
-        required: false,
-      },
-    ],
   },
   {
     timestamps: true,
