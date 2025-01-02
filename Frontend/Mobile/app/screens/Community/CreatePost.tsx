@@ -103,7 +103,6 @@ export default function CreatePost() {
   const [description, setDescription] = useState("");
   const [numberOfWorker, setNumberOfWorker] = useState("");
   const [category, setCategory] = useState("");
-  const [photos, setPhotos] = useState([]);
   const [location, setLocation] = useState(null);
   const [tempPhotos, setTempPhotos] = useState([]);
 
@@ -182,8 +181,8 @@ export default function CreatePost() {
   const compressImage = async (uri) => {
     const compressed = await ImageManipulator.manipulateAsync(
       uri,
-      [{ resize: { width: 800 } }], // Resize width
-      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // Compress quality
+      [{ resize: { width: 800 } }],
+      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
     );
     return compressed.uri;
   };

@@ -57,14 +57,6 @@ export default function EditProject({ route, navigation }) {
         numberOfLines={4}
       />
 
-      <Text style={styles.label}>Location</Text>
-      <TextInput
-        style={styles.input}
-        value={location}
-        onChangeText={setLocation}
-        placeholder="Enter project location"
-      />
-
       <Text style={styles.label}>Images</Text>
       <View style={styles.imageContainer}>
         {images.map((image, index) => (

@@ -19,7 +19,7 @@ const personInformationRouter = require("./routers/personInformationRouter");
 const postRouter = require("./routers/postRoutes");
 const RequestRouter = require("./routers/RequestRouter");
 const notificationRouter = require("./routers/notificationRouter");
-const imageRouter = require("./routers/imageRouter"); 
+const projectRouter = require("./routers/projectRouter");
 
 
 const app = express();
@@ -59,6 +59,7 @@ app.use("/api/user", personInformationRouter);
 app.use("/api/community", postRouter);
 app.use("/api/request", RequestRouter);
 app.use("/api/notification", notificationRouter);
-app.use("/api/image", imageRouter);
+app.use("/api/projects", projectRouter);
+
 app.use(errorHandler);
 module.exports = app;
