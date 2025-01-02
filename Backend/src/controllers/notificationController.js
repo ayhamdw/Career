@@ -83,4 +83,40 @@ const updateNotification = async (req, res) => {
   }
 };
 
-module.exports = { addNotification, getNotification, updateNotification };
+const rateProficient = async (req, res) => {
+  try {
+    const notificationId = req.params.currentNotificationId;
+    const { rating, comment } = req.body;
+    const notification = await Notification.findById(notificationId).lean();
+    const ratedUserId = notification.fromUser;
+    const userId = notification.userId;
+
+    await User.findByIdAndUpdate(ratedUserId, {
+      $push: {
+        "profile.ratings": {
+          rating,
+          review: comment,
+          userId,
+        },
+      },
+    });
+
+    // Mark the notification as rated and read
+    await Notification.findByIdAndUpdate(notificationId, {
+      rated: true,
+      status: "Read",
+    });
+
+    res.status(200).json({ message: "Rated proficient" });
+  } catch (error) {
+    console.log("Error while rating proficient:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = {
+  addNotification,
+  getNotification,
+  updateNotification,
+  rateProficient,
+};

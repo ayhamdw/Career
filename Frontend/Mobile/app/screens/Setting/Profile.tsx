@@ -88,7 +88,7 @@ const Profile = ({ user }) => {
           }}
         />
         <Text style={{ fontSize: 22, fontWeight: "bold", marginTop: 10 }}>
-          {user.profile.firstName}
+          {user.profile.firstName + " " + user.profile.lastName}
         </Text>
         <Text style={{ fontSize: 16, color: "#7d7d7d", marginBottom: 20 }}>
           {user.careerCategory + "," + user.career}

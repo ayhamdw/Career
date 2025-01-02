@@ -159,7 +159,10 @@ export default function ProfProfile({ proficientDetails, user }) {
 
         <AboutSection section={proficientDetails.city} title="Location" />
 
-        <AboutSection section={String(calcRating(reviews))} title="Ratings" />
+        <AboutSection
+          section={String(calcRating(reviews).toFixed(1))}
+          title="Ratings"
+        />
 
         <ReviewsSection reviews={reviews} />
       </ScrollView>

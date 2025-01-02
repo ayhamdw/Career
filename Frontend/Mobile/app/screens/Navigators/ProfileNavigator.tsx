@@ -12,6 +12,7 @@ import Saved from "../Setting/Saved";
 import PostDetails from "../Community/postDetails";
 import MyProjects from "../Setting/MyProjects";
 import EditProject from "../Setting/EditProject";
+import CreateProject from "../Setting/CreateProject";
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,7 @@ const ProfileNavigator = ({ user }: { user: any }) => {
       ChangePassword: (props: any) => <ChangePassword {...props} user={user} />,
       PostDetails: (props: any) => <PostDetails {...props} user={user} />,
       MyProjects: (props: any) => <MyProjects {...props} user={user} />,
+      CreateProject: (props: any) => <CreateProject {...props} user={user} />,
       EditProject: (props: any) => <EditProject {...props} user={user} />,
       Logout: (props: any) => <Login {...props} />,
     }),
@@ -77,6 +79,12 @@ const ProfileNavigator = ({ user }: { user: any }) => {
       <Stack.Screen
         name="EditProject"
         component={screenData.EditProject}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="CreateProject"
+        component={screenData.CreateProject}
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Logout" component={screenData.Logout} />

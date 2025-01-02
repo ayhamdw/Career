@@ -76,8 +76,11 @@ const MyProjects = () => {
           </View>
         ))}
       </ScrollView>
-      <TouchableOpacity style={styles.createButton}>
-        <Text style={styles.createButtonText}>Create New Post</Text>
+      <TouchableOpacity
+        style={styles.createButton}
+        onPress={() => navigation.navigate("CreateProject")}
+      >
+        <Text style={styles.createButtonText}>Create New Project</Text>
       </TouchableOpacity>
     </View>
   );

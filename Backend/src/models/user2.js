@@ -112,7 +112,6 @@ const userSchema = new mongoose.Schema(
             ref: "User",
             default: null,
           },
-          date: { type: Date, default: Date.now, default: "" },
         },
       ],
     },

@@ -22,6 +22,10 @@ const schema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    rated: {
+      type: Boolean,
+      default: false,
+    },
     status: {
       type: String,
       enum: ["Unread", "Read"],
