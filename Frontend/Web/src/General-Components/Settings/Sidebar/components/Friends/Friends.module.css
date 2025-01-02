@@ -1,115 +1,141 @@
 .friendsContainer {
-  padding: 40px;
   margin: 0 auto;
-  background-color: #f8f9fa;
-  border-radius: 15px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-  font-family: 'Roboto', sans-serif;
-  width: 85%;
+  padding: 30px;
+  background: linear-gradient(135deg, #e8f5e9, #d7e7e4);
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  max-width: 1200px;
+  flex:1;
+  margin-top: 30px;
+  height: fit-content;
 }
 
 .friendsTitle {
   font-size: 2.5rem;
-  font-weight: 600;
   text-align: center;
-  margin-bottom: 40px;
   color: rgb(109, 201, 126);
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  margin-bottom: 30px;
+  font-family: "Roboto", sans-serif;
 }
 
 .categorySection {
-  margin-bottom: 50px;
-  padding: 20px;
-  border-radius: 12px;
-  background-color: #f0f0f0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  margin-bottom: 30px;
 }
 
 .categoryTitle {
   font-size: 1.8rem;
+  color: #444;
+  border-bottom: 3px solid rgb(109, 201, 126);
   margin-bottom: 20px;
-  color: rgb(109, 201, 126);
-  font-weight: 600;
-  text-transform: capitalize;
+  padding-bottom: 5px;
+  text-transform: uppercase;
 }
 
 .friendsList {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 0 20px;
+  list-style: none;
+  padding: 0;
 }
 
-.friendCard {
-  background-color: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  padding: 25px;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+.friendItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* .friendCard:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+/* .friendItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 } */
 
 .friendPhoto {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  margin-bottom: 30px;
-  border: 2px solid rgb(109, 201, 126);
-  margin: auto;
-  margin-bottom: 15px;
+  object-fit: cover;
+  margin-right: 15px;
+  border: 3px solid rgb(109, 201, 126);
 }
 
 .friendDetails {
-  margin-bottom: 20px;
+  flex-grow: 1;
+  font-family: "Roboto", sans-serif;
 }
 
 .friendName {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #34495e;
+  font-size: 1.4rem;
+  color: #333;
   margin-bottom: 5px;
 }
 
 .friendCareer {
-  font-size: 1.1rem;
-  color: #7f8c8d;
+  font-size: 1rem;
+  color: #777;
 }
 
-.friendBadge {
-  display: inline-block;
-  background-color: rgb(109, 201, 126);
-  color: #fff;
-  font-size: 0.9rem;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-weight: 500;
-  text-transform: capitalize;
-  margin-top: 10px;
+.friendRating {
+  font-size: 1rem;
+  color: #ff9800;
+  font-weight: bold;
 }
 
-@media (max-width: 768px) {
-  .friendsTitle {
-    font-size: 2rem;
-  }
-
-  .categoryTitle {
-    font-size: 1.6rem;
-  }
-
-  .friendCard {
-    padding: 15px;
-  }
-
-  .friendPhoto {
-    width: 80px;
-    height: 80px;
-  }
+.friendActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
+
+.viewProfileBtn {
+  padding: 8px 16px;
+  background: rgb(109, 201, 126);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.viewProfileBtn:hover {
+  background: #88d497;
+}
+
+
+.categorySelector {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.categoryLabel {
+  font-size: 1.2rem;
+  color: #444;
+  font-weight: bold;
+}
+
+.categoryDropdown {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 2px solid rgb(109, 201, 126);
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.categoryDropdown:focus {
+  border-color: rgb(88, 185, 110);
+}
+
+.categoryDropdown option {
+  font-size: 1rem;
+}
+

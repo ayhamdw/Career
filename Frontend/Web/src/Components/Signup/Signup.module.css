@@ -271,3 +271,80 @@ textarea {
     }
 }
 
+
+/* Image upload container */
+.imageField {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+  }
+  
+  .imageField label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .imageField input[type="file"] {
+    display: none;
+  }
+  
+  .imageField button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .imageField button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Image preview container */
+  .imagePreview {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    max-width: 100%;
+  }
+  
+  .previewImage {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  /* Optional: style for file input trigger (label as button) */
+  .imageField input[type="file"] + label {
+    background-color: #008CBA;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+  
+  .imageField input[type="file"]:focus + label {
+    outline: none;
+  }
+  
