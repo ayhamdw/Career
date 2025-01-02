@@ -9,6 +9,10 @@ import {
   Image,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { ayhamWifiUrl } from "@/constants/Urls";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 
 export default function EditProject({ route, navigation }) {
   const { project } = route.params;
@@ -29,10 +33,37 @@ export default function EditProject({ route, navigation }) {
     }
   };
 
-  const handleSave = () => {
-    console.log({ title, content, images, location });
-    alert("Project details updated successfully!");
-    navigation.goBack();
+  const deleteImage = (image: string) => {
+    setImages(images.filter((img: string) => img !== image));
+  };
+
+  const saveChanges = async (id: string) => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.put(
+        `${ayhamWifiUrl}/api/projects/update-project/${id}`,
+        {
+          title,
+          content,
+          images,
+          location,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        Toast.show({
+          text1: "Project updated successfully 🎉",
+          type: "success",
+        });
+        navigation.goBack();
+      }
+    } catch (error) {
+      console.log("Error updating project:", error);
+    }
   };
 
   return (
@@ -60,7 +91,9 @@ export default function EditProject({ route, navigation }) {
       <Text style={styles.label}>Images</Text>
       <View style={styles.imageContainer}>
         {images.map((image, index) => (
-          <Image key={index} source={{ uri: image }} style={styles.image} />
+          <TouchableOpacity key={index} onPress={() => deleteImage(image)}>
+            <Image source={{ uri: image }} style={styles.image} />
+          </TouchableOpacity>
         ))}
       </View>
 
@@ -68,7 +101,10 @@ export default function EditProject({ route, navigation }) {
         <Text style={styles.imagePickerButtonText}>Pick Images</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+      <TouchableOpacity
+        style={styles.saveButton}
+        onPress={() => saveChanges(project._id)}
+      >
         <Text style={styles.saveButtonText}>Save</Text>
       </TouchableOpacity>
     </ScrollView>

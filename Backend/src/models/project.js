@@ -17,6 +17,10 @@ const projectSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    location: {
+      type: String,
+      required: true,
+    },
     images: {
       type: [String],
       required: false,
