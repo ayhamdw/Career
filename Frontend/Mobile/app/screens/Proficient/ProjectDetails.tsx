@@ -8,7 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
 
@@ -70,6 +70,12 @@ export default function ProjectDetails() {
 
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{project?.title}</Text>
+        <View style={styles.locationContainer}>
+          <MaterialIcons name="location-on" size={20} color="#007bff" />
+          <Text style={styles.locationText}>
+            {project?.location || "Unknown Location"}
+          </Text>
+        </View>
         <Text style={styles.content}>{project?.content}</Text>
       </View>
     </View>
@@ -90,18 +96,25 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 7,
     marginLeft: 10,
-
     elevation: 3,
   },
   imageSliderContainer: {
-    height: width * 0.6,
+    height: width * 0.65,
+    backgroundColor: "#f9f9f9",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 6,
   },
   imageSlider: {
     flex: 1,
   },
   image: {
     width: width,
-    height: width * 0.6,
+    height: width * 0.65,
     resizeMode: "cover",
   },
   indicatorContainer: {
@@ -128,11 +141,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    // marginTop: 10,
     shadowColor: "#000",
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 5,
     elevation: 5,
+    marginTop: -20,
   },
   title: {
     fontSize: 24,
@@ -141,9 +154,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
   },
+  locationContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    marginVertical: 10,
+  },
+  locationText: {
+    fontSize: 16,
+    color: "#007bff",
+    marginLeft: 5,
+    fontWeight: "500",
+    alignSelf: "flex-start",
+  },
   content: {
     fontSize: 16,
     color: "#555555",
     textAlign: "justify",
+    marginTop: 10,
   },
 });
