@@ -6,6 +6,7 @@ const {
   addNotification,
   getNotification,
   updateNotification,
+  rateProficient,
 } = require("../controllers/notificationController");
 
 router.post("/add-notification", Auth, addNotification);
@@ -13,5 +14,7 @@ router.post("/add-notification", Auth, addNotification);
 router.get("/get-notification/:id", Auth, getNotification);
 
 router.post("/update-notification/:id", Auth, updateNotification);
+
+router.post("/rate-proficient/:currentNotificationId", Auth, rateProficient);
 
 module.exports = router;

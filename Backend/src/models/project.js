@@ -17,21 +17,16 @@ const projectSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    location: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     rating: {
       type: Number,
-      required: true,
+      required: false,
       min: 0,
       max: 5,
     },
     images: [
       {
         type: [String],
-        required: true,
+        required: false,
       },
     ],
   },

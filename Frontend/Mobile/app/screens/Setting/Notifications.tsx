@@ -6,17 +6,23 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Modal,
+  TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [localStatus, setLocalStatus] = useState("Unread");
+  const [ratingModalVisible, setRatingModalVisible] = useState(false);
+  const [currentNotificationId, setCurrentNotificationId] = useState(null);
+  const [rating, setRating] = useState("");
+  const [comment, setComment] = useState("");
   const navigation = useNavigation();
   const route = useRoute();
   const userId = route.params?.userId;
@@ -41,32 +47,61 @@ const Notifications = () => {
     }
   };
 
-  useEffect(() => {
-    fetchNotifications();
-  }, [userId]);
-
-  const updateNotification = async (id: string) => {
+  const updateNotification = async (id) => {
     try {
       const token = await AsyncStorage.getItem("token");
-      const response = await axios.post(
+      await axios.post(
         `${ayhamWifiUrl}/api/notification/update-notification/${id}`,
         {},
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      if (response.status === 200) {
-        console.log("Notification updated successfully.");
-        fetchNotifications();
-      }
+      fetchNotifications();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
-  const formatTime = (dateString: Date) => {
+  const submitRating = async () => {
+    if (
+      !rating ||
+      isNaN(rating) ||
+      rating < 1 ||
+      rating > 5 ||
+      comment === ""
+    ) {
+      alert("Please enter a valid rating (1-5) and comment");
+      return;
+    }
+
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.post(
+        `${ayhamWifiUrl}/api/notification/rate-proficient/${currentNotificationId}`,
+        { rating: parseFloat(rating), comment },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.status === 200) {
+        Toast.show({
+          type: "success",
+          text1: "Rating Submitted Successfully! 🎉",
+          position: "top",
+          visibilityTime: 4000,
+        });
+        setRatingModalVisible(false);
+        setRating("");
+        fetchNotifications();
+      }
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+    }
+  };
+
+  const formatTime = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString("en-US", {
       day: "numeric",
@@ -77,7 +112,7 @@ const Notifications = () => {
     });
   };
 
-  const renderNotification = ({ item }: { item: any }) => {
+  const renderNotification = ({ item }) => {
     const {
       id,
       title,
@@ -85,43 +120,62 @@ const Notifications = () => {
       firstName,
       lastName,
       profileImage,
-      type,
       status,
       date,
+      rated,
     } = item;
+
     return (
-      <TouchableOpacity
-        style={styles.notificationCard}
-        onPress={() => updateNotification(id)}
-        disabled={status === "Read"}
-      >
-        <View style={styles.row}>
-          <Image
-            source={{
-              uri: profileImage
-                ? profileImage
-                : "https://www.gravatar.com/avatar/0?d=mp",
-            }}
-            style={styles.avatar}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.message}>{message}</Text>
-            <Text style={styles.details}>
-              From: {firstName} {lastName}
-            </Text>
-            <Text style={styles.date}>{formatTime(date)}</Text>
+      <View>
+        <TouchableOpacity
+          style={styles.notificationCard}
+          onPress={() => updateNotification(id)}
+          disabled={status === "Read"}
+        >
+          <View style={styles.row}>
+            <Image
+              source={{
+                uri: profileImage || "https://www.gravatar.com/avatar/0?d=mp",
+              }}
+              style={styles.avatar}
+            />
+            <View style={styles.textContainer}>
+              <Text style={styles.title}>{title}</Text>
+              <Text style={styles.message}>{message}</Text>
+              <Text style={styles.details}>
+                From: {firstName} {lastName}
+              </Text>
+              <Text style={styles.date}>{formatTime(date)}</Text>
+            </View>
           </View>
-        </View>
-        <View
-          style={[
-            styles.statusIndicator,
-            status === "Unread" ? styles.unread : styles.read,
-          ]}
-        />
-      </TouchableOpacity>
+          <View
+            style={[
+              styles.statusIndicator,
+              status === "Unread" ? styles.unread : styles.read,
+            ]}
+          />
+          {title.includes("Completed!") && (
+            <TouchableOpacity
+              style={
+                rated === true ? styles.rateDisabledButton : styles.rateButton
+              }
+              onPress={() => {
+                setCurrentNotificationId(id);
+                setRatingModalVisible(true);
+              }}
+              disabled={rated === true}
+            >
+              <Text style={styles.rateButtonText}>Rate</Text>
+            </TouchableOpacity>
+          )}
+        </TouchableOpacity>
+      </View>
     );
   };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [userId]);
 
   if (loading) {
     return (
@@ -157,6 +211,47 @@ const Notifications = () => {
         renderItem={renderNotification}
         contentContainerStyle={styles.list}
       />
+
+      <Modal
+        visible={ratingModalVisible}
+        animationType="slide"
+        transparent={true}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Rate Proficient</Text>
+            <TextInput
+              style={styles.input}
+              value={rating}
+              onChangeText={setRating}
+              placeholder="Enter rating (1-5)"
+              keyboardType="numeric"
+            />
+
+            <Text style={styles.modalTitle}>Your Comment</Text>
+            <TextInput
+              style={styles.input}
+              value={comment}
+              onChangeText={setComment}
+              placeholder="Write Your Comment"
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setRatingModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={submitRating}
+              >
+                <Text style={styles.modalButtonText}>Submit</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -255,6 +350,70 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingBottom: 16,
+  },
+  rateButton: {
+    marginTop: 8,
+    alignSelf: "flex-end",
+    backgroundColor: "#6c63ff",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+  },
+  rateButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 20,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginBottom: 10,
+    alignSelf: "flex-start",
+  },
+  input: {
+    width: "100%",
+    padding: 12,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  modalButton: {
+    backgroundColor: "#6c63ff",
+    padding: 10,
+    borderRadius: 8,
+    flex: 1,
+    alignItems: "center",
+    marginHorizontal: 5,
+  },
+  modalButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  rateDisabledButton: {
+    marginTop: 8,
+    alignSelf: "flex-end",
+    backgroundColor: "#ccc",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
   },
 });
 
