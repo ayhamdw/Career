@@ -59,6 +59,7 @@ const getNotification = async (req, res) => {
         profilePicture: fromUser.profilePicture,
         status: notification.status,
         date: notification.createdAt,
+        rated: notification.rated,
       };
     });
 

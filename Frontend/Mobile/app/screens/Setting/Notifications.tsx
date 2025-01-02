@@ -122,6 +122,7 @@ const Notifications = () => {
       profileImage,
       status,
       date,
+      rated,
     } = item;
 
     return (
@@ -155,11 +156,14 @@ const Notifications = () => {
           />
           {title.includes("Completed!") && (
             <TouchableOpacity
-              style={styles.rateButton}
+              style={
+                rated === true ? styles.rateDisabledButton : styles.rateButton
+              }
               onPress={() => {
                 setCurrentNotificationId(id);
                 setRatingModalVisible(true);
               }}
+              disabled={rated === true}
             >
               <Text style={styles.rateButtonText}>Rate</Text>
             </TouchableOpacity>
@@ -402,6 +406,14 @@ const styles = StyleSheet.create({
   modalButtonText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  rateDisabledButton: {
+    marginTop: 8,
+    alignSelf: "flex-end",
+    backgroundColor: "#ccc",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
   },
 });
 
