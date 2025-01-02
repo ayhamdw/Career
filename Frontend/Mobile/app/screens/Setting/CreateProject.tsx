@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
+import { Picker } from "@react-native-picker/picker";
 import uuid from "react-native-uuid";
 import Amazon from "@/app/Services/Amazon";
 import { useRoute } from "@react-navigation/native";
@@ -22,8 +23,28 @@ const CreateProject = ({ navigation }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [images, setImages] = useState([]);
+  const [location, setLocation] = useState("Select a city");
   const route = useRoute();
   const { user } = route.params;
+
+  const palestinianCities = [
+    "Jerusalem",
+    "Ramallah",
+    "Hebron",
+    "Nablus",
+    "Bethlehem",
+    "Jenin",
+    "Tulkarm",
+    "Qalqilya",
+    "Gaza",
+    "Rafah",
+    "Khan Younis",
+    "Deir al-Balah",
+    "Beit Hanoun",
+    "Beit Lahia",
+    "Salfit",
+    "Jericho",
+  ];
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -60,8 +81,15 @@ const CreateProject = ({ navigation }) => {
   };
 
   const handleCreate = async () => {
-    if (!title || !content || images.length === 0) {
-      alert("Please fill out all fields and add at least one image.");
+    if (
+      !title ||
+      !content ||
+      images.length === 0 ||
+      location === "Select a city"
+    ) {
+      alert(
+        "Please fill out all fields, add at least one image, and select a location."
+      );
       return;
     }
     const token = await AsyncStorage.getItem("token");
@@ -73,6 +101,7 @@ const CreateProject = ({ navigation }) => {
         title,
         content,
         images: uploadedPhotos,
+        location,
         user: user._id,
       },
       {
@@ -118,6 +147,19 @@ const CreateProject = ({ navigation }) => {
         multiline={true}
         numberOfLines={4}
       />
+
+      <Text style={styles.label}>Location</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={location}
+          onValueChange={(itemValue) => setLocation(itemValue)}
+        >
+          <Picker.Item label="Select a city" value="Select a city" />
+          {palestinianCities.map((city, index) => (
+            <Picker.Item key={index} label={city} value={city} />
+          ))}
+        </Picker>
+      </View>
 
       <Text style={styles.label}>Images</Text>
       <View style={styles.imageContainer}>
@@ -180,6 +222,18 @@ const styles = StyleSheet.create({
   textArea: {
     height: 120,
     textAlignVertical: "top",
+  },
+  pickerContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   imageContainer: {
     flexDirection: "row",

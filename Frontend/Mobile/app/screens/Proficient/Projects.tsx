@@ -8,11 +8,17 @@ import {
   Pressable,
 } from "react-native";
 import React, { useLayoutEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
+import { ayhamWifiUrl } from "@/constants/Urls";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Projects() {
   const navigation = useNavigation();
+  const [projects, setProjects] = React.useState([]);
+  const route = useRoute();
+  const id = route.params?.id;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -31,41 +37,37 @@ export default function Projects() {
     });
   }, []);
 
-  const showProject = async (id: string) => {
-    navigation.navigate("ProjectDetails", { id });
+  const showProject = async (project: any) => {
+    navigation.navigate("ProjectDetails", { project });
   };
 
-  const projects = [
-    {
-      id: "1",
-      title: "Modern Office Design",
-      content:
-        "This project focuses on creating a modern and functional office space...",
-      images: [
-        "https://via.placeholder.com/300",
-        "https://via.placeholder.com/300",
-      ],
-      location: "New York, USA",
-      rating: 4.5,
-    },
-    {
-      id: "2",
-      title: "Luxury Apartment Renovation",
-      content:
-        "A luxury renovation project featuring high-end materials and designs...",
-      images: [
-        "https://via.placeholder.com/300",
-        "https://via.placeholder.com/300",
-      ],
-      location: "Los Angeles, USA",
-      rating: 4.8,
-    },
-  ];
+  const fetchData = async (proficientId: string) => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(
+        `${ayhamWifiUrl}/api/projects/get-my-projects/${proficientId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setProjects(response.data.projects);
+      }
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+  };
 
+  React.useEffect(() => {
+    fetchData(id);
+  }, [id]);
   const ProjectCard = ({ project }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => showProject(project.id)}
+      onPress={() => showProject(project)}
+      index={project._id}
     >
       <Text style={styles.title}>{project.title}</Text>
       <Text style={styles.content}>{project.content}</Text>
@@ -78,16 +80,6 @@ export default function Projects() {
         )}
         showsHorizontalScrollIndicator={false}
       />
-      <View style={styles.footer}>
-        <View style={styles.locationContainer}>
-          <Ionicons name="location" size={20} color="gray" />
-          <Text style={styles.locationText}>{project.location}</Text>
-        </View>
-        <View style={styles.ratingContainer}>
-          <Ionicons name="star" size={20} color="gold" />
-          <Text style={styles.ratingText}>{project.rating.toFixed(1)}</Text>
-        </View>
-      </View>
     </TouchableOpacity>
   );
 

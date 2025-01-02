@@ -1,14 +1,12 @@
 import { ayhamWifiUrl } from "@/constants/Urls";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { useFocusEffect } from "expo-router";
-import React, { useEffect } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import React, { useEffect, useCallback } from "react";
 import {
   View,
   Text,
   Image,
-  Button,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
@@ -17,33 +15,6 @@ import {
 const MyProjects = ({ user }: { user: any }) => {
   const navigation = useNavigation();
   const [projects, setProjects] = React.useState([]);
-  // const projects = [
-  //   {
-  //     id: 1,
-  //     title: "Project Alpha",
-  //     content: "This is a creative project about exploring new ideas.",
-  //     image: "https://via.placeholder.com/150",
-  //     rating: 4.5,
-  //     location: "New York, USA",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Project Beta",
-  //     content: "An innovative solution for modern problems.",
-  //     image: "https://via.placeholder.com/150",
-  //     rating: 4.8,
-  //     location: "London, UK",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Project Gamma",
-  //     content: "Building next-gen apps with cutting-edge technologies.",
-  //     image: "https://via.placeholder.com/150",
-  //     rating: 5.0,
-  //     location: "Berlin, Germany",
-  //   },
-  // ];
-
   const editProject = async (project: any) => {
     navigation.navigate("EditProject", { project });
   };
@@ -70,6 +41,11 @@ const MyProjects = ({ user }: { user: any }) => {
       console.log("Error fetching data:", error);
     }
   };
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [user._id])
+  );
 
   const deleteProject = async (id: string) => {
     try {
@@ -97,9 +73,6 @@ const MyProjects = ({ user }: { user: any }) => {
     fetchData();
   }, [user._id]);
 
-  // useFocusEffect(() => {
-  //   fetchData();
-  // });
   return (
     <View style={styles.container}>
       <Text style={styles.header}>My Projects</Text>

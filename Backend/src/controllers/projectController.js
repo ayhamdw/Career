@@ -2,8 +2,8 @@ const Project = require("../models/project");
 
 const createProject = async (req, res) => {
   try {
-    const { title, content, images, user } = req.body;
-    await Project.create({ user, title, content, images })
+    const { title, content, location, images, user } = req.body;
+    await Project.create({ user, title, content, location, images })
       .then((project) => {
         res.status(201).send({ message: "Project created successfully" });
       })
@@ -44,4 +44,20 @@ const deleteProject = async (req, res) => {
     console.log("error while deleting project", error);
   }
 };
-module.exports = { createProject, getMyProjects, deleteProject };
+
+const updateProject = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, content, images, user } = req.body;
+    await Project.findByIdAndUpdate(id, { title, content, images, user })
+      .then(() => {
+        res.status(200).send({ message: "Project updated successfully" });
+      })
+      .catch(() => {
+        res.status(400).send({ error: "Failed to update project" });
+      });
+  } catch (error) {
+    console.log("error while updating project", error);
+  }
+};
+module.exports = { createProject, getMyProjects, deleteProject, updateProject };
