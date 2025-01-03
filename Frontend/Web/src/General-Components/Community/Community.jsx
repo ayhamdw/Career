@@ -298,33 +298,38 @@ const Community = () => {
   return (
     <div className={styles.communityContainer}>
       <div className={styles.mainContent}>
-        <div className={styles.rightSection}>
-          <h3>Featured Categories</h3>
-          <ul>
-            {categories.map((category, index) => (
-              <li
-                key={index}
-                className={selectedCategories.includes(category) ? styles.active : ""}
-                onClick={() => toggleCategory(category)}
-              >
-                {category}
-              </li>
-            ))}
-          </ul>
+      <div className={styles.rightSection}>
+  <h3>Featured Categories</h3>
+  <ul>
+    {categories.map((category, index) => (
+      <li
+        key={index}
+        className={`${styles.listItem} ${
+          selectedCategories.includes(category) ? styles.active : ""
+        }`}
+        onClick={() => toggleCategory(category)}
+      >
+        {category}
+      </li>
+    ))}
+  </ul>
 
-          <h3>Popular Cities</h3>
-          <ul>
-            {cities.map((city, index) => (
-              <li
-                key={index}
-                className={selectedCities.includes(city) ? styles.active : ""}
-                onClick={() => toggleCity(city)}
-              >
-                {city}
-              </li>
-            ))}
-          </ul>
-        </div>
+  <h3>Popular Cities</h3>
+  <ul>
+    {cities.map((city, index) => (
+      <li
+        key={index}
+        className={`${styles.listItem} ${
+          selectedCities.includes(city) ? styles.active : ""
+        }`}
+        onClick={() => toggleCity(city)}
+      >
+        {city}
+      </li>
+    ))}
+  </ul>
+</div>
+
 
         <div className={styles.postsSection}>
           <button className={styles.createPostBtn} onClick={
@@ -343,91 +348,117 @@ const Community = () => {
           }>
             Create Post
           </button>
-          {isModalOpen /*&& userRole === "admin"*/ && (
-            <div className={styles.modal}>
-              <div className={styles.modalContent}>
-                <form onSubmit={handleSubmit}>
-                  <h2>Create a New Post</h2>
+          {isModalOpen && (
+  <div className={styles.modal}>
+    <div className={styles.modalContent}>
+      <h2>Create a New Post</h2>
+      <form onSubmit={handleSubmit}>
+        <div className={styles.formGroup}>
+          <label htmlFor="title">Post Title</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Enter post title"
+            value={form.title}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
 
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder="Post Title"
-                    value={form.title}
-                    onChange={handleInputChange}
-                    required
-                  />
+        <div className={styles.formGroup}>
+          <label htmlFor="content">Post Content</label>
+          <textarea
+            id="content"
+            name="content"
+            placeholder="Enter post content"
+            value={form.content}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
 
-                  <textarea
-                    name="content"
-                    placeholder="Post Content"
-                    value={form.content}
-                    onChange={handleInputChange}
-                    required
-                  />
+        <div className={styles.formGroup}>
+          <label htmlFor="careerCategory">Career Category</label>
+          <select
+            id="careerCategory"
+            name="careerCategory"
+            value={form.careerCategory}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Select a category</option>
+            {categories.map((category, index) => (
+              <option key={index} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
 
-                  <select
-                    name="careerCategory"
-                    value={form.careerCategory}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Select Category</option>
-                    {categories.map((category, index) => (
-                      <option key={index} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
+        <div className={styles.formGroup}>
+          <label htmlFor="location">Location</label>
+          <select
+            id="location"
+            name="location"
+            value={form.location}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Select a city</option>
+            {[
+              "Jerusalem",
+              "Gaza",
+              "Ramallah",
+              "Nablus",
+              "Hebron",
+              "Bethlehem",
+              "Jenin",
+              "Tulkarem",
+              "Qalqilya",
+              "Salfit",
+              "Khan Younis",
+              "Rafah",
+              "Tubas",
+              "Jericho",
+            ].map((city, index) => (
+              <option key={index} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
+        </div>
 
-                  <select
-                    name="location"
-                    value={form.location}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Select City</option>
-                    <option value="Jerusalem">Jerusalem</option>
-                    <option value="Gaza">Gaza</option>
-                    <option value="Ramallah">Ramallah</option>
-                    <option value="Nablus">Nablus</option>
-                    <option value="Hebron">Hebron</option>
-                    <option value="Bethlehem">Bethlehem</option>
-                    <option value="Jenin">Jenin</option>
-                    <option value="Tulkarem">Tulkarem</option>
-                    <option value="Qalqilya">Qalqilya</option>
-                    <option value="Salfit">Salfit</option>
-                    <option value="Nablus">Nablus</option>
-                    <option value="Khan Younis">Khan Younis</option>
-                    <option value="Rafah">Rafah</option>
-                    <option value="Tubas">Tubas</option>
-                    <option value="Jericho">Jericho</option>
-                    <option value="Ariha">Ariha</option>
-                  </select>
+        <div className={styles.formGroup}>
+          <label htmlFor="numberOfWorker">Number of Workers</label>
+          <input
+            type="number"
+            id="numberOfWorker"
+            name="numberOfWorker"
+            placeholder="Enter number of workers"
+            value={form.numberOfWorker}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
 
+        <div className={styles.buttonGroup}>
+          <button type="submit" className={styles.submitBtn}>
+            Post
+          </button>
+          <button
+            type="button"
+            className={styles.cancelBtn}
+            onClick={() => setIsModalOpen(false)}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
 
-                  <input type="number"
-                    placeholder="number of Worker"
-                    onChange={handleInputChange}
-                    required name="numberOfWorker"
-                    value={form.numberOfWorker}
-                  />
-
-
-                  <button type="submit" className={styles.submitBtn}>
-                    Post
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.cancelBtn}
-                    onClick={() => setIsModalOpen(false)}
-                  >
-                    Cancel
-                  </button>
-                </form>
-              </div>
-            </div>
-          )}
 
 
           <div className={styles.postList}>
@@ -441,16 +472,13 @@ const Community = () => {
                 >
                   <div className={styles.posterInfo}>
                     <img
-                      src={userImage}
+                      src={post.user.profile.profileImage}
                       alt="User"
                       className={styles.posterImage}
                     />
                     <div>
                       <p className={styles.posterName}>
                         {post.user.profile.firstName} {post.user.profile.lastName}
-                      </p>
-                      <p className={styles.posterCareer}>
-                        {post.userRole === "admin" ? "Service Provider" : "Client"}
                       </p>
                     </div>
                   </div>
