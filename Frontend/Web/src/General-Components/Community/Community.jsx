@@ -26,6 +26,17 @@ const Community = () => {
   const [userFirstName, setUserFirstName] = useState("");
   const [userLastName, setUserLasttName] = useState("");
   const [userCoordinates, setUserCoordinates] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCities, setSelectedCities] = useState([]);
+
+
+
+  useEffect(() => {
+    console.log("selectedCategories: ", selectedCategories);
+    console.log("selectedCities: ", selectedCities);
+  }, [selectedCategories, selectedCities]);
+  
+
 
   const categories = [
     "Home Services",
@@ -49,6 +60,30 @@ const Community = () => {
     "Jericho",
     "Gaza",
   ];
+
+  const toggleCategory = (category) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
+  };
+
+  const toggleCity = (city) => {
+    setSelectedCities((prev) =>
+      prev.includes(city) ? prev.filter((c) => c !== city) : [...prev, city]
+    );
+  };
+
+  const filteredPosts = posts.filter((post) => {
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(post.careerCategory);
+    const matchesCity =
+      selectedCities.length === 0 || selectedCities.includes(post.location);
+    return matchesCategory && matchesCity;
+  });
+
 
 
 
@@ -256,7 +291,7 @@ const Community = () => {
     navigate('/signin'); // Redirect to the sign-in page after closing the modal
   };
 
-  const closeModal = () =>{
+  const closeModal = () => {
     setIsModalVisible(false);
   }
 
@@ -267,14 +302,26 @@ const Community = () => {
           <h3>Featured Categories</h3>
           <ul>
             {categories.map((category, index) => (
-              <li key={index}>{category}</li>
+              <li
+                key={index}
+                className={selectedCategories.includes(category) ? styles.active : ""}
+                onClick={() => toggleCategory(category)}
+              >
+                {category}
+              </li>
             ))}
           </ul>
 
           <h3>Popular Cities</h3>
           <ul>
             {cities.map((city, index) => (
-              <li key={index}>{city}</li>
+              <li
+                key={index}
+                className={selectedCities.includes(city) ? styles.active : ""}
+                onClick={() => toggleCity(city)}
+              >
+                {city}
+              </li>
             ))}
           </ul>
         </div>
@@ -384,42 +431,86 @@ const Community = () => {
 
 
           <div className={styles.postList}>
-            {posts.slice().reverse().map((post) => (
-              <div className={`${styles.postCard} ${post.user._id === currentUserId ? styles.myPost : ""}`} key={post._id}>
-                <div className={styles.posterInfo}>
-                  <img src={userImage} alt="User" className={styles.posterImage} />
-                  <div>
-                    <p className={styles.posterName}>{post.user.profile.firstName} {post.user.profile.lastName}</p>
-                    <p className={styles.posterCareer}>{post.userRole === "admin" ? "Service Provider" : "Client"}</p>
+            {filteredPosts.slice().reverse().map((post) => {
+              const isCurrentUser = post.user._id === currentUserId;
+
+              return (
+                <div
+                  className={`${styles.postCard} ${isCurrentUser ? styles.myPost : ""}`}
+                  key={post._id}
+                >
+                  <div className={styles.posterInfo}>
+                    <img
+                      src={userImage}
+                      alt="User"
+                      className={styles.posterImage}
+                    />
+                    <div>
+                      <p className={styles.posterName}>
+                        {post.user.profile.firstName} {post.user.profile.lastName}
+                      </p>
+                      <p className={styles.posterCareer}>
+                        {post.userRole === "admin" ? "Service Provider" : "Client"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className={styles.postContent}>
+                    {post.user.city}
+                  </p>
+                  <h3 className={styles.postTitle}>
+                    {post.title}
+                  </h3>
+                  <p className={styles.postContent}>
+                    {post.content}
+                  </p>
+
+                  <div className={styles.postDetails}>
+                    <p><strong>Category:</strong> {post.careerCategory}</p>
+                    <p><strong>Location:</strong> {post.location}</p>
+                    <p><strong>Number of Workers Required:</strong> {post.numberOfWorker}</p>
+                    <p>
+                      <strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}
+                    </p>
+                  </div>
+
+                  <div className={styles.actions}>
+                    {!isCurrentUser && (
+                      <button
+                        className={styles.applyBtn}
+                        onClick={() => handleApplyForThisJop(
+                          post.user._id,
+                          currentUserId,
+                          new Date().toISOString(),
+                          userCoordinates
+                        )}
+                      >
+                        Apply for this Job
+                      </button>
+                    )}
+
+                    {isModalVisible && (
+                      <Modal
+                        message="You didn't log in. Please log in and try again."
+                        onClose={closeModal}
+                        onLogin={loginModal}
+                      />
+                    )}
+
+                    {isCurrentUser && (
+                      <button
+                        className={styles.deleteBtn}
+                        onClick={() => handleDeletePost(post._id)}
+                      >
+                        Delete post
+                      </button>
+                    )}
                   </div>
                 </div>
-                <p className={styles.postContent}>{post.user.city}</p>
-                <h3 className={styles.postTitle}>{post.title}</h3>
-                <p className={styles.postContent}>{post.content}</p>
-
-                <div className={styles.postDetails}>
-                  {/* <p><strong>Name</strong> {post.userFirstName} {post.userLastName}</p> */}
-                  <p><strong>Category:</strong> {post.careerCategory}</p>
-                  <p><strong>Location:</strong> {post.location}</p>
-                  <p><strong>Number of Workers Required:</strong> {post.numberOfWorker}</p>
-                  <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
-                </div>
-
-                <div className={styles.actions}>
-                  {(post.user._id !== currentUserId) && (
-                    <button className={styles.applyBtn} onClick={() => handleApplyForThisJop(post.user._id, currentUserId, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
-                  )}
-                  {isModalVisible && (
-                    <Modal message="You didn't log in. Please log in and try again." onClose={closeModal} onLogin={loginModal} />
-                  )}
-                  {(post.user._id === currentUserId) && (
-                    <button className={styles.deleteBtn} onClick={() => handleDeletePost(post._id)}>Delete post</button>
-                  )}
-                </div>
-              </div>
-
-            ))}
+              );
+            })}
           </div>
+
         </div>
       </div>
     </div>
@@ -432,7 +523,7 @@ export default Community;
 
 const Modal = ({ message, onClose, onLogin }) => {
   return (
-<div className={styles.modalOverlay}>
+    <div className={styles.modalOverlay}>
       <div className={styles.modalContainer}>
         <div className={styles.modalContentModal}>
           <h2 className={styles.modalTitle}>Login Required</h2>
