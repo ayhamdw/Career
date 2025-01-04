@@ -3,7 +3,6 @@ const Message = require("../models/message"); //! Message Model Object
 
 const messageController = async (req, res) => {
   try {
-    console.log(req.body);
     const { senderId, receiverId, messageType, messageText } = req.body;
 
     if (messageType === "image" && !req.file) {
@@ -29,7 +28,6 @@ const messageController = async (req, res) => {
     });
 
     await message.save();
-    console.log("Message saved successfully");
     res.status(200).json({ message: "Message Sent Successfully" });
   } catch (error) {
     console.error("Error while saving message:", error);

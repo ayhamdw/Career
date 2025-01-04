@@ -2,13 +2,14 @@
   "expo": {
     "name": "Mobile",
     "scheme": "myapp",
-    "slug": "Mobile",
+    "slug": "career",
     "version": "1.0.0",
-    "permissions": ["LOCATION"],
+    "permissions": [
+      "LOCATION"
+    ],
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
@@ -27,7 +28,12 @@
       "package": "com.career.mobile",
       "googleMaps": {
         "apiKey": "AIzaSyAFRRxD0w9k4pdQ4PYsnxHGBGa_GbVYljU"
-      }
+      },
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -41,7 +47,9 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/Kavoon-Regular.ttf"]
+          "fonts": [
+            "./assets/fonts/Kavoon-Regular.ttf"
+          ]
         }
       ],
       "expo-location",
@@ -57,13 +65,13 @@
           "iosUrlScheme": "com.googleusercontent.apps.155720957457-buoh0r927fjprq0j9pf9cckbof2gu2g2"
         }
       ]
-   ],
+    ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
       "eas": {
-        "projectId": "71fd3940-bc9f-4976-ac6c-e67805ab4945"
+        "projectId": "894020d3-599f-4b42-921c-20e69adaba8b"
       }
     }
   }

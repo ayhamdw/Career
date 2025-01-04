@@ -1,5 +1,6 @@
 const User = require("../models/user2");
 const Notification = require("../models/notification");
+const axios = require("axios");
 
 const addNotification = async (req, res) => {
   const { proficientId, userId, type, title, message, status } = req.body;
@@ -63,7 +64,6 @@ const getNotification = async (req, res) => {
       };
     });
 
-    console.log(finalResults);
     res.status(200).json({ finalResults });
   } catch (error) {
     console.error(error);
@@ -115,9 +115,54 @@ const rateProficient = async (req, res) => {
   }
 };
 
+const pushNotification = async (req, res) => {
+  try {
+    console.log(req.body);
+  } catch (error) {
+    console.log("Error while pushing notification:", error);
+  }
+};
+
+const sendPushNotification = async (expoPushToken, title, body, data) => {
+  const message = {
+    to: expoPushToken,
+    sound: "default",
+    title: title,
+    body: body,
+    data: data,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://exp.host/--/api/v2/push/send",
+      message,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("Notification sent successfully:", response.data);
+  } catch (error) {
+    console.error(
+      "Error sending notification:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+const expoPushToken = "ExponentPushToken[DosaQjEzUPJiXEZl01fn2s]";
+sendPushNotification(
+  expoPushToken,
+  "Proficient Request",
+  "You have a new request from a user",
+  { additionalData: "Example Data ;)" }
+);
+
 module.exports = {
   addNotification,
   getNotification,
   updateNotification,
   rateProficient,
+  pushNotification,
 };

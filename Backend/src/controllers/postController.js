@@ -6,9 +6,6 @@ const createPost = async (req, res) => {
     req.body;
   const user = req.user;
   const userRole = user.role;
-  console.log(req.body);
-  console.log(user);
-  console.log(userRole);
   try {
     const newPost = new Post({
       user: user._id,
@@ -98,7 +95,6 @@ const savePost = async (req, res) => {
 
 const getSavedPostsIds = async (req, res) => {
   try {
-    console.log(req.params.userId);
     const userId = req.params.userId;
     await User.findById(userId)
       .select("savedPosts")
@@ -143,10 +139,8 @@ const getAllPostsExceptMine = async (req, res) => {
 };
 
 const getMyPosts = async (req, res) => {
-  console.log("id", req.params.id);
   const posts = await Post.find({ user: req.params.id }).select("_id").lean();
   res.status(200).send(posts);
-  console.log(posts);
 };
 
 module.exports = {
