@@ -86,7 +86,24 @@ export default function ProfProfile({ proficientDetails, user }) {
   };
 
   const onProjectPress = async () => {
-    navigation.navigate("Projects", { id: proficientDetails._id });
+    // navigation.navigate("Projects", { id: proficientDetails._id });
+    const token = await AsyncStorage.getItem("token");
+    const response = await axios.post(
+      `${ayhamWifiUrl}/api/notification/push-notification`,
+      {
+        data: {
+          userId: user._id,
+          proficientId: proficientDetails.email,
+          title: "Proficient Request",
+          body: "You have a new request from a user",
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   };
 
   useEffect(() => {

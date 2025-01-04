@@ -161,12 +161,31 @@ const HomePage = ({ user }: { user: User }) => {
       user: user._id,
     });
   };
+  const saveExpoToken = async (token: any) => {
+    try {
+      const response = await axios.post(
+        `${ayhamWifiUrl}/api/user/save-expo-token`,
+        {
+          userId: user._id,
+          token: expoPushToken?.data, //
+        }
+      );
+      if (response.status === 200) {
+        console.log("Token saved successfully");
+      }
+    } catch (error) {
+      console.log("Error saving token:", error);
+    }
+  };
+
+  useEffect(() => {
+    saveExpoToken(expoPushToken?.data);
+  }, []);
 
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
         <Text>Token: {expoPushToken?.data ?? null} </Text>
-        <Text>Notification: {data}</Text>
         <Header
           name={`${user.profile.firstName} ${user.profile.lastName}`}
           navigation={navigation}

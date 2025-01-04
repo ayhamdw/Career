@@ -14,7 +14,6 @@ const logInUsers = async (req, res) => {
 
 const sendFiendRequestController = async (req, res) => {
   const { currentUserId, selectedUserId } = req.body;
-  // console.log(JSON.parse(req.body.ids));
   try {
     await User.findByIdAndUpdate(selectedUserId, {
       $push: {
@@ -35,7 +34,6 @@ const sendFiendRequestController = async (req, res) => {
 
 const getFriendsRequest = async (req, res) => {
   const userId = req.params.userId;
-  console.log("inside Get Friends Request", userId);
   try {
     const user = await User.findById(userId)
       .populate("friendRequests", "profile email image city")
@@ -127,13 +125,12 @@ const deleteFriendFromList = async (req, res) => {
 
 const getSendRequests = async (req, res) => {
   const userId = req.params.userId;
-  console.log("Inside Get Send Requests for User:", userId);
-  
+
   try {
     const user = await User.findById(userId)
-      .populate("sendRequests", "profile email image city") 
+      .populate("sendRequests", "profile email image city")
       .lean();
-      
+
     const sendRequests = user.sendRequests;
     res.status(200).json(sendRequests);
   } catch (error) {
@@ -157,8 +154,6 @@ const rejectFriendRequest = async (req, res) => {
     res.status(500).json({ Error: error });
   }
 };
-
-
 
 module.exports = {
   logInUsers,
