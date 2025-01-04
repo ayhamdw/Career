@@ -77,17 +77,6 @@ const createBooking = async (req, res) => {
       },
       status: "Pending",
     });
-
-    const expoToken = await User.findById(proficientId).select("expoPushToken");
-    const token = expoToken.expoPushToken;
-
-    sendPushNotification(
-      token,
-      "New Booking Request",
-      "You have a new request from a user",
-      { additionalData: "Example Data ;)" }
-    );
-
     provider.profile.numberOfRequest += 1;
 
     await user.save();
