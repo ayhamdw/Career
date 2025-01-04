@@ -20,6 +20,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
 import jobs from "@/constants/Jobs";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 interface Location {
   type: string;
   coordinates: [number, number];
@@ -72,6 +73,8 @@ const HomePage = ({ user }: { user: User }) => {
   const [users, setUsers] = React.useState<User[]>([]);
   const [searchResults, setSearchResults] = React.useState<string[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const { expoPushToken, notification } = usePushNotifications();
+  const data = JSON.stringify(notification, undefined, 2);
   const filters = [
     "All Proficient",
     "Home Services",
@@ -162,6 +165,8 @@ const HomePage = ({ user }: { user: User }) => {
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
+        <Text>Token: {expoPushToken?.data ?? null} </Text>
+        <Text>Notification: {data}</Text>
         <Header
           name={`${user.profile.firstName} ${user.profile.lastName}`}
           navigation={navigation}
