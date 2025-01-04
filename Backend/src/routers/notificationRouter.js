@@ -18,6 +18,4 @@ router.post("/update-notification/:id", Auth, updateNotification);
 
 router.post("/rate-proficient/:currentNotificationId", Auth, rateProficient);
 
-router.post("/push-notification", Auth, pushNotification);
-
 module.exports = router;

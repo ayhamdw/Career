@@ -6,7 +6,6 @@ const addNotification = async (req, res) => {
   const { proficientId, userId, type, title, message, status } = req.body;
   try {
     const proficient = await User.findById(proficientId);
-    const user = await User.findById(userId);
     const newNotification = new Notification({
       userId: proficientId,
       fromUser: userId,
@@ -16,6 +15,14 @@ const addNotification = async (req, res) => {
       status,
     });
     proficient.notifications.push(newNotification._id);
+
+    const expoToken = await User.findById(proficientId).select("expoPushToken");
+    const token = expoToken.expoPushToken;
+
+    sendPushNotification(token, title, message, {
+      additionalData: "Example Data ;)",
+    });
+
     await newNotification.save();
     await proficient.save();
     res.status(200).json({ message: "Notification added" });
@@ -102,7 +109,6 @@ const rateProficient = async (req, res) => {
       },
     });
 
-    // Mark the notification as rated and read
     await Notification.findByIdAndUpdate(notificationId, {
       rated: true,
       status: "Read",
@@ -151,18 +157,11 @@ const sendPushNotification = async (expoPushToken, title, body, data) => {
   }
 };
 
-const expoPushToken = "ExponentPushToken[DosaQjEzUPJiXEZl01fn2s]";
-sendPushNotification(
-  expoPushToken,
-  "Proficient Request",
-  "You have a new request from a user",
-  { additionalData: "Example Data ;)" }
-);
-
 module.exports = {
   addNotification,
   getNotification,
   updateNotification,
   rateProficient,
   pushNotification,
+  sendPushNotification,
 };
