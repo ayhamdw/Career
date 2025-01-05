@@ -87,7 +87,7 @@ useEffect(()=>{
           <Route path="friends" element={<Friends />} />
           <Route
             path=""
-            element={<Portfolio />} 
+            element={<SavedPosts />} 
           />
         </Routes>
       
