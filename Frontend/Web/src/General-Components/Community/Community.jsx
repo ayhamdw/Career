@@ -33,15 +33,37 @@ const Community = () => {
   const [selectedCities, setSelectedCities] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [previewImages, setPreviewImages] = useState([]);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [savedPosts, setSavedPosts] = useState([]);
+  const myId = localStorage.getItem("id")
+
+  useEffect(()=>{
+    const getSavedPostIds = async()=>{
+      try{
+        const response = await axios.get(`${import.meta.env.VITE_API}/community/getSavedPostsIds/${myId}`);
+        
+        setSavedPosts(response.data.savedPosts)
+        console.log("Saved Posts: ",response.data.savedPosts)
+        console.log("Saved Posts useState: ",savedPosts)
+      }
+      catch(error){
+        console.log("Error Get Saved Post ID's: ", error)
+      }
+    }
+    getSavedPostIds();
+  },[])
 
 
 
-  const toggleFavorite = async(_id, _userId) => {
-    setIsFavorite(prevState => !prevState);
+  const toggleFavorite = async(_postId, _userId) => {
+    const isAlreadySaved = savedPosts.includes(_postId);
+
+    const updatedSavedPosts = isAlreadySaved
+    ? savedPosts.filter(id => id !== _postId) 
+    : [...savedPosts, _postId]; 
+    setSavedPosts(updatedSavedPosts);
     try{
       const response = await axios.post(`${import.meta.env.VITE_API}/community/savePost`,{
-        postId: _id,
+        postId: _postId,
         userId: _userId
       });
       console.log("response: ", response)
@@ -587,6 +609,7 @@ const Community = () => {
           <div className={styles.postList}>
             {filteredPosts.slice().reverse().map((post) => {
               const isCurrentUser = post.user._id === currentUserId;
+              const isFavorite = savedPosts.includes(post._id)
 
               return (
                 <div
