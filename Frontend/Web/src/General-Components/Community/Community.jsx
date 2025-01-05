@@ -4,6 +4,7 @@ import styles from "./Community.module.css";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import s3 from 'react-aws-s3-typescript'
+import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 
 
 
@@ -32,9 +33,23 @@ const Community = () => {
   const [selectedCities, setSelectedCities] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [previewImages, setPreviewImages] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
 
 
 
+  const toggleFavorite = async(_id, _userId) => {
+    setIsFavorite(prevState => !prevState);
+    try{
+      const response = await axios.post(`${import.meta.env.VITE_API}/community/savePost`,{
+        postId: _id,
+        userId: _userId
+      });
+      console.log("response: ", response)
+    }
+    catch(error){
+      console.log("Error Save Post: ",error)
+    }
+  };
 
 
   useEffect(() => {
@@ -575,23 +590,31 @@ const Community = () => {
 
               return (
                 <div
-                  className={`${styles.postCard} ${isCurrentUser ? styles.myPost : ""}`}
+                  className={`${styles.postCard} ${isCurrentUser ? styles.myPost : ""} ${post.saved ? styles.savedPost : ""}`}
                   key={post._id}
                 >
                   {/* Poster Info Section */}
                   <div className={styles.posterInfo}>
-                    <img
-                      src={post.user.profile.profileImage}
-                      alt={`${post.user.profile.firstName} ${post.user.profile.lastName}`}
-                      className={styles.posterImage}
-                    />
+
                     <div className={styles.posterDetails}>
+                      <img
+                        src={post.user.profile.profileImage}
+                        alt={`${post.user.profile.firstName} ${post.user.profile.lastName}`}
+                        className={styles.posterImage}
+                      />
                       <p className={styles.posterName}>
                         {post.user.profile.firstName} {post.user.profile.lastName}
                       </p>
-                      {/* <p className={styles.posterCity}>{post.user.city}</p> */}
                     </div>
+
+                    {!isCurrentUser && (
+                      <div className={isFavorite ? styles.favoriteIconTrue : styles.favoriteIconFalse} onClick={()=>toggleFavorite(post._id,currentUserId)}>
+                        {isFavorite ? <MdFavorite /> : <MdFavoriteBorder  />} 
+                      </div>
+                    )}
                   </div>
+
+
 
                   {/* Post Title */}
                   <h3 className={styles.postTitle}>
@@ -662,6 +685,7 @@ const Community = () => {
                     )}
                   </div>
                 </div>
+
 
 
               );
