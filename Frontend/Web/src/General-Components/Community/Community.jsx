@@ -65,6 +65,7 @@ const Community = () => {
     "Qalqilya",
     "Jericho",
     "Gaza",
+    "Tubas",
   ];
 
   const toggleCategory = (category) => {
@@ -588,18 +589,18 @@ const Community = () => {
                       <p className={styles.posterName}>
                         {post.user.profile.firstName} {post.user.profile.lastName}
                       </p>
-                      <p className={styles.posterCity}>{post.user.city}</p>
+                      {/* <p className={styles.posterCity}>{post.user.city}</p> */}
                     </div>
                   </div>
 
                   {/* Post Title */}
                   <h3 className={styles.postTitle}>
-                    {post.title}
+                    <span className={styles.jobDesc}>Title:</span> {post.title}
                   </h3>
 
                   {/* Post Content */}
                   <p className={styles.postContent}>
-                    {post.content}
+                    <span className={styles.jobDesc}>Job Description:</span> {post.content}
                   </p>
 
                   {/* Post Details Section */}
