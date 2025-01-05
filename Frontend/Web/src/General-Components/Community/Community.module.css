@@ -267,7 +267,7 @@ textarea {
 
   /* background-color: red; */
   cursor: pointer;
-  color: red;
+  color:red;
   font-size: 1.8rem;
   transition: transform 0.3s ease;
 }
