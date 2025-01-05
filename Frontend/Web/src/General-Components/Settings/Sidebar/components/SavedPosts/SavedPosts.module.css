@@ -1,0 +1,197 @@
+/* Overall container */
+.projectsPage {
+  padding: 40px;
+  background-color: #f4f7fa;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 12px;
+}
+
+/* Page Title */
+.pageTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-bottom: 2px solid #6dc87e;
+  padding-bottom: 10px;
+}
+
+/* Info Text */
+.projectsInfo {
+  font-size: 1.1rem;
+  color: #777;
+  text-align: center;
+  margin-bottom: 40px;
+  font-weight: 400;
+}
+
+/* Main Grid Container */
+.projectsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  align-items: stretch;
+}
+
+/* Project Card */
+.projectCard {
+  background-color: #fff;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 380px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+.projectImage {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+.projectCard:hover .projectImage {
+  opacity: 0.8;
+}
+
+.projectCardContent {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.projectCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.projectTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  transition: color 0.3s ease;
+  width: fit-content;
+
+}
+
+.projectTitle:hover {
+  color: #6dc87e;
+}
+
+.projectType {
+  font-size: 1.1rem;
+  color: #777;
+  font-weight: 500;
+}
+
+.projectDescription {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.projectClientLocation {
+  font-size: 0.9rem;
+  color: #777;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.projectClient,
+.projectLocation {
+  display: inline-block;
+}
+
+.projectButton {
+  display: inline-block;
+  background-color: #6dc87e;
+  color: #fff;
+  padding: 12px 20px;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 5px;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.projectButton:hover {
+  background-color: #5aa771;
+  transform: scale(1.05);
+}
+
+/* Hover effect */
+.projectButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #5aa771;
+}
+
+/* Saved Posts indicator */
+.savedPostsIndicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #f1c40f;
+  color: #fff;
+  padding: 8px 12px;
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+/* Empty State (When no saved posts) */
+.projectGridEmpty {
+  font-size: 1.2rem;
+  color: #888;
+  text-align: center;
+  padding: 40px;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  width: 100%;
+  margin-top: 30px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .projectsPage {
+    padding: 20px;
+  }
+
+  .projectsGrid {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .projectCard {
+    max-width: 100%;
+  }
+
+  .projectTitle {
+    font-size: 1.3rem;
+  }
+
+  .projectType {
+    font-size: 1rem;
+  }
+
+  .projectDescription {
+    font-size: 0.95rem;
+  }
+}

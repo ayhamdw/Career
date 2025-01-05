@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./Community.module.css";
-import userImage from './poster.png';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import s3 from 'react-aws-s3-typescript'
+import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+
 
 
 
@@ -18,7 +20,8 @@ const Community = () => {
     content: "",
     careerCategory: "",
     location: "",
-    numberOfWorker: "",
+    numberOfWorker: 0,
+    photos: [],
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
@@ -26,6 +29,57 @@ const Community = () => {
   const [userFirstName, setUserFirstName] = useState("");
   const [userLastName, setUserLasttName] = useState("");
   const [userCoordinates, setUserCoordinates] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCities, setSelectedCities] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [previewImages, setPreviewImages] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+  const myId = localStorage.getItem("id")
+
+  useEffect(()=>{
+    const getSavedPostIds = async()=>{
+      try{
+        const response = await axios.get(`${import.meta.env.VITE_API}/community/getSavedPostsIds/${myId}`);
+        
+        setSavedPosts(response.data.savedPosts)
+        console.log("Saved Posts: ",response.data.savedPosts)
+        console.log("Saved Posts useState: ",savedPosts)
+      }
+      catch(error){
+        console.log("Error Get Saved Post ID's: ", error)
+      }
+    }
+    getSavedPostIds();
+  },[])
+
+
+
+  const toggleFavorite = async(_postId, _userId) => {
+    const isAlreadySaved = savedPosts.includes(_postId);
+
+    const updatedSavedPosts = isAlreadySaved
+    ? savedPosts.filter(id => id !== _postId) 
+    : [...savedPosts, _postId]; 
+    setSavedPosts(updatedSavedPosts);
+    try{
+      const response = await axios.post(`${import.meta.env.VITE_API}/community/savePost`,{
+        postId: _postId,
+        userId: _userId
+      });
+      console.log("response: ", response)
+    }
+    catch(error){
+      console.log("Error Save Post: ",error)
+    }
+  };
+
+
+  useEffect(() => {
+    console.log("selectedCategories: ", selectedCategories);
+    console.log("selectedCities: ", selectedCities);
+  }, [selectedCategories, selectedCities]);
+
+
 
   const categories = [
     "Home Services",
@@ -48,7 +102,35 @@ const Community = () => {
     "Qalqilya",
     "Jericho",
     "Gaza",
+    "Tubas",
   ];
+
+  const toggleCategory = (category) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
+  };
+
+  const toggleCity = (city) => {
+    setSelectedCities((prev) =>
+      prev.includes(city) ? prev.filter((c) => c !== city) : [...prev, city]
+    );
+  };
+
+  const filteredPosts = posts.filter((post) => {
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(post.careerCategory);
+    const matchesCity =
+      selectedCities.length === 0 || selectedCities.includes(post.location);
+
+    const matchesSearchQuery =
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.content.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesCity && matchesSearchQuery;
+  });
 
 
 
@@ -80,7 +162,6 @@ const Community = () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API}/community/posts`);
         setPosts(response.data);
-        // console.log("posts: ", JSON.stringify(response.data, null, 2));
         response.data.forEach(post => {
           console.log("Post data: ", post.user);
         });
@@ -139,23 +220,84 @@ const Community = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    switch (name) {
+      case 'title':
+        setForm((prevForm) => ({ ...prevForm, title: value }));
+        break;
+      case 'content':
+        setForm((prevForm) => ({ ...prevForm, content: value }));
+        break;
+      case 'numberOfWorker':
+        setForm((prevForm) => ({ ...prevForm, numberOfWorker: value }));
+        break;
+      case 'careerCategory':
+        setForm((prevForm) => ({ ...prevForm, careerCategory: value }));
+        break;
+      case 'location':
+        setForm((prevForm) => ({ ...prevForm, location: value }));
+        break;
+      default:
+        break;
+    }
   };
 
 
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setForm((prevState) => ({
+      ...prevState,
+      photos: [...files],
+    }));
+    const previewUrls = files.map((file) => URL.createObjectURL(file));
+    setPreviewImages((prevPreview) => [...prevPreview, ...previewUrls]);
+  };
+
+  const handleRemoveImage = (index) => {
+    setForm((prevState) => ({
+      ...prevState,
+      images: prevState.images.filter((_, i) => i !== index),
+    }));
+    setPreviewImages((prevPreview) =>
+      prevPreview.filter((_, i) => i !== index)
+    );
+  };
+
+
+  const handleUpload = async (image) => {
+    const Reacts3Client = new s3({
+      accessKeyId: "AKIA5MSUBQC3OE6ZOF4Z",
+      secretAccessKey: "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",
+      bucketName: "career-images-s3",
+      dirName: "media",
+      region: "eu-north-1",
+      s3Url: "https://career-images-s3.s3.eu-north-1.amazonaws.com",
+    });
+
+    try {
+      const data = await Reacts3Client.uploadFile(image);
+      return data.location;
+    } catch (err) {
+      console.error("Error uploading image: ", err);
+      throw err;
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
       toast.error("You need to log in first.");
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 2000);
+      setTimeout(() => window.location.href = "/login", 2000);
       return;
     }
 
+
     try {
+
+      const imageUrls = await Promise.all(
+        form.photos.map((image) => handleUpload(image))
+      );
+
       const post = {
         title: form.title,
         content: form.content,
@@ -163,6 +305,7 @@ const Community = () => {
         location: form.location,
         numberOfWorker: form.numberOfWorker,
         userRole: userRole,
+        photos: imageUrls
       };
 
       const response = await axios.post(
@@ -175,16 +318,13 @@ const Community = () => {
         }
       );
 
-      window.location.reload();
-
-
-
       setPosts([response.data, ...posts]);
-
-      setForm({ title: "", content: "", careerCategory: "", location: "" });
+      setForm({ title: "", content: "", careerCategory: "", location: "", numberOfWorker: "", images: [] });
       setIsModalOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error("Error creating post:", error.response ? error.response.data : error.message);
+      toast.error("Error creating post.");
     }
   };
 
@@ -253,10 +393,10 @@ const Community = () => {
 
   const loginModal = () => {
     setIsModalVisible(false);
-    navigate('/signin'); // Redirect to the sign-in page after closing the modal
+    navigate('/signin');
   };
 
-  const closeModal = () =>{
+  const closeModal = () => {
     setIsModalVisible(false);
   }
 
@@ -267,19 +407,34 @@ const Community = () => {
           <h3>Featured Categories</h3>
           <ul>
             {categories.map((category, index) => (
-              <li key={index}>{category}</li>
+              <li
+                key={index}
+                className={`${styles.listItem} ${selectedCategories.includes(category) ? styles.active : ""
+                  }`}
+                onClick={() => toggleCategory(category)}
+              >
+                {category}
+              </li>
             ))}
           </ul>
 
           <h3>Popular Cities</h3>
           <ul>
             {cities.map((city, index) => (
-              <li key={index}>{city}</li>
+              <li
+                key={index}
+                className={`${styles.listItem} ${selectedCities.includes(city) ? styles.active : ""
+                  }`}
+                onClick={() => toggleCity(city)}
+              >
+                {city}
+              </li>
             ))}
           </ul>
         </div>
 
         <div className={styles.postsSection}>
+
           <button className={styles.createPostBtn} onClick={
 
             () => {
@@ -296,130 +451,270 @@ const Community = () => {
           }>
             Create Post
           </button>
-          {isModalOpen /*&& userRole === "admin"*/ && (
+          <input
+            type="text"
+            placeholder="Search posts..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className={styles.inputSearch}
+          />
+          {isModalOpen && (
             <div className={styles.modal}>
               <div className={styles.modalContent}>
+                <h2>Create a New Post</h2>
                 <form onSubmit={handleSubmit}>
-                  <h2>Create a New Post</h2>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="title">Post Title</label>
+                    <input
+                      type="text"
+                      id="title"
+                      name="title"
+                      placeholder="Enter post title"
+                      value={form.title}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
 
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder="Post Title"
-                    value={form.title}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <div className={styles.formGroup}>
+                    <label htmlFor="content">Post Content</label>
+                    <textarea
+                      id="content"
+                      name="content"
+                      placeholder="Enter post content"
+                      value={form.content}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
 
-                  <textarea
-                    name="content"
-                    placeholder="Post Content"
-                    value={form.content}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <div className={styles.formGroup}>
+                    <label htmlFor="careerCategory">Career Category</label>
+                    <select
+                      id="careerCategory"
+                      name="careerCategory"
+                      value={form.careerCategory}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="">Select a category</option>
+                      {categories.map((category, index) => (
+                        <option key={index} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                  <select
-                    name="careerCategory"
-                    value={form.careerCategory}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Select Category</option>
-                    {categories.map((category, index) => (
-                      <option key={index} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="location">Location</label>
+                    <select
+                      id="location"
+                      name="location"
+                      value={form.location}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="">Select a city</option>
+                      {[
+                        "Jerusalem",
+                        "Gaza",
+                        "Ramallah",
+                        "Nablus",
+                        "Hebron",
+                        "Bethlehem",
+                        "Jenin",
+                        "Tulkarem",
+                        "Qalqilya",
+                        "Salfit",
+                        "Khan Younis",
+                        "Rafah",
+                        "Tubas",
+                        "Jericho",
+                      ].map((city, index) => (
+                        <option key={index} value={city}>
+                          {city}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                  <select
-                    name="location"
-                    value={form.location}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Select City</option>
-                    <option value="Jerusalem">Jerusalem</option>
-                    <option value="Gaza">Gaza</option>
-                    <option value="Ramallah">Ramallah</option>
-                    <option value="Nablus">Nablus</option>
-                    <option value="Hebron">Hebron</option>
-                    <option value="Bethlehem">Bethlehem</option>
-                    <option value="Jenin">Jenin</option>
-                    <option value="Tulkarem">Tulkarem</option>
-                    <option value="Qalqilya">Qalqilya</option>
-                    <option value="Salfit">Salfit</option>
-                    <option value="Nablus">Nablus</option>
-                    <option value="Khan Younis">Khan Younis</option>
-                    <option value="Rafah">Rafah</option>
-                    <option value="Tubas">Tubas</option>
-                    <option value="Jericho">Jericho</option>
-                    <option value="Ariha">Ariha</option>
-                  </select>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="numberOfWorker">Number of Workers</label>
+                    <input
+                      type="number"
+                      id="numberOfWorker"
+                      name="numberOfWorker"
+                      placeholder="Enter number of workers"
+                      value={form.numberOfWorker}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
 
+                  <div className={styles.formGroup}>
+                    <label htmlFor="images">Upload Images</label>
+                    <input
+                      type="file"
+                      id="images"
+                      name="images"
+                      accept="image/*"
+                      multiple
+                      onChange={handleFileChange}
+                    />
+                    {previewImages.length > 0 && (
+                      <div className={styles.imagePreview}>
+                        {previewImages.map((image, index) => (
+                          <div key={index} className={styles.previewContainer}>
+                            <img
+                              src={image}
+                              alt={`preview-${index}`}
+                              className={styles.previewImage}
+                            />
+                            <button
+                              type="button"
+                              className={styles.removeImageButton}
+                              onClick={() => handleRemoveImage(index)}
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
-                  <input type="number"
-                    placeholder="number of Worker"
-                    onChange={handleInputChange}
-                    required name="numberOfWorker"
-                    value={form.numberOfWorker}
-                  />
-
-
-                  <button type="submit" className={styles.submitBtn}>
-                    Post
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.cancelBtn}
-                    onClick={() => setIsModalOpen(false)}
-                  >
-                    Cancel
-                  </button>
+                  <div className={styles.buttonGroup}>
+                    <button type="submit" className={styles.submitBtn}>
+                      Post
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.cancelBtn}
+                      onClick={() => setIsModalOpen(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </form>
               </div>
+
+
+
             </div>
           )}
 
 
+
           <div className={styles.postList}>
-            {posts.slice().reverse().map((post) => (
-              <div className={`${styles.postCard} ${post.user._id === currentUserId ? styles.myPost : ""}`} key={post._id}>
-                <div className={styles.posterInfo}>
-                  <img src={userImage} alt="User" className={styles.posterImage} />
-                  <div>
-                    <p className={styles.posterName}>{post.user.profile.firstName} {post.user.profile.lastName}</p>
-                    <p className={styles.posterCareer}>{post.userRole === "admin" ? "Service Provider" : "Client"}</p>
+            {filteredPosts.slice().reverse().map((post) => {
+              const isCurrentUser = post.user._id === currentUserId;
+              const isFavorite = savedPosts.includes(post._id)
+
+              return (
+                <div
+                  className={`${styles.postCard} ${isCurrentUser ? styles.myPost : ""} ${post.saved ? styles.savedPost : ""}`}
+                  key={post._id}
+                >
+                  {/* Poster Info Section */}
+                  <div className={styles.posterInfo}>
+
+                    <div className={styles.posterDetails}>
+                      <img
+                        src={post.user.profile.profileImage}
+                        alt={`${post.user.profile.firstName} ${post.user.profile.lastName}`}
+                        className={styles.posterImage}
+                      />
+                      <p className={styles.posterName}>
+                        {post.user.profile.firstName} {post.user.profile.lastName}
+                      </p>
+                    </div>
+
+                    {!isCurrentUser && (
+                      <div className={isFavorite ? styles.favoriteIconTrue : styles.favoriteIconFalse} onClick={()=>toggleFavorite(post._id,currentUserId)}>
+                        {isFavorite ? <MdFavorite /> : <MdFavoriteBorder  />} 
+                      </div>
+                    )}
+                  </div>
+
+
+
+                  {/* Post Title */}
+                  <h3 className={styles.postTitle}>
+                    <span className={styles.jobDesc}>Title:</span> {post.title}
+                  </h3>
+
+                  {/* Post Content */}
+                  <p className={styles.postContent}>
+                    <span className={styles.jobDesc}>Job Description:</span> {post.content}
+                  </p>
+
+                  {/* Post Details Section */}
+                  <div className={styles.postDetails}>
+                    <p><strong>Category:</strong> {post.careerCategory}</p>
+                    <p><strong>Location:</strong> {post.location}</p>
+                    <p><strong>Number of Workers Required:</strong> {post.numberOfWorker}</p>
+                    <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
+                  </div>
+
+                  {/* Image Gallery Section */}
+                  {post.images && post.images.length > 0 && (
+                    <div className={styles.imageGallery}>
+                      {post.images.map((imageUrl, index) => (
+                        <img
+                          key={index}
+                          src={imageUrl}
+                          alt={`Post image ${index + 1}`}
+                          className={styles.postImage}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Actions Section */}
+                  <div className={styles.actions}>
+                    {/* Apply Button (for non-current user) */}
+                    {!isCurrentUser && (
+                      <button
+                        className={styles.applyBtn}
+                        onClick={() => handleApplyForThisJop(
+                          post.user._id,
+                          currentUserId,
+                          new Date().toISOString(),
+                          userCoordinates
+                        )}
+                      >
+                        Apply for this Job
+                      </button>
+                    )}
+
+                    {/* Modal for Unauthenticated User */}
+                    {isModalVisible && (
+                      <Modal
+                        message="You didn't log in. Please log in and try again."
+                        onClose={closeModal}
+                        onLogin={loginModal}
+                      />
+                    )}
+
+                    {/* Delete Button (for current user) */}
+                    {isCurrentUser && (
+                      <button
+                        className={styles.deleteBtn}
+                        onClick={() => handleDeletePost(post._id)}
+                      >
+                        Delete Post
+                      </button>
+                    )}
                   </div>
                 </div>
-                <p className={styles.postContent}>{post.user.city}</p>
-                <h3 className={styles.postTitle}>{post.title}</h3>
-                <p className={styles.postContent}>{post.content}</p>
 
-                <div className={styles.postDetails}>
-                  {/* <p><strong>Name</strong> {post.userFirstName} {post.userLastName}</p> */}
-                  <p><strong>Category:</strong> {post.careerCategory}</p>
-                  <p><strong>Location:</strong> {post.location}</p>
-                  <p><strong>Number of Workers Required:</strong> {post.numberOfWorker}</p>
-                  <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
-                </div>
 
-                <div className={styles.actions}>
-                  {(post.user._id !== currentUserId) && (
-                    <button className={styles.applyBtn} onClick={() => handleApplyForThisJop(post.user._id, currentUserId, new Date().toISOString(), userCoordinates)}>Apply for this Job</button>
-                  )}
-                  {isModalVisible && (
-                    <Modal message="You didn't log in. Please log in and try again." onClose={closeModal} onLogin={loginModal} />
-                  )}
-                  {(post.user._id === currentUserId) && (
-                    <button className={styles.deleteBtn} onClick={() => handleDeletePost(post._id)}>Delete post</button>
-                  )}
-                </div>
-              </div>
 
-            ))}
+              );
+            })}
           </div>
+
         </div>
       </div>
     </div>
@@ -432,7 +727,7 @@ export default Community;
 
 const Modal = ({ message, onClose, onLogin }) => {
   return (
-<div className={styles.modalOverlay}>
+    <div className={styles.modalOverlay}>
       <div className={styles.modalContainer}>
         <div className={styles.modalContentModal}>
           <h2 className={styles.modalTitle}>Login Required</h2>

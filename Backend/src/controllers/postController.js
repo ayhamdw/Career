@@ -143,6 +143,23 @@ const getMyPosts = async (req, res) => {
   res.status(200).send(posts);
 };
 
+
+
+const getPostById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const post = await Post.findById(id); // Replace `Post` with your Mongoose model
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    res.json(post);
+  } catch (error) {
+    console.error('Error fetching post by ID:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
 module.exports = {
   createPost,
   getAllPosts,
@@ -152,4 +169,5 @@ module.exports = {
   getSavedPosts,
   getSavedPostsIds,
   getMyPosts,
+  getPostById
 };

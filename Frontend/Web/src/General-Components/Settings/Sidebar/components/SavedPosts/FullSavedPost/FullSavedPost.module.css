@@ -1,0 +1,144 @@
+.fullPostContainer {
+    max-width: 80%;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    margin-top: 40px;
+    margin-bottom: 40px;
+    overflow: hidden;
+    /* height: 80vh; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .postTitle {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 20px;
+    text-align: center;
+    /* text-transform: uppercase; */
+    letter-spacing: 2px;
+    border-bottom: 3px solid #6dc87e;
+    padding-bottom: 15px;
+    position: relative;
+  }
+  
+  .postTitle::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: #6dc87e;
+    margin: 0 auto;
+    margin-top: 10px;
+  }
+    .careerCategory {
+    font-size: 1.3rem;
+    color: #6dc87e;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-align: center;
+    text-transform: capitalize;
+  }
+  
+  .location {
+    font-size: 1.1rem;
+    color: #555;
+    text-align: center;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+  
+  .postImages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .postImage {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .postImage:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  .postContent {
+    font-size: 1.1rem;
+    color: #444;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+  
+  .postContent h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .postContent p {
+    margin-bottom: 10px;
+    text-align: justify;
+  }
+  
+  .footer {
+    font-size: 1rem;
+    color: #666;
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  .loading {
+    font-size: 1.8rem;
+    color: #333;
+    text-align: center;
+    margin-top: 50px;
+    font-weight: bold;
+  }
+  
+  .error {
+    font-size: 1.8rem;
+    color: #e74c3c;
+    text-align: center;
+    margin-top: 50px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  @media (max-width: 768px) {
+    .postTitle {
+      font-size: 2rem;
+    }
+  
+    .careerCategory {
+      font-size: 1.1rem;
+    }
+  
+    .location {
+      font-size: 1rem;
+    }
+  
+    .postContent {
+      font-size: 1rem;
+    }
+  
+    .footer {
+      font-size: 0.9rem;
+    }
+  }
+  
