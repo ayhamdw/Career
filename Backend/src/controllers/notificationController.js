@@ -1,11 +1,11 @@
 const User = require("../models/user2");
 const Notification = require("../models/notification");
+const axios = require("axios");
 
 const addNotification = async (req, res) => {
   const { proficientId, userId, type, title, message, status } = req.body;
   try {
     const proficient = await User.findById(proficientId);
-    const user = await User.findById(userId);
     const newNotification = new Notification({
       userId: proficientId,
       fromUser: userId,
@@ -15,6 +15,14 @@ const addNotification = async (req, res) => {
       status,
     });
     proficient.notifications.push(newNotification._id);
+
+    const expoToken = await User.findById(proficientId).select("expoPushToken");
+    const token = expoToken.expoPushToken;
+
+    sendPushNotification(token, title, message, {
+      additionalData: "Example Data ;)",
+    });
+
     await newNotification.save();
     await proficient.save();
     res.status(200).json({ message: "Notification added" });
@@ -63,7 +71,6 @@ const getNotification = async (req, res) => {
       };
     });
 
-    console.log(finalResults);
     res.status(200).json({ finalResults });
   } catch (error) {
     console.error(error);
@@ -102,7 +109,6 @@ const rateProficient = async (req, res) => {
       },
     });
 
-    // Mark the notification as rated and read
     await Notification.findByIdAndUpdate(notificationId, {
       rated: true,
       status: "Read",
@@ -115,9 +121,47 @@ const rateProficient = async (req, res) => {
   }
 };
 
+const pushNotification = async (req, res) => {
+  try {
+    console.log(req.body);
+  } catch (error) {
+    console.log("Error while pushing notification:", error);
+  }
+};
+
+const sendPushNotification = async (expoPushToken, title, body, data) => {
+  const message = {
+    to: expoPushToken,
+    sound: "default",
+    title: title,
+    body: body,
+    data: data,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://exp.host/--/api/v2/push/send",
+      message,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("Notification sent successfully:", response.data);
+  } catch (error) {
+    console.error(
+      "Error sending notification:",
+      error.response?.data || error.message
+    );
+  }
+};
+
 module.exports = {
   addNotification,
   getNotification,
   updateNotification,
   rateProficient,
+  pushNotification,
+  sendPushNotification,
 };

@@ -2,7 +2,7 @@ const User = require("../models/user2");
 const Booking = require("../models/Booking");
 const Project = require("../models/project");
 const axios = require("axios");
-
+const { sendPushNotification } = require("./notificationController");
 const getProficientData = async (req, res) => {
   try {
     const { id, careerCategory } = req.query;
@@ -62,7 +62,6 @@ const createBooking = async (req, res) => {
     const user = await User.findById(userId);
     const provider = await User.findById(proficientId);
 
-    //
     user.sendProficientRequests.push(proficientId);
     provider.receiveProficientRequest.push(userId);
 
@@ -78,7 +77,6 @@ const createBooking = async (req, res) => {
       },
       status: "Pending",
     });
-
     provider.profile.numberOfRequest += 1;
 
     await user.save();

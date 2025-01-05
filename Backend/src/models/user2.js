@@ -236,6 +236,11 @@ const userSchema = new mongoose.Schema(
         ref: "Post",
       },
     ],
+    expoPushToken: {
+      type: String,
+      default: "",
+      required: false,
+    },
     resetCode: {
       type: Number,
       default: 0,

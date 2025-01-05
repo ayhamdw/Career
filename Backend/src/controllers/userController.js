@@ -1,7 +1,6 @@
 const User = require("../models/user2"); //! User Model Object
 const getUserDetails = async (req, res) => {
   try {
-    console.log("inside");
     const user = await User.findById(req.params.userId).select("-password"); // Exclude sensitive fields
     if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json(user);
@@ -66,53 +65,80 @@ const rateUser = async (req, res) => {
   // targetUserId : the user who receiving the rating
   try {
     if (!userId || !targetUserId) {
-      return res.status(400).json({ message: 'Both userId and targetUserId are required.' });
+      return res
+        .status(400)
+        .json({ message: "Both userId and targetUserId are required." });
     }
-    if (rating === undefined || typeof rating !== 'number') {
-      return res.status(400).json({ message: 'Invalid rating value. It must be a number.' });
+    if (rating === undefined || typeof rating !== "number") {
+      return res
+        .status(400)
+        .json({ message: "Invalid rating value. It must be a number." });
     }
     const user = await User.findById(targetUserId);
     if (!user) {
-      return res.status(404).json({ message: 'Target user not found.' });
+      return res.status(404).json({ message: "Target user not found." });
     }
     const newRating = {
       ratings: rating,
-      review: review || '', 
-      userId, 
+      review: review || "",
+      userId,
     };
 
     user.profile.ratings.push(newRating);
-    await user.save(); 
+    await user.save();
 
-    res.status(200).json({ message: 'Rating added successfully.', user });
+    res.status(200).json({ message: "Rating added successfully.", user });
   } catch (error) {
-    res.status(500).json({ message: 'Error adding rating.', error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error adding rating.", error: error.message });
   }
 };
-
-
 
 const checkIfUserRated = async (req, res) => {
-  const { userId, targetUserId } = req.body; 
+  const { userId, targetUserId } = req.body;
 
   try {
-      const user = await User.findOne({
-          _id: targetUserId,
-          'profile.ratings.userId': userId
-      }).exec();
-      if (user) {
-          return res.status(200).json({ success: true, message: 'User has rated the target user' });
-      } else {
-          return res.status(404).json({ success: false, message: 'User has not rated the target user' });
-      }
+    const user = await User.findOne({
+      _id: targetUserId,
+      "profile.ratings.userId": userId,
+    }).exec();
+    if (user) {
+      return res
+        .status(200)
+        .json({ success: true, message: "User has rated the target user" });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "User has not rated the target user",
+      });
+    }
   } catch (error) {
-      console.error('Error checking user rating:', error);
-      return res.status(500).json({ success: false, message: 'Error checking rating' });
+    console.error("Error checking user rating:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error checking rating" });
   }
 };
 
-
-
+const saveExpoToken = async (req, res) => {
+  const { userId, token } = req.body;
+  console.log("Saving expo token:", userId);
+  console.log("Token:", token);
+  try {
+    if (!userId || !token) {
+      return res.status(400).json({ message: "Invalid request data" });
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.expoPushToken = token;
+    await user.save();
+  } catch (error) {
+    console.log("Error saving expo token:", error);
+  }
+};
 
 module.exports = {
   getUserDetails,
@@ -121,4 +147,5 @@ module.exports = {
   getAllUsers,
   rateUser,
   checkIfUserRated,
+  saveExpoToken,
 };

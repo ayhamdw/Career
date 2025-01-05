@@ -19,6 +19,7 @@ const Community = () => {
     careerCategory: "",
     location: "",
     numberOfWorker: "",
+    image: null,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
@@ -29,6 +30,8 @@ const Community = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedCities, setSelectedCities] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [previewImages, setPreviewImages] = useState([]);
+
 
 
 
@@ -182,11 +185,30 @@ const Community = () => {
     setForm({ ...form, [name]: value });
   };
 
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+      setForm((prevState) => ({
+      ...prevState,
+      images: [...prevState.images, ...files],
+    }));
+      const previewUrls = files.map((file) => URL.createObjectURL(file));
+    setPreviewImages((prevPreview) => [...prevPreview, ...previewUrls]);
+  };
+
+  const handleRemoveImage = (index) => {
+    setForm((prevState) => ({
+      ...prevState,
+      images: prevState.images.filter((_, i) => i !== index),
+    }));
+    setPreviewImages((prevPreview) =>
+      prevPreview.filter((_, i) => i !== index)
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
       toast.error("You need to log in first.");
       setTimeout(() => {
@@ -196,37 +218,42 @@ const Community = () => {
     }
 
     try {
-      const post = {
-        title: form.title,
-        content: form.content,
-        careerCategory: form.careerCategory,
-        location: form.location,
-        numberOfWorker: form.numberOfWorker,
-        userRole: userRole,
-      };
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("content", form.content);
+      formData.append("careerCategory", form.careerCategory);
+      formData.append("location", form.location);
+      formData.append("numberOfWorker", form.numberOfWorker);
+      form.images.forEach((image) => formData.append("images", image));
+
 
       const response = await axios.post(
         `${import.meta.env.VITE_API}/community/post`,
-        post,
+        formData,
         {
           headers: {
-            'Authorization': `Bearer ${token}`,
-          }
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
-      window.location.reload();
-
-
-
       setPosts([response.data, ...posts]);
-
-      setForm({ title: "", content: "", careerCategory: "", location: "" });
+      setForm({
+        title: "",
+        content: "",
+        careerCategory: "",
+        location: "",
+        numberOfWorker: "",
+        images: [],
+      });
       setIsModalOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error("Error creating post:", error.response ? error.response.data : error.message);
     }
   };
+
 
 
 
@@ -293,7 +320,7 @@ const Community = () => {
 
   const loginModal = () => {
     setIsModalVisible(false);
-    navigate('/signin'); // Redirect to the sign-in page after closing the modal
+    navigate('/signin');
   };
 
   const closeModal = () => {
@@ -337,7 +364,7 @@ const Community = () => {
 
 
         <div className={styles.postsSection}>
-            
+
           <button className={styles.createPostBtn} onClick={
 
             () => {
@@ -355,12 +382,12 @@ const Community = () => {
             Create Post
           </button>
           <input
-              type="text"
-              placeholder="Search posts..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className={styles.inputSearch}
-            />
+            type="text"
+            placeholder="Search posts..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className={styles.inputSearch}
+          />
           {isModalOpen && (
             <div className={styles.modal}>
               <div className={styles.modalContent}>
@@ -455,6 +482,39 @@ const Community = () => {
                     />
                   </div>
 
+                  <div className={styles.formGroup}>
+                    <label htmlFor="images">Upload Images</label>
+                    <input
+                      type="file"
+                      id="images"
+                      name="images"
+                      accept="image/*"
+                      multiple
+                      onChange={handleFileChange}
+                    />
+                    {/* Preview Images */}
+                    {previewImages.length > 0 && (
+                      <div className={styles.imagePreview}>
+                        {previewImages.map((image, index) => (
+                          <div key={index} className={styles.previewContainer}>
+                            <img
+                              src={image}
+                              alt={`preview-${index}`}
+                              className={styles.previewImage}
+                            />
+                            <button
+                              type="button"
+                              className={styles.removeImageButton}
+                              onClick={() => handleRemoveImage(index)}
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   <div className={styles.buttonGroup}>
                     <button type="submit" className={styles.submitBtn}>
                       Post
@@ -469,6 +529,9 @@ const Community = () => {
                   </div>
                 </form>
               </div>
+
+
+
             </div>
           )}
 

@@ -7,6 +7,7 @@ const {
   getNotification,
   updateNotification,
   rateProficient,
+  pushNotification,
 } = require("../controllers/notificationController");
 
 router.post("/add-notification", Auth, addNotification);
