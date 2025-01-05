@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./Community.module.css";
-import userImage from './poster.png';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import s3 from 'react-aws-s3-typescript'
+
 
 
 
@@ -18,8 +19,8 @@ const Community = () => {
     content: "",
     careerCategory: "",
     location: "",
-    numberOfWorker: "",
-    image: null,
+    numberOfWorker: 0,
+    photos: [],
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
@@ -123,7 +124,6 @@ const Community = () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API}/community/posts`);
         setPosts(response.data);
-        // console.log("posts: ", JSON.stringify(response.data, null, 2));
         response.data.forEach(post => {
           console.log("Post data: ", post.user);
         });
@@ -182,16 +182,35 @@ const Community = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    switch (name) {
+      case 'title':
+        setForm((prevForm) => ({ ...prevForm, title: value }));
+        break;
+      case 'content':
+        setForm((prevForm) => ({ ...prevForm, content: value }));
+        break;
+      case 'numberOfWorker':
+        setForm((prevForm) => ({ ...prevForm, numberOfWorker: value }));
+        break;
+      case 'careerCategory':
+        setForm((prevForm) => ({ ...prevForm, careerCategory: value }));
+        break;
+      case 'location':
+        setForm((prevForm) => ({ ...prevForm, location: value }));
+        break;
+      default:
+        break;
+    }
   };
+
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-      setForm((prevState) => ({
+    setForm((prevState) => ({
       ...prevState,
-      images: [...prevState.images, ...files],
+      photos: [...files],
     }));
-      const previewUrls = files.map((file) => URL.createObjectURL(file));
+    const previewUrls = files.map((file) => URL.createObjectURL(file));
     setPreviewImages((prevPreview) => [...prevPreview, ...previewUrls]);
   };
 
@@ -205,55 +224,71 @@ const Community = () => {
     );
   };
 
+
+  const handleUpload = async (image) => {
+    const Reacts3Client = new s3({
+      accessKeyId: "AKIA5MSUBQC3OE6ZOF4Z",
+      secretAccessKey: "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",
+      bucketName: "career-images-s3",
+      dirName: "media",
+      region: "eu-north-1",
+      s3Url: "https://career-images-s3.s3.eu-north-1.amazonaws.com",
+    });
+
+    try {
+      const data = await Reacts3Client.uploadFile(image);
+      return data.location;
+    } catch (err) {
+      console.error("Error uploading image: ", err);
+      throw err;
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("You need to log in first.");
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 2000);
+      setTimeout(() => window.location.href = "/login", 2000);
       return;
     }
 
-    try {
-      const formData = new FormData();
-      formData.append("title", form.title);
-      formData.append("content", form.content);
-      formData.append("careerCategory", form.careerCategory);
-      formData.append("location", form.location);
-      formData.append("numberOfWorker", form.numberOfWorker);
-      form.images.forEach((image) => formData.append("images", image));
 
+    try {
+
+      const imageUrls = await Promise.all(
+        form.photos.map((image) => handleUpload(image))
+      );
+
+      const post = {
+        title: form.title,
+        content: form.content,
+        careerCategory: form.careerCategory,
+        location: form.location,
+        numberOfWorker: form.numberOfWorker,
+        userRole: userRole,
+        photos: imageUrls
+      };
 
       const response = await axios.post(
         `${import.meta.env.VITE_API}/community/post`,
-        formData,
+        post,
         {
           headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
+            'Authorization': `Bearer ${token}`,
+          }
         }
       );
 
       setPosts([response.data, ...posts]);
-      setForm({
-        title: "",
-        content: "",
-        careerCategory: "",
-        location: "",
-        numberOfWorker: "",
-        images: [],
-      });
+      setForm({ title: "", content: "", careerCategory: "", location: "", numberOfWorker: "", images: [] });
       setIsModalOpen(false);
       window.location.reload();
     } catch (error) {
       console.error("Error creating post:", error.response ? error.response.data : error.message);
+      toast.error("Error creating post.");
     }
   };
-
 
 
 
@@ -359,9 +394,6 @@ const Community = () => {
             ))}
           </ul>
         </div>
-
-
-
 
         <div className={styles.postsSection}>
 
@@ -492,7 +524,6 @@ const Community = () => {
                       multiple
                       onChange={handleFileChange}
                     />
-                    {/* Preview Images */}
                     {previewImages.length > 0 && (
                       <div className={styles.imagePreview}>
                         {previewImages.map((image, index) => (
@@ -546,39 +577,56 @@ const Community = () => {
                   className={`${styles.postCard} ${isCurrentUser ? styles.myPost : ""}`}
                   key={post._id}
                 >
+                  {/* Poster Info Section */}
                   <div className={styles.posterInfo}>
                     <img
                       src={post.user.profile.profileImage}
-                      alt="User"
+                      alt={`${post.user.profile.firstName} ${post.user.profile.lastName}`}
                       className={styles.posterImage}
                     />
-                    <div>
+                    <div className={styles.posterDetails}>
                       <p className={styles.posterName}>
                         {post.user.profile.firstName} {post.user.profile.lastName}
                       </p>
+                      <p className={styles.posterCity}>{post.user.city}</p>
                     </div>
                   </div>
 
-                  <p className={styles.postContent}>
-                    {post.user.city}
-                  </p>
+                  {/* Post Title */}
                   <h3 className={styles.postTitle}>
                     {post.title}
                   </h3>
+
+                  {/* Post Content */}
                   <p className={styles.postContent}>
                     {post.content}
                   </p>
 
+                  {/* Post Details Section */}
                   <div className={styles.postDetails}>
                     <p><strong>Category:</strong> {post.careerCategory}</p>
                     <p><strong>Location:</strong> {post.location}</p>
                     <p><strong>Number of Workers Required:</strong> {post.numberOfWorker}</p>
-                    <p>
-                      <strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}
-                    </p>
+                    <p><strong>Posted on:</strong> {new Date(post.postDate).toLocaleString()}</p>
                   </div>
 
+                  {/* Image Gallery Section */}
+                  {post.images && post.images.length > 0 && (
+                    <div className={styles.imageGallery}>
+                      {post.images.map((imageUrl, index) => (
+                        <img
+                          key={index}
+                          src={imageUrl}
+                          alt={`Post image ${index + 1}`}
+                          className={styles.postImage}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Actions Section */}
                   <div className={styles.actions}>
+                    {/* Apply Button (for non-current user) */}
                     {!isCurrentUser && (
                       <button
                         className={styles.applyBtn}
@@ -593,6 +641,7 @@ const Community = () => {
                       </button>
                     )}
 
+                    {/* Modal for Unauthenticated User */}
                     {isModalVisible && (
                       <Modal
                         message="You didn't log in. Please log in and try again."
@@ -601,16 +650,19 @@ const Community = () => {
                       />
                     )}
 
+                    {/* Delete Button (for current user) */}
                     {isCurrentUser && (
                       <button
                         className={styles.deleteBtn}
                         onClick={() => handleDeletePost(post._id)}
                       >
-                        Delete post
+                        Delete Post
                       </button>
                     )}
                   </div>
                 </div>
+
+
               );
             })}
           </div>

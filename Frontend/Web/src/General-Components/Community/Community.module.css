@@ -73,13 +73,13 @@ header h1 {
   position: relative;
   max-width: 600px;
   width: 100%;
-  max-height: 90vh; /* Limit the height to 80% of the viewport */
+  max-height: 90vh; 
   height: auto;
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow-y: auto; /* Enable vertical scrolling when content overflows */
+  overflow-y: auto; 
 }
 
 input,
@@ -648,3 +648,95 @@ textarea {
     font-size: 14px;
   }
 }
+
+.imageGallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.postImage {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+
+
+
+.postCard {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 100%;
+  justify-content: space-between; /* Ensures even distribution of space */
+}
+
+.postTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.postContent {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.postDetails {
+  font-size: 0.95rem;
+  color: #444;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+  margin-bottom: 10px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.applyBtn, .deleteBtn {
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.applyBtn {
+  background-color: #6dc97e;
+  color: white;
+}
+
+.applyBtn:hover {
+  background-color: #5bb26d;
+}
+
+.deleteBtn {
+  background-color: #df4314;
+  color: white;
+}
+
+.deleteBtn:hover {
+  background-color: #b83710;
+}
+
+
+
+
