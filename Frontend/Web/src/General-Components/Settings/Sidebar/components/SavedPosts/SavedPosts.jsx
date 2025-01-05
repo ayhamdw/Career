@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import styles from "./Projects.module.css";
+import styles from "./SavedPosts.module.css";
+import {Link} from 'react-router-dom'
 
-const Projects = () => {
+const SavedPosts = () => {
   const [savedPosts, setSavedPosts] = useState([]);
   const myId = localStorage.getItem("id")
   useEffect(() => {
@@ -46,9 +47,9 @@ const Projects = () => {
                   <span className={styles.projectClient}>Client: {post.user?.profile?.firstName || "Unknown"}</span>
                   <span className={styles.projectLocation}>Location: {post.location}</span>
                 </div>
-                <a href={`/project/${post._id}`} className={styles.projectButton}>
+                <Link to={`/savedPost/${post._id}`} className={styles.projectButton}>
                   View Post
-                </a>
+                </Link>
               </div>
             </div>
           ))
@@ -58,4 +59,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default SavedPosts;

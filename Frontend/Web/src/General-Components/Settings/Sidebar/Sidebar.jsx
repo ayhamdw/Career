@@ -122,12 +122,7 @@ const Sidebar = ({ user }) => {
       )}
 
       <ul className={style.sidebarLinks}>
-        <Link to="/settings/projects" className={style.sidebarLink}>
-          <li>
-            <FaProjectDiagram className={style.icon} />
-            <span>Projects (10)</span>
-          </li>
-        </Link>
+
         <Link to="/settings/portfolio" className={style.sidebarLink}>
           <li>
             <FaImage className={style.icon} />
@@ -150,6 +145,12 @@ const Sidebar = ({ user }) => {
           <li>
             <FaUserFriends className={style.icon} />
             <span>Friends</span>
+          </li>
+        </Link>
+        <Link to="/settings/SavedPosts" className={style.sidebarLink}>
+          <li>
+            <FaProjectDiagram className={style.icon} />
+            <span>Saved Posts</span>
           </li>
         </Link>
         <Link className={style.sidebarLink} onClick={handleLogout}>
