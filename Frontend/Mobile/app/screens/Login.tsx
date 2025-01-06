@@ -20,6 +20,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { user } = useUser();
+  console.log("User first Name: ", user?.firstName);
+  console.log("User last Name: ", user?.lastName);
   const [loaded, error] = useFonts({
     "Kavoon-Regular": require("../../assets/fonts/Kavoon-Regular.ttf"),
   });
