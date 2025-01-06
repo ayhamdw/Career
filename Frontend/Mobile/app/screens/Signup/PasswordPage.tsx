@@ -127,7 +127,7 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
           const uniqueId = uuidv4();
           const ext = uri.split(".").pop();
           const newFileName = `certificates/pdf/${uniqueId}.${ext}`.trim();
-          return await Amazon.uploadImageToS3(newFileName, uri);
+          return await Amazon.uploadFileToS3(newFileName, uri);
         })
       );
 

@@ -38,6 +38,27 @@ const uploadImageToS3 = async (newImageName: string, uri: string): Promise<strin
   }
 };
 
+const uploadFileToS3 = async (newFileName: string, uri: string): Promise<string> => {
+  try {
+    const fileData = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+    const fileBuffer = Buffer.from(fileData, 'base64');
+
+    const params = {
+      Bucket: process.env.EXPO_PUBLIC_AWS_BUCKET_NAME || "", 
+      Key: newFileName, 
+      Body: fileBuffer,
+      ContentType: 'application/pdf', 
+      ACL: 'public-read',
+    };
+
+    const s3Response = await s3.upload(params).promise();
+    return s3Response.Location; // Return the public URL of the uploaded file
+  } catch (error) {
+    console.error("Failed to upload file to S3:", error);
+    throw error;
+  }
+};
+
 
 const getImageUrl = (fileName: string): string => {
   const bucketUrl = `https://${EXPO_PUBLIC_AWS_BUCKET_NAME}.s3.${EXPO_PUBLIC_AWS_REGION}.amazonaws.com/`;
@@ -53,4 +74,4 @@ const deleteObject = (key:string) => {
   },function (err,data){})
 }
 
-export default { uploadImageToS3, getImageUrl , deleteObject };
+export default { uploadImageToS3, getImageUrl , deleteObject,uploadFileToS3 };
