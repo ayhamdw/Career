@@ -25,5 +25,4 @@ router.get("/getSavedPostsIds/:userId", postController.getSavedPostsIds);
 router.get("/myPosts/:id", postController.getMyPosts);
 router.get("/getPostById/:id", postController.getPostById);
 
-
 module.exports = router;

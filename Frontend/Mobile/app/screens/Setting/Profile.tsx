@@ -39,12 +39,7 @@ const Profile = ({ user }) => {
         await AsyncStorage.removeItem("token");
         await AsyncStorage.removeItem("user");
         console.log("Logout successful");
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: "Login" }],
-          })
-        );
+        navigation.navigate("Login");
       }
     } catch (err) {
       console.log("Logout failed:", err);
