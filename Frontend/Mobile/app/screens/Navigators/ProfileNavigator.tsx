@@ -28,6 +28,7 @@ const ProfileNavigator = ({ user }: { user: any }) => {
       MyProjects: (props: any) => <MyProjects {...props} user={user} />,
       CreateProject: (props: any) => <CreateProject {...props} user={user} />,
       EditProject: (props: any) => <EditProject {...props} user={user} />,
+      Login: (props: any) => <Login {...props} />,
       Logout: (props: any) => <Login {...props} />,
     }),
     [user]
@@ -85,6 +86,12 @@ const ProfileNavigator = ({ user }: { user: any }) => {
       <Stack.Screen
         name="CreateProject"
         component={screenData.CreateProject}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="Login"
+        component={screenData.Login}
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Logout" component={screenData.Logout} />

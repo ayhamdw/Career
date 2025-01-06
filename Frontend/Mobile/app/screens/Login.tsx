@@ -20,8 +20,6 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { user } = useUser();
-  console.log("User first Name: ", user?.firstName);
-  console.log("User last Name: ", user?.lastName);
   const [loaded, error] = useFonts({
     "Kavoon-Regular": require("../../assets/fonts/Kavoon-Regular.ttf"),
   });
@@ -32,31 +30,20 @@ const Login = () => {
     strategy: "oauth_apple",
   });
 
-  const handleOAuthSignIn = useCallback(
-    async (strategy) => {
-      try {
-        const startOAuth =
-          strategy === "oauth_google"
-            ? startGoogleOAuthFlow
-            : startAppleOAuthFlow;
+  useEffect(() => {
+    if (user) {
+      const email = user?.emailAddresses[0]?.emailAddress;
+      const firstName = user?.firstName;
+      const lastName = user?.lastName;
+      const profileImage = user?.imageUrl;
 
-        const { createdSessionId, setActive } = await startOAuth({
-          redirectUrl: Linking.createURL("/dashboard", { scheme: "myapp" }),
-        });
+      console.log("email", email);
+      console.log("firstName", firstName);
+      console.log("lastName", lastName);
+      console.log("profileImage", profileImage);
 
-        if (createdSessionId) {
-          setActive!({ session: createdSessionId });
-
-          const email = user?.emailAddresses[0].emailAddress;
-          const firstName = user?.firstName;
-          const lastName = user?.lastName;
-          const profileImage = user?.imageUrl;
-
-          console.log("email", email);
-          console.log("firstName", firstName);
-          console.log("lastName", lastName);
-          console.log("profileImage", profileImage);
-
+      const registerUser = async () => {
+        try {
           const response = await axios.post(
             `${ayhamWifiUrl}/api/auth/register`,
             {
@@ -74,12 +61,35 @@ const Login = () => {
           await AsyncStorage.setItem("user", JSON.stringify(backendUser));
 
           navigation.replace("Main", { user: backendUser });
+        } catch (err) {
+          console.error("Registration failed:", err);
+        }
+      };
+
+      registerUser();
+    }
+  }, [user, navigation]);
+
+  const handleOAuthSignIn = useCallback(
+    async (strategy) => {
+      try {
+        const startOAuth =
+          strategy === "oauth_google"
+            ? startGoogleOAuthFlow
+            : startAppleOAuthFlow;
+
+        const { createdSessionId, setActive } = await startOAuth({
+          redirectUrl: Linking.createURL("/dashboard", { scheme: "myapp" }),
+        });
+
+        if (createdSessionId) {
+          setActive!({ session: createdSessionId });
         }
       } catch (err) {
         console.error(`${strategy} Sign-In failed:`, err);
       }
     },
-    [startGoogleOAuthFlow, startAppleOAuthFlow, navigation]
+    [startGoogleOAuthFlow, startAppleOAuthFlow]
   );
 
   const handleSignIn = async () => {
