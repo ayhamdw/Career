@@ -1,13 +1,45 @@
-import { View, KeyboardAvoidingView, Platform, Alert } from "react-native";
+import {
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+  Button,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import React, { useState } from "react";
-import { SignUpStackParamList } from "./types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import * as ImagePicker from "expo-image-picker";
+import * as DocumentPicker from "expo-document-picker";
+import { v4 as uuidv4 } from "uuid";
 import styles from "../../../assets/styles/SignupStyle";
-import axios from "axios";
-import { ayhamWifiUrl } from "@/constants/Urls";
 import Header from "@/components/General Components/Header";
 import ButtonGroup from "@/components/General Components/ButtonGroup";
 import Password from "@/components/Password/Password";
+import Amazon from "../../Services/Amazon";
+import { ayhamWifiUrl } from "@/constants/Urls";
+import axios from "axios";
+
+type SignUpStackParamList = {
+  PasswordPage: {
+    firstName: string;
+    lastName: string;
+    username: string;
+    profileImage: string;
+    gender: string;
+    dateOfBirth: string;
+    email: string;
+    city: string;
+    latitude: number;
+    longitude: number;
+    category: string;
+    career: string;
+    bio: string;
+    experience: string;
+  };
+};
 
 type PasswordPageProps = NativeStackScreenProps<
   SignUpStackParamList,
@@ -17,6 +49,9 @@ type PasswordPageProps = NativeStackScreenProps<
 const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [certificates, setCertificates] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>([]);
+
   const {
     firstName,
     lastName,
@@ -34,9 +69,48 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
     experience,
   } = route.params;
 
-  const handlePrevious = () => {
-    navigation.goBack();
+  const handleSelectCertificates = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "application/pdf",
+        multiple: true,
+      });
+
+      if (!result.canceled) {
+        const uris = result.assets.map((asset) => asset.uri);
+        setCertificates((prev) => [...prev, ...uris]);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to pick documents.");
+    }
   };
+
+  const handleSelectImages = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [4, 3],
+        quality: 1,
+        allowsMultipleSelection: true,
+      });
+
+      if (!result.canceled) {
+        const uris = result.assets.map((asset) => asset.uri);
+        setImages((prev) => [...prev, ...uris]);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to pick images.");
+    }
+  };
+
+  const handleRemoveItem = (type: "certificates" | "images", index: number) => {
+    if (type === "certificates") {
+      setCertificates((prev) => prev.filter((_, i) => i !== index));
+    } else {
+      setImages((prev) => prev.filter((_, i) => i !== index));
+    }
+  };
+
   const handleNext = async () => {
     if (!password || !confirmPassword) {
       alert("Please fill in all fields");
@@ -46,7 +120,26 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
       alert("Passwords do not match");
       return;
     }
+
     try {
+      const uploadedCertificates = await Promise.all(
+        certificates.map(async (uri) => {
+          const uniqueId = uuidv4();
+          const ext = uri.split(".").pop();
+          const newFileName = `certificates/pdf/${uniqueId}.${ext}`.trim();
+          return await Amazon.uploadImageToS3(newFileName, uri);
+        })
+      );
+
+      const uploadedImages = await Promise.all(
+        images.map(async (uri) => {
+          const uniqueId = uuidv4();
+          const ext = uri.split(".").pop();
+          const newFileName = `certificates/images/${uniqueId}.${ext}`.trim();
+          return await Amazon.uploadImageToS3(newFileName, uri);
+        })
+      );
+
       const response = await axios.post(`${ayhamWifiUrl}/api/auth/register`, {
         username,
         email,
@@ -68,6 +161,8 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
             coordinates: [longitude, latitude],
           },
           profileImage,
+          certificates: uploadedCertificates,
+          additionalImages: uploadedImages,
         },
         verificationStatus: false,
         tokens: [],
@@ -77,20 +172,18 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
         resetCode: 0,
         resetCodeExpires: new Date().toISOString(),
       });
-      console.log("inside");
+
       if (response.status === 201) {
-        console.log("Done");
         Alert.alert(
           "🎉 Success 🎉",
           "Your account has been created successfully! 🚀 Ready to explore amazing features?",
           [
             {
               text: "Let's Go! 🚀",
-              onPress: () => console.log("User navigated to the app"),
+              onPress: () => navigation.navigate("MainNavigation"),
             },
           ]
         );
-        navigation.navigate("MainNavigation");
       }
     } catch (error) {
       console.log("Error", error);
@@ -107,25 +200,82 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
       );
     }
   };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
     >
       <View style={styles.container}>
         <Header title="Password Page" />
-        <Password
-          placeholder="Enter password"
-          password={password}
-          onChangeText={setPassword}
-        />
-        <Password
-          placeholder="Confirm Password"
-          password={confirmPassword}
-          onChangeText={setConfirmPassword}
-        />
-        <ButtonGroup onPrevious={handlePrevious} onNext={handleNext} />
+        <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+          <Password
+            placeholder="Enter password"
+            password={password}
+            onChangeText={setPassword}
+          />
+          <Password
+            placeholder="Confirm Password"
+            password={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+
+          <Text style={styles.sectionTitle}>Upload Certificates</Text>
+          <TouchableOpacity
+            style={styles.uploadButton}
+            onPress={handleSelectCertificates}
+          >
+            <Text style={styles.uploadButtonText}>Choose Certificates</Text>
+          </TouchableOpacity>
+          <ScrollView
+            horizontal
+            style={styles.previewContainer}
+            showsHorizontalScrollIndicator={false}
+          >
+            {certificates.map((uri, index) => (
+              <View key={index} style={styles.previewItem}>
+                <Text style={styles.previewText}>Certificate {index + 1}</Text>
+                <TouchableOpacity
+                  onPress={() => handleRemoveItem("certificates", index)}
+                  style={styles.removeButton}
+                >
+                  <Text style={styles.removeButtonText}>Remove</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+
+          <Text style={styles.sectionTitle}>Upload Images</Text>
+          <TouchableOpacity
+            style={styles.uploadButton}
+            onPress={handleSelectImages}
+          >
+            <Text style={styles.uploadButtonText}>Choose Images</Text>
+          </TouchableOpacity>
+          <ScrollView
+            horizontal
+            style={styles.previewContainer}
+            showsHorizontalScrollIndicator={false}
+          >
+            {images.map((uri, index) => (
+              <View key={index} style={styles.previewItem}>
+                <Image
+                  source={{ uri }}
+                  style={styles.previewImage}
+                  resizeMode="cover"
+                />
+                <TouchableOpacity
+                  onPress={() => handleRemoveItem("images", index)}
+                  style={styles.removeButton}
+                >
+                  <Text style={styles.removeButtonText}>Remove</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+
+          <ButtonGroup onPrevious={navigation.goBack} onNext={handleNext} />
+        </ScrollView>
       </View>
     </KeyboardAvoidingView>
   );

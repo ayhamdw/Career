@@ -37,7 +37,8 @@ const App = () => {
         <NavigationIndependentTree>
           <StatusBar barStyle="dark-content" />
           <NavigationContainer>
-            {user ? <Main route={{ params: { user } }} /> : <MainNavigation />}
+            {/* {user ? <Main route={{ params: { user } }} /> : <MainNavigation />} */}
+            <MainNavigation />
             <Toast />
           </NavigationContainer>
         </NavigationIndependentTree>

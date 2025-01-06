@@ -152,7 +152,6 @@ const HomePage = ({ user }: { user: User }) => {
       setSearchResults(result);
     }
   };
-
   const chooseJob = (item: string) => {
     setModalVisible(false);
     setSearch("");
@@ -167,7 +166,7 @@ const HomePage = ({ user }: { user: User }) => {
         `${ayhamWifiUrl}/api/user/save-expo-token`,
         {
           userId: user._id,
-          token: expoPushToken?.data, //
+          token: token, //
         }
       );
       if (response.status === 200) {
