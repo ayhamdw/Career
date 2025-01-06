@@ -196,4 +196,53 @@ export default StyleSheet.create({
     color: "#a9a9a9",
     fontSize: 16,
   },
+
+
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginVertical: 10,
+  },
+  uploadButton: {
+    backgroundColor: "#007bff",
+    padding: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  uploadButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  previewContainer: {
+    flexDirection: "row",
+    marginBottom: 20,
+  },
+  previewItem: {
+    alignItems: "center",
+    marginRight: 10,
+    padding: 10,
+    backgroundColor: "#f8f9fa",
+    borderRadius: 8,
+  },
+  previewText: {
+    fontSize: 14,
+    color: "#333",
+  },
+  previewImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+  },
+  removeButton: {
+    marginTop: 5,
+    backgroundColor: "#ff4d4f",
+    padding: 5,
+    borderRadius: 4,
+  },
+  removeButtonText: {
+    color: "#fff",
+    fontSize: 12,
+  },
 });

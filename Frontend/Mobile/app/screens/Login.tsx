@@ -30,6 +30,14 @@ const Login = () => {
     strategy: "oauth_apple",
   });
 
+  const loadUser = async () => {
+    const userString = await AsyncStorage.getItem("user");
+    if (userString) {
+      const userObject = JSON.parse(userString);
+      navigation.replace("Main", { user: userObject });
+    }
+  };
+
   useEffect(() => {
     if (user) {
       const email = user?.emailAddresses[0]?.emailAddress;
@@ -69,6 +77,10 @@ const Login = () => {
       registerUser();
     }
   }, [user, navigation]);
+
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   const handleOAuthSignIn = useCallback(
     async (strategy) => {

@@ -114,6 +114,14 @@ const userSchema = new mongoose.Schema(
           },
         },
       ],
+      certificates: {
+        type: [String],
+        required: false,
+      },
+      additionalImages: {
+        type: [String],
+        required: false,
+      },
     },
     verificationStatus: {
       type: Boolean,
