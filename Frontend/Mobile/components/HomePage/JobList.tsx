@@ -50,8 +50,6 @@ export default function JobList() {
     { id: "3", title: "Blacksmith", location: "Nablus", price: "$80/day" },
   ]);
 
-  const [filteredResults, setFilteredResults] = useState([]);
-
   const handleSearch = (data: string) => {
     setSearch(data);
     if (data === "") {
@@ -78,6 +76,34 @@ export default function JobList() {
           : [...prev, value]
       );
     }
+  };
+
+  const applyFilters = async () => {
+    const data = {
+      title: searchJob,
+      cities: selectedCities,
+      dayRate: dayRate,
+      rating: rating,
+    };
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(
+        `${ayhamWifiUrl}/api/jobs/specific-data/${JSON.stringify(data)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setJobs(response.data.posts);
+        setProficient(response.data.proficient);
+      }
+    } catch (error) {
+      console.log("Error fetching posts:", error);
+    }
+
+    setModalVisible(false);
   };
 
   const fetchAllPosts = async () => {
@@ -169,7 +195,9 @@ export default function JobList() {
 
       {proficient.length === 0 && toggleButton === false && (
         <View style={styles.noPostAvailable}>
-          <Text style={styles.noPostAvailableText}>No Post Available</Text>
+          <Text style={styles.noPostAvailableText}>
+            No Proficient Available
+          </Text>
         </View>
       )}
       <FlatList
@@ -249,10 +277,7 @@ export default function JobList() {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalButton, styles.applyButton]}
-                onPress={() => {
-                  console.log(dayRate, selectedCities, rating);
-                  setModalVisible(false);
-                }}
+                onPress={() => applyFilters()}
               >
                 <Text style={styles.buttonText}>Apply</Text>
               </TouchableOpacity>
