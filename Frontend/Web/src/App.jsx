@@ -21,6 +21,7 @@ import Community from './General-Components/Community/Community.jsx';
 import SentRequestDetails from './General-Components/Requests/SentRequestDetails/SentRequestDetails.jsx';
 import ProviderProfile from './Components/ServiceProvider/providerProfile/providerProfile.jsx';
 import FullSavedPost from './General-Components/Settings/Sidebar/components/SavedPosts/FullSavedPost/FullSavedPost.jsx';
+import Admin from './Admin/Admin.jsx'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { path: "/", element: <HomePage /> },
+      { path: "/admin", element: <Admin /> },
       { path: "/signin", element: <Sginin /> },
       { path: "/signup", element: <Signup /> },
       { path: "/verify", element: <Verify /> },

@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+*{
+    padding:0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root{
+    --main-app-color:rgb(109, 201, 126);
+}
+body{
+    background-color: #f5f5f5;
+}
+
+
+.container{
+    margin:auto;
+    display: flex;
+}
+
+.sidebar{ 
+    width: 15%;
+    background-color: #24243E;
+    height: 100vh;
+}
+
+.sidebar .sidebarHeader{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--main-app-color);
+    width: 100%;
+}
+
+.sidebar .sidebarHeader img{
+    width: 70px;
+}
+
+.sidebar .sidebarHeader p{
+    font-size: 35px;
+    font-family: "Roboto", serif;
+    font-weight: 700;
+    font-style: italic;
+    position: relative;
+    right: 8px;
+    bottom: 5px;
+    color: white;
+    height: 50px;
+
+}
+
+
+.sidebar .sidebarContent{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 75%;
+    margin: auto;
+    margin-top: 20px;
+
+}
+
+
+.sidebar .sidebarContent ul{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100%;
+}
+.sidebar .sidebarContent ul li{
+    color: #a1a4b5;
+    width: 100%;
+    height: 100%;
+    padding: 10px 0;
+    font-size: 20px;
+}
+
+.sidebar .sidebarContent ul li:hover{
+    color: var(--main-app-color);
+}
+.sidebar .sidebarContent ul li .sidebarItem{
+    display: flex;
+    justify-content: f;
+    align-items: center;
+    gap: 7px;
+}
+
+.contentPage{
+    width: 100%;
+    background-color: rgb(234, 242, 252);
+}
+
+
+
+.contentPage .navbar{
+    width: 100%;
+    background-color: white;
+    height: 70px;
+}
+
+.contentPage .content{
+
+}
