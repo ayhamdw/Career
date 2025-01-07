@@ -8,12 +8,16 @@ const getProficientData = async (req, res) => {
     const { id, careerCategory } = req.query;
     if (careerCategory === "All Proficient") {
       await User.find({ _id: { $ne: id } })
-        .select("profile email city career careerCategory")
+        .select(
+          "profile email city career careerCategory verificationStatus dayRate"
+        )
         .then((users) => res.status(200).send(users))
         .catch((error) => res.status(500).send("Error: " + error));
     } else {
       await User.find({ _id: { $ne: id }, careerCategory: careerCategory })
-        .select("profile email city career careerCategory")
+        .select(
+          "profile email city career careerCategory verificationStatus dayRate"
+        )
         .then((users) => res.status(200).send(users))
         .catch((error) => res.status(500).send("Error: " + error));
     }

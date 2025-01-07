@@ -21,6 +21,7 @@ import Password from "@/components/Password/Password";
 import Amazon from "../../Services/Amazon";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import axios from "axios";
+import { TextInput } from "react-native-gesture-handler";
 
 type SignUpStackParamList = {
   PasswordPage: {
@@ -51,6 +52,7 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [certificates, setCertificates] = useState<string[]>([]);
   const [images, setImages] = useState<string[]>([]);
+  const [dayRate, setDayRate] = useState<string>("");
 
   const {
     firstName,
@@ -164,6 +166,7 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
           certificates: uploadedCertificates,
           additionalImages: uploadedImages,
         },
+        dayRate,
         verificationStatus: false,
         tokens: [],
         friendRequests: [],
@@ -218,6 +221,14 @@ const PasswordPage: React.FC<PasswordPageProps> = ({ navigation, route }) => {
             placeholder="Confirm Password"
             password={confirmPassword}
             onChangeText={setConfirmPassword}
+          />
+
+          <TextInput
+            placeholder="Enter Your Day Rate"
+            style={styles.textInput}
+            keyboardType="numeric"
+            value={dayRate}
+            onChangeText={setDayRate}
           />
 
           <Text style={styles.sectionTitle}>Upload Certificates</Text>
