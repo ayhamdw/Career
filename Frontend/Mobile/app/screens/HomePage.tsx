@@ -74,7 +74,7 @@ const HomePage = ({ user }: { user: User }) => {
   const [searchResults, setSearchResults] = React.useState<string[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const { expoPushToken, notification } = usePushNotifications();
-  console.log("User", users);
+  console.log("User", users[1]);
   const filters = [
     "All Proficient",
     "Home Services",
@@ -108,6 +108,7 @@ const HomePage = ({ user }: { user: User }) => {
     career: string;
     careerCategory: string;
     verificationStatus: boolean;
+    dayRate: string;
   }) => {
     navigation.navigate("ProfNavigator", { proficientDetails, user });
   };

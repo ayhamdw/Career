@@ -137,7 +137,7 @@ const userSchema = new mongoose.Schema(
       default: [],
       required: false,
     },
-    houreRate: {
+    dayRate: {
       type: Number,
       default: 0,
     },

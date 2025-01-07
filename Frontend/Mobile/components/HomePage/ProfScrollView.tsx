@@ -32,6 +32,7 @@ interface Prof {
   career: string;
   careerCategory: string;
   verificationStatus: boolean;
+  dayRate: string;
 }
 
 interface ProfListProps {
@@ -40,7 +41,6 @@ interface ProfListProps {
 }
 
 const ProfList: React.FC<ProfListProps> = ({ jobs, onCardPress }) => {
-  console.log("Verified Jobs:", jobs[0]?.verificationStatus);
   const calcRating = (job: Prof) => {
     if (job.profile.ratings.length === 0) return 0;
     const totalRating = job.profile.ratings.reduce(
@@ -115,6 +115,12 @@ const ProfList: React.FC<ProfListProps> = ({ jobs, onCardPress }) => {
               <Text style={styles.bio} numberOfLines={2}>
                 {job.profile.bio || "No bio available."}
               </Text>
+
+              {/* Day Rate Section */}
+              <View style={styles.dayRateSection}>
+                <MaterialIcons name="attach-money" size={20} color="#fff" />
+                <Text style={styles.dayRateText}>{job.dayRate} / day</Text>
+              </View>
 
               {/* Number of Requests Section */}
               <View style={styles.requestsSection}>
@@ -206,6 +212,22 @@ const styles = StyleSheet.create({
     color: "#e0e0e0",
     marginTop: 10,
     fontStyle: "italic",
+  },
+  dayRateSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+    backgroundColor: "#ffa726",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    alignSelf: "flex-start",
+  },
+  dayRateText: {
+    fontSize: 14,
+    color: "#fff",
+    fontWeight: "bold",
+    marginLeft: 6,
   },
   requestsSection: {
     flexDirection: "row",
