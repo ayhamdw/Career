@@ -48,6 +48,7 @@ const signinController = async (req, res, next) => {
       token,
       verificationStatus: user.verificationStatus,
     });
+    console.log(token);
   } catch (error) {
     console.log("Error inside the Login", error);
     next(error);
