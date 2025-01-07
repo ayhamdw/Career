@@ -6,7 +6,7 @@ const cities = [
     "Jerusalem",
     "Jenin",
     "Tulkarm",
-    "Qalqilya",
+    "Qalqiliya",
     "Bethlehem",
     "Tubas",
     "Salfit",
