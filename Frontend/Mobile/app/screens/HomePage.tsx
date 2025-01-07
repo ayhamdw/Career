@@ -74,7 +74,7 @@ const HomePage = ({ user }: { user: User }) => {
   const [searchResults, setSearchResults] = React.useState<string[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const { expoPushToken, notification } = usePushNotifications();
-  const data = JSON.stringify(notification, undefined, 2);
+  console.log("User", users);
   const filters = [
     "All Proficient",
     "Home Services",
@@ -107,6 +107,7 @@ const HomePage = ({ user }: { user: User }) => {
     city: string;
     career: string;
     careerCategory: string;
+    verificationStatus: boolean;
   }) => {
     navigation.navigate("ProfNavigator", { proficientDetails, user });
   };
@@ -166,7 +167,7 @@ const HomePage = ({ user }: { user: User }) => {
         `${ayhamWifiUrl}/api/user/save-expo-token`,
         {
           userId: user._id,
-          token: token, //
+          token: token,
         }
       );
       if (response.status === 200) {
@@ -180,6 +181,7 @@ const HomePage = ({ user }: { user: User }) => {
   useEffect(() => {
     saveExpoToken(expoPushToken?.data);
   }, []);
+  //test
 
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -223,7 +225,7 @@ const HomePage = ({ user }: { user: User }) => {
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={styles.listItem}
-                    onPress={() => chooseJob(item)} // Wrap in an arrow function
+                    onPress={() => chooseJob(item)}
                   >
                     <Text>{item}</Text>
                   </TouchableOpacity>

@@ -20,6 +20,7 @@ const Header: React.FC<HeaderProps> = ({ name, navigation, userId }) => {
   const fetchNotificationNumber = async () => {
     const token = await AsyncStorage.getItem("token");
     try {
+      console.log(userId);
       const response = await axios.get(
         `${ayhamWifiUrl}/api/notification/get-notification/${userId}`,
         {
