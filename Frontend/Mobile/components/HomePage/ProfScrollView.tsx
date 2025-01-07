@@ -116,13 +116,11 @@ const ProfList: React.FC<ProfListProps> = ({ jobs, onCardPress }) => {
                 {job.profile.bio || "No bio available."}
               </Text>
 
-              {/* Day Rate Section */}
               <View style={styles.dayRateSection}>
                 <MaterialIcons name="attach-money" size={20} color="#fff" />
                 <Text style={styles.dayRateText}>{job.dayRate} / day</Text>
               </View>
 
-              {/* Number of Requests Section */}
               <View style={styles.requestsSection}>
                 <MaterialIcons name="thumb-up" size={20} color="#fff" />
                 <Text style={styles.requestsText}>
