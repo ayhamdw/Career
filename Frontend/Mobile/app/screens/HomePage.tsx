@@ -21,6 +21,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
 import jobs from "@/constants/Jobs";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
+import jobAndProficientList from "@/constants/Jobs";
+import SearchModal from "@/components/HomePage/Modal";
+
 interface Location {
   type: string;
   coordinates: [number, number];
@@ -148,17 +151,18 @@ const HomePage = ({ user }: { user: User }) => {
     if (data === "") {
       setSearchResults([]);
     } else {
-      const result = jobs.filter((job) =>
+      const result = jobAndProficientList.filter((job) =>
         job.toLowerCase().includes(data.toLowerCase())
       );
       setSearchResults(result);
     }
   };
-  const chooseJob = () => {
+  const chooseJob = (item: string) => {
     setModalVisible(false);
     setSearch("");
     navigation.navigate("JobList", {
       user: user._id,
+      job: item,
     });
   };
   const saveExpoToken = async (token: any) => {
@@ -191,58 +195,23 @@ const HomePage = ({ user }: { user: User }) => {
           navigation={navigation}
           userId={id}
         />
-        <TouchableOpacity style={styles.searchBar} onPress={() => chooseJob()}>
+        <TouchableOpacity
+          style={styles.searchBar}
+          onPress={() => setModalVisible(true)}
+        >
           <Text style={styles.placeholderText}>
             {search || "Search for jobs"}
           </Text>
         </TouchableOpacity>
 
-        <Modal
-          visible={modalVisible}
-          animationType="slide"
-          transparent={true}
-          onRequestClose={() => {
-            setModalVisible(false);
-            setSearch("");
-          }}
-        >
-          <View style={styles.modalBackdrop}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Search for Jobs</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Type to search"
-                value={search}
-                onChangeText={handleSearch}
-                autoFocus={true}
-              />
-              <FlatList
-                data={searchResults}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={styles.listItem}
-                    onPress={() => chooseJob(item)}
-                  >
-                    <Text>{item}</Text>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-                ListEmptyComponent={() =>
-                  search.trim() !== "" && (
-                    <Text style={styles.emptyText}>No results found</Text>
-                  )
-                }
-              />
-              ;
-              <Pressable
-                style={styles.closeButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.closeButtonText}>Close</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
+        <SearchModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          search={search}
+          setSearch={handleSearch}
+          searchResults={searchResults}
+          chooseJob={chooseJob}
+        />
 
         <View style={styles.section}>
           <TipsHeader title="Tips For You" buttonText="See All" />
