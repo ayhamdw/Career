@@ -17,15 +17,18 @@ import cities from "@/constants/Cities";
 import styles from "@/assets/styles/JobListStyle";
 import SearchModal from "./Modal";
 import jobAndProficientList from "@/constants/Jobs";
+import { ayhamWifiUrl } from "@/constants/Urls";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function JobList() {
   const route = useRoute();
   const { job, user } = route.params;
   const [searchJob, setSearchJob] = useState(job);
-  const [searchText, setSearchText] = useState(job);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedCities, setSelectedCities] = useState([]);
   const [dayRate, setDayRate] = useState({ min: "", max: "" });
+  const [rating, setRating] = useState("");
   const [toggleButton, setToggleButton] = useState(true);
   const [searchResults, setSearchResults] = React.useState<string[]>([]);
   const [searchModalVisible, setSearchModalVisible] = useState(false);
@@ -74,14 +77,32 @@ export default function JobList() {
           ? prev.filter((item) => item !== value)
           : [...prev, value]
       );
-    } else if (type === "category") {
-      setSelectedCategories((prev) =>
-        prev.includes(value)
-          ? prev.filter((item) => item !== value)
-          : [...prev, value]
-      );
     }
   };
+
+  const fetchAllPosts = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(
+        `${ayhamWifiUrl}/api/jobs/all-posts/${searchJob}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setJobs(response.data.posts);
+        setProficient(response.data.proficient);
+      }
+    } catch (error) {
+      console.log("Error fetching posts:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllPosts();
+  }, []);
 
   const renderJob = ({ item }) => (
     <TouchableOpacity
@@ -99,7 +120,7 @@ export default function JobList() {
         </Text>
         <Text style={styles.jobPrice}>
           <Ionicons name="pricetag-outline" size={18} color="#28a745" />{" "}
-          {item.price}
+          {"$" + item.price + "/day"}
         </Text>
       </View>
     </TouchableOpacity>
@@ -140,10 +161,20 @@ export default function JobList() {
           <Ionicons name="filter" size={24} color="black" />
         </TouchableOpacity>
       </View>
+      {jobs.length === 0 && toggleButton === true && (
+        <View style={styles.noPostAvailable}>
+          <Text style={styles.noPostAvailableText}>No Post Available</Text>
+        </View>
+      )}
 
+      {proficient.length === 0 && toggleButton === false && (
+        <View style={styles.noPostAvailable}>
+          <Text style={styles.noPostAvailableText}>No Post Available</Text>
+        </View>
+      )}
       <FlatList
-        data={filteredResults}
-        keyExtractor={(item) => item.id}
+        data={toggleButton ? jobs : proficient}
+        keyExtractor={(item) => item._id}
         renderItem={renderJob}
         contentContainerStyle={styles.jobList}
       />
@@ -178,7 +209,6 @@ export default function JobList() {
                 </TouchableOpacity>
               ))}
 
-              {/* Day Rate */}
               <Text style={styles.filterCategory}>Day Rate</Text>
               <View style={styles.dayRateRow}>
                 <TextInput
@@ -197,9 +227,19 @@ export default function JobList() {
                   onChangeText={(text) => setDayRate({ ...dayRate, max: text })}
                 />
               </View>
+
+              <Text style={styles.filterCategory}>Rating (1 - 5)</Text>
+              <View style={styles.dayRateRow}>
+                <TextInput
+                  style={styles.dayRateInput}
+                  placeholder="Rating"
+                  keyboardType="numeric"
+                  value={rating}
+                  onChangeText={(text) => setRating(text)}
+                />
+              </View>
             </ScrollView>
 
-            {/* Modal Buttons */}
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.cancelButton]}
@@ -210,7 +250,7 @@ export default function JobList() {
               <TouchableOpacity
                 style={[styles.modalButton, styles.applyButton]}
                 onPress={() => {
-                  console.log(dayRate, selectedCities);
+                  console.log(dayRate, selectedCities, rating);
                   setModalVisible(false);
                 }}
               >

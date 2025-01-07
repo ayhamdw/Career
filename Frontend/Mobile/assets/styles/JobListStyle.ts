@@ -228,5 +228,31 @@ const styles = StyleSheet.create({
     placeholderText: {
       color: "#888",
     },
+    noPostAvailable: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+      backgroundColor: "#f9f9f9",
+      borderRadius: 12,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 5,
+      marginTop: 20,
+    },
+    noPostAvailableText: {
+      fontSize: 20,
+      fontWeight: "bold",
+      color: "#4caf50",
+      textAlign: "center",
+    },
+    noPostSubText: {
+      fontSize: 14,
+      color: "#777",
+      marginTop: 8,
+      textAlign: "center",
+    },
   });
 export default styles;
