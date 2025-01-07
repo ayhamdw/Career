@@ -17,13 +17,13 @@ import { Checkbox } from "react-native-paper";
 export default function JobList() {
   const route = useRoute();
   const { job, user } = route.params;
-  console.log("Job:", job);
-  console.log("User:", user);
   const [searchText, setSearchText] = useState("");
+  const [resultSearch, setResultSearch] = useState();
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedCities, setSelectedCities] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [dayRate, setDayRate] = useState({ min: "", max: "" });
+  const [toggleButton, setToggleButton] = useState(true);
   const [jobs, setJobs] = useState([
     { id: "1", title: "Web Developer", location: "Gaza", price: "$100/day" },
     {
@@ -33,6 +33,17 @@ export default function JobList() {
       price: "$150/day",
     },
     { id: "3", title: "Content Writer", location: "Nablus", price: "$80/day" },
+  ]);
+
+  const [proficient, setProficeint] = useState([
+    { id: "1", title: "Carpenter", location: "Gaza", price: "$100/day" },
+    {
+      id: "2",
+      title: "Plumber",
+      location: "Ramallah",
+      price: "$150/day",
+    },
+    { id: "3", title: "Black Smith", location: "Nablus", price: "$80/day" },
   ]);
 
   const cities = [
@@ -60,9 +71,8 @@ export default function JobList() {
   ];
 
   useEffect(() => {
-    setSearchText(job);
+    setResultSearch(jobs);
   }, []);
-
   const toggleModal = () => setModalVisible(!isModalVisible);
 
   const toggleFilter = (value, type) => {
@@ -79,6 +89,13 @@ export default function JobList() {
           : [...prev, value]
       );
     }
+  };
+
+  const changeText = (text: string) => {
+    setSearchText(text);
+    setResultSearch(
+      jobs.filter((job) => job.title.toLowerCase().includes(text.toLowerCase()))
+    );
   };
 
   const renderJob = ({ item }) => (
@@ -105,12 +122,35 @@ export default function JobList() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.toggleButtonContainer}>
+        <TouchableOpacity
+          style={
+            toggleButton
+              ? styles.toggleButtonActive
+              : styles.toggleButtonInactive
+          }
+          onPress={() => setToggleButton(!toggleButton)}
+        >
+          <Text style={styles.toggleButtonText}>Posts</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={
+            toggleButton
+              ? styles.toggleButtonInactive
+              : styles.toggleButtonActive
+          }
+          onPress={() => setToggleButton(!toggleButton)}
+        >
+          <Text style={styles.toggleButtonText}>Proficient</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.searchRow}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search for jobs"
           value={searchText}
-          onChangeText={(text) => setSearchText(text)}
+          onChangeText={changeText}
+          autoFocus={true}
         />
         <TouchableOpacity onPress={toggleModal}>
           <Ionicons name="filter" size={24} color="black" />
@@ -118,7 +158,7 @@ export default function JobList() {
       </View>
 
       <FlatList
-        data={jobs}
+        data={resultSearch}
         keyExtractor={(item) => item.id}
         renderItem={renderJob}
         contentContainerStyle={styles.jobList}
@@ -295,5 +335,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 20,
+  },
+  toggleButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  toggleButtonActive: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: "#007bff",
+    width: "48%",
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  toggleButtonInactive: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: "#ccc",
+    width: "48%",
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  toggleButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });

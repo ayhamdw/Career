@@ -154,11 +154,10 @@ const HomePage = ({ user }: { user: User }) => {
       setSearchResults(result);
     }
   };
-  const chooseJob = (item: string) => {
+  const chooseJob = () => {
     setModalVisible(false);
     setSearch("");
     navigation.navigate("JobList", {
-      job: item,
       user: user._id,
     });
   };
@@ -182,7 +181,6 @@ const HomePage = ({ user }: { user: User }) => {
   useEffect(() => {
     saveExpoToken(expoPushToken?.data);
   }, []);
-  //test
 
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -193,10 +191,7 @@ const HomePage = ({ user }: { user: User }) => {
           navigation={navigation}
           userId={id}
         />
-        <TouchableOpacity
-          style={styles.searchBar}
-          onPress={() => setModalVisible(true)}
-        >
+        <TouchableOpacity style={styles.searchBar} onPress={() => chooseJob()}>
           <Text style={styles.placeholderText}>
             {search || "Search for jobs"}
           </Text>
