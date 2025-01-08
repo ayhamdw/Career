@@ -13,6 +13,8 @@ import PostDetails from "../Community/postDetails";
 import MyProjects from "../Setting/MyProjects";
 import EditProject from "../Setting/EditProject";
 import CreateProject from "../Setting/CreateProject";
+import MyPosts from "../Setting/MyPosts";
+import EditPost from "../Setting/EditPost";
 
 const Stack = createStackNavigator();
 
@@ -28,6 +30,8 @@ const ProfileNavigator = ({ user }: { user: any }) => {
       MyProjects: (props: any) => <MyProjects {...props} user={user} />,
       CreateProject: (props: any) => <CreateProject {...props} user={user} />,
       EditProject: (props: any) => <EditProject {...props} user={user} />,
+      MyPosts: (props: any) => <MyPosts {...props} user={user} />,
+      EditPost: (props: any) => <EditPost {...props} user={user} />,
       Logout: (props: any) => <Login {...props} />,
     }),
     [user]
@@ -85,6 +89,18 @@ const ProfileNavigator = ({ user }: { user: any }) => {
       <Stack.Screen
         name="CreateProject"
         component={screenData.CreateProject}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="MyPosts"
+        component={screenData.MyPosts}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="EditPost"
+        component={screenData.EditPost}
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Logout" component={screenData.Logout} />

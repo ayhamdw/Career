@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
@@ -19,6 +19,29 @@ export default function FriendRequests({ user }: { user: any }) {
   const [senderUserData, setSenderUserData] = useState([]);
   const [filter, setFilter] = useState("active");
   const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "",
+      headerLeft: () => (
+        <View style={{ marginLeft: 20 }}>
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="black"
+            onPress={() => navigation.goBack()}
+            style={{
+              marginLeft: -10,
+              width: 30,
+              height: 30,
+              borderRadius: 50,
+              backgroundColor: "white",
+            }}
+          />
+        </View>
+      ),
+    });
+  }, []);
 
   const formatTime = (dateString: string): string => {
     const date = new Date(dateString);

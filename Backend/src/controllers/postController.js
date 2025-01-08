@@ -165,6 +165,15 @@ const getPostById = async (req, res) => {
   }
 };
 
+const getMyPostsWithDetails = async (req, res) => {
+  try {
+    const response = await Post.find({ user: req.params.id });
+    res.status(200).send(response);
+  } catch (error) {
+    console.log("error while getting saved posts", error);
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
@@ -175,4 +184,5 @@ module.exports = {
   getSavedPostsIds,
   getMyPosts,
   getPostById,
+  getMyPostsWithDetails,
 };

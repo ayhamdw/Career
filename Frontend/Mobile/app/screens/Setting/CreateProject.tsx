@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import { ayhamWifiUrl } from "@/constants/Urls";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { Ionicons } from "@expo/vector-icons";
 
 const CreateProject = ({ navigation }) => {
   const [title, setTitle] = useState("");
@@ -45,6 +46,29 @@ const CreateProject = ({ navigation }) => {
     "Salfit",
     "Jericho",
   ];
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "",
+      headerLeft: () => (
+        <View style={{ marginLeft: 20 }}>
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="black"
+            onPress={() => navigation.goBack()}
+            style={{
+              marginLeft: -10,
+              width: 30,
+              height: 30,
+              borderRadius: 50,
+              backgroundColor: "white",
+            }}
+          />
+        </View>
+      ),
+    });
+  }, []);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({

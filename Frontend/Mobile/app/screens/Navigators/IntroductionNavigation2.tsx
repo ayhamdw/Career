@@ -30,7 +30,11 @@ const IntroductionNavigation = () => (
       options={{ headerStyle: { backgroundColor: "white" } }}
     />
     <Stack.Screen name="Main" component={Main} />
-    <Stack.Screen name="ProfileNavigator" component={ProfileNavigator} />
+    <Stack.Screen
+      name="ProfileNavigator"
+      component={ProfileNavigator}
+      options={{ headerShown: false }}
+    />
   </Stack.Navigator>
 );
 
