@@ -19,7 +19,7 @@ const postSchema = new mongoose.Schema(
     },
     careerCategory: {
       type: String,
-      required: true,
+      required: false,
       enum: [
         "Home Services",
         "Technical Services",

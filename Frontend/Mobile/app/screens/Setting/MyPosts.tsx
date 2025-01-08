@@ -86,8 +86,8 @@ export default function MyPosts({ user }) {
     ]);
   };
 
-  const handleEditPost = (postId) => {
-    navigation.navigate("EditPost", { postId });
+  const handleEditPost = (postId, postDetails) => {
+    navigation.navigate("EditPost", { postId, postDetails });
   };
 
   useEffect(() => {
@@ -103,7 +103,7 @@ export default function MyPosts({ user }) {
       <View style={styles.actionsContainer}>
         <TouchableOpacity
           style={[styles.button, styles.editButton]}
-          onPress={() => handleEditPost(item._id)}
+          onPress={() => handleEditPost(item._id, item)}
         >
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>

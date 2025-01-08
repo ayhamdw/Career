@@ -11,14 +11,16 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 import { Picker } from "@react-native-picker/picker";
-import uuid from "react-native-uuid";
-import Amazon from "@/app/Services/Amazon";
 import { useRoute } from "@react-navigation/native";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Ionicons } from "@expo/vector-icons";
+
+import { uploadPhotos } from "../../Services/UploadPhotos";
+
+import cities from "@/constants/Cities";
 
 const CreateProject = ({ navigation }) => {
   const [title, setTitle] = useState("");
@@ -27,25 +29,6 @@ const CreateProject = ({ navigation }) => {
   const [location, setLocation] = useState("Select a city");
   const route = useRoute();
   const { user } = route.params;
-
-  const palestinianCities = [
-    "Jerusalem",
-    "Ramallah",
-    "Hebron",
-    "Nablus",
-    "Bethlehem",
-    "Jenin",
-    "Tulkarm",
-    "Qalqilya",
-    "Gaza",
-    "Rafah",
-    "Khan Younis",
-    "Deir al-Balah",
-    "Beit Hanoun",
-    "Beit Lahia",
-    "Salfit",
-    "Jericho",
-  ];
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -70,6 +53,15 @@ const CreateProject = ({ navigation }) => {
     });
   }, []);
 
+  const compressImage = async (uri) => {
+    const compressed = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { width: 800 } }],
+      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+    );
+    return compressed.uri;
+  };
+
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -80,28 +72,6 @@ const CreateProject = ({ navigation }) => {
     if (!result.canceled) {
       setImages([...images, ...result.assets.map((asset) => asset.uri)]);
     }
-  };
-
-  const compressImage = async (uri) => {
-    const compressed = await ImageManipulator.manipulateAsync(
-      uri,
-      [{ resize: { width: 800 } }],
-      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
-    );
-    return compressed.uri;
-  };
-
-  const uploadPhotos = async (tempPhotos) => {
-    const photos = [];
-    for (const element of tempPhotos) {
-      const uniqueId = uuid.v4();
-      const photo = element;
-      const ext = photo.split(".").pop();
-      const newFileName = `projects/${user._id}/${uniqueId}.${ext}`.trim();
-      const url = await Amazon.uploadImageToS3(newFileName, photo);
-      photos.push(url);
-    }
-    return photos;
   };
 
   const handleCreate = async () => {
@@ -118,7 +88,7 @@ const CreateProject = ({ navigation }) => {
     }
     const token = await AsyncStorage.getItem("token");
     const compressedPhotos = await Promise.all(images.map(compressImage));
-    const uploadedPhotos = await uploadPhotos(compressedPhotos);
+    const uploadedPhotos = await uploadPhotos(compressedPhotos, user._id);
     const response = await axios.post(
       `${ayhamWifiUrl}/api/projects/create-project`,
       {
@@ -179,7 +149,7 @@ const CreateProject = ({ navigation }) => {
           onValueChange={(itemValue) => setLocation(itemValue)}
         >
           <Picker.Item label="Select a city" value="Select a city" />
-          {palestinianCities.map((city, index) => (
+          {cities.map((city, index) => (
             <Picker.Item key={index} label={city} value={city} />
           ))}
         </Picker>
