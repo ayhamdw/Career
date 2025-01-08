@@ -13,6 +13,8 @@ import { ayhamWifiUrl } from "@/constants/Urls";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
+import { uploadPhotos } from "@/app/Services/UploadPhotos";
+import * as ImageManipulator from "expo-image-manipulator";
 
 export default function EditProject({ route, navigation }) {
   const { project } = route.params;
@@ -37,15 +39,26 @@ export default function EditProject({ route, navigation }) {
     setImages(images.filter((img: string) => img !== image));
   };
 
+  const compressImage = async (uri) => {
+    const compressed = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { width: 800 } }],
+      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+    );
+    return compressed.uri;
+  };
+
   const saveChanges = async (id: string) => {
     try {
       const token = await AsyncStorage.getItem("token");
+      const compressedPhotos = await Promise.all(images.map(compressImage));
+      const uploadedPhotos = await uploadPhotos(compressedPhotos, project._id);
       const response = await axios.put(
         `${ayhamWifiUrl}/api/projects/update-project/${id}`,
         {
           title,
           content,
-          images,
+          images: uploadedPhotos,
           location,
         },
         {

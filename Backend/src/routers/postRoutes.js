@@ -23,6 +23,13 @@ router.get("/getSavedPosts/:id", postController.getSavedPosts);
 router.get("/getSavedPostsIds/:userId", postController.getSavedPostsIds);
 
 router.get("/myPosts/:id", postController.getMyPosts);
+
 router.get("/getPostById/:id", postController.getPostById);
+
+router.get("/getMyPostsWithDetails/:id", postController.getMyPostsWithDetails);
+
+router.get("/getPostDetails/:id", postController.getPostDetails);
+
+router.put("/updatePost/:id", postController.updatePost);
 
 module.exports = router;
