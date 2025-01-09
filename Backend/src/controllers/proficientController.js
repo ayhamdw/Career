@@ -1,5 +1,6 @@
 const User = require("../models/user2");
 const Booking = require("../models/Booking");
+const Post = require("../models/posts");
 const Project = require("../models/project");
 const axios = require("axios");
 const { sendPushNotification } = require("./notificationController");
@@ -147,9 +148,17 @@ const senderDetails = async (req, res) => {
 };
 
 const acceptRequest = async (req, res) => {
-  const { action, bookId } = req.body;
+  const { action, bookId, postId } = req.body;
+  console.log(req.body);
+  console.log("action:", action);
+  console.log("postId", postId);
   try {
     await Booking.findByIdAndUpdate(bookId, { status: action });
+    if (action === "Accepted" && postId) {
+      await Post.findByIdAndUpdate(postId, { $inc: { numberOfWorker: -1 } });
+    } else if (action === "Cancelled" && postId) {
+      await Post.findByIdAndUpdate(postId, { $inc: { numberOfWorker: 1 } });
+    }
     res.status(200).json({ message: "Request Accepted" });
   } catch (error) {
     res.status(500).send("Error: " + error);

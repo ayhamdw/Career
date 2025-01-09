@@ -83,13 +83,14 @@ export default function FriendRequests({ user }: { user: any }) {
   const requestAction = async (
     action: string,
     bookId: string,
-    clientId: string
+    clientId: string,
+    postId: string
   ) => {
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await axios.post(
         `${ayhamWifiUrl}/api/proficient/request-action`,
-        { action, bookId },
+        { action, bookId, postId },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -234,13 +235,17 @@ export default function FriendRequests({ user }: { user: any }) {
             <>
               <TouchableOpacity
                 style={[styles.button, styles.acceptButton]}
-                onPress={() => requestAction("Accepted", bookId, sender._id)}
+                onPress={() =>
+                  requestAction("Accepted", bookId, sender._id, postId)
+                }
               >
                 <Text style={styles.buttonText}>Accept</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.rejectButton]}
-                onPress={() => requestAction("Rejected", bookId, sender._id)}
+                onPress={() =>
+                  requestAction("Rejected", bookId, sender._id, postId)
+                }
               >
                 <Text style={styles.buttonText}>Reject</Text>
               </TouchableOpacity>
@@ -250,13 +255,17 @@ export default function FriendRequests({ user }: { user: any }) {
             <>
               <TouchableOpacity
                 style={[styles.button, styles.cancelButton]}
-                onPress={() => requestAction("Cancelled", bookId, sender._id)}
+                onPress={() =>
+                  requestAction("Cancelled", bookId, sender._id, postId)
+                }
               >
                 <Text style={styles.buttonText}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.completeButton]}
-                onPress={() => requestAction("Completed", bookId, sender._id)}
+                onPress={() =>
+                  requestAction("Completed", bookId, sender._id, postId)
+                }
               >
                 <Text style={styles.buttonText}>Complete</Text>
               </TouchableOpacity>
