@@ -122,18 +122,17 @@ const checkIfUserRated = async (req, res) => {
 };
 
 const saveExpoToken = async (req, res) => {
-  const { userId, token } = req.body;
-  console.log("Saving expo token:", userId);
-  console.log("Token:", token);
+  const { userId, expoToken } = req.body;
+  console.log("Expo token:", expoToken);
   try {
-    if (!userId || !token) {
+    if (!userId || !expoToken) {
       return res.status(400).json({ message: "Invalid request data" });
     }
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    user.expoPushToken = token;
+    user.expoPushToken = expoToken;
     await user.save();
   } catch (error) {
     console.log("Error saving expo token:", error);
