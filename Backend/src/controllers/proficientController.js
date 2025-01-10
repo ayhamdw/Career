@@ -149,9 +149,7 @@ const senderDetails = async (req, res) => {
 
 const acceptRequest = async (req, res) => {
   const { action, bookId, postId } = req.body;
-  console.log(req.body);
-  console.log("action:", action);
-  console.log("postId", postId);
+
   try {
     await Booking.findByIdAndUpdate(bookId, { status: action });
     if (action === "Accepted" && postId) {

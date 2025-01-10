@@ -77,7 +77,6 @@ const HomePage = ({ user }: { user: User }) => {
   const [searchResults, setSearchResults] = React.useState<string[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const { expoPushToken, notification } = usePushNotifications();
-  console.log("User", users[1]);
   const filters = [
     "All Proficient",
     "Home Services",
@@ -167,11 +166,12 @@ const HomePage = ({ user }: { user: User }) => {
   };
   const saveExpoToken = async (token: any) => {
     try {
+      console.log("Expo Token:", token);
       const response = await axios.post(
         `${ayhamWifiUrl}/api/user/save-expo-token`,
         {
           userId: user._id,
-          token: token,
+          expoToken: token,
         }
       );
       if (response.status === 200) {
@@ -184,7 +184,7 @@ const HomePage = ({ user }: { user: User }) => {
 
   useEffect(() => {
     saveExpoToken(expoPushToken?.data);
-  }, []);
+  }, [expoPushToken]);
 
   return (
     <ScrollView style={styles.scrollContainer}>

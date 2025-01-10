@@ -1,3 +1,4 @@
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
   Text,
@@ -9,7 +10,6 @@ import {
   Platform,
   Keyboard,
 } from "react-native";
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
@@ -20,6 +20,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
+import { io, Socket } from "socket.io-client";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
 
 import styles from "@/assets/styles/ChatUserStyle";
 import { ayhamWifiUrl } from "../../constants/Urls";
@@ -30,7 +32,7 @@ const ChatUser = ({ user }) => {
   const [selectedImage, setSelectedImage] = useState("");
   const [receiverDetails, setReceiverDetails] = useState();
   const [messages, setMessages] = useState([]);
-
+  const socket = useRef(null);
   const scrollViewRef = useRef(null);
   const route = useRoute();
   const { me } = route.params;
@@ -42,6 +44,49 @@ const ChatUser = ({ user }) => {
   const handelEmojiPress = () => {
     setShowEmojiSelector(!showEmojiSelector);
   };
+
+  useEffect(() => {
+    socket.current = io("http://192.168.1.13:7777", {
+      transports: ["websocket", "polling"],
+    });
+    console.log("Socket instance:", socket.current);
+    if (socket.current) {
+      console.log("Socket initialized:", socket.current);
+
+      socket.current.on("connect_error", (error) => {
+        console.error("Socket connection error:", error);
+      });
+
+      socket.current.on("connect", () => {
+        console.log("Socket connected successfully!");
+      });
+
+      socket.current.on("receiveMessage", (data) => {
+        console.log("Received message:", data);
+      });
+
+      return () => {
+        if (socket.current) {
+          socket.current.disconnect();
+        }
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on("receiveMessage", (data) => {
+        console.log("Received message:", data);
+        setMessages((prevMessages) => [...prevMessages, data]);
+      });
+
+      return () => {
+        if (socket.current) {
+          socket.current.off("receiveMessage");
+        }
+      };
+    }
+  }, []);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -78,42 +123,51 @@ const ChatUser = ({ user }) => {
     };
   }, []);
 
-  const handleSendMessage = async (messageType: string, imageUri: string) => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      const formData = new FormData();
-      formData.append("senderId", senderId); //* Append senderId to the form data
-      formData.append("receiverId", receiverId); //* Append receiverId to the form data
+  const handleSendMessage = async (messageType, imageUri) => {
+    if (message.trim() !== "" || imageUri) {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        const formData = new FormData();
+        formData.append("senderId", senderId);
+        formData.append("receiverId", receiverId);
 
-      if (messageType === "image") {
-        formData.append("messageType", "image");
-        formData.append("imageFile", {
-          uri: imageUri,
-          name: "image.jpg",
-          type: "image/jpeg",
-        });
-      } else {
-        formData.append("messageType", "text");
-        formData.append("messageText", message);
-      }
-      const response = await axios.post(
-        `${ayhamWifiUrl}/api/messages/messages`,
-        formData,
-        {
-          headers: {
-            "content-type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
+        if (messageType === "image") {
+          formData.append("messageType", "image");
+          formData.append("imageFile", {
+            uri: imageUri,
+            name: "image.jpg",
+            type: "image/jpeg",
+          });
+        } else {
+          formData.append("messageType", "text");
+          formData.append("messageText", message);
         }
-      );
-      if (response.status === 200) {
-        setMessage("");
-        setSelectedImage("");
-        fetchMessages();
-        scrollViewRef.current?.scrollToEnd({ animated: true });
+
+        const response = await axios.post(
+          `${ayhamWifiUrl}/api/messages/messages`,
+          formData,
+          {
+            headers: {
+              "content-type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const newMessage = response.data;
+          setMessage("");
+          setSelectedImage("");
+
+          socket.current.emit("sendMessage", newMessage);
+
+          // setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+          scrollViewRef.current?.scrollToEnd({ animated: true });
+        }
+      } catch (error) {
+        console.log("error", error);
       }
-    } catch (error) {
-      console.log("error", error);
     }
   };
 
@@ -187,14 +241,14 @@ const ChatUser = ({ user }) => {
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
+      keyboardVerticalOffset={80}
     >
       <StatusBar barStyle="dark-content" />
       <ScrollView
-        ref={scrollViewRef} // Step 2: Attach the reference to ScrollView
+        ref={scrollViewRef}
         onContentSizeChange={() =>
           scrollViewRef.current?.scrollToEnd({ animated: true })
-        } // Auto-scroll on content change
+        }
       >
         {messages.map((item, index) => {
           if (item.messageType === "text") {
@@ -218,7 +272,6 @@ const ChatUser = ({ user }) => {
             const imageUrl = item.messageUrl;
             const fileName = imageUrl.split("\\").pop();
             const source = { uri: baseUrl + fileName };
-            console.log(source);
             return (
               <Pressable
                 key={index}

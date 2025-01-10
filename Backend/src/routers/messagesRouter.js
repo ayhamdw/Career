@@ -1,13 +1,12 @@
 const express = require("express");
 const Auth = require("../middleware/auth");
+const router = new express.Router();
 const {
   messageController,
   getMessageBetweenUsersController,
   getChatUserDetails,
 } = require("../controllers/messagesController");
 const upload = require("../utils/SaveImageFile");
-
-const router = new express.Router();
 
 router.post("/messages", upload.single("imageFile"), Auth, messageController);
 

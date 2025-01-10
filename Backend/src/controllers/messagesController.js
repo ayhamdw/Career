@@ -5,33 +5,36 @@ const messageController = async (req, res) => {
   try {
     const { senderId, receiverId, messageType, messageText } = req.body;
 
-    if (messageType === "image" && !req.file) {
-      console.error("File upload failed: req.file is undefined");
-      return res.status(400).json({ error: "File upload failed" });
-    }
-
     if (
       !senderId ||
       !receiverId ||
       !messageType ||
-      (!messageText && messageType !== "image")
+      (!messageText && messageType === "text") ||
+      (messageType === "image" && !req.file)
     ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
+
     const message = new Message({
       senderId,
       receiverId,
       messageType,
       messageText: messageType === "text" ? messageText : null,
-      timestamp: new Date(),
       messageUrl: messageType === "image" ? req.file.path : null,
+      timestamp: new Date(),
     });
 
     await message.save();
-    res.status(200).json({ message: "Message Sent Successfully" });
+
+    const populatedMessage = await Message.findById(message._id).populate(
+      "senderId",
+      "_id profile.firstName profile.lastName"
+    );
+
+    res.status(200).json(populatedMessage);
   } catch (error) {
     console.error("Error while saving message:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Failed to save message" });
   }
 };
 
