@@ -148,14 +148,15 @@ const senderDetails = async (req, res) => {
 };
 
 const acceptRequest = async (req, res) => {
-  const { action, bookId, postId } = req.body;
-
+  const { action, bookId, postId, senderId } = req.body;
   try {
     await Booking.findByIdAndUpdate(bookId, { status: action });
     if (action === "Accepted" && postId) {
       await Post.findByIdAndUpdate(postId, { $inc: { numberOfWorker: -1 } });
+      await Post.findByIdAndUpdate(postId, { $push: { employees: senderId } });
     } else if (action === "Cancelled" && postId) {
       await Post.findByIdAndUpdate(postId, { $inc: { numberOfWorker: 1 } });
+      await Post.findByIdAndUpdate(postId, { $pull: { employees: senderId } });
     }
     res.status(200).json({ message: "Request Accepted" });
   } catch (error) {

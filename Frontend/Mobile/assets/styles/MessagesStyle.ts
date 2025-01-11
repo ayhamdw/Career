@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 35,
-    backgroundColor: "#f0f0f0",
+    // backgroundColor: "#f0f0f0",
     marginRight: 15,
   },
   messageBubble: {
@@ -72,6 +72,33 @@ const styles = StyleSheet.create({
     color: "#666",
     lineHeight: 22,
   },
+  toggleContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginVertical: 10,
+  },
+  toggleButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 20,
+    marginHorizontal: 5,
+    backgroundColor: "#f9f9f9",
+  },
+  activeToggleButton: {
+    backgroundColor: "#58d68d",
+    borderColor: "#58d68d",
+  },
+  toggleButtonText: {
+    fontSize: 16,
+    color: "#555",
+  },
+  activeToggleButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  
 });
 
 export default styles;
