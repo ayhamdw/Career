@@ -52,6 +52,19 @@ const postSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    employees: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    groupName: {
+      type: String,
+      default: function () {
+        return `Group: ${this.title}`;
+      },
+      trim: true,
+    },
   },
   {
     timestamps: true,
@@ -59,5 +72,4 @@ const postSchema = new mongoose.Schema(
 );
 
 const Post = mongoose.model("Post", postSchema);
-
 module.exports = Post;
