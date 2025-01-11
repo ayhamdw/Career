@@ -29,6 +29,7 @@ const ChatGroup = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [groupDetails, setGroupDetails] = useState(null);
+  const [postOwner, setPostOwner] = useState(null);
   const scrollViewRef = useRef(null);
   const socket = useRef(null);
   const navigation = useNavigation();
@@ -49,8 +50,9 @@ const ChatGroup = () => {
             },
           }
         );
-        console.log("Group messages:", response.data);
         setMessages(response.data.message);
+        setPostOwner(response.data.postOwner.user);
+        console.log("Post Owner:", response.data.postOwner.user);
       } catch (error) {
         console.error("Error fetching group messages:", error);
       }
@@ -169,6 +171,7 @@ const ChatGroup = () => {
       headerTitle: () => (
         <TouchableOpacity
           onPress={() => navigation.navigate("GroupDetails", { group })}
+          disabled={userId !== postOwner}
         >
           <Text style={{ fontWeight: "bold", fontSize: 16 }}>
             {groupDetails ? groupDetails.groupName : "Loading..."}
