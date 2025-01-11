@@ -6,12 +6,12 @@ const messageSchema = mongoose.Schema({
     required: true,
   },
   receiverId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId, // for group chat, this will be null
     ref: "User",
     required: false,
   },
   postId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId, // for private chat, this will be null
     ref: "Post",
     required: false,
   },

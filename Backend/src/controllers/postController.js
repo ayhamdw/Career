@@ -156,7 +156,9 @@ const getPostById = async (req, res) => {
 
 const getMyPostsWithDetails = async (req, res) => {
   try {
-    const response = await Post.find({ user: req.params.id });
+    const response = await Post.find({
+      $or: [{ user: req.params.id }, { employees: req.params.id }],
+    });
     res.status(200).send(response);
   } catch (error) {
     console.log("error while getting saved posts", error);
@@ -173,6 +175,19 @@ const getPostDetails = async (req, res) => {
   } catch (error) {
     res.status(400).send({ error: "Error fetching post details" });
     console.log("error while getting post details", error);
+  }
+};
+
+const getPostByPostId = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    res.status(200).send(post);
+  } catch (error) {
+    console.log("error while getting post by post id", error);
   }
 };
 
@@ -220,4 +235,5 @@ module.exports = {
   getMyPostsWithDetails,
   getPostDetails,
   updatePost,
+  getPostByPostId,
 };

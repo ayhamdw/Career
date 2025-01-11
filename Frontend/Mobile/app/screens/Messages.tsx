@@ -63,7 +63,7 @@ const Messages: React.FC<MessagesProps> = ({ user }) => {
           setUsers([...new Set(response.data)]);
         } else {
           const response = await axios.get(
-            `${ayhamWifiUrl}/api/community//getMyPostsWithDetails/${userId}`,
+            `${ayhamWifiUrl}/api/community/getMyPostsWithDetails/${userId}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -114,7 +114,9 @@ const Messages: React.FC<MessagesProps> = ({ user }) => {
     groups.map((group, index) => (
       <TouchableOpacity
         key={index}
-        onPress={() => navigation.navigate("ChatGroup", { group })}
+        onPress={() =>
+          navigation.navigate("ChatGroup", { group, userId: user._id })
+        }
         style={styles.messageContainer}
       >
         <Image source={groupImage} style={styles.imageStyle} />
