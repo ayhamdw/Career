@@ -32,4 +32,6 @@ router.get("/getPostDetails/:id", postController.getPostDetails);
 
 router.put("/updatePost/:id", postController.updatePost);
 
+router.get("/getPostByPostId/:id", postController.getPostByPostId);
+
 module.exports = router;
