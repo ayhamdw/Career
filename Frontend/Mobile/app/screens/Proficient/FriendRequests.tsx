@@ -84,13 +84,14 @@ export default function FriendRequests({ user }: { user: any }) {
     action: string,
     bookId: string,
     clientId: string,
-    postId: string
+    postId: string,
+    senderId: string
   ) => {
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await axios.post(
         `${ayhamWifiUrl}/api/proficient/request-action`,
-        { action, bookId, postId },
+        { action, bookId, postId, senderId },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -236,7 +237,13 @@ export default function FriendRequests({ user }: { user: any }) {
               <TouchableOpacity
                 style={[styles.button, styles.acceptButton]}
                 onPress={() =>
-                  requestAction("Accepted", bookId, sender._id, postId)
+                  requestAction(
+                    "Accepted",
+                    bookId,
+                    sender._id,
+                    postId,
+                    sender._id
+                  )
                 }
               >
                 <Text style={styles.buttonText}>Accept</Text>
@@ -244,7 +251,13 @@ export default function FriendRequests({ user }: { user: any }) {
               <TouchableOpacity
                 style={[styles.button, styles.rejectButton]}
                 onPress={() =>
-                  requestAction("Rejected", bookId, sender._id, postId)
+                  requestAction(
+                    "Rejected",
+                    bookId,
+                    sender._id,
+                    postId,
+                    sender._id
+                  )
                 }
               >
                 <Text style={styles.buttonText}>Reject</Text>
@@ -256,7 +269,13 @@ export default function FriendRequests({ user }: { user: any }) {
               <TouchableOpacity
                 style={[styles.button, styles.cancelButton]}
                 onPress={() =>
-                  requestAction("Cancelled", bookId, sender._id, postId)
+                  requestAction(
+                    "Cancelled",
+                    bookId,
+                    sender._id,
+                    postId,
+                    sender._id
+                  )
                 }
               >
                 <Text style={styles.buttonText}>Cancel</Text>
@@ -264,7 +283,13 @@ export default function FriendRequests({ user }: { user: any }) {
               <TouchableOpacity
                 style={[styles.button, styles.completeButton]}
                 onPress={() =>
-                  requestAction("Completed", bookId, sender._id, postId)
+                  requestAction(
+                    "Completed",
+                    bookId,
+                    sender._id,
+                    postId,
+                    sender._id
+                  )
                 }
               >
                 <Text style={styles.buttonText}>Complete</Text>
