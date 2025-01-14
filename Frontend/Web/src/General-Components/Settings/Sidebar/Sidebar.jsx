@@ -110,7 +110,7 @@ const Sidebar = ({ user }) => {
           </div>
           <span className={style.warningText}>
             
-            <Link to="/upload-certificate" className={style.uploadLink}>
+            <Link to="/settings/upload-certificate" className={style.uploadLink}>
               upload your certificate.
             </Link>
           </span>

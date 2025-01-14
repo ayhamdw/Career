@@ -90,7 +90,7 @@ const Certificates = () => {
                 </span>
               </p>
               <div className={styles.uploadedFile}>
-                {user.certificate.isCertified && (
+                {true && (
                   <div>
                     <button className={styles.previewBtn} onClick={() => openPreview(user.certificate.certificateFile)}>
                       <FaEye className="icon" /> Preview

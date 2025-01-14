@@ -352,6 +352,36 @@ const getAllUsers = async (req, res) => {
 };
 
 
+const updateCertificateFile = async (req, res) => {
+  try {
+    const { userId, certificateFile } = req.body; 
+    if (!userId || !certificateFile) {
+      return res.status(400).json({ message: 'User ID and certificate file URL are required.' });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          'certificate.certificateFile': certificateFile,
+          'certificate.verificationStatus': 'pending', 
+        },
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    res.status(200).json({ message: 'Certificate file updated successfully', user });
+  } catch (err) {
+    console.error('Error updating certificate file:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
 
 module.exports = {
    getUserRoleByEmail,
@@ -369,4 +399,5 @@ module.exports = {
    updateInfo,
    checkIfUserRated,
    getAllUsers,
+   updateCertificateFile,
   };

@@ -8,6 +8,7 @@ import Portfolio from "./Sidebar/components/Portfolio/Portfolio";
 import ChangeInfo from "./Sidebar/components/ChangeInformation/ChangeInformation";
 import FriendRequests from "./Sidebar/components/FriendRequests/FriendRequests";
 import Friends from './Sidebar/components/Friends/Friends'
+import UploadCertificate from './Sidebar/components/UploadCertificate/UploadCertificate'
 import "./Settings.css";
 
 const Settings = () => {
@@ -85,6 +86,7 @@ useEffect(()=>{
           <Route path="change-info" element={<ChangeInfo user={userInfo}/>} />
           <Route path="friend-requests" element={<FriendRequests />} />
           <Route path="friends" element={<Friends />} />
+          <Route path="upload-certificate" element={<UploadCertificate />} />
           <Route
             path=""
             element={<SavedPosts />} 
