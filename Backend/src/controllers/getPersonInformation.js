@@ -314,6 +314,134 @@ const updateInfo = async (req, res) => {
 };
 
 
+const checkIfUserRated = async (req, res) => {
+  const { userId, targetUserId } = req.body;
+
+
+  try {
+    const user = await User.findOne({
+      _id: targetUserId,
+      "profile.ratings.userId": userId,
+    }).exec();
+    if (user) {
+      return res
+        .status(200)
+        .json({ success: true, message: "User has rated the target user" });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "User has not rated the target user",
+      });
+    }
+  } catch (error) {
+    console.error("Error checking user rating:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error checking rating" });
+  }
+};
+
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find(); 
+    res.json(users); 
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ message: 'Unable to fetch users' });
+  }
+};
+
+
+const updateCertificateFile = async (req, res) => {
+  try {
+    const { userId, certificateFile } = req.body; 
+    if (!userId || !certificateFile) {
+      return res.status(400).json({ message: 'User ID and certificate file URL are required.' });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          'certificate.certificateFile': certificateFile,
+          'certificate.isCertified': true,
+          'certificate.verificationStatus': 'pending', 
+        },
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    res.status(200).json({ message: 'Certificate file updated successfully', user });
+  } catch (err) {
+    console.error('Error updating certificate file:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+const verifyCertificate = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required.' });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          'certificate.verificationStatus': 'verified',
+        },
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    res.status(200).json({ message: 'Certificate verified successfully', user });
+  } catch (err) {
+    console.error('Error verifying certificate:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const rejectCertificate = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required.' });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          'certificate.verificationStatus': 'rejected',
+        },
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    res.status(200).json({ message: 'Certificate verified successfully', user });
+  } catch (err) {
+    console.error('Error verifying certificate:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
 
 module.exports = {
    getUserRoleByEmail,
@@ -328,5 +456,10 @@ module.exports = {
    getUserByEmail,
    getUserById,
    updateImage,
-   updateInfo
+   updateInfo,
+   checkIfUserRated,
+   getAllUsers,
+   updateCertificateFile,
+   verifyCertificate,
+   rejectCertificate,
   };

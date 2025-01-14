@@ -98,6 +98,7 @@ const rateUser = async (req, res) => {
 const checkIfUserRated = async (req, res) => {
   const { userId, targetUserId } = req.body;
 
+
   try {
     const user = await User.findOne({
       _id: targetUserId,

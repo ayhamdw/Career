@@ -1,0 +1,195 @@
+/* Resetting some basic elements for consistency */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Background and container setup */
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fb;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  .container {
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+  }
+  
+  /* Heading and category selection */
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: rgb(109, 201, 126);
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  
+  .categorySelect {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 20px 0;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: #f7f7f7;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .categorySelect:hover,
+  .categorySelect:focus {
+    border-color: rgb(109, 201, 126);
+    outline: none;
+    background-color: #e8f4e2;
+  }
+  
+  /* Users list container */
+  .usersList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+  }
+  
+  .userCard {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .userCard:hover {
+    /* transform: translateY(-10px); */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+  
+  .userImage {
+    width: 100%;
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    border-bottom: 2px solid #f1f1f1;
+    border-radius: 50%;
+    margin: auto;
+    border: 4px solid rgb(109, 201, 126);
+    margin-top: 15px;
+  }
+  
+  .userInfo {
+    padding: 20px;
+  }
+  
+  .userInfo h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .userInfo p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  
+  .userInfo p span {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .userInfo .verified {
+    margin-top: 10px;
+    padding: 5px 15px;
+    background-color: rgb(109, 201, 126);
+    color: white;
+    font-size: 0.9rem;
+    border-radius: 20px;
+    display: inline-block;
+  }
+  
+  .userInfo .notVerified {
+    margin-top: 10px;
+    padding: 5px 15px;
+    background-color: #e74c3c;
+    color: white;
+    font-size: 0.9rem;
+    border-radius: 20px;
+    display: inline-block;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px;
+    }
+  
+    h1 {
+      font-size: 2rem;
+    }
+  
+    .categorySelect {
+      padding: 10px 15px;
+      font-size: 0.9rem;
+    }
+  
+    .userCard {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  
+    .userInfo h3 {
+      font-size: 1.5rem;
+    }
+  
+    .userInfo p {
+      font-size: 0.9rem;
+    }
+  
+    .userInfo .verified,
+    .userInfo .notVerified {
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1.5rem;
+    }
+  
+    .categorySelect {
+      padding: 8px 12px;
+    }
+  
+    .usersList {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+
+  /* Show All Button */
+.showAllButton {
+    background-color: rgb(109, 201, 126);
+    color: white;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .showAllButton:hover {
+    background-color: #66b97a;
+  }
+  
+  .showAllButton:focus {
+    outline: none;
+  }
+  

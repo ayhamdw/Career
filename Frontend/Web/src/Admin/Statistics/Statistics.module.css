@@ -1,0 +1,138 @@
+/* Statistics.module.css */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9fafb;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-top: 30px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.topContainer {
+  /* max-width: 1300px; */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.statisticsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 30px;
+  padding: 40px 20px;
+  grid-auto-rows: minmax(100px, auto);
+  width: 100%;
+}
+
+.statItem {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.statItem:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.statItem h2 {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.statItem p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.chartContainer {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.chartContainer h2 {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.chartContainer canvas {
+  border-radius: 8px;
+  max-width: 100%;
+}
+
+.statItem p, .chartContainer h2 {
+  transition: color 0.3s ease;
+}
+
+.statItem:hover p, .chartContainer:hover h2 {
+  color: #1abc9c; /* Accent color on hover */
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  .statisticsContainer {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .statItem h2 {
+    font-size: 1.4rem;
+  }
+
+  .statItem p {
+    font-size: 1rem;
+  }
+
+  .chartContainer h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .statisticsContainer {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .statItem h2 {
+    font-size: 1.2rem;
+  }
+
+  .statItem p {
+    font-size: 1rem;
+  }
+
+  .chartContainer h2 {
+    font-size: 1.2rem;
+  }
+}

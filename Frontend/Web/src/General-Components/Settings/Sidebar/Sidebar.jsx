@@ -7,6 +7,7 @@ import { FaProjectDiagram, FaImage, FaUserEdit, FaUserFriends, FaSignOutAlt } fr
 import { useAuth } from "../../../AuthContext";
 import axios from 'axios';
 import s3 from 'react-aws-s3-typescript'
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
 
 const Sidebar = ({ user }) => {
@@ -38,14 +39,14 @@ const Sidebar = ({ user }) => {
 
   const myId = localStorage.getItem("id");
   const handleCrop = async () => {
-    
+
     if (editorRef.current) {
       const canvas = editorRef.current.getImageScaledToCanvas();
-  
+
       canvas.toBlob(async (blob) => {
         if (blob) {
           const file = new File([blob], "edited-profile-image.png", { type: "image/png" });
-  
+
           const Reacts3Client = new s3({
             accessKeyId: "AKIA5MSUBQC3OE6ZOF4Z",
             secretAccessKey: "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",
@@ -54,14 +55,14 @@ const Sidebar = ({ user }) => {
             region: "eu-north-1",
             s3Url: "https://career-images-s3.s3.eu-north-1.amazonaws.com",
           });
-  
+
           try {
             const data = await Reacts3Client.uploadFile(file);
             const imgURL = data.location;
-  
+
             console.log("Uploaded image URL:", imgURL);
-            await axios.put(`${import.meta.env.VITE_API}/user/changeImage`, {userId:myId, profileImageUrl: imgURL });
-  
+            await axios.put(`${import.meta.env.VITE_API}/user/changeImage`, { userId: myId, profileImageUrl: imgURL });
+
             setPreview(imgURL);
             setIsEditing(false);
           } catch (err) {
@@ -71,9 +72,9 @@ const Sidebar = ({ user }) => {
       }, "image/png");
     }
   };
-  
-  
-  
+
+
+
 
   const handleCancelEdit = () => {
     setIsEditing(false);
@@ -92,6 +93,34 @@ const Sidebar = ({ user }) => {
           {user?.profile?.firstName || "Guest"} {user?.profile?.lastName || ""}
         </h2>
       </div>
+
+      {user?.certificate?.isCertified ? (
+        <div className={style.certificateVerified}>
+          <div className={style.iconWrapper}>
+            <FaCheckCircle className={style.checkIcon} />
+          </div>
+          <span className={style.verifiedText}>Verified</span>
+        </div>
+      ) : (
+        <div className={style.certificateWarning}>
+          <div className={style.iconWrapper}>
+            <FaTimesCircle className={style.warningIcon} />
+            Not Verified{" "}
+            <br />
+          </div>
+          <span className={style.warningText}>
+            
+            <Link to="/settings/upload-certificate" className={style.uploadLink}>
+              upload your certificate.
+            </Link>
+          </span>
+        </div>
+      )}
+
+
+
+
+
 
       {isEditing && (
         <div className={style.modal}>

@@ -176,3 +176,67 @@
 .cancelButton:hover {
   opacity: 0.9;
 }
+
+.certificateVerified {
+  display: flex;
+  align-items: center;
+  color: #08b631;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 20px;
+  transition: all 0.3s ease;
+  justify-content: center;
+  border: 1px solid green;
+  margin-bottom: 20px;
+
+
+}
+.iconWrapper {
+  margin-right: 10px;
+  display: flex;
+  gap: 5px;
+}
+
+.checkIcon {
+  font-size: 18px;
+  color: #08b631;
+  transition: transform 0.3s ease;
+  font-size: 20px;
+}
+
+
+.verifiedText {
+  font-weight: bold;
+}
+
+.certificateWarning {
+  display: flex;
+  align-items: center;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.warningIcon {
+  font-size: 18px;
+  color: #dc3545;
+  transition: transform 0.3s ease;
+}
+
+.warningText {
+  font-weight: bold;
+}
+
+.uploadLink {
+  color: #007bff;
+  font-weight: bold;
+  text-decoration: none;
+  margin-left: 5px;
+  transition: color 0.3s ease;
+}
