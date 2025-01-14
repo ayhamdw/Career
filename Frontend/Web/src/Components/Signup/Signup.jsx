@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import s3 from 'react-aws-s3-typescript'
+import Logo from '../../assets/logo.png'
 
 
 
@@ -158,19 +159,19 @@ function Signup() {
       region: "eu-north-1",
       s3Url: "https://career-images-s3.s3.eu-north-1.amazonaws.com",
     });
-  
+
     try {
       const data = await Reacts3Client.uploadFile(image);
       imgURL = data.location;
 
-      console.log("imgURL: ",imgURL)
+      console.log("imgURL: ", imgURL)
 
     } catch (err) {
       console.error("Error uploading image: ", err);
       throw err;
     }
   };
-  
+
 
 
 
@@ -246,7 +247,7 @@ function Signup() {
     formData.append('profile[bio]', '');
     formData.append('profile[experience]', user.experience);
 
-    formData.append('profile[profileImage]', imgURL);
+    formData.append('profile[profileImage]', "https://placehold.co/400");
 
     formData.append('profile[location][type]', "Point");
 
@@ -310,174 +311,183 @@ function Signup() {
   };
 
   return (
-    <div className={style.container}>
-      <div className={style.signUpForm}>
-        <div className={style.inputPart}>
-          <div className={style.headerInput}>
-            <p>Sign Up</p>
+    <div className="flex items-center justify-center  bg-gray-100">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
+        <img src={Logo} className='w-[100px] m-auto'/>
+        <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Sign Up</h2>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Username */}
+          <div>
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={user.username}
+              onChange={handleChange}
+              className={`w-full px-4 py-2 border ${usernameExist ? 'border-red-500' : 'border-gray-300'
+                } rounded-lg focus:outline-none focus:ring focus:ring-[rgb(109,201,126)]`}
+            />
+            {usernameExist && <p className="text-red-500 text-sm mt-1">Username already exists</p>}
           </div>
-          <form onSubmit={handleSubmit} className={style.inputFields}>
-            {/* Username */}
-            <div className={style.field}>
-              <label>Username</label>
-              <input type="text" name="username" value={user.username} onChange={handleChange}
-                style={{ border: usernameExist ? '1px solid red' : '' }}
-              />
-              {usernameExist === true && <p style={{ color: 'red' }}>Username Already Exist</p>}
-            </div>
 
-            {/* Email */}
-            <div className={style.field}>
-              <label>Email</label>
-              <input type="email" name="email" value={user.email} onChange={handleChange} required
-                style={{ border: emailExists ? '1px solid red' : '' }}
-              />
-              {emailExists && (
-                <p style={{ color: 'red' }}>{errorMessage}</p>
-              )}
-            </div>
+          {/* Email */}
+          <div>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={user.email}
+              onChange={handleChange}
+              required
+              className={`w-full px-4 py-2 border ${emailExists ? 'border-red-500' : 'border-gray-300'
+                } rounded-lg focus:outline-none focus:ring focus:ring-[rgb(109,201,126)]`}
+            />
+            {emailExists && <p className="text-red-500 text-sm mt-1">{errorMessage}</p>}
+          </div>
 
-            {/* Password */}
-            <div className={style.field}>
-              <label>Password</label>
-              <input type="password" name="password" value={user.password} onChange={handleChange} required />
-            </div>
+          {/* Password */}
+          <div>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={user.password}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-[rgb(109,201,126)]"
+            />
+          </div>
 
-            {/* Role */}
-            {/* <div className={style.field}>
-              <label>Role</label>
-              <select name="role" value={user.role} onChange={handleChange} >
-                <option value="">Select Role</option>
-                <option value="user">user</option>
-                <option value="admin">admin</option>
-              </select>
-            </div> */}
+          {/* Gender */}
+          <div>
+            <select
+              name="gender"
+              value={user.gender}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-[rgb(109,201,126)]"
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
 
-            {/* Gender */}
-            <div className={style.field}>
-              <label>Gender</label>
-              <select name="gender" value={user.gender} onChange={handleChange} required>
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-            </div>
+          {/* City */}
+          <div>
+            <select
+              name="city"
+              value={user.city}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-[rgb(109,201,126)]"
+            >
+              <option value="">Select City</option>
+              <option value="Nablus">Nablus</option>
+              <option value="Ramallah">Ramallah</option>
+              <option value="Hebron">Hebron</option>
+              <option value="Bethlehem">Bethlehem</option>
+              <option value="Jenin">Jenin</option>
+              <option value="Jericho">Jericho</option>
+              <option value="Gaza">Gaza</option>
+              <option value="Rafah">Rafah</option>
+              <option value="Tulkarm">Tulkarm</option>
+              <option value="Qalqilya">Qalqilya</option>
+              <option value="Salfit">Salfit</option>
+              <option value="Tubas">Tubas</option>
+              <option value="Jerusalem">Jerusalem</option>
+              <option value="Khan Yunis">Khan Yunis</option>
+              <option value="Deir al-Balah">Deir al-Balah</option>
+            </select>
+          </div>
 
-            {/* City */}
-            <div className={style.field}>
-              <label>City</label>
-              <select name="city" value={user.city} onChange={handleChange} required>
-                <option value="">Select a city</option>
-                <option value="Nablus">Nablus</option>
-                <option value="Ramallah">Ramallah</option>
-                <option value="Hebron">Hebron</option>
-                <option value="Bethlehem">Bethlehem</option>
-                <option value="Jenin">Jenin</option>
-                <option value="Jericho">Jericho</option>
-                <option value="Gaza">Gaza</option>
-                <option value="Rafah">Rafah</option>
-                <option value="Tulkarm">Tulkarm</option>
-                <option value="Qalqilya">Qalqilya</option>
-                <option value="Salfit">Salfit</option>
-                <option value="Tubas">Tubas</option>
-                <option value="Jerusalem">Jerusalem</option>
-                <option value="Khan Yunis">Khan Yunis</option>
-                <option value="Deir al-Balah">Deir al-Balah</option>
-              </select>
-            </div>
+          {/* Date of Birth */}
+          <div>
+            <input
+              type="date"
+              name="dateOfBirth"
+              value={user.dateOfBirth}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-[rgb(109,201,126)]"
+            />
+          </div>
 
-            {/* Date of Birth */}
-            <div className={style.field}>
-              <label>Date of Birth</label>
-              <input type="date" name="dateOfBirth" value={user.dateOfBirth} onChange={handleChange} required />
-            </div>
+          {/* Career Category */}
+          <div>
+            <select
+              name="careerCategory"
+              value={user.careerCategory}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-[rgb(109,201,126)]"
+            >
+              <option value="">Select Career Category</option>
+              <option value="Home Services">Home Services</option>
+              <option value="Technical Services">Technical Services</option>
+              <option value="Educational Services">Educational Services</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Creative Services">Creative Services</option>
+              <option value="Legal & Financial Services">Legal & Financial Services</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
-            {/* Career Category */}
-            <div className={style.field}>
-              <label>Career Category</label>
-              <select name="careerCategory" value={user.careerCategory} onChange={handleChange} required>
-                <option value="">Select Category</option>
-                <option value="Home Services">Home Services</option>
-                <option value="Technical Services">Technical Services</option>
-                <option value="Educational Services">Educational Services</option>
-                <option value="Healthcare">Healthcare</option>
-                <option value="Creative Services">Creative Services</option>
-                <option value="Legal & Financial Services">Legal & Financial Services</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-
+          <div className="space-y-4">
             {/* First Name */}
-            <div className={style.field}>
-              <label>First Name</label>
-              <input type="text" name="firstName" value={user.firstName} onChange={handleChange} required
-                style={{ border: user.firstName && user.firstName.length < 3 ? '1px solid red' : '' }}
+            <div>
+              <input
+                type="text"
+                name="firstName"
+                value={user.firstName}
+                onChange={handleChange}
+                required
+                className={`w-full px-4 py-2 border ${user.firstName && user.firstName.length < 3 ? 'border-red-500' : 'border-gray-300'
+                  } rounded-lg focus:outline-none focus:ring-2 ${user.firstName && user.firstName.length < 3 ? 'focus:ring-red-500' : 'focus:ring-[rgb(109,201,126)]'
+                  }`}
+                placeholder="First Name"
               />
               {user.firstName && user.firstName.length < 3 && (
-                <p style={{ color: 'red' }}>First Name must be at least 3 characters long.</p>
+                <p className="mt-1 text-sm text-red-500">First Name must be at least 3 characters long.</p>
               )}
-
-
             </div>
 
             {/* Last Name */}
-            <div className={style.field}>
-              <label>Last Name</label>
-              <input type="text" name="lastName" value={user.lastName} onChange={handleChange} required
-                style={{ border: user.lastName && user.lastName.length < 3 ? '1px solid red' : '' }}
+            <div>
+              <input
+                type="text"
+                name="lastName"
+                value={user.lastName}
+                onChange={handleChange}
+                required
+                className={`w-full px-4 py-2 border ${user.lastName && user.lastName.length < 3 ? 'border-red-500' : 'border-gray-300'
+                  } rounded-lg focus:outline-none focus:ring-2 ${user.lastName && user.lastName.length < 3 ? 'focus:ring-red-500' : 'focus:ring-[rgb(109,201,126)]'
+                  }`}
+                placeholder="Last Name"
               />
               {user.lastName && user.lastName.length < 3 && (
-                <p style={{ color: 'red' }}>Last Name must be at least 3 characters long.</p>
+                <p className="mt-1 text-sm text-red-500">Last Name must be at least 3 characters long.</p>
               )}
             </div>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-[rgb(109,201,126)] text-white py-2 px-4 rounded-lg hover:bg-[rgb(109,201,126)]/80 focus:outline-none focus:ring focus:ring-[rgb(109,201,126)]"
+          >
+            Create Account
+          </button>
+        </form>
 
-            {/* Phone */}
-            {/* <div className={style.field}>
-              <label>Phone</label>
-              <input type="text" name="phone" value={user.phone} onChange={handleChange} required />
-            </div> */}
-
-            {/* Bio */}
-            {/* <div className={style.field}>
-              <label>Bio</label>
-              <textarea name="bio" value={user.bio} onChange={handleChange} placeholder="Tell us a little about yourself" rows="4" required />
-            </div> */}
-
-            {/* Experience */}
-            {/* <div className={style.field}>
-              <label>Your Experience (Number of Years)</label>
-              <input type="text" name="experience" value={user.experience} onChange={handleChange} required />
-            </div> */}
-
-            {/* Profile Image */}
-            <div className={style.imageField}>
-              <label htmlFor="profileImage">Profile Image (Optional)</label>
-
-              {/* The hidden file input */}
-              <input
-                type="file"
-                name="profileImage"
-                id="profileImage"
-                onChange={handleFileChange}
-              />
-              <label htmlFor="profileImage">Choose File</label>
-
-              {image && (
-                <div className={style.imagePreview}>
-                  <img src={URL.createObjectURL(image)} alt="Profile Preview" className={style.previewImage} />
-                  {/* <button onClick={handleUpload}>Upload Image</button> */}
-                </div>
-              )}
-            </div>
-
-
-
-            <button type="submit" className={style.signUpButton}>Create an Account</button>
-          </form>
-        </div>
+        <p className="text-center text-gray-600 mt-4">
+          Already have an account? <a href="/signin" className="text-[#0a8bff] hover:underline">Sign In</a>
+        </p>
       </div>
     </div>
   );
+
+
+
 }
 
 export default Signup;

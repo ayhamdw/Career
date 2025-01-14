@@ -36,6 +36,11 @@ const Community = () => {
   const [savedPosts, setSavedPosts] = useState([]);
   const myId = localStorage.getItem("id")
 
+
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []); 
+
   useEffect(()=>{
     const getSavedPostIds = async()=>{
       try{

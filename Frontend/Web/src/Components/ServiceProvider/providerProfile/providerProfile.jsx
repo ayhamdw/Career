@@ -12,6 +12,9 @@ const ProviderProfile = () => {
   const myId = localStorage.getItem("id");
   const token = localStorage.getItem("token");
 
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []); 
 
   useEffect(() => {
     const fetchProviderData = async () => {

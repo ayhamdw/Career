@@ -1,246 +1,124 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Cairo", sans-serif;
-}
-
-body{
-    /* background-image: url('./background.jpg'); */
-    background-size:auto ;
-}
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
-    padding: 20px;
+    height: 100vh;
+    background-color: #f9f9f9;
+    flex-direction: column;
+  }
+
+  .mainLogo{
+    width: 100px;
     margin: auto;
-    width: 80%;
-    margin-bottom: 50px;
-    
-    /* background-size: 100%; */
-}
-
-.sgininForm {
-    display: flex;
-    background-color: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    width: 70%;
-    flex-direction: row;
-    height: 550px;
-    transition: transform 0.3s ease;
-    position: relative;
-}
-
-.sgininForm:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgb(109, 201, 126) 50%, rgb(45, 155, 116) 50%);
-    z-index: 0;
-}
-
-
-
-.inpustPart {
-    flex: 1;
-    padding: 50px;
-    background-color: #f7fafc;
-    position: relative;
-    z-index: 1; /* Ensure the input section is above the background */
-}
-.headerInput p {
-    font-size: 30px;
-    font-weight: bold;
-    color: rgb(45, 155, 116);
+  }
+  
+  .formWrapper {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
-    margin-bottom: 25px;
-    letter-spacing: 1px;
-}
-
-.inputFields {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.field {
-    display: flex;
-    flex-direction: column;
-}
-
-.field label {
-    font-weight: bold;
-    color: #555;
-    margin-bottom: 8px;
-}
-
-.field input {
-    padding: 12px;
-    border-bottom: 1px solid #ccc;
-    border-color: rgb(45, 155, 116);
-    border-radius: 10px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    background-color: #f7fafc;
-    
-}
-
-.field input:focus {
-    border-color: rgb(45, 155, 116);
-    outline: none;
-    box-shadow: 0 0 8px rgba(45, 155, 116, 0.3);
-}
-
-.sgininButton {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .subText {
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+  
+  .inputGroup {
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #333;
+  }
+  
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .primaryButton {
     background-color: rgb(109, 201, 126);
-    color: white;
-    padding: 14px;
+    color: #fff;
+    padding: 0.75rem;
     border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 20px;
-    margin-top: 25px;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 4px;
+    font-size: 1rem;
     width: 100%;
-}
-
-.sgininButton:hover {
-    background-color: rgb(45, 155, 116);
-    box-shadow: 0 8px 15px rgba(45, 155, 116, 0.3);
-}
-
-/* Last line styling */
-.lastLine {
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+  
+  .primaryButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .orDivider {
+    color: #999;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  
+  .authButtons button {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .googleButton {
+    color: black;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.remember {
-    display: flex;
-    align-items: center;
-}
-
-.remember input {
-    margin-right: 8px;
-}
-
-.lastLine a {
-    color: rgb(45, 155, 116);
-    text-decoration: none;
-    transition: color 0.3s ease, text-decoration 0.3s ease;
-}
-
-.lastLine a:hover {
-    color: rgb(109, 201, 126);
-    text-decoration: underline;
-}
-
-.designPart {
-    flex: 1;
-    background: linear-gradient(135deg, rgb(109, 201, 126), rgb(45, 155, 116));
-    color: white;
-    padding: 50px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
-    position: relative;
-    z-index: 1; 
-}
-.designPart h2 {
-    font-size: 32px;
-    margin-bottom: 25px;
-}
-
-.designPart img {
-    width: 150px;
-    margin: 30px auto;
-    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
-    transition: transform 0.3s ease;
-    transform: scale(1.6); /* Adjusted scale for better fit */
-}
-
-
-
-.designPart p {
-    margin: 15px 0;
-    line-height: 1.6;
-}
-
-.designPart a {
+    align-items: center;
+  }
+  .googleButton img{
+    width: 40px;
+    align-self: flex-end;
+  }
+  .microsoftButton {
+    background-color: #00a4ef;
     color: white;
-    text-decoration: underline;
-    transition: color 0.3s ease;
-}
+  }
+  
+  .appleButton {
+    background-color: #000;
+    color: white;
+  }
+  
+  .footerText {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+  
+  .footerText a {
+    color: #0a8bff;
+    text-decoration: none;
+  }
+  
+  .error {
+    color: red;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+  
 
-.designPart a:hover {
-    color: #f1f1f1;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .sgininForm {
-        flex-direction: column;
-        height: auto;
-        width: 90%;
-    }
-
-    .inpustPart, .designPart {
-        padding: 30px;
-    }
-
-    .headerInput p {
-        font-size: 26px;
-    }
-
-    .designPart img {
-        width: 120px; /* Slightly smaller on medium screens */
-    }
-
-    .sgininButton {
-        padding: 12px;
-        font-size: 18px;
-    }
-
-    .lastLine {
-        flex-direction: column;
-        align-items: flex-start;
-        margin-top: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    .sgininButton {
-        padding: 12px;
-        font-size: 16px;
-    }
-
-    .headerInput p {
-        font-size: 24px;
-    }
-
-    .designPart img {
-        width: 100px; /* Smaller image for mobile */
-    }
-
-    .lastLine a {
-        margin-top: 12px;
-    }
-}
-
-@media (max-width: 1500px) {
-    .designPart {
-        display: none; /* Hide design part */
-    }
-}

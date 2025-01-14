@@ -7,6 +7,10 @@ const Requests = () => {
   const [acceptedRequests, setAcceptedRequests] = useState([]);
   const [rejectedRequests, setRejectedRequests] = useState([]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []); 
+
 
   const handleAccept = async(userId) => {
     const request = incomingRequests.find((req) => req._id === userId);

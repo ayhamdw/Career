@@ -132,6 +132,30 @@ const signinWithGoogle = async (req, res) => {
   }
 };
 
+const validateEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required.' });
+    }
+
+    // Check if the email exists in the database
+    const user = await User.findOne({ email });
+
+    if (user) {
+      return res.status(200).json({ exists: true, message: 'Email exists.' });
+    } else {
+      return res.status(404).json({ exists: false, message: 'Email not found.' });
+    }
+  } catch (err) {
+    console.error('Error validating email:', err);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+};
+
+
+
 module.exports = {
   signupController,
   signinController,
@@ -140,4 +164,5 @@ module.exports = {
   getAllEmails,
   getAllUsernames,
   verifyCode,
+  validateEmail
 };

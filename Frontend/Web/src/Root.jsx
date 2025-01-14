@@ -8,13 +8,16 @@ function Root() {
 
   // Define the base admin route
   const isAdminRoute = location.pathname.startsWith("/admin");
+  const isSigninRoute = location.pathname.startsWith("/signin");
+  const isVerifyRoute = location.pathname.startsWith("/verify");
+  const isSignupRoute = location.pathname.startsWith("/signup");
 
   return (
     <>
       {/* Conditionally hide Navbar and Footer for admin routes */}
-      {!isAdminRoute && <Navbar />}
+      {!isAdminRoute && !isSigninRoute && !isVerifyRoute && !isSignupRoute && <Navbar />}
       <Outlet />
-      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && !isSigninRoute && !isVerifyRoute && !isSignupRoute && <Footer />}
     </>
   );
 }
