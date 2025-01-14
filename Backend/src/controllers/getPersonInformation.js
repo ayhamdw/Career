@@ -364,6 +364,7 @@ const updateCertificateFile = async (req, res) => {
       {
         $set: {
           'certificate.certificateFile': certificateFile,
+          'certificate.isCertified': true,
           'certificate.verificationStatus': 'pending', 
         },
       },
@@ -377,6 +378,65 @@ const updateCertificateFile = async (req, res) => {
     res.status(200).json({ message: 'Certificate file updated successfully', user });
   } catch (err) {
     console.error('Error updating certificate file:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+const verifyCertificate = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required.' });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          'certificate.verificationStatus': 'verified',
+        },
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    res.status(200).json({ message: 'Certificate verified successfully', user });
+  } catch (err) {
+    console.error('Error verifying certificate:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const rejectCertificate = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required.' });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          'certificate.verificationStatus': 'rejected',
+        },
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    res.status(200).json({ message: 'Certificate verified successfully', user });
+  } catch (err) {
+    console.error('Error verifying certificate:', err);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
@@ -400,4 +460,6 @@ module.exports = {
    checkIfUserRated,
    getAllUsers,
    updateCertificateFile,
+   verifyCertificate,
+   rejectCertificate,
   };

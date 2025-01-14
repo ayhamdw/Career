@@ -24,17 +24,54 @@ const Certificates = () => {
         fetchAllUsers();
     },[])
 
-  const approveCertificate = (id) => {
-    setUsers(users.map(user => 
-      user._id === id ? { ...user, certificateStatus: 'verified' } : user
-    ));
-  };
+    const approveCertificate = async(id) => {
+      setUsers(users.map(user =>
+        user._id === id 
+          ? { 
+              ...user, 
+              certificate: {
+                ...user.certificate,
+                verificationStatus: 'verified'
+              }
+            } 
+          : user
+      ));
 
-  const rejectCertificate = (id) => {
-    setUsers(users.map(user => 
-      user._id === id ? { ...user, certificateStatus: 'rejected' } : user
-    ));
-  };
+      try{
+        await axios.post(`${import.meta.env.VITE_API}/user/verify-certificate`,{
+          userId: id
+        })
+      }
+      catch(error){
+        console.log("Error Approve Certificate: ",error)
+      }
+    };
+    
+
+    const rejectCertificate = async(id) => {
+      setUsers(users.map(user => 
+        user._id === id 
+          ? { 
+              ...user, 
+              certificate: {
+                ...user.certificate,
+                verificationStatus: 'rejected'
+              }
+            } 
+          : user
+      ));
+
+      try{
+        await axios.post(`${import.meta.env.VITE_API}/user/reject-certificate`,{
+          userId: id
+        })
+      }
+      catch(error){
+        console.log("Error Approve Certificate: ",error)
+      }
+      
+    };
+    
 
   const filterUsersByStatus = (status) => {
     return users.filter(user => user.certificate.verificationStatus === status);
@@ -141,12 +178,12 @@ const Certificates = () => {
                 )}
               </div>
               <div className={styles.actions}>
-                <button 
-                  className={styles.approveBtn} 
+                <div 
+                  className={styles.approveBtnA} 
                   disabled
                 >
                   <FaCheck className="icon" /> Approved
-                </button>
+                </div>
               </div>
             </div>
           ))}
@@ -157,7 +194,7 @@ const Certificates = () => {
       <div className={styles.sectionContainer}>
         <h2 className={styles.sectionTitle}>Rejected Users</h2>
         <div className={styles.userList}>
-          {filterUsersByStatus('rjected').map(user => (
+          {filterUsersByStatus('rejected').map(user => (
             <div key={user._id} className={styles.userCard}>
               <h2 className={styles.userName}>{user.profile.firstName} {user.profile.lastName}</h2>
               <p className={styles.userInfo}>Certificate was rejected.</p>
@@ -177,12 +214,12 @@ const Certificates = () => {
                 )}
               </div>
               <div className={styles.actions}>
-                <button 
-                  className={styles.rejectBtn} 
+                <div 
+                  className={styles.rejectBtnR} 
                   disabled
                 >
                   <FaTimes className="icon" /> Rejected
-                </button>
+                </div>
               </div>
             </div>
           ))}
@@ -211,12 +248,12 @@ const Certificates = () => {
                 )}
               </div>
               <div className={styles.actions}>
-                <button 
-                  className={styles.rejectBtn} 
+                <div 
+                  className={styles.rejectedDiv} 
                   disabled
                 >
-                  <FaTimes className="icon" /> Did not Uploaded File
-                </button>
+                  <FaTimes className="icon" /> No Uploaded File
+                </div>
               </div>
             </div>
           ))}
