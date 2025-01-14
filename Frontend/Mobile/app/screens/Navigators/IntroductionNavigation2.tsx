@@ -1,9 +1,9 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Introduction1 from "../introduction1";
-import Introduction2 from "../introduction2";
-import Login from "../Login";
-import ForgotPassword from "../ForgetPassword";
+import Introduction1 from "../Login/introduction1";
+import Introduction2 from "../Login/introduction2";
+import Login from "../Login/Login";
+import ForgotPassword from "../Login/ForgetPassword";
 import ProfileNavigator from "./ProfileNavigator";
 import Main from "./Main";
 import SignUpNavigator from "./SignupNavigation";

@@ -59,7 +59,12 @@ const CustomTabNavigator = ({ screenData, user }) => (
         ),
         tabBarStyle: [
           styles.tabBarStyle,
-          { display: routeName === "ChatUser" ? "none" : "flex" },
+          {
+            display:
+              routeName === "ChatUser" || routeName === "ChatGroup"
+                ? "none"
+                : "flex",
+          },
         ],
         tabBarShowLabel: false,
         headerShown: false,
@@ -83,9 +88,7 @@ export default CustomTabNavigator;
 const styles = StyleSheet.create({
   tabBarStyle: {
     position: "absolute",
-    left: 10,
-    right: 10,
-    bottom: -15,
+    bottom: -20,
     borderRadius: 30,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,

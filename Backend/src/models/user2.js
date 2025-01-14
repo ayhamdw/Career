@@ -154,6 +154,7 @@ const userSchema = new mongoose.Schema(
         type: String,
         enum: ["pending", "verified", "rejected","noFile"],
         default: "noFile",
+
       },
     },
 

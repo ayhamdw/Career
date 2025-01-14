@@ -32,4 +32,15 @@ router.get("/getPostDetails/:id", postController.getPostDetails);
 
 router.put("/updatePost/:id", postController.updatePost);
 
+router.get("/getPostByPostId/:id", postController.getPostByPostId);
+
+router.get("/getGroupChatUsers/:id", postController.getGroupChatUsers);
+
+router.delete(
+  "/deleteGroupChatUser/:postId/:userId",
+  postController.deleteGroupChatUser
+);
+
+router.put("/updateGroupName/:id", postController.updateGroupName);
+
 module.exports = router;

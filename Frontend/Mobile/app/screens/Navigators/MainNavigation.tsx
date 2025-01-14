@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "../Login";
+import Login from "../Login/Login";
 import Main from "./Main";
 import IntroductionNavigation from "./IntroductionNavigation2";
-import ForgotPassword from "../ForgetPassword";
+import ForgotPassword from "../Login/ForgetPassword";
 import SignUpNavigator from "./SignupNavigation";
 import JobList from "@/components/HomePage/JobList";
 import Notifications from "../Setting/Notifications";
@@ -10,7 +10,8 @@ import PostDetails from "../Community/postDetails";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CreatePost from "../Community/CreatePost";
-import ChatUser from "../ChatUser";
+import ChatUser from "../Chat/ChatUser";
+import Tips from "../Home/Tips";
 
 const Stack = createNativeStackNavigator();
 const MainNavigation = () => {
@@ -68,6 +69,11 @@ const MainNavigation = () => {
         name="ChatUser"
         component={ChatUser}
         options={{ headerShadowVisible: false }}
+      />
+      <Stack.Screen
+        name="Tips"
+        component={Tips}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
