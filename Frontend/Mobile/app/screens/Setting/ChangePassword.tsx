@@ -7,11 +7,11 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
-import styles from "../../assets/styles/ChangePasswordStyle";
-import { COLORS } from "../../assets/styles/Dimensions";
+import styles from "../../../assets/styles/ChangePasswordStyle";
+import { COLORS } from "../../../assets/styles/Dimensions";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ayhamWifiUrl } from "../../constants/Urls";
+import { ayhamWifiUrl } from "../../../constants/Urls";
 
 const ChangePassword = ({ user }) => {
   const checkOldPassword = async (oldPassword: string) => {

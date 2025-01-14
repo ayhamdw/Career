@@ -1,10 +1,11 @@
 import { View, Text } from "react-native";
 import React, { useMemo } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomePage from "../HomePage";
-import ProfProfile from "../Proficient/ProfProfile";
+import HomePage from "../Home/HomePage";
 import ProfNavigator from "../Proficient/ProfNavigator";
 import JobList from "@/components/HomePage/JobList";
+import Tips from "../Home/Tips";
+import FirstTip from "../Home/FirstTip";
 const Stack = createNativeStackNavigator();
 export default function HomePageNavigation({ user }) {
   const screenData = useMemo(
@@ -31,6 +32,17 @@ export default function HomePageNavigation({ user }) {
         name="JobList"
         component={JobList}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Tips"
+        component={Tips}
+        options={{ headerShadowVisible: false }}
+      />
+
+      <Stack.Screen
+        name="FirstTip"
+        component={FirstTip}
+        options={{ headerShadowVisible: false }}
       />
     </Stack.Navigator>
   );

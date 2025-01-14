@@ -4,9 +4,13 @@ import styles from "../../assets/styles/HomePage/ImageStyle";
 import tips from "@/assets/images/tips.jpg";
 interface TipsImageProps {}
 
-const TipsImage: React.FC<TipsImageProps> = () => {
+interface TipsImageProps {
+  onPress?: () => void;
+}
+
+const TipsImage: React.FC<TipsImageProps> = ({ onPress }) => {
   return (
-    <TouchableOpacity style={styles.tipButton}>
+    <TouchableOpacity style={styles.tipButton} onPress={onPress}>
       <Image style={styles.tipImage} source={tips} />
       <View style={styles.tipOverlay}>
         <Text style={styles.tipButtonText}>Discover More</Text>
