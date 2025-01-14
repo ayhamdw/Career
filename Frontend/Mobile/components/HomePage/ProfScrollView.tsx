@@ -137,7 +137,6 @@ const ProfList: React.FC<ProfListProps> = ({ jobs, onCardPress }) => {
 
 const styles = StyleSheet.create({
   jobList: {
-    marginTop: 10,
     flex: 1,
   },
   jobCard: {
