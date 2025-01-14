@@ -12,7 +12,8 @@ const { getUserRoleByEmail,
    getUserById,
    updateImage,
    updateInfo,
-   checkIfUserRated
+   checkIfUserRated,
+   getAllUsers,
 
   } = require('../controllers/getPersonInformation'); 
 const router = express.Router();
@@ -30,6 +31,7 @@ router.post('/SentProficient',getSentProficientRequestByEmail);
 router.post('/user',getUserByEmail);
 router.post('/isUserRated',checkIfUserRated);
 router.get('/userId/:id',getUserById);
+router.get('/Allusers',getAllUsers);
 router.put('/changeImage',updateImage);
 router.put('/updateInfo/:userId',updateInfo);
 

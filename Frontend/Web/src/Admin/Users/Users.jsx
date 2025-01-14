@@ -1,95 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Users.module.css';
+import axios from 'axios';
 
 function Users() {
   const [users, setUsers] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Home Services");
   const [showAll, setShowAll] = useState(false);
 
-  useEffect(() => {
-    // Fake user data for testing purposes
-    const fakeUsers = [
-      {
-        id: 1,
-        name: "John Doe",
-        photo: "https://randomuser.me/api/portraits/men/1.jpg",
-        career: "Plumber",
-        rating: 4.5,
-        experience: 5,
-        isVerified: true,
-        category: "Home Services",
-      },
-      {
-        id: 2,
-        name: "Jane Smith",
-        photo: "https://randomuser.me/api/portraits/women/2.jpg",
-        career: "Electrician",
-        rating: 4.8,
-        experience: 7,
-        isVerified: false,
-        category: "Home Services",
-      },
-      {
-        id: 3,
-        name: "Carlos Martinez",
-        photo: "https://randomuser.me/api/portraits/men/3.jpg",
-        career: "Web Developer",
-        rating: 4.2,
-        experience: 3,
-        isVerified: true,
-        category: "Technical Services",
-      },
-      {
-        id: 4,
-        name: "Emily Brown",
-        photo: "https://randomuser.me/api/portraits/women/4.jpg",
-        career: "Teacher",
-        rating: 4.7,
-        experience: 10,
-        isVerified: true,
-        category: "Educational Services",
-      },
-      {
-        id: 5,
-        name: "Ahmed Al-Farsi",
-        photo: "https://randomuser.me/api/portraits/men/5.jpg",
-        career: "Nurse",
-        rating: 4.9,
-        experience: 6,
-        isVerified: true,
-        category: "Healthcare",
-      },
-      {
-        id: 6,
-        name: "Sophia Lee",
-        photo: "https://randomuser.me/api/portraits/women/6.jpg",
-        career: "Graphic Designer",
-        rating: 4.3,
-        experience: 4,
-        isVerified: false,
-        category: "Creative Services",
-      },
-    ];
 
-    // Filter users based on the category or show all users if showAll is true
-    const filteredUsers = showAll
-      ? fakeUsers
-      : fakeUsers.filter(user => user.category === selectedCategory);
 
-    setUsers(filteredUsers);
-  }, [selectedCategory, showAll]);
+    useEffect(()=>{
+        const fetchAllUsers = async()=>{
+            try{
+                const response = await axios.get(`${import.meta.env.VITE_API}/user/Allusers`)
+                setUsers(response.data);
+            }
+            catch(error){
+                console.log("Error Fetching Users: ",error);
+            }
+        }
+        fetchAllUsers();
+    },[])
+
+
+    // {
+    //     id: 1,
+    //     name: "John Doe",
+    //     photo: "https://randomuser.me/api/portraits/men/1.jpg",
+    //     career: "Plumber",
+    //     rating: 4.5,
+    //     experience: 5,
+    //     isVerified: true,
+    //     category: "Home Services",
+    //   },
+
+
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
-    setShowAll(false); // Reset to category view when changing category
+    setShowAll(false); 
   };
 
   const handleShowAllClick = () => {
-    setShowAll(prevState => !prevState); // Toggle the showAll state
+    setShowAll(prevState => !prevState); 
     if (showAll) {
-      setSelectedCategory("Home Services"); // Reset to the default category when showing all users
+      setSelectedCategory("Home Services"); 
     }
   };
+
+  const filteredUsers = showAll
+  ? users
+  : users.filter(user => user.careerCategory === selectedCategory);
 
   return (
     <div className={styles.container}>
@@ -122,16 +83,16 @@ function Users() {
 
       {/* Display Users */}
       <div className={styles.usersList}>
-        {users.length > 0 ? (
-          users.map((user) => (
-            <div key={user.id} className={styles.userCard}>
-              <img src={user.photo} alt={user.name} className={styles.userImage} />
+        {filteredUsers.length > 0 ? (
+          filteredUsers.map((user) => (
+            <div key={user._id} className={styles.userCard}>
+              <img src={user.profile.profileImage} alt={user.profile.firstName} className={styles.userImage} />
               <div className={styles.userInfo}>
-                <h3>{user.name}</h3>
-                <p>Career: {user.career}</p>
+                <h3>{user.profile.firstName} {user.profile.lastName}</h3>
+                <p>Career: {user.careerCategory}</p>
                 <p>Rating: {user.rating}</p>
-                <p>Experience: {user.experience} years</p>
-                <p>Verified: {user.isVerified ? 'Yes' : 'No'}</p>
+                <p>Experience: {user.profile.experience} years</p>
+                <p>Verified: {user.certificate.isCertified ? 'Yes' : 'No'}</p>
               </div>
             </div>
           ))

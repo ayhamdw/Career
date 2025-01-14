@@ -65,15 +65,20 @@
   }
   
   .userCard:hover {
-    transform: translateY(-10px);
+    /* transform: translateY(-10px); */
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
   }
   
   .userImage {
     width: 100%;
     height: 200px;
+    width: 200px;
     object-fit: cover;
     border-bottom: 2px solid #f1f1f1;
+    border-radius: 50%;
+    margin: auto;
+    border: 4px solid rgb(109, 201, 126);
+    margin-top: 15px;
   }
   
   .userInfo {
