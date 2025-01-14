@@ -19,7 +19,7 @@ const postSchema = new mongoose.Schema(
     },
     careerCategory: {
       type: String,
-      required: true,
+      required: false,
       enum: [
         "Home Services",
         "Technical Services",
@@ -47,7 +47,24 @@ const postSchema = new mongoose.Schema(
       type: [String],
       default: [],
       required: false,
-    }
+    },
+    dayRate: {
+      type: Number,
+      required: true,
+    },
+    employees: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    groupName: {
+      type: String,
+      default: function () {
+        return `Group: ${this.title}`;
+      },
+      trim: true,
+    },
   },
   {
     timestamps: true,
@@ -55,5 +72,4 @@ const postSchema = new mongoose.Schema(
 );
 
 const Post = mongoose.model("Post", postSchema);
-
 module.exports = Post;

@@ -21,6 +21,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
 import jobs from "@/constants/Jobs";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
+import jobAndProficientList from "@/constants/Jobs";
+import SearchModal from "@/components/HomePage/Modal";
+
 interface Location {
   type: string;
   coordinates: [number, number];
@@ -74,7 +77,6 @@ const HomePage = ({ user }: { user: User }) => {
   const [searchResults, setSearchResults] = React.useState<string[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const { expoPushToken, notification } = usePushNotifications();
-  const data = JSON.stringify(notification, undefined, 2);
   const filters = [
     "All Proficient",
     "Home Services",
@@ -107,6 +109,8 @@ const HomePage = ({ user }: { user: User }) => {
     city: string;
     career: string;
     careerCategory: string;
+    verificationStatus: boolean;
+    dayRate: string;
   }) => {
     navigation.navigate("ProfNavigator", { proficientDetails, user });
   };
@@ -146,28 +150,28 @@ const HomePage = ({ user }: { user: User }) => {
     if (data === "") {
       setSearchResults([]);
     } else {
-      const result = jobs.filter((job) =>
+      const result = jobAndProficientList.filter((job) =>
         job.toLowerCase().includes(data.toLowerCase())
       );
       setSearchResults(result);
     }
   };
-
   const chooseJob = (item: string) => {
     setModalVisible(false);
     setSearch("");
     navigation.navigate("JobList", {
-      job: item,
       user: user._id,
+      job: item,
     });
   };
   const saveExpoToken = async (token: any) => {
     try {
+      console.log("Expo Token:", token);
       const response = await axios.post(
         `${ayhamWifiUrl}/api/user/save-expo-token`,
         {
           userId: user._id,
-          token: expoPushToken?.data, //
+          expoToken: token,
         }
       );
       if (response.status === 200) {
@@ -180,7 +184,7 @@ const HomePage = ({ user }: { user: User }) => {
 
   useEffect(() => {
     saveExpoToken(expoPushToken?.data);
-  }, []);
+  }, [expoPushToken]);
 
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -200,52 +204,14 @@ const HomePage = ({ user }: { user: User }) => {
           </Text>
         </TouchableOpacity>
 
-        <Modal
-          visible={modalVisible}
-          animationType="slide"
-          transparent={true}
-          onRequestClose={() => {
-            setModalVisible(false);
-            setSearch("");
-          }}
-        >
-          <View style={styles.modalBackdrop}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Search for Jobs</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Type to search"
-                value={search}
-                onChangeText={handleSearch}
-                autoFocus={true}
-              />
-              <FlatList
-                data={searchResults}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={styles.listItem}
-                    onPress={() => chooseJob(item)} // Wrap in an arrow function
-                  >
-                    <Text>{item}</Text>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-                ListEmptyComponent={() =>
-                  search.trim() !== "" && (
-                    <Text style={styles.emptyText}>No results found</Text>
-                  )
-                }
-              />
-              ;
-              <Pressable
-                style={styles.closeButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.closeButtonText}>Close</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
+        <SearchModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          search={search}
+          setSearch={handleSearch}
+          searchResults={searchResults}
+          chooseJob={chooseJob}
+        />
 
         <View style={styles.section}>
           <TipsHeader title="Tips For You" buttonText="See All" />

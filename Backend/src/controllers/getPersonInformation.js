@@ -314,6 +314,34 @@ const updateInfo = async (req, res) => {
 };
 
 
+const checkIfUserRated = async (req, res) => {
+  const { userId, targetUserId } = req.body;
+
+
+  try {
+    const user = await User.findOne({
+      _id: targetUserId,
+      "profile.ratings.userId": userId,
+    }).exec();
+    if (user) {
+      return res
+        .status(200)
+        .json({ success: true, message: "User has rated the target user" });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "User has not rated the target user",
+      });
+    }
+  } catch (error) {
+    console.error("Error checking user rating:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error checking rating" });
+  }
+};
+
+
 
 module.exports = {
    getUserRoleByEmail,
@@ -328,5 +356,6 @@ module.exports = {
    getUserByEmail,
    getUserById,
    updateImage,
-   updateInfo
+   updateInfo,
+   checkIfUserRated
   };

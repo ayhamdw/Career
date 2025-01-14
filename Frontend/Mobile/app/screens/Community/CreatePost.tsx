@@ -105,6 +105,7 @@ export default function CreatePost() {
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState(null);
   const [tempPhotos, setTempPhotos] = useState([]);
+  const [dayRate, setDayRate] = useState("");
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -124,8 +125,8 @@ export default function CreatePost() {
   const handlePhotoUpload = useCallback(async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
       quality: 1,
+      allowsMultipleSelection: true,
     });
     if (!result.canceled) {
       setTempPhotos((prev) => [...prev, result.assets[0].uri]);
@@ -146,6 +147,7 @@ export default function CreatePost() {
           careerCategory: category,
           location,
           photos: uploadImages,
+          dayRate,
         },
         {
           headers: {
@@ -165,6 +167,7 @@ export default function CreatePost() {
         setDescription("");
         setNumberOfWorker("");
         setCategory("");
+        setDayRate("");
         setLocation(null);
         setTempPhotos([]);
       }
@@ -235,6 +238,15 @@ export default function CreatePost() {
             value={numberOfWorker}
             onChangeText={(text) => setNumberOfWorker(text)}
             placeholder="Enter number of workers"
+            keyboardType="numeric"
+            multiline={undefined}
+          />
+
+          <InputField
+            label="Day Rate"
+            value={dayRate}
+            onChangeText={(text) => setDayRate(text)}
+            placeholder="Enter day rate"
             keyboardType="numeric"
             multiline={undefined}
           />

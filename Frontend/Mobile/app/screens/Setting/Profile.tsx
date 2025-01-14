@@ -16,6 +16,7 @@ import { ayhamWifiUrl } from "@/constants/Urls";
 import styles from "@/assets/styles/ProfileStyle";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+
 import { useClerk } from "@clerk/clerk-expo";
 
 const Profile = ({ user }) => {
@@ -39,12 +40,7 @@ const Profile = ({ user }) => {
         await AsyncStorage.removeItem("token");
         await AsyncStorage.removeItem("user");
         console.log("Logout successful");
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: "Login" }],
-          })
-        );
+        navigation.navigate("Login");
       }
     } catch (err) {
       console.log("Logout failed:", err);
@@ -142,6 +138,18 @@ const Profile = ({ user }) => {
             style={styles.iconStyle}
           />
           <Text style={[styles.optionText]}>Projects</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.option}
+          onPress={() => navigation.navigate("MyPosts")}
+        >
+          <MaterialCommunityIcons
+            name="post-outline"
+            size={24}
+            style={styles.iconStyle}
+          />
+          <Text style={[styles.optionText]}>Posts</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.option} onPress={logoutFunction}>

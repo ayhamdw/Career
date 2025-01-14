@@ -6,24 +6,33 @@ import {
   TouchableOpacity,
   FlatList,
   Modal,
-  Button,
   StyleSheet,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { Checkbox } from "react-native-paper";
+import cities from "@/constants/Cities";
+import styles from "@/assets/styles/JobListStyle";
+import SearchModal from "./Modal";
+import jobAndProficientList from "@/constants/Jobs";
+import { ayhamWifiUrl } from "@/constants/Urls";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function JobList() {
   const route = useRoute();
   const { job, user } = route.params;
-  console.log("Job:", job);
-  console.log("User:", user);
-  const [searchText, setSearchText] = useState("");
+  const [searchJob, setSearchJob] = useState(job);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedCities, setSelectedCities] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
   const [dayRate, setDayRate] = useState({ min: "", max: "" });
+  const [rating, setRating] = useState("");
+  const [toggleButton, setToggleButton] = useState(true);
+  const [searchResults, setSearchResults] = React.useState<string[]>([]);
+  const [searchModalVisible, setSearchModalVisible] = useState(false);
+  const [search, setSearch] = useState("");
   const [jobs, setJobs] = useState([
     { id: "1", title: "Web Developer", location: "Gaza", price: "$100/day" },
     {
@@ -35,35 +44,29 @@ export default function JobList() {
     { id: "3", title: "Content Writer", location: "Nablus", price: "$80/day" },
   ]);
 
-  const cities = [
-    "Gaza",
-    "Ramallah",
-    "Nablus",
-    "Hebron",
-    "Jerusalem",
-    "Jenin",
-    "Tulkarm",
-    "Qalqilya",
-    "Bethlehem",
-    "Tubas",
-    "Salfit",
-    "Jericho",
-  ];
-  const careerCategories = [
-    "Technical Services",
-    "Home Services",
-    "Educational Services",
-    "Healthcare",
-    "Creative Services",
-    "Legal & Financial Services",
-    "Other",
-  ];
+  const [proficient, setProficient] = useState([
+    { id: "1", title: "Carpenter", location: "Gaza", price: "$100/day" },
+    { id: "2", title: "Plumber", location: "Ramallah", price: "$150/day" },
+    { id: "3", title: "Blacksmith", location: "Nablus", price: "$80/day" },
+  ]);
 
-  useEffect(() => {
-    setSearchText(job);
-  }, []);
+  const handleSearch = (data: string) => {
+    setSearch(data);
+    if (data === "") {
+      setSearchResults([]);
+    } else {
+      const result = jobAndProficientList.filter((job) =>
+        job.toLowerCase().includes(data.toLowerCase())
+      );
+      setSearchResults(result);
+    }
+  };
 
-  const toggleModal = () => setModalVisible(!isModalVisible);
+  const chooseJob = (item: string) => {
+    setSearchModalVisible(false);
+    setSearch("");
+    setSearchJob(item);
+  };
 
   const toggleFilter = (value, type) => {
     if (type === "city") {
@@ -72,14 +75,60 @@ export default function JobList() {
           ? prev.filter((item) => item !== value)
           : [...prev, value]
       );
-    } else if (type === "category") {
-      setSelectedCategories((prev) =>
-        prev.includes(value)
-          ? prev.filter((item) => item !== value)
-          : [...prev, value]
-      );
     }
   };
+
+  const applyFilters = async () => {
+    const data = {
+      title: searchJob,
+      cities: selectedCities,
+      dayRate: dayRate,
+      rating: rating,
+    };
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(
+        `${ayhamWifiUrl}/api/jobs/specific-data/${JSON.stringify(data)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setJobs(response.data.posts);
+        setProficient(response.data.proficient);
+      }
+    } catch (error) {
+      console.log("Error fetching posts:", error);
+    }
+
+    setModalVisible(false);
+  };
+
+  const fetchAllPosts = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(
+        `${ayhamWifiUrl}/api/jobs/all-posts/${searchJob}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setJobs(response.data.posts);
+        setProficient(response.data.proficient);
+      }
+    } catch (error) {
+      console.log("Error fetching posts:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllPosts();
+  }, []);
 
   const renderJob = ({ item }) => (
     <TouchableOpacity
@@ -97,7 +146,7 @@ export default function JobList() {
         </Text>
         <Text style={styles.jobPrice}>
           <Ionicons name="pricetag-outline" size={18} color="#28a745" />{" "}
-          {item.price}
+          {"$" + item.price + "/day"}
         </Text>
       </View>
     </TouchableOpacity>
@@ -105,56 +154,87 @@ export default function JobList() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.toggleButtonContainer}>
+        <TouchableOpacity
+          style={
+            toggleButton
+              ? styles.toggleButtonActive
+              : styles.toggleButtonInactive
+          }
+          onPress={() => setToggleButton(true)}
+        >
+          <Text style={styles.toggleButtonText}>Posts</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={
+            toggleButton
+              ? styles.toggleButtonInactive
+              : styles.toggleButtonActive
+          }
+          onPress={() => setToggleButton(false)}
+        >
+          <Text style={styles.toggleButtonText}>Proficient</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.searchRow}>
-        <TextInput
+        <TouchableOpacity
           style={styles.searchInput}
-          placeholder="Search for jobs"
-          value={searchText}
-          onChangeText={(text) => setSearchText(text)}
-        />
-        <TouchableOpacity onPress={toggleModal}>
+          onPress={() => setSearchModalVisible(true)}
+        >
+          <Text style={styles.placeholderText}>{searchJob}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
           <Ionicons name="filter" size={24} color="black" />
         </TouchableOpacity>
       </View>
+      {jobs.length === 0 && toggleButton === true && (
+        <View style={styles.noPostAvailable}>
+          <Text style={styles.noPostAvailableText}>No Post Available</Text>
+        </View>
+      )}
 
+      {proficient.length === 0 && toggleButton === false && (
+        <View style={styles.noPostAvailable}>
+          <Text style={styles.noPostAvailableText}>
+            No Proficient Available
+          </Text>
+        </View>
+      )}
       <FlatList
-        data={jobs}
-        keyExtractor={(item) => item.id}
+        data={toggleButton ? jobs : proficient}
+        keyExtractor={(item) => item._id}
         renderItem={renderJob}
         contentContainerStyle={styles.jobList}
       />
 
       <Modal visible={isModalVisible} animationType="slide" transparent>
-        <View style={styles.modalContainer}>
+        <KeyboardAvoidingView
+          style={styles.modalContainer}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Filters</Text>
             <ScrollView>
               <Text style={styles.filterCategory}>Cities</Text>
               {cities.map((city) => (
-                <View key={city} style={styles.filterRow}>
-                  <Checkbox
-                    status={
-                      selectedCities.includes(city) ? "checked" : "unchecked"
-                    }
-                    onPress={() => toggleFilter(city, "city")}
-                  />
-                  <Text>{city}</Text>
-                </View>
-              ))}
-
-              <Text style={styles.filterCategory}>Career Categories</Text>
-              {careerCategories.map((category) => (
-                <View key={category} style={styles.filterRow}>
-                  <Checkbox
-                    status={
-                      selectedCategories.includes(category)
-                        ? "checked"
-                        : "unchecked"
-                    }
-                    onPress={() => toggleFilter(category, "category")}
-                  />
-                  <Text>{category}</Text>
-                </View>
+                <TouchableOpacity
+                  key={city}
+                  style={[
+                    styles.cityOption,
+                    selectedCities.includes(city) && styles.selectedOption,
+                  ]}
+                  onPress={() => toggleFilter(city, "city")}
+                >
+                  <Text
+                    style={[
+                      styles.cityOptionText,
+                      selectedCities.includes(city) &&
+                        styles.selectedOptionText,
+                    ]}
+                  >
+                    {city}
+                  </Text>
+                </TouchableOpacity>
               ))}
 
               <Text style={styles.filterCategory}>Day Rate</Text>
@@ -175,125 +255,45 @@ export default function JobList() {
                   onChangeText={(text) => setDayRate({ ...dayRate, max: text })}
                 />
               </View>
+
+              <Text style={styles.filterCategory}>Rating (1 - 5)</Text>
+              <View style={styles.dayRateRow}>
+                <TextInput
+                  style={styles.dayRateInput}
+                  placeholder="Rating"
+                  keyboardType="numeric"
+                  value={rating}
+                  onChangeText={(text) => setRating(text)}
+                />
+              </View>
             </ScrollView>
+
             <View style={styles.modalButtons}>
-              <Button title="Cancel" color="red" onPress={toggleModal} />
-              <Button title="Apply" onPress={toggleModal} />
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.applyButton]}
+                onPress={() => applyFilters()}
+              >
+                <Text style={styles.buttonText}>Apply</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
+
+      <SearchModal
+        modalVisible={searchModalVisible}
+        setModalVisible={setSearchModalVisible}
+        search={search}
+        setSearch={handleSearch}
+        searchResults={searchResults}
+        chooseJob={chooseJob}
+      />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: "#f8f9fa",
-  },
-  searchRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  searchInput: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 10,
-    marginRight: 10,
-  },
-  jobList: {
-    paddingBottom: 20,
-  },
-  jobCard: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-  },
-  cardHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  jobTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft: 10,
-  },
-  cardBody: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  jobLocation: {
-    color: "#555",
-  },
-  jobPrice: {
-    color: "#28a745",
-    fontWeight: "bold",
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    height: "80%",
-    width: "90%",
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 15,
-  },
-  filterCategory: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginVertical: 10,
-  },
-  filterRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  dayRateRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  dayRateInput: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 10,
-    textAlign: "center",
-  },
-  dayRateDivider: {
-    marginHorizontal: 10,
-    fontSize: 16,
-  },
-  modalButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 20,
-  },
-});

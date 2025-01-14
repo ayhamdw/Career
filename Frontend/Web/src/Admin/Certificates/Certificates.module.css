@@ -1,0 +1,186 @@
+/* Certificates.module.css */
+
+/* Main container styling */
+.certificatesContainer {
+    margin: 0 auto;
+    padding: 60px;
+    border-radius: 15px;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+  }
+  
+  /* Page title */
+  .pageTitle {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #0fabbc, #6cc98f);
+    -webkit-background-clip: text;
+    color: transparent;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  /* Section container */
+  .sectionContainer {
+    margin-bottom: 60px;
+  }
+  
+  /* Section Title */
+  .sectionTitle {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    border-bottom: 3px solid #6cc98f;
+    padding-bottom: 10px;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* User list grid */
+  .userList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 40px;
+    margin-top: 40px;
+  }
+  
+  /* Individual user card */
+  .userCard {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s ease;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    opacity: 0.95;
+  }
+  
+  /* .userCard:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+  } */
+  
+  /* User name and styling */
+  .userName {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    font-family: 'Roboto', sans-serif;
+    transition: color 0.3s ease;
+  }
+  
+  /* User info section */
+  .userInfo {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  
+  /* Status styles */
+  .certificateStatus {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+  }
+  
+  /* Status colors */
+  .statusTextPending {
+    background-color: #ffcc00;
+    color: #333;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 5px;
+  }
+  
+  .statusTextApproved {
+    background-color: #28a745;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 5px;
+  }
+  
+  .statusTextRejected {
+    background-color: #e74c3c;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 5px;
+  }
+  
+  /* Button styling */
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+  }
+  
+  .approveBtn, .rejectBtn {
+    padding: 12px 22px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    /* border-radius: 25px; */
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    letter-spacing: 1px;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .approveBtn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .approveBtn:hover {
+    background-color: #218838;
+    /* transform: scale(1.05); */
+  }
+  
+  .rejectBtn {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .rejectBtn:hover {
+    background-color: #c0392b;
+    /* transform: scale(1.05); */
+  }
+  
+  /* Section card hover effect */
+  .userCard:hover .userName {
+    color: #6cc98f;
+  }
+  
+  /* Section heading hover effect */
+  .sectionTitle:hover {
+    color: #6cc98f;
+    border-bottom-color: #4CAF50;
+  }
+  
+  /* Additional styling for icons */
+  button .icon {
+    margin-right: 10px;
+    font-size: 1.3rem;
+    vertical-align: middle;
+  }
+  

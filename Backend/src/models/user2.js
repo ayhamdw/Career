@@ -114,6 +114,14 @@ const userSchema = new mongoose.Schema(
           },
         },
       ],
+      certificates: {
+        type: [String],
+        required: false,
+      },
+      additionalImages: {
+        type: [String],
+        required: false,
+      },
     },
     verificationStatus: {
       type: Boolean,
@@ -129,7 +137,7 @@ const userSchema = new mongoose.Schema(
       default: [],
       required: false,
     },
-    houreRate: {
+    dayRate: {
       type: Number,
       default: 0,
     },

@@ -8,7 +8,12 @@ const messageSchema = mongoose.Schema({
   receiverId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
+    required: false,
+  },
+  postId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Post",
+    required: false,
   },
   messageType: {
     type: String,
@@ -22,5 +27,16 @@ const messageSchema = mongoose.Schema({
     default: Date.now,
   },
 });
+
+messageSchema.pre("save", function (next) {
+  if (!this.receiverId && !this.postId) {
+    return next(new Error("Either receiverId or postId must be provided."));
+  }
+  if (this.receiverId && this.postId) {
+    return next(new Error("You cannot have both receiverId and postId."));
+  }
+  next();
+});
+
 const Message = mongoose.model("Message", messageSchema);
 module.exports = Message;

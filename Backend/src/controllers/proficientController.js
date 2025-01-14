@@ -1,5 +1,6 @@
 const User = require("../models/user2");
 const Booking = require("../models/Booking");
+const Post = require("../models/posts");
 const Project = require("../models/project");
 const axios = require("axios");
 const { sendPushNotification } = require("./notificationController");
@@ -8,12 +9,16 @@ const getProficientData = async (req, res) => {
     const { id, careerCategory } = req.query;
     if (careerCategory === "All Proficient") {
       await User.find({ _id: { $ne: id } })
-        .select("profile email city career careerCategory")
+        .select(
+          "profile email city career careerCategory verificationStatus dayRate"
+        )
         .then((users) => res.status(200).send(users))
         .catch((error) => res.status(500).send("Error: " + error));
     } else {
       await User.find({ _id: { $ne: id }, careerCategory: careerCategory })
-        .select("profile email city career careerCategory")
+        .select(
+          "profile email city career careerCategory verificationStatus dayRate"
+        )
         .then((users) => res.status(200).send(users))
         .catch((error) => res.status(500).send("Error: " + error));
     }
@@ -143,9 +148,16 @@ const senderDetails = async (req, res) => {
 };
 
 const acceptRequest = async (req, res) => {
-  const { action, bookId } = req.body;
+  const { action, bookId, postId, senderId } = req.body;
   try {
     await Booking.findByIdAndUpdate(bookId, { status: action });
+    if (action === "Accepted" && postId) {
+      await Post.findByIdAndUpdate(postId, { $inc: { numberOfWorker: -1 } });
+      await Post.findByIdAndUpdate(postId, { $push: { employees: senderId } });
+    } else if (action === "Cancelled" && postId) {
+      await Post.findByIdAndUpdate(postId, { $inc: { numberOfWorker: 1 } });
+      await Post.findByIdAndUpdate(postId, { $pull: { employees: senderId } });
+    }
     res.status(200).json({ message: "Request Accepted" });
   } catch (error) {
     res.status(500).send("Error: " + error);

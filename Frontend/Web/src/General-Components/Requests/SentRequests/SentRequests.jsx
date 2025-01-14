@@ -38,8 +38,8 @@ const SentRequests = () => {
   }, []);
 
   const handleRequestDetails = (request) => {
-    console.log("Navigating with request:", request);
-    navigate("/requestdetails", { state: { requestDetails: request } });
+    console.log("Navigating with request ID:", request._id);
+    navigate(`/requestdetails/${request._id}`);
   };
 
   const RequestSection = ({ title, requests }) => (

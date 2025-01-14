@@ -29,7 +29,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { path: "/", element: <HomePage /> },
-      { path: "/admin", element: <Admin /> },
+      { path: "/admin/*", element: <Admin /> },
       { path: "/signin", element: <Sginin /> },
       { path: "/signup", element: <Signup /> },
       { path: "/verify", element: <Verify /> },
@@ -37,7 +37,7 @@ const router = createBrowserRouter([
       { path: "/service-provider", element: <ProtectedRoute><ServiceProvider /></ProtectedRoute> },
       { path: "/community", element: <Community /> },
       { path: "/requests/sent/", element: <ProtectedRoute><SentRequests /></ProtectedRoute> },
-      { path: "/requestdetails", element: <SentRequestDetails /> }, 
+      { path: "/requestdetails/:userId", element: <SentRequestDetails /> }, 
       { path: "/requests/received", element: <ProtectedRoute><ReceivedRequests /></ProtectedRoute> },
       { path: "/profile/:id", element: <ProtectedRoute><ProviderProfile /></ProtectedRoute> },
       { path: "/savedPost/:postId", element: <ProtectedRoute><FullSavedPost /></ProtectedRoute> },

@@ -2,8 +2,15 @@ const Post = require("../models/posts");
 const User = require("../models/user2");
 
 const createPost = async (req, res) => {
-  const { title, content, careerCategory, location, numberOfWorker, photos } =
-    req.body;
+  const {
+    title,
+    content,
+    careerCategory,
+    location,
+    numberOfWorker,
+    photos,
+    dayRate,
+  } = req.body;
   const user = req.user;
   const userRole = user.role;
   try {
@@ -16,6 +23,7 @@ const createPost = async (req, res) => {
       location,
       numberOfWorker,
       images: photos || [],
+      dayRate,
     });
     await newPost.save();
     res.status(201).json(newPost);
@@ -127,38 +135,77 @@ const getSavedPosts = async (req, res) => {
   }
 };
 
-const getAllPostsExceptMine = async (req, res) => {
-  try {
-    const posts = await Post.find({ user: { $ne: req.user._id } })
-      .populate("user", "_id username profile email role city")
-      .lean();
-    res.status(200).send(posts);
-  } catch (error) {
-    res.status(400).send({ error: "Error fetching posts" });
-  }
-};
-
 const getMyPosts = async (req, res) => {
   const posts = await Post.find({ user: req.params.id }).select("_id").lean();
   res.status(200).send(posts);
 };
 
-
-
 const getPostById = async (req, res) => {
   const { id } = req.params;
   try {
-    const post = await Post.findById(id); // Replace `Post` with your Mongoose model
+    const post = await Post.findById(id);
     if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
+      return res.status(404).json({ message: "Post not found" });
     }
     res.json(post);
   } catch (error) {
-    console.error('Error fetching post by ID:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error fetching post by ID:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
+const getMyPostsWithDetails = async (req, res) => {
+  try {
+    const response = await Post.find({ user: req.params.id });
+    res.status(200).send(response);
+  } catch (error) {
+    console.log("error while getting saved posts", error);
+  }
+};
+
+const getPostDetails = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const response = await Post.findById(postId)
+      .select("title content location numberOfWorker images dayRate")
+      .lean();
+    res.status(200).send(response);
+  } catch (error) {
+    res.status(400).send({ error: "Error fetching post details" });
+    console.log("error while getting post details", error);
+  }
+};
+
+const updatePost = async (req, res) => {
+  const postId = req.params.id;
+  const {
+    title,
+    content,
+    careerCategory,
+    location,
+    numberOfWorker,
+    photos,
+    dayRate,
+  } = req.body;
+  try {
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found." });
+    }
+    post.title = title;
+    post.content = content;
+    post.careerCategory = careerCategory;
+    post.location = location;
+    post.numberOfWorker = numberOfWorker;
+    post.images = photos || [];
+    post.dayRate = dayRate;
+    await post.save();
+    return res.status(200).json(post);
+  } catch (error) {
+    console.error("Error updating post:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
 
 module.exports = {
   createPost,
@@ -169,5 +216,8 @@ module.exports = {
   getSavedPosts,
   getSavedPostsIds,
   getMyPosts,
-  getPostById
+  getPostById,
+  getMyPostsWithDetails,
+  getPostDetails,
+  updatePost,
 };
