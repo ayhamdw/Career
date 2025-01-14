@@ -1,15 +1,40 @@
-import React, { useState } from 'react';
-import { FaCheck, FaTimes, FaSpinner } from 'react-icons/fa';  // Adding more icons
+import React, { useState, useRef } from 'react';
+import { FaCheck, FaTimes, FaEye } from 'react-icons/fa';  // Adding Eye icon for preview
 import styles from './Certificates.module.css';
 
 const Certificates = () => {
-  // Sample data for users with certificate status
+  // Sample data for users with certificate status and uploaded files (image or other file types)
   const [users, setUsers] = useState([
-    { id: 1, name: 'John Doe', certificateStatus: 'Pending' },
-    { id: 2, name: 'Jane Smith', certificateStatus: 'Approved' },
-    { id: 3, name: 'Emily Johnson', certificateStatus: 'Rejected' },
-    { id: 4, name: 'Michael Brown', certificateStatus: 'Pending' },
-    { id: 5, name: 'Sara White', certificateStatus: 'Approved' },
+    { 
+      id: 1, 
+      name: 'John Doe', 
+      certificateStatus: 'Pending', 
+      uploadedFile: 'https://randomuser.me/api/portraits/men/1.jpg' // Example image
+    },
+    { 
+      id: 2, 
+      name: 'Jane Smith', 
+      certificateStatus: 'Approved', 
+      uploadedFile: 'https://www.w3.org/WAI/WCAG21/quickref/files/example-pdf.pdf' // Example PDF
+    },
+    { 
+      id: 3, 
+      name: 'Emily Johnson', 
+      certificateStatus: 'Rejected', 
+      uploadedFile: 'https://randomuser.me/api/portraits/women/3.jpg' // Example image
+    },
+    { 
+      id: 4, 
+      name: 'Michael Brown', 
+      certificateStatus: 'Pending', 
+      uploadedFile: 'https://www.w3.org/WAI/WCAG21/quickref/files/example-textfile.txt' // Example text file
+    },
+    { 
+      id: 5, 
+      name: 'Sara White', 
+      certificateStatus: 'Approved', 
+      uploadedFile: 'https://randomuser.me/api/portraits/women/5.jpg' // Example image
+    },
   ]);
 
   // Function to handle approval of certificate
@@ -31,12 +56,46 @@ const Certificates = () => {
     return users.filter(user => user.certificateStatus === status);
   };
 
+  // Preview modal state
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewFile, setPreviewFile] = useState(null);
+
+  // Open the file preview modal
+  const openPreview = (file) => {
+    setPreviewFile(file);
+    setShowPreview(true);
+  };
+
+  // Close the preview modal
+  const closePreview = () => {
+    setShowPreview(false);
+    setPreviewFile(null);
+  };
+
   return (
     <div className={styles.certificatesContainer}>
       <h1 className={styles.pageTitle}>Certificate Approval</h1>
 
-            {/* Pending Users Section */}
-            <div className={styles.sectionContainer}>
+      {/* Preview Modal */}
+      {showPreview && (
+        <div className={styles.previewModal}>
+          <div className={styles.previewContent}>
+            <button className={styles.closePreviewBtn} onClick={closePreview}>Close</button>
+            {previewFile && previewFile.endsWith('.pdf') ? (
+              <embed src={previewFile} type="application/pdf" width="100%" height="600px" />
+            ) : previewFile && previewFile.endsWith('.txt') ? (
+              <iframe src={previewFile} width="100%" height="600px"></iframe>
+            ) : previewFile && previewFile.endsWith('.jpg') || previewFile.endsWith('.jpeg') || previewFile.endsWith('.png') ? (
+              <img src={previewFile} alt="Preview" className={styles.previewImage} />
+            ) : (
+              <p>File format not supported for preview.</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Pending Users Section */}
+      <div className={styles.sectionContainer}>
         <h2 className={styles.sectionTitle}>Pending Users</h2>
         <div className={styles.userList}>
           {filterUsersByStatus('Pending').map(user => (
@@ -49,6 +108,15 @@ const Certificates = () => {
                   {user.certificateStatus}
                 </span>
               </p>
+              <div className={styles.uploadedFile}>
+                {user.uploadedFile && (
+                  <div>
+                    <button className={styles.previewBtn} onClick={() => openPreview(user.uploadedFile)}>
+                      <FaEye className="icon" /> Preview
+                    </button>
+                  </div>
+                )}
+              </div>
               <div className={styles.actions}>
                 <button 
                   className={styles.approveBtn} 
@@ -82,6 +150,15 @@ const Certificates = () => {
                   {user.certificateStatus}
                 </span>
               </p>
+              <div className={styles.uploadedFile}>
+                {user.uploadedFile && (
+                  <div>
+                    <button className={styles.previewBtn} onClick={() => openPreview(user.uploadedFile)}>
+                      <FaEye className="icon" /> Preview
+                    </button>
+                  </div>
+                )}
+              </div>
               <div className={styles.actions}>
                 <button 
                   className={styles.approveBtn} 
@@ -109,6 +186,15 @@ const Certificates = () => {
                   {user.certificateStatus}
                 </span>
               </p>
+              <div className={styles.uploadedFile}>
+                {user.uploadedFile && (
+                  <div>
+                    <button className={styles.previewBtn} onClick={() => openPreview(user.uploadedFile)}>
+                      <FaEye className="icon" /> Preview
+                    </button>
+                  </div>
+                )}
+              </div>
               <div className={styles.actions}>
                 <button 
                   className={styles.rejectBtn} 
@@ -121,8 +207,6 @@ const Certificates = () => {
           ))}
         </div>
       </div>
-
-
 
     </div>
   );
