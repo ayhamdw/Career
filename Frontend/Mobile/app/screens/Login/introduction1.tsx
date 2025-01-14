@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Text, View, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import styles from "../../assets/styles/Introduction1Style";
+import styles from "../../../assets/styles/Introduction1Style";
 
 export default function Introduction1() {
   const navigation = useNavigation();

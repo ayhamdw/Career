@@ -6,10 +6,10 @@ import { useNavigation } from "@react-navigation/native";
 import { useClerk, useOAuth, useUser } from "@clerk/clerk-expo";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
-import styles from "../../assets/styles/LoginStyle";
-import google from "../../assets/images/google.png";
-import facebook from "../../assets/images/facebook.png";
-import apple from "../../assets/images/apple.png";
+import styles from "../../../assets/styles/LoginStyle";
+import google from "../../../assets/images/google.png";
+import facebook from "../../../assets/images/facebook.png";
+import apple from "../../../assets/images/apple.png";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import { useFonts } from "expo-font";
 
@@ -21,7 +21,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const { user } = useUser();
   const [loaded, error] = useFonts({
-    "Kavoon-Regular": require("../../assets/fonts/Kavoon-Regular.ttf"),
+    "Kavoon-Regular": require("../../../assets/fonts/Kavoon-Regular.ttf"),
   });
   const { startOAuthFlow: startGoogleOAuthFlow } = useOAuth({
     strategy: "oauth_google",

@@ -186,6 +186,14 @@ const HomePage = ({ user }: { user: User }) => {
     saveExpoToken(expoPushToken?.data);
   }, [expoPushToken]);
 
+  const navigateToTips = () => {
+    navigation.navigate("Tips");
+  };
+
+  const navigateToFirstTip = () => {
+    navigation.navigate("FirstTip");
+  };
+
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
@@ -214,12 +222,15 @@ const HomePage = ({ user }: { user: User }) => {
         />
 
         <View style={styles.section}>
-          <TipsHeader title="Tips For You" buttonText="See All" />
-          <TipsImage />
+          <TipsHeader
+            title="Tips For You"
+            buttonText="See All"
+            onPress={navigateToTips}
+          />
+          <TipsImage onPress={navigateToFirstTip} />
         </View>
 
         <View style={styles.section}>
-          <TipsHeader title="Proficient Recommendation" buttonText="See All" />
           <ProfRecommendation
             data={filters}
             selectedFilter={selectedFilter}

@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import styles from "../../assets/styles/ForgotPasswordStyle";
+import styles from "../../../assets/styles/ForgotPasswordStyle";
 import axios, { AxiosError } from "axios";
 import Toast from "react-native-toast-message";
 import { ScrollView } from "react-native-gesture-handler";
-import { ayhamWifiUrl } from "../../constants/Urls";
+import { ayhamWifiUrl } from "../../../constants/Urls";
 
 export default function ForgotPassword() {
   const [username, setUsername] = useState("");

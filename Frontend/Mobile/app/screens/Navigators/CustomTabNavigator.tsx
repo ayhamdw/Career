@@ -88,9 +88,7 @@ export default CustomTabNavigator;
 const styles = StyleSheet.create({
   tabBarStyle: {
     position: "absolute",
-    left: 10,
-    right: 10,
-    bottom: -15,
+    bottom: -20,
     borderRadius: 30,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
