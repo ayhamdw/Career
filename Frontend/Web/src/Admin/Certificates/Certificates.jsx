@@ -1,72 +1,53 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FaCheck, FaTimes, FaEye } from 'react-icons/fa';  // Adding Eye icon for preview
 import styles from './Certificates.module.css';
+import axios from 'axios';
+
+
+
+
+
 
 const Certificates = () => {
-  // Sample data for users with certificate status and uploaded files (image or other file types)
-  const [users, setUsers] = useState([
-    { 
-      id: 1, 
-      name: 'John Doe', 
-      certificateStatus: 'Pending', 
-      uploadedFile: 'https://randomuser.me/api/portraits/men/1.jpg' // Example image
-    },
-    { 
-      id: 2, 
-      name: 'Jane Smith', 
-      certificateStatus: 'Approved', 
-      uploadedFile: 'https://www.w3.org/WAI/WCAG21/quickref/files/example-pdf.pdf' // Example PDF
-    },
-    { 
-      id: 3, 
-      name: 'Emily Johnson', 
-      certificateStatus: 'Rejected', 
-      uploadedFile: 'https://randomuser.me/api/portraits/women/3.jpg' // Example image
-    },
-    { 
-      id: 4, 
-      name: 'Michael Brown', 
-      certificateStatus: 'Pending', 
-      uploadedFile: 'https://www.w3.org/WAI/WCAG21/quickref/files/example-textfile.txt' // Example text file
-    },
-    { 
-      id: 5, 
-      name: 'Sara White', 
-      certificateStatus: 'Approved', 
-      uploadedFile: 'https://randomuser.me/api/portraits/women/5.jpg' // Example image
-    },
-  ]);
+  const [users, setUsers] = useState([]);
 
-  // Function to handle approval of certificate
+      useEffect(()=>{
+        const fetchAllUsers = async()=>{
+            try{
+                const response = await axios.get(`${import.meta.env.VITE_API}/user/Allusers`)
+                setUsers(response.data);
+            }
+            catch(error){
+                console.log("Error Fetching Users: ",error);
+            }
+        }
+        fetchAllUsers();
+    },[])
+
   const approveCertificate = (id) => {
     setUsers(users.map(user => 
-      user.id === id ? { ...user, certificateStatus: 'Approved' } : user
+      user._id === id ? { ...user, certificateStatus: 'verified' } : user
     ));
   };
 
-  // Function to handle rejection of certificate
   const rejectCertificate = (id) => {
     setUsers(users.map(user => 
-      user.id === id ? { ...user, certificateStatus: 'Rejected' } : user
+      user._id === id ? { ...user, certificateStatus: 'rejected' } : user
     ));
   };
 
-  // Function to filter users by status
   const filterUsersByStatus = (status) => {
-    return users.filter(user => user.certificateStatus === status);
+    return users.filter(user => user.certificate.verificationStatus === status);
   };
 
-  // Preview modal state
   const [showPreview, setShowPreview] = useState(false);
   const [previewFile, setPreviewFile] = useState(null);
 
-  // Open the file preview modal
   const openPreview = (file) => {
     setPreviewFile(file);
     setShowPreview(true);
   };
 
-  // Close the preview modal
   const closePreview = () => {
     setShowPreview(false);
     setPreviewFile(null);
@@ -98,20 +79,20 @@ const Certificates = () => {
       <div className={styles.sectionContainer}>
         <h2 className={styles.sectionTitle}>Pending Users</h2>
         <div className={styles.userList}>
-          {filterUsersByStatus('Pending').map(user => (
-            <div key={user.id} className={styles.userCard}>
-              <h2 className={styles.userName}>{user.name}</h2>
+          {filterUsersByStatus('pending').map(user => (
+            <div key={user._id} className={styles.userCard}>
+              <h2 className={styles.userName}>{user.profile.firstName} {user.profile.lastName}</h2>
               <p className={styles.userInfo}>Awaiting certificate approval.</p>
               <p className={styles.certificateStatus}>
                 Status: 
                 <span className={styles.statusTextPending}>
-                  {user.certificateStatus}
+                  {user.certificate.verificationStatus}
                 </span>
               </p>
               <div className={styles.uploadedFile}>
-                {user.uploadedFile && (
+                {user.certificate.isCertified && (
                   <div>
-                    <button className={styles.previewBtn} onClick={() => openPreview(user.uploadedFile)}>
+                    <button className={styles.previewBtn} onClick={() => openPreview(user.certificate.certificateFile)}>
                       <FaEye className="icon" /> Preview
                     </button>
                   </div>
@@ -120,13 +101,13 @@ const Certificates = () => {
               <div className={styles.actions}>
                 <button 
                   className={styles.approveBtn} 
-                  onClick={() => approveCertificate(user.id)}
+                  onClick={() => approveCertificate(user._id)}
                 >
                   <FaCheck className="icon" /> Approve
                 </button>
                 <button 
                   className={styles.rejectBtn} 
-                  onClick={() => rejectCertificate(user.id)}
+                  onClick={() => rejectCertificate(user._id)}
                 >
                   <FaTimes className="icon" /> Reject
                 </button>
@@ -140,20 +121,20 @@ const Certificates = () => {
       <div className={styles.sectionContainer}>
         <h2 className={styles.sectionTitle}>Approved Users</h2>
         <div className={styles.userList}>
-          {filterUsersByStatus('Approved').map(user => (
-            <div key={user.id} className={styles.userCard}>
-              <h2 className={styles.userName}>{user.name}</h2>
+          {filterUsersByStatus('verified').map(user => (
+            <div key={user._id} className={styles.userCard}>
+              <h2 className={styles.userName}>{user.profile.firstName} {user.profile.lastName}</h2>
               <p className={styles.userInfo}>Has uploaded certificate.</p>
               <p className={styles.certificateStatus}>
                 Status: 
                 <span className={styles.statusTextApproved}>
-                  {user.certificateStatus}
+                  {user.certificate.verificationStatus}
                 </span>
               </p>
               <div className={styles.uploadedFile}>
-                {user.uploadedFile && (
+                {user.certificate.certificateFile && (
                   <div>
-                    <button className={styles.previewBtn} onClick={() => openPreview(user.uploadedFile)}>
+                    <button className={styles.previewBtn} onClick={() => openPreview(user.certificate.certificateFile)}>
                       <FaEye className="icon" /> Preview
                     </button>
                   </div>
@@ -176,20 +157,20 @@ const Certificates = () => {
       <div className={styles.sectionContainer}>
         <h2 className={styles.sectionTitle}>Rejected Users</h2>
         <div className={styles.userList}>
-          {filterUsersByStatus('Rejected').map(user => (
-            <div key={user.id} className={styles.userCard}>
-              <h2 className={styles.userName}>{user.name}</h2>
+          {filterUsersByStatus('rjected').map(user => (
+            <div key={user._id} className={styles.userCard}>
+              <h2 className={styles.userName}>{user.profile.firstName} {user.profile.lastName}</h2>
               <p className={styles.userInfo}>Certificate was rejected.</p>
               <p className={styles.certificateStatus}>
                 Status: 
                 <span className={styles.statusTextRejected}>
-                  {user.certificateStatus}
+                  {user.certificate.verificationStatus}
                 </span>
               </p>
               <div className={styles.uploadedFile}>
-                {user.uploadedFile && (
+                {user.certificate.certificateFile && (
                   <div>
-                    <button className={styles.previewBtn} onClick={() => openPreview(user.uploadedFile)}>
+                    <button className={styles.previewBtn} onClick={() => openPreview(user.certificate.certificateFile)}>
                       <FaEye className="icon" /> Preview
                     </button>
                   </div>
@@ -201,6 +182,40 @@ const Certificates = () => {
                   disabled
                 >
                   <FaTimes className="icon" /> Rejected
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className={styles.sectionContainer}>
+        <h2 className={styles.sectionTitle}>Users who have not uploaded their files</h2>
+        <div className={styles.userList}>
+          {filterUsersByStatus('noFile').map(user => (
+            <div key={user._id} className={styles.userCard}>
+              <h2 className={styles.userName}>{user.profile.firstName} {user.profile.lastName}</h2>
+              <p className={styles.userInfo}>Certificate was rejected.</p>
+              <p className={styles.certificateStatus}>
+                Status: 
+                <span className={styles.statusTextRejected}>
+                  Not Verified
+                </span>
+              </p>
+              <div className={styles.uploadedFile}>
+                {user.certificate.certificateFile && (
+                  <div>
+                    <button className={styles.previewBtn} onClick={() => openPreview(user.certificate.certificateFile)}>
+                      <FaEye className="icon" /> Preview
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div className={styles.actions}>
+                <button 
+                  className={styles.rejectBtn} 
+                  disabled
+                >
+                  <FaTimes className="icon" /> Did not Uploaded File
                 </button>
               </div>
             </div>
