@@ -222,6 +222,23 @@ const updatePost = async (req, res) => {
   }
 };
 
+const getGroupChatUsers = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const response = await Post.findById(postId)
+      .select("employees")
+      .populate(
+        "employees",
+        "profile.firstName profile.lastName profile.profileImage"
+      )
+      .lean();
+    res.status(200).send(response.employees);
+  } catch (error) {
+    console.log("error while getting group chat users", error);
+    res.status(400).send({ error: "Error fetching group chat users" });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
@@ -236,4 +253,5 @@ module.exports = {
   getPostDetails,
   updatePost,
   getPostByPostId,
+  getGroupChatUsers,
 };

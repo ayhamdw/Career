@@ -10,7 +10,7 @@ import PostDetails from "../Community/postDetails";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CreatePost from "../Community/CreatePost";
-import ChatUser from "../ChatUser";
+import ChatUser from "../Chat/ChatUser";
 
 const Stack = createNativeStackNavigator();
 const MainNavigation = () => {
