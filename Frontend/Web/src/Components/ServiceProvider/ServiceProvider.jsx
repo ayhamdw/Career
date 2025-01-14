@@ -14,6 +14,10 @@ const ServiceProvider = () => {
   const myId = localStorage.getItem("id")
 
   useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []); 
+
+  useEffect(() => {
     const fetchProviders = async () => {
       try {
         const response = await axios.post(`${import.meta.env.VITE_API}/user/users`, {

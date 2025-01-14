@@ -12,6 +12,10 @@ const SentRequests = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []); 
+
+  useEffect(() => {
     const fetchRequests = async (url, setState) => {
       const email = localStorage.getItem("userEmail");
       try {

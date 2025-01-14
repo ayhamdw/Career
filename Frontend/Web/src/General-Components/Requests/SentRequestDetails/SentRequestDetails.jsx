@@ -17,6 +17,10 @@ const SentRequestDetails = () => {
     const [openRated, setOpenRated] = useState(false);
     const { userId } = useParams();
 
+    useEffect(() => {
+        window.scrollTo(0, 0); 
+      }, []); 
+
 
     useEffect(() => {
         console.log(userId)
