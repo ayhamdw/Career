@@ -4,6 +4,12 @@
     align-items: center;
     height: 100vh;
     background-color: #f9f9f9;
+    flex-direction: column;
+  }
+
+  .mainLogo{
+    width: 100px;
+    margin: auto;
   }
   
   .formWrapper {
@@ -115,3 +121,4 @@
     margin-bottom: 1rem;
   }
   
+

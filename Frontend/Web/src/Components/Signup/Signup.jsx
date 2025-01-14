@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import s3 from 'react-aws-s3-typescript'
+import Logo from '../../assets/logo.png'
 
 
 
@@ -310,8 +311,9 @@ function Signup() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center  bg-gray-100">
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
+        <img src={Logo} className='w-[100px] m-auto'/>
         <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Sign Up</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">

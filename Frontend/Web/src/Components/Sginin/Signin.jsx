@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../AuthContext';
 import GoogleLogo from '../../assets/Google.png';
+import Logo from '../../assets/logo.png'
 
 function Signin() {
   const [email, setEmail] = useState('');
@@ -65,6 +66,8 @@ function Signin() {
   return (
     <div className={style.container}>
       <div className={style.formWrapper}>
+      <img src={Logo} className={style.mainLogo}/>
+
         <h2>Welcome back</h2>
         <p className={style.subText}>Sign in to your account</p>
 
