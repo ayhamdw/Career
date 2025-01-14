@@ -15,15 +15,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import axios from "axios";
 import Toast from "react-native-toast-message";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function GroupDetails() {
   const navigation = useNavigation();
   const route = useRoute();
   const group = route.params?.group;
-  console.log("Group ID:", group._id);
-  console.log("Group Name:", group.groupName);
   const [users, setUsers] = useState([]);
-  const [chatName, setChatName] = useState(group.groupName);
+  const [groupName, setGroupName] = useState(group.groupName);
   const [loading, setLoading] = useState(false);
 
   useLayoutEffect(() => {
@@ -59,29 +58,40 @@ export default function GroupDetails() {
 
   const deleteUser = async (userId: string) => {
     try {
-      const token = await AsyncStorage.getItem("token");
-      const response = await axios.delete(
-        `${ayhamWifiUrl}/api/community/deleteGroupChatUser/${groupId}/${userId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      Alert.alert(
+        "Delete User",
+        "Are you sure you want to delete this user from the group?",
+        [
+          { text: "No" },
+          {
+            text: "Yes",
+            onPress: async () => {
+              const token = await AsyncStorage.getItem("token");
+              const response = await axios.delete(
+                `${ayhamWifiUrl}/api/community/removeUserFromGroup/${group._id}/${userId}`,
+                {
+                  headers: { Authorization: `Bearer ${token}` },
+                }
+              );
+              if (response.status === 200) {
+                Toast.show({
+                  type: "success",
+                  text1: "User removed",
+                  text2: "User has been removed from the group successfully.",
+                });
+                fetchUsers();
+              }
+            },
+          },
+        ]
       );
-      if (response.status === 200) {
-        Toast.show({
-          type: "success",
-          text1: "User deleted",
-          text2: "User has been removed from the group.",
-        });
-        fetchUsers();
-      }
     } catch (error) {
       Toast.show({
         type: "error",
         text1: "Error",
-        text2: "Failed to delete user.",
+        text2: "Failed to remove user from group.",
       });
-      Alert.alert("Error", "Failed to delete user.");
-      console.error("Error deleting user:", error);
+      console.error("Error removing user from group:", error);
     }
   };
 
@@ -89,14 +99,18 @@ export default function GroupDetails() {
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await axios.put(
-        `${ayhamWifiUrl}/api/community/updateGroupName/${groupId}`,
+        `${ayhamWifiUrl}/api/community/updateGroupName/${group._id}`,
         { name: groupName },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       if (response.status === 200) {
-        Alert.alert("Success", "Group name updated successfully!");
+        Toast.show({
+          type: "success",
+          text1: "Group name updated",
+          text2: "Group name has been updated successfully.",
+        });
       }
     } catch (error) {
       Alert.alert("Error", "Failed to update group name.");
@@ -118,7 +132,7 @@ export default function GroupDetails() {
         {item.profile.firstName} {item.profile.lastName}
       </Text>
       <TouchableOpacity onPress={() => deleteUser(item._id)}>
-        <Entypo name="cross" size={24} color="red" />
+        <FontAwesome name="remove" size={24} color="red" />
       </TouchableOpacity>
     </View>
   );
@@ -128,8 +142,8 @@ export default function GroupDetails() {
       <Text style={styles.heading}>Edit Group Details</Text>
       <TextInput
         style={styles.input}
-        value={chatName}
-        onChangeText={setChatName}
+        value={groupName}
+        onChangeText={setGroupName}
         placeholder="Enter Group Name"
       />
       <FlatList

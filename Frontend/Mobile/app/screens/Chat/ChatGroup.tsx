@@ -34,10 +34,8 @@ const ChatGroup = () => {
   const socket = useRef(null);
   const navigation = useNavigation();
   const route = useRoute();
-  const group = route.params.group;
-  const userId = route.params.userId;
-  const groupId = group._id;
-  const groupName = group.groupName;
+  const group = route.params?.group;
+  const userId = route.params?.userId;
 
   useEffect(() => {
     const fetchGroupMessages = async () => {
