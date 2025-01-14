@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './HomePage.css'
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -18,6 +18,11 @@ import Services from './Services/Services';
 import CategoriesSection from './CategoriesSection/CategoriesSection'
 
 function HomePage() {
+  useEffect(()=>{
+    window.scrollTo(0,0)
+  },[])
+
+
   return (
     <>
     <div className='bodyHome'>
