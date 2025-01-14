@@ -34,4 +34,6 @@ router.put("/updatePost/:id", postController.updatePost);
 
 router.get("/getPostByPostId/:id", postController.getPostByPostId);
 
+router.get("/getGroupChatUsers/:id", postController.getGroupChatUsers);
+
 module.exports = router;
