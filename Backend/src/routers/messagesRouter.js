@@ -5,6 +5,7 @@ const {
   messageController,
   getMessageBetweenUsersController,
   getChatUserDetails,
+  getMessageBetweenUsersUsingPostId,
 } = require("../controllers/messagesController");
 const upload = require("../utils/SaveImageFile");
 
@@ -17,5 +18,7 @@ router.get(
   Auth,
   getMessageBetweenUsersController
 );
+
+router.get("/groupMessages/:postId", Auth, getMessageBetweenUsersUsingPostId);
 
 module.exports = router;

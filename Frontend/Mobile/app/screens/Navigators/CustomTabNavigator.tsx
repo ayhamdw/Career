@@ -59,7 +59,12 @@ const CustomTabNavigator = ({ screenData, user }) => (
         ),
         tabBarStyle: [
           styles.tabBarStyle,
-          { display: routeName === "ChatUser" ? "none" : "flex" },
+          {
+            display:
+              routeName === "ChatUser" || routeName === "ChatGroup"
+                ? "none"
+                : "flex",
+          },
         ],
         tabBarShowLabel: false,
         headerShown: false,
