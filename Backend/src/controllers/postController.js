@@ -239,6 +239,37 @@ const getGroupChatUsers = async (req, res) => {
   }
 };
 
+const deleteGroupChatUser = async (req, res) => {
+  const { postId, userId } = req.params;
+  console.log("postId", postId);
+  console.log("userId", userId);
+
+  try {
+    await Post.findByIdAndUpdate(postId, {
+      $pull: { employees: userId },
+    });
+  } catch (error) {
+    console.log("error while deleting group chat user", error);
+    res.status(400).send({ error: "Error deleting group chat user" });
+  }
+};
+
+const updateGroupName = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const groupName = req.body.name;
+    await Post.findByIdAndUpdate(id, {
+      groupName: groupName,
+    });
+    console.log("id", id);
+    console.log("groupName", groupName);
+    res.status(200).send({ message: "Group name updated successfully" });
+  } catch (error) {
+    console.log("error while updating group name", error);
+    res.status(400).send({ error: "Error updating group name" });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
@@ -254,4 +285,6 @@ module.exports = {
   updatePost,
   getPostByPostId,
   getGroupChatUsers,
+  deleteGroupChatUser,
+  updateGroupName,
 };

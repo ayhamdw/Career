@@ -15,6 +15,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
 import { ayhamWifiUrl } from "@/constants/Urls";
+import { useFocusEffect } from "@react-navigation/native";
 
 interface User {
   _id: string;
@@ -45,39 +46,41 @@ const Messages: React.FC<MessagesProps> = ({ user }) => {
   const [groups, setGroups] = useState<Group[]>([]);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
-        const userId = user._id;
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const token = await AsyncStorage.getItem("token");
+          const userId = user._id;
 
-        if (activeTab === "Direct") {
-          const response = await axios.get(
-            `${ayhamWifiUrl}/api/friends/acceptedFriends/${userId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          setUsers([...new Set(response.data)]);
-        } else {
-          const response = await axios.get(
-            `${ayhamWifiUrl}/api/community/getMyPostsWithDetails/${userId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          setGroups(response.data);
+          if (activeTab === "Direct") {
+            const response = await axios.get(
+              `${ayhamWifiUrl}/api/friends/acceptedFriends/${userId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+            setUsers([...new Set(response.data)]);
+          } else {
+            const response = await axios.get(
+              `${ayhamWifiUrl}/api/community/getMyPostsWithDetails/${userId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+            setGroups(response.data);
+          }
+        } catch (error) {
+          console.log("Error fetching data:", error);
         }
-      } catch (error) {
-        console.log("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, [user._id, activeTab]);
+      };
+      fetchData();
+    }, [activeTab, user._id])
+  );
 
   const renderDirectMessages = () =>
     users.map((item, index) => (
