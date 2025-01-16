@@ -6,12 +6,31 @@ import { MdHome } from "react-icons/md";
 import { FaUsersGear } from "react-icons/fa6";
 import { LiaCertificateSolid } from "react-icons/lia";
 import { CiMenuBurger } from "react-icons/ci";
+import { FaSignOutAlt } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom'
 import Statistics from './Statistics/Statistics';
 import Certificates from './Certificates/Certificates';
 import Users from './Users/Users'
+import { useAuth } from "../AuthContext";
+
+
+
+
+
 
 
 function Admin() {
+    const navigate = useNavigate();
+    const { logout } = useAuth();
+
+    const handleLogout = () => {
+        logout();
+        localStorage.clear();
+        navigate("/signin");
+        window.location.reload();
+      };
+
+
     return (
         <div className={style.container}>
             <div className={style.sidebar}>
@@ -35,6 +54,12 @@ function Admin() {
                         <li>
                             <Link to="/admin/certificates" className={style.sidebarItem}>
                                 <LiaCertificateSolid /> Certificates
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link onClick={handleLogout} className={style.sidebarItem}>
+                                <FaSignOutAlt /> Logout
                             </Link>
                         </li>
                     </ul>

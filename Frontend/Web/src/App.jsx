@@ -29,7 +29,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { path: "/", element: <HomePage /> },
-      { path: "/admin/*", element: <Admin /> },
+      { path: "/admin/*", element: <ProtectedRoute> <Admin /> </ProtectedRoute>},
       { path: "/signin", element: <Sginin /> },
       { path: "/signup", element: <Signup /> },
       { path: "/verify", element: <Verify /> },
