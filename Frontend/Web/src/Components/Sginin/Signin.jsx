@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import style from './Signin.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../AuthContext';
 import GoogleLogo from '../../assets/Google.png';
 import Logo from '../../assets/logo.png'
+
+import style from './Signin.module.css';
+
 
 function Signin() {
   const [email, setEmail] = useState('');
@@ -12,8 +14,10 @@ function Signin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [emailValidated, setEmailValidated] = useState(false);
+  const [userRole, setUserRole] = useState('user');
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [userEmail, setUserEmail] = useState("");
   const token = localStorage.getItem("token");
 
   const validateEmail = async () => {
@@ -27,6 +31,7 @@ function Signin() {
       const response = await axios.post(`${import.meta.env.VITE_API}/auth/validate-email`, { email });
       if (response.status === 200 && response.data.exists) {
         setEmailValidated(true);
+        
         setError('');
       } else {
         setError('Email not found. Please sign up first.');
@@ -43,7 +48,9 @@ function Signin() {
       setError('Please enter both email and password');
       return;
     }
-
+  
+    setLoading(true);
+  
     try {
       const response = await axios.post(`${import.meta.env.VITE_API}/auth/login`, { email, password });
       if (response.status === 200) {
@@ -53,8 +60,17 @@ function Signin() {
         localStorage.setItem('firstName', user.profile.firstName);
         login(token);
         localStorage.setItem('userEmail', email);
-        navigate(verificationStatus ? '/' : '/verify');
-        window.location.reload();
+  
+        try {
+          const roleResponse = await axios.post(`${import.meta.env.VITE_API}/user/role`, { email });
+          if (roleResponse.data.role === 'user') {
+            navigate(verificationStatus ? '/' : '/verify');
+          } else {
+            navigate('/admin');
+          }
+        } catch (err) {
+          setError('Failed to retrieve user role');
+        }
       }
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');
@@ -62,6 +78,7 @@ function Signin() {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className={style.container}>
