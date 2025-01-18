@@ -270,12 +270,12 @@ const Community = () => {
 
   const handleUpload = async (image) => {
     const Reacts3Client = new s3({
-      accessKeyId: "AKIA5MSUBQC3OE6ZOF4Z",
-      secretAccessKey: "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",
+      accessKeyId: import.meta.env.VITE_AWS_ID,
+      secretAccessKey: import.meta.env.VITE_AWS_KEY,
       bucketName: "career-images-s3",
       dirName: "media",
       region: "eu-north-1",
-      s3Url: "https://career-images-s3.s3.eu-north-1.amazonaws.com",
+      s3Url: import.meta.env.VITE_S3_URL,
     });
 
     try {
