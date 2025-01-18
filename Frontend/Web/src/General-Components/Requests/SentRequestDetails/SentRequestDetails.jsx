@@ -44,7 +44,7 @@ const SentRequestDetails = () => {
         if (document.getElementById("google-maps-script")) return;
 
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDdDsyQ3mxGGix5HiKOphWo1b4RW-Nxqis&callback=initMap&libraries=places,directions`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_MAP_KE}&callback=initMap&libraries=places,directions`;
         script.id = "google-maps-script";
         script.async = true;
         script.defer = true;
