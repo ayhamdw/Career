@@ -123,7 +123,8 @@ const ServiceProvider = () => {
 
           {filteredProviders.length > 0 ? (
             filteredProviders.map((provider, index) => (
-              <div key={index} className={styles.providerCard}>
+              provider.role !== 'admin' && (
+                <div key={index} className={styles.providerCard}>
                 <img
                   src={provider.profile.profileImage}
                   alt={provider.profile.firstName}
@@ -133,7 +134,7 @@ const ServiceProvider = () => {
                   <h3>{provider.profile.firstName} {provider.profile.lastName}</h3>
                   <p className={styles.career}>{provider.career}</p>
                   {renderRatingStars(provider.rating)}
-                  <p className={styles.experience}>Experience: {provider.profile.experience} years</p>
+                  <p className={styles.experience}>Experience: {provider.profile.experience}</p>
                   <p className={`${styles.certificate} ${provider.certificate.isCertified ? styles.verified : styles.notVerified}`}>
                     {provider.certificate.isCertified ? (
                       <FaCheckCircle className={styles.icon} />
@@ -169,6 +170,10 @@ const ServiceProvider = () => {
                   )}
                 </div>
               </div>
+
+              )
+
+              
 
             ))
           ) : (
