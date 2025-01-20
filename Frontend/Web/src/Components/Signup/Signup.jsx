@@ -47,6 +47,7 @@ function Signup() {
   const handleGoogleSignUp = async (response) => {
     if (response.credential) {
       const userData = JSON.parse(atob(response.credential.split('.')[1]));
+      console.log("UserData", userData)
       const { email, given_name, family_name, picture } = userData;
 
       const user = {
