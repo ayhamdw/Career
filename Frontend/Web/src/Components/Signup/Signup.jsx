@@ -6,6 +6,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import s3 from 'react-aws-s3-typescript'
 import Logo from '../../assets/logo.png'
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { useAuth } from '../../AuthContext';
+
+
 
 
 
@@ -37,6 +41,42 @@ function Signup() {
   });
 
   const [imageUrl, setImageUrl] = useState("");
+    const { login } = useAuth();
+  
+
+  const handleGoogleSignUp = async (response) => {
+    if (response.credential) {
+      const userData = JSON.parse(atob(response.credential.split('.')[1]));
+      const { email, given_name, family_name, picture } = userData;
+
+      const user = {
+        isOAuth: true,
+        email: email,
+        firstName: given_name,
+        lastName: family_name,
+        profileImage: picture,
+      };
+
+      try {
+        const res = await axios.post(`${import.meta.env.VITE_API}/auth/signup-google`, user);
+        console.log('Data sent to backend', res.data);
+
+        if (res.status === 200) {
+          const { token, user } = res.data;
+          localStorage.setItem('token', token);
+          localStorage.setItem('id', user._id);
+          localStorage.setItem('firstName', user.profile.firstName);
+          localStorage.setItem('userEmail', email);
+          login(token);
+          navigate('/community')
+
+        }
+
+      } catch (error) {
+        console.error('Error sending data to backend:', error);
+      }
+    }
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -204,6 +244,8 @@ function Signup() {
       await axios.post(`${import.meta.env.VITE_API}/send/send-verification`, { email, code });
       toast.info('Verification code sent to your email!', { position: "top-right" });
       console.log(code)
+
+      return code;
 
 
 
@@ -482,6 +524,15 @@ function Signup() {
         <p className="text-center text-gray-600 mt-4">
           Already have an account? <a href="/signin" className="text-[#0a8bff] hover:underline">Sign In</a>
         </p>
+
+        <p className={style.orDivider}>OR</p>
+
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+          <GoogleLogin
+            onSuccess={handleGoogleSignUp}
+            onError={() => console.log("Google login failed")}
+          />
+        </GoogleOAuthProvider>
       </div>
     </div>
   );

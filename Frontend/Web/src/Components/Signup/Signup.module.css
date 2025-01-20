@@ -348,3 +348,12 @@ textarea {
     outline: none;
   }
   
+
+  .orDivider {
+    color: #999;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    margin: auto;
+    text-align: center;
+    margin: 20px auto;
+  }

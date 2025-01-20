@@ -12,12 +12,16 @@ const {
   getAllUsernames,
   verifyCode,
   signinWithGoogle,
-  validateEmail
+  validateEmail,
+  signupWithGoogle,
+
 } = require("../controllers/authController");
 
 router.post("/register", upload.single("imageFile"), signupController);
 
 router.post("/login", signinController);
+router.post("/signin-google", signinWithGoogle);
+router.post("/signup-google", signupWithGoogle);
 
 router.post("/logout", Auth, logoutController);
 

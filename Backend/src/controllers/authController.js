@@ -125,12 +125,56 @@ const verifyCode = async (req, res) => {
   }
 };
 
-const signinWithGoogle = async (req, res) => {
+const signinWithGoogle = async (req, res, next) => {
   try {
+    const user = await User.findByEmail(req.body.email);  
+    const token = await user.generateAuthToken();
+    
+    res.status(200).send({
+      user,
+      token,
+      verificationStatus: user.verificationStatus,
+    });
   } catch (error) {
-    console.log("Error inside the Google Login", error);
+    console.log("Error inside the Login", error);
+    next(error);
   }
 };
+
+
+const signupWithGoogle = async (req, res) => {
+  try {
+    const { isOAuth, email, firstName, lastName, profileImage } = req.body;
+
+    let user;
+    if (isOAuth) {
+      user = await User.findOne({ email });
+      if (!user) {
+        user = new User({
+          email,
+          profile: {
+            firstName,
+            lastName,
+            profileImage,
+          },
+          verificationStatus: true, 
+        });
+        await user.save();
+      }
+    } else {
+      user = new User(req.body);
+      await user.save();
+    }
+
+    const token = await user.generateAuthToken();
+    res.status(200).send({ user, token });
+  } catch (error) {
+    console.log("Error inside the Signup", error);
+    res.status(400).send(error);
+  }
+};
+
+
 
 const validateEmail = async (req, res) => {
   try {
@@ -164,5 +208,7 @@ module.exports = {
   getAllEmails,
   getAllUsernames,
   verifyCode,
-  validateEmail
+  validateEmail,
+  signinWithGoogle,
+  signupWithGoogle,
 };
