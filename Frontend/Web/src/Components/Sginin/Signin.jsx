@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../../AuthContext';
 import GoogleLogo from '../../assets/Google.png';
 import Logo from '../../assets/logo.png'
-
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import style from './Signin.module.css';
 
 
@@ -20,6 +20,44 @@ function Signin() {
   const [userEmail, setUserEmail] = useState("");
   const token = localStorage.getItem("token");
 
+  const handleGoogleSignIn = async (response) => {
+    if (response.credential) {
+      const userData = JSON.parse(atob(response.credential.split('.')[1]));
+      const { email } = userData;
+  
+      try {
+        const res = await axios.post(`${import.meta.env.VITE_API}/auth/signin-google`, { email });
+  
+        console.log('Login successful', res.data);
+  
+        if (res.status === 200) {
+          const { token, verificationStatus, user } = res.data;
+          localStorage.setItem('token', token);
+          localStorage.setItem('id', user._id);
+          localStorage.setItem('firstName', user.profile.firstName);
+          localStorage.setItem('userEmail', email);
+          login(token);
+  
+          try {
+            const roleResponse = await axios.post(`${import.meta.env.VITE_API}/user/role`, { email });
+            if (roleResponse.data.role === 'user') {
+              navigate(verificationStatus ? '/' : '/verify');
+            } else {
+              navigate('/admin');
+            }
+          } catch (err) {
+            setError('Failed to retrieve user role');
+          }
+        }
+      } catch (err) {
+        setError(err.response?.data?.message || 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+  
+
   const validateEmail = async () => {
     if (!email) {
       setError('Please enter your email address');
@@ -31,7 +69,7 @@ function Signin() {
       const response = await axios.post(`${import.meta.env.VITE_API}/auth/validate-email`, { email });
       if (response.status === 200 && response.data.exists) {
         setEmailValidated(true);
-        
+
         setError('');
       } else {
         setError('Email not found. Please sign up first.');
@@ -48,9 +86,9 @@ function Signin() {
       setError('Please enter both email and password');
       return;
     }
-  
+
     setLoading(true);
-  
+
     try {
       const response = await axios.post(`${import.meta.env.VITE_API}/auth/login`, { email, password });
       if (response.status === 200) {
@@ -60,7 +98,7 @@ function Signin() {
         localStorage.setItem('firstName', user.profile.firstName);
         login(token);
         localStorage.setItem('userEmail', email);
-  
+
         try {
           const roleResponse = await axios.post(`${import.meta.env.VITE_API}/user/role`, { email });
           if (roleResponse.data.role === 'user') {
@@ -78,12 +116,12 @@ function Signin() {
       setLoading(false);
     }
   };
-  
+
 
   return (
     <div className={style.container}>
       <div className={style.formWrapper}>
-      <img src={Logo} className={style.mainLogo}/>
+        <img src={Logo} className={style.mainLogo} />
 
         <h2>Welcome back</h2>
         <p className={style.subText}>Sign in to your account</p>
@@ -127,11 +165,14 @@ function Signin() {
 
         <p className={style.orDivider}>OR</p>
 
-        <div className={style.authButtons}>
-          <button className={style.googleButton}>
-            <img src={GoogleLogo} alt="Google Logo" /> Continue with Google
-          </button>
-        </div>
+
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+          <GoogleLogin
+            onSuccess={handleGoogleSignIn}
+            onError={() => console.log("Google login failed")}
+          />
+        </GoogleOAuthProvider>
+
 
         <div className={style.footerText}>
           <p>

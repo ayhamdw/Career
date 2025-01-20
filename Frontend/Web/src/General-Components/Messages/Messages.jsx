@@ -299,7 +299,7 @@ const ChatSystem = () => {
       </div>
 
 
-      {isInfoVisible && activeFriend && (
+      {activeFriend && (
         <div className={styles.chatInfo}>
           <div className={styles.infoHeader}>
             <img

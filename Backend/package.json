@@ -15,6 +15,7 @@
         "@sendgrid/mail": "^8.1.4",
         "axios": "^1.7.9",
         "axois": "^0.0.1-security",
+        "bcrypt": "^5.1.1",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.20.3",
         "cors": "^2.8.5",
