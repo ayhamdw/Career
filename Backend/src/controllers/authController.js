@@ -147,11 +147,17 @@ const signupWithGoogle = async (req, res) => {
     const { isOAuth, email, firstName, lastName, profileImage } = req.body;
 
     let user;
+    let username = email.split('@')[0]; 
+    if (!username) {
+      username = `user${Date.now()}`; 
+    }
+
     if (isOAuth) {
       user = await User.findOne({ email });
       if (!user) {
         user = new User({
           email,
+          username,
           profile: {
             firstName,
             lastName,
