@@ -55,5 +55,4 @@ const Portfolio = ({userFirstName,userLastName,bio}) => {
     </div>
   );
 };
-
 export default Portfolio;

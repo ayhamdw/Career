@@ -140,6 +140,23 @@ const saveExpoToken = async (req, res) => {
   }
 };
 
+const getAllUserCoordinates = async (req, res) => {
+  try {
+    const users = await User.find({}, "_id profile.location.coordinates profile.profileImage"); // Select _id, coordinates, and profileImage
+    const userCoordinates = users.map(user => ({
+      id: user._id,
+      coordinates: user.profile?.location?.coordinates || null, // Fallback for missing coordinates
+      profileImage: user.profile?.profileImage || null, // Fallback for missing profileImage
+    }));
+
+    res.status(200).json({ userCoordinates });
+  } catch (error) {
+    console.error("Error fetching user coordinates:", error);
+    res.status(500).json({ error: "Failed to fetch user coordinates" });
+  }
+};
+
+
 module.exports = {
   getUserDetails,
   updateUserProfile,
@@ -148,4 +165,5 @@ module.exports = {
   rateUser,
   checkIfUserRated,
   saveExpoToken,
+  getAllUserCoordinates
 };
