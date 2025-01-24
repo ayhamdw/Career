@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import styles from './ProviderProfile.module.css';
-import { FaEnvelope, FaUserPlus, FaStar, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaEnvelope, FaUserPlus, FaStar, FaCheckCircle, FaTimesCircle, FaExclamationTriangle } from 'react-icons/fa';
+import s3 from 'react-aws-s3-typescript'
 
 const ProviderProfile = () => {
   const [provider, setProvider] = useState(null);
@@ -13,8 +14,8 @@ const ProviderProfile = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, []); 
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const fetchProviderData = async () => {
@@ -145,7 +146,7 @@ const Actions = ({ provider, myId, token }) => {
     fetchFriendRequests();
   }, [myId, token]);
 
-  
+
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -229,54 +230,120 @@ const Actions = ({ provider, myId, token }) => {
     }
   };
 
-  const handleAcceptRequest = async(ProviderId)=>{
-        try {
-          const response = await axios.post(`${import.meta.env.VITE_API}/friends/acceptFriendRequest`, {
-            senderId: ProviderId,
-            receiverId: myId,
-          },
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-    
-          )
-          setFriends((prevRequests) => [...prevRequests, ProviderId]);
-          setFriendRequests((prevRequests) =>
-            prevRequests.filter((id) => id !== ProviderId)
-          );
+  const handleAcceptRequest = async (ProviderId) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API}/friends/acceptFriendRequest`, {
+        senderId: ProviderId,
+        receiverId: myId,
+      },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
 
-        }
-        catch (e) {
-          console.log("Error Accept Request: ", e);
-        }
+      )
+      setFriends((prevRequests) => [...prevRequests, ProviderId]);
+      setFriendRequests((prevRequests) =>
+        prevRequests.filter((id) => id !== ProviderId)
+      );
+
+    }
+    catch (e) {
+      console.log("Error Accept Request: ", e);
+    }
   }
 
-    const handleRejectRequest = async(ProviderId) => {
-      try {
-        const response = await axios.post(`${import.meta.env.VITE_API}/friends/reject-request`, {
-          senderId: ProviderId,
-          receiverId: myId,
-        },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-  
-        )
-        setFriendRequests((prevRequests) =>
-          prevRequests.filter((id) => id !== ProviderId)
-        );
-      }
-      catch (e) {
-        console.log("Error Accept Request: ", e);
-      }
-      
-    };
+  const handleRejectRequest = async (ProviderId) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API}/friends/reject-request`, {
+        senderId: ProviderId,
+        receiverId: myId,
+      },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+
+      )
+      setFriendRequests((prevRequests) =>
+        prevRequests.filter((id) => id !== ProviderId)
+      );
+    }
+    catch (e) {
+      console.log("Error Accept Request: ", e);
+    }
+
+  };
 
   const isISentToThisPerson = requestsSent.includes(provider._id);
   const isThisPersonSentMeRequest = friendRequests.includes(provider._id);
   const isInMyFriends = friends.includes(provider._id);
 
+  const [reportText, setReportText] = useState('');
+  const [documentationImage, setDocumentationImage] = useState(null);
+  const [image, setImage] = useState(null);
+  const [isReporting, setIsReporting] = useState(false);
 
+  const handleUpload = async () => {
+    if (!image) {
+      alert('Please select an image to upload.');
+      return;
+    }
+
+    const Reacts3Client = new s3({
+      accessKeyId: "AKIA5MSUBQC3OE6ZOF4Z",
+      secretAccessKey: "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",
+      bucketName: "career-images-s3",
+      dirName: "media",
+      region: "eu-north-1",
+      s3Url: "https://career-images-s3.s3.eu-north-1.amazonaws.com",
+    });
+
+    try {
+      const data = await Reacts3Client.uploadFile(image);
+      setDocumentationImage(data.location);  // Store the image URL in state
+      console.log("Image URL:", data.location);  // Log the image URL for debugging
+    } catch (err) {
+      console.error("Error uploading image:", err);
+      alert('Error uploading image. Please try again.');
+      throw err;
+    }
+  };
+
+  const handleReport = async () => {
+    if (!reportText || !documentationImage || !provider._id) {
+      alert("Please provide a description, an image, and the person being reported.");
+      return;
+    }
+  
+    try {
+      await handleUpload();
+      if (!documentationImage) {
+        alert('Image upload failed. Please try again.');
+        return;
+      }
+  
+      const reportData = {
+        userId: myId,  // The user who is reporting
+        reportedUserId: provider._id,  // The person being reported
+        reportText: reportText,
+        documentationImage: documentationImage,  // Use the uploaded image URL
+      };
+
+      const response = await axios.post(`${import.meta.env.VITE_API}/Complaint/report`, reportData);
+  
+      console.log('Response:', response.data); 
+  
+      if (response.status === 201) {
+        alert('Report submitted successfully!');
+        setIsReporting(false); 
+      } else {
+        alert('Failed to submit the report. Please try again.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('An error occurred while submitting the report.');
+    }
+  };
+  
   return (
     <div className={styles.actionsSection}>
       <button className={styles.messageButton} onClick={() => alert('Messaging feature is under construction!')}>
@@ -284,20 +351,64 @@ const Actions = ({ provider, myId, token }) => {
       </button>
       {isThisPersonSentMeRequest ? (
         <>
-          <button className={styles.acceptBtn} onClick={()=>handleAcceptRequest(provider._id)}>Accept Request</button>
-          <button className={styles.rejectBtn} onClick={()=>handleRejectRequest(provider._id)}>Reject Request</button>
+          <button className={styles.acceptBtn} onClick={() => handleAcceptRequest(provider._id)}>Accept Request</button>
+          <button className={styles.rejectBtn} onClick={() => handleRejectRequest(provider._id)}>Reject Request</button>
         </>
       ) : (
         <>
 
           <button
-            className={isISentToThisPerson? styles.cancelSent  :isInMyFriends ? styles.isFriends : styles.addFriendButton}
-            onClick={isISentToThisPerson ? ()=>handleCancelFriendRequest(provider._id) : isInMyFriends ? () => handleDeleteFriend(provider._id) : () => handleSendFriendRequest(provider._id)}
+            className={isISentToThisPerson ? styles.cancelSent : isInMyFriends ? styles.isFriends : styles.addFriendButton}
+            onClick={isISentToThisPerson ? () => handleCancelFriendRequest(provider._id) : isInMyFriends ? () => handleDeleteFriend(provider._id) : () => handleSendFriendRequest(provider._id)}
           >
-            {isISentToThisPerson  ? 'Cancel Request' : isInMyFriends ? 'Delete Friend' : 'Add Friend'}
+            {isISentToThisPerson ? 'Cancel Request' : isInMyFriends ? 'Delete Friend' : 'Add Friend'}
           </button>
         </>
       )}
+
+      <button
+        className="flex items-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+        onClick={() => setIsReporting(true)}  // Open the report modal
+      >
+        <FaExclamationTriangle className="mr-2" />
+        Report
+      </button>
+
+      {isReporting && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg w-96">
+            <h3 className="text-xl font-semibold mb-4">Report Provider</h3>
+            <textarea
+              className="w-full p-3 border border-gray-300 rounded-md mb-4"
+              placeholder="Describe the issue..."
+              rows="4"
+              value={reportText}
+              onChange={(e) => setReportText(e.target.value)} // Handle report text change
+            />
+            <input
+              type="file"
+              onChange={(e) => setImage(e.target.files[0])} // Handle file selection
+              className="w-full p-3 border border-gray-300 rounded-md mb-4"
+            />
+            <div className="flex justify-between">
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                onClick={handleReport} // Trigger report submission
+              >
+                Submit Report
+              </button>
+              <button
+                className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400"
+                onClick={() => setIsReporting(false)} // Close the report modal
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
     </div>
   );
 };
