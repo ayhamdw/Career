@@ -401,6 +401,8 @@ const Community = () => {
           },
         }
       );
+      toast.success("Submited Successfully ");
+
     } catch (error) {
       console.log("Error applying for the job: ", error);
     }
@@ -637,6 +639,7 @@ const Community = () => {
               const isCurrentUser = post.user._id === currentUserId;
               const isFavorite = savedPosts.includes(post._id);
               const isCertified = post.user.certificate.isCertified;
+              console.log(`${post.user.profile.firstName}`,isCertified)
               return (
                 <div
                   className={`${styles.postCard} ${isCurrentUser ? styles.myPost : ""} ${post.saved ? styles.savedPost : ""}`}
