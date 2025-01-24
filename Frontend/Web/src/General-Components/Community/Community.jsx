@@ -38,43 +38,43 @@ const Community = () => {
 
 
   useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, []); 
+    window.scrollTo(0, 0);
+  }, []);
 
-  useEffect(()=>{
-    const getSavedPostIds = async()=>{
-      try{
+  useEffect(() => {
+    const getSavedPostIds = async () => {
+      try {
         const response = await axios.get(`${import.meta.env.VITE_API}/community/getSavedPostsIds/${myId}`);
-        
+
         setSavedPosts(response.data.savedPosts)
-        console.log("Saved Posts: ",response.data.savedPosts)
-        console.log("Saved Posts useState: ",savedPosts)
+        console.log("Saved Posts: ", response.data.savedPosts)
+        console.log("Saved Posts useState: ", savedPosts)
       }
-      catch(error){
+      catch (error) {
         console.log("Error Get Saved Post ID's: ", error)
       }
     }
     getSavedPostIds();
-  },[])
+  }, [])
 
 
 
-  const toggleFavorite = async(_postId, _userId) => {
+  const toggleFavorite = async (_postId, _userId) => {
     const isAlreadySaved = savedPosts.includes(_postId);
 
     const updatedSavedPosts = isAlreadySaved
-    ? savedPosts.filter(id => id !== _postId) 
-    : [...savedPosts, _postId]; 
+      ? savedPosts.filter(id => id !== _postId)
+      : [...savedPosts, _postId];
     setSavedPosts(updatedSavedPosts);
-    try{
-      const response = await axios.post(`${import.meta.env.VITE_API}/community/savePost`,{
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API}/community/savePost`, {
         postId: _postId,
         userId: _userId
       });
       console.log("response: ", response)
     }
-    catch(error){
-      console.log("Error Save Post: ",error)
+    catch (error) {
+      console.log("Error Save Post: ", error)
     }
   };
 
@@ -364,10 +364,20 @@ const Community = () => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [userData, setUserData] = useState(null);
 
-  const handleApplyForThisJop = async (proficientId, userId, requestDateTime, [longitude, latitude]) => {
+
+
+  const handleApplyForThisJop = async (proficientId, userId, requestDateTime, [longitude, latitude], isCertified) => {
     try {
       const token = localStorage.getItem("token");
+
+      if (!isCertified) {
+        setUserData({ proficientId, userId, requestDateTime, location: { longitude, latitude }, isCertified });
+        setIsPopupVisible(true);
+        return;
+      }
 
       if (!token) {
         setIsModalVisible(true);
@@ -392,8 +402,19 @@ const Community = () => {
         }
       );
     } catch (error) {
-      console.log("Error Apply Job: ", error);
+      console.log("Error applying for the job: ", error);
     }
+  };
+
+  const handleConfirmApplication = async () => {
+    const { proficientId, userId, requestDateTime, location } = userData;
+    await handleApplyForThisJop(proficientId, userId, requestDateTime, [location.longitude, location.latitude], true);
+    toast.success("Submited Successfully ");
+    setIsPopupVisible(false);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupVisible(false); 
   };
 
   const loginModal = () => {
@@ -614,8 +635,8 @@ const Community = () => {
           <div className={styles.postList}>
             {filteredPosts.slice().reverse().map((post) => {
               const isCurrentUser = post.user._id === currentUserId;
-              const isFavorite = savedPosts.includes(post._id)
-
+              const isFavorite = savedPosts.includes(post._id);
+              const isCertified = post.user.certificate.isCertified;
               return (
                 <div
                   className={`${styles.postCard} ${isCurrentUser ? styles.myPost : ""} ${post.saved ? styles.savedPost : ""}`}
@@ -636,8 +657,8 @@ const Community = () => {
                     </div>
 
                     {!isCurrentUser && (
-                      <div className={isFavorite ? styles.favoriteIconTrue : styles.favoriteIconFalse} onClick={()=>toggleFavorite(post._id,currentUserId)}>
-                        {isFavorite ? <MdFavorite /> : <MdFavoriteBorder  />} 
+                      <div className={isFavorite ? styles.favoriteIconTrue : styles.favoriteIconFalse} onClick={() => toggleFavorite(post._id, currentUserId)}>
+                        {isFavorite ? <MdFavorite /> : <MdFavoriteBorder />}
                       </div>
                     )}
                   </div>
@@ -686,12 +707,22 @@ const Community = () => {
                           post.user._id,
                           currentUserId,
                           new Date().toISOString(),
-                          userCoordinates
+                          userCoordinates,
+                          isCertified,
                         )}
                       >
                         Apply for this Job
                       </button>
                     )}
+
+                    <div>
+                      <CustomPopup
+                        show={isPopupVisible}
+                        onClose={handleClosePopup}
+                        onConfirm={handleConfirmApplication}
+                      />
+                      {/* Add your other components or UI here */}
+                    </div>
 
                     {/* Modal for Unauthenticated User */}
                     {isModalVisible && (
@@ -741,6 +772,41 @@ const Modal = ({ message, onClose, onLogin }) => {
             <button onClick={onClose} className={styles.modalCloseBtn}>Close</button>
             <button onClick={onLogin} className={styles.modalLoginBtn}>Go to Login</button>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+const CustomPopup = ({ show, onClose, onConfirm }) => {
+  if (!show) return null;
+
+  return (
+    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-md z-50">
+      <div className="bg-white rounded-lg p-8 w-96 max-w-lg shadow-2xl relative">
+        {/* <button
+          className="absolute top-2 right-2 text-gray-600 text-2xl hover:text-gray-800 transition duration-300"
+          onClick={onClose}
+        >
+          &times;
+        </button> */}
+        <p className="text-xl text-gray-800 mb-6 text-center font-medium">
+          This user is not officially verified. Are you sure you want to proceed?
+        </p>
+        <div className="flex justify-around gap-4">
+          <button
+            onClick={onConfirm}
+            className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 focus:outline-none transition duration-300 shadow-md hover:shadow-lg"
+          >
+            Yes
+          </button>
+          <button
+            onClick={onClose}
+            className="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 focus:outline-none transition duration-300 shadow-md hover:shadow-lg"
+          >
+            No
+          </button>
         </div>
       </div>
     </div>

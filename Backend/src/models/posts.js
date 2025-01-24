@@ -50,7 +50,7 @@ const postSchema = new mongoose.Schema(
     },
     dayRate: {
       type: Number,
-      required: true,
+      required: false,
     },
     employees: [
       {
