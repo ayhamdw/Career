@@ -7,6 +7,7 @@ const {
   rateUser,
   checkIfUserRated,
   saveExpoToken,
+  getAllUserCoordinates,
 } = require("../controllers/userController");
 const Auth = require("../middleware/auth");
 
@@ -15,6 +16,7 @@ router.put("/update/profile", Auth, updateUserProfile);
 router.post("/rateUser", rateUser);
 router.post("/userRated", checkIfUserRated);
 router.post("/save-expo-token", saveExpoToken);
+router.get("/coordinations", getAllUserCoordinates);
 
 // router.patch("/users/me", Auth, async (req, res) => {
 //   const updates = Object.keys(req.body);

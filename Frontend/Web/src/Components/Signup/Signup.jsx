@@ -69,7 +69,7 @@ function Signup() {
           localStorage.setItem('firstName', user.profile.firstName);
           localStorage.setItem('userEmail', email);
           login(token);
-          navigate('/community')
+          navigate('/')
 
         }
 
