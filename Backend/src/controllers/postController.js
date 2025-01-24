@@ -36,7 +36,7 @@ const createPost = async (req, res) => {
 const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate("user", "_id username profile email role city")
+      .populate("user", "_id username profile email role city certificate")
       .lean();
     res.status(200).send(posts);
   } catch (error) {

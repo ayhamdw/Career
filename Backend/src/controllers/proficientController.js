@@ -63,7 +63,7 @@ const createBooking = async (req, res) => {
     const locationAPI = await axios.get(
       `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=en`
     );
-    const city = locationAPI.data.address.city || "Unknown City";
+    const city = locationAPI.data.address || "Unknown City";
     const user = await User.findById(userId);
     const provider = await User.findById(proficientId);
 
