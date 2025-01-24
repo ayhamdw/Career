@@ -157,6 +157,51 @@ const getAllUserCoordinates = async (req, res) => {
 };
 
 
+const bandUser = async (req, res) => {
+  const { userId } = req.params;
+  const { banDuration } = req.body;
+
+  if (!banDuration || isNaN(banDuration) || banDuration <= 0) {
+      return res.status(400).json({ message: 'Invalid ban duration' });
+  }
+
+  try {
+      const user = await User.findById(userId);
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Calculate the ban expiration date
+      const banExpirationDate = new Date();
+      banExpirationDate.setDate(banExpirationDate.getDate() + parseInt(banDuration));
+
+      // Update the user with the ban expiration date
+      user.bannedUntil = banExpirationDate;
+
+      await user.save();
+
+      return res.status(200).json({ message: `User banned for ${banDuration} days`, bannedUntil: banExpirationDate });
+  } catch (error) {
+      return res.status(500).json({ message: 'Error banning user', error });
+  }
+};
+
+
+const getBanUntil = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    console.log(user.bannedUntil)
+    return res.status(200).json({ success: true, bannedUntil: user.bannedUntil });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: 'Error fetching banUntil' });
+  }
+};
+
 module.exports = {
   getUserDetails,
   updateUserProfile,
@@ -165,5 +210,7 @@ module.exports = {
   rateUser,
   checkIfUserRated,
   saveExpoToken,
-  getAllUserCoordinates
+  getAllUserCoordinates,
+  bandUser,
+  getBanUntil
 };

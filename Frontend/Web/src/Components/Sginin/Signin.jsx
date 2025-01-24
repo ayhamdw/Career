@@ -86,19 +86,35 @@ function Signin() {
       setError('Please enter both email and password');
       return;
     }
-
+  
     setLoading(true);
-
+  
     try {
       const response = await axios.post(`${import.meta.env.VITE_API}/auth/login`, { email, password });
+  
       if (response.status === 200) {
         const { token, verificationStatus, user } = response.data;
         localStorage.setItem('token', token);
         localStorage.setItem('id', user._id);
         localStorage.setItem('firstName', user.profile.firstName);
         login(token);
-        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userEmail', email);  
 
+        const banResponse = await axios.get(`${import.meta.env.VITE_API}/user/banUntil/${user._id}`);
+        const { bannedUntil } = banResponse.data;
+
+        if (bannedUntil) {
+          const currentDate = new Date();
+          const banUntilDate = new Date(bannedUntil);
+
+          if (banUntilDate > currentDate) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('firstName');
+            localStorage.removeItem('userEmail');
+            navigate('/ban-user')
+            return;  
+          }
+        }
         try {
           const roleResponse = await axios.post(`${import.meta.env.VITE_API}/user/role`, { email });
           if (roleResponse.data.role === 'user') {
@@ -116,6 +132,7 @@ function Signin() {
       setLoading(false);
     }
   };
+  
 
 
   return (

@@ -8,6 +8,8 @@ const {
   checkIfUserRated,
   saveExpoToken,
   getAllUserCoordinates,
+  bandUser,
+  getBanUntil
 } = require("../controllers/userController");
 const Auth = require("../middleware/auth");
 
@@ -16,6 +18,9 @@ router.put("/update/profile", Auth, updateUserProfile);
 router.post("/rateUser", rateUser);
 router.post("/userRated", checkIfUserRated);
 router.post("/save-expo-token", saveExpoToken);
+router.post("/ban-user/:userId", bandUser);
+router.get("/banUntil/:userId", getBanUntil);
+
 router.get("/coordinations", getAllUserCoordinates);
 
 // router.patch("/users/me", Auth, async (req, res) => {

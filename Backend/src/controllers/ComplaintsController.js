@@ -26,12 +26,30 @@ exports.createReport = async (req, res) => {
 
 exports.getAllReports = async (req, res) => {
   try {
-    const reports = await Report.find()
-      .populate('user', 'username email')  // Populate reporter details
-      .populate('reportedUser', 'username email');  // Populate reported person details
+    const reports = await Report.find({ isResolved: false })
+      .populate('user', 'username email')  
+      .populate('reportedUser', 'username email'); 
+    
     res.status(200).json(reports);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+exports.solveReport = async (req, res) => {
+  try {
+      const { complaintId } = req.params;
+      const updatedReport = await Report.findByIdAndUpdate(complaintId, { isResolved: true }, { new: true });
+
+      if (!updatedReport) {
+          return res.status(404).json({ success: false, message: 'Complaint not found' });
+      }
+
+      res.json({ success: true, message: 'Complaint resolved successfully' });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Error resolving complaint' });
   }
 };

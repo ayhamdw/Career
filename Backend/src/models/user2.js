@@ -157,6 +157,7 @@ const userSchema = new mongoose.Schema(
 
       },
     },
+    bannedUntil: { type: Date, default: null , required: false},
 
     tokens: [
       {

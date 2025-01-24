@@ -309,10 +309,10 @@ const Actions = ({ provider, myId, token }) => {
   };
 
   const handleReport = async () => {
-    if (!reportText || !documentationImage || !provider._id) {
-      alert("Please provide a description, an image, and the person being reported.");
-      return;
-    }
+    // if (!reportText || !documentationImage || !provider._id) {
+    //   alert("Please provide a description, an image, and the person being reported.");
+    //   return;
+    // }
   
     try {
       await handleUpload();
