@@ -11,13 +11,14 @@ function Root() {
   const isSigninRoute = location.pathname.startsWith("/signin");
   const isVerifyRoute = location.pathname.startsWith("/verify");
   const isSignupRoute = location.pathname.startsWith("/signup");
+  const isBan = location.pathname.startsWith("/ban-user");
 
   return (
     <>
       {/* Conditionally hide Navbar and Footer for admin routes */}
-      {!isAdminRoute && !isSigninRoute && !isVerifyRoute && !isSignupRoute && <Navbar />}
+      {!isAdminRoute && !isSigninRoute && !isVerifyRoute && !isSignupRoute && !isBan && <Navbar />}
       <Outlet />
-      {!isAdminRoute && !isSigninRoute && !isVerifyRoute && !isSignupRoute && <Footer />}
+      {!isAdminRoute && !isSigninRoute && !isVerifyRoute && !isSignupRoute && !isBan && <Footer />}
     </>
   );
 }

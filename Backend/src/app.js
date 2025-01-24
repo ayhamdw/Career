@@ -21,6 +21,8 @@ const RequestRouter = require("./routers/RequestRouter");
 const notificationRouter = require("./routers/notificationRouter");
 const projectRouter = require("./routers/projectRouter");
 const jobsRouter = require("./routers/jobsRouter");
+const ComplaintsRouter = require("./routers/ComplaintsRouter");
+
 
 const app = express();
 
@@ -71,6 +73,7 @@ app.use("/api/request", RequestRouter);
 app.use("/api/notification", notificationRouter);
 app.use("/api/projects", projectRouter);
 app.use("/api/jobs", jobsRouter);
+app.use("/api/Complaint", ComplaintsRouter);
 
 app.use(errorHandler);
 module.exports = app;

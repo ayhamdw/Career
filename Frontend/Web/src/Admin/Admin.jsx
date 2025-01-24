@@ -10,8 +10,12 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom'
 import Statistics from './Statistics/Statistics';
 import Certificates from './Certificates/Certificates';
+import Reports from './Reports/Reports';
+
 import Users from './Users/Users'
 import { useAuth } from "../AuthContext";
+import { TbMessageReportFilled } from "react-icons/tb";
+
 
 
 
@@ -58,10 +62,18 @@ function Admin() {
                         </li>
 
                         <li>
+                            <Link to="/admin/reports" className={style.sidebarItem}>
+                            <TbMessageReportFilled /> Reports
+                            
+                            </Link>
+                        </li>
+
+                        <li>
                             <Link onClick={handleLogout} className={style.sidebarItem}>
                                 <FaSignOutAlt /> Logout
                             </Link>
                         </li>
+                       
                     </ul>
                 </div>
             </div>
@@ -88,6 +100,7 @@ function Admin() {
                         <Route path="statistics" element={<Statistics />} />
                         <Route path="users" element={<Users />} />
                         <Route path="certificates" element={<Certificates />} />
+                        <Route path="reports" element={<Reports />} />
                         <Route path="" element={<Statistics />} />
                     </Routes>
                 </div>

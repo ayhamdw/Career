@@ -22,6 +22,7 @@ import SentRequestDetails from './General-Components/Requests/SentRequestDetails
 import ProviderProfile from './Components/ServiceProvider/providerProfile/providerProfile.jsx';
 import FullSavedPost from './General-Components/Settings/Sidebar/components/SavedPosts/FullSavedPost/FullSavedPost.jsx';
 import Admin from './Admin/Admin.jsx'
+import BanUser from './Components/Sginin/BanUser.jsx'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
       { path: "/signup", element: <Signup /> },
       { path: "/verify", element: <Verify /> },
       { path: "/messages", element: <ProtectedRoute><Messages /></ProtectedRoute> },
+      { path: "/ban-user", element: <ProtectedRoute><BanUser /></ProtectedRoute> },
       { path: "/service-provider", element: <ProtectedRoute><ServiceProvider /></ProtectedRoute> },
       { path: "/community", element: <Community /> },
       { path: "/requests/sent/", element: <ProtectedRoute><SentRequests /></ProtectedRoute> },
