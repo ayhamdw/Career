@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './ServiceProvider.module.css';
-import { FaCheckCircle, FaTimesCircle, FaEnvelope,FaUserSlash } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaEnvelope, FaUserSlash } from 'react-icons/fa';
 import providerProfile from './providerProfile/providerProfile';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,8 +14,8 @@ const ServiceProvider = () => {
   const myId = localStorage.getItem("id")
 
   useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, []); 
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -65,7 +65,8 @@ const ServiceProvider = () => {
   };
 
   const handleContactClick = (name) => {
-    alert(`Initiating contact with ${name}`);
+    // alert(`Initiating contact with ${name}`);
+    navigate('/messages')
   };
 
   const categories = [
@@ -86,6 +87,8 @@ const ServiceProvider = () => {
 
   console.log('Selected Category:', selectedCategory);
   console.log('Providers:', providers);
+
+
 
   return (
     <div className={styles.container}>
@@ -125,56 +128,70 @@ const ServiceProvider = () => {
             filteredProviders.map((provider, index) => (
               provider.role !== 'admin' && (
                 <div key={index} className={styles.providerCard}>
-                <img
-                  src={provider.profile.profileImage}
-                  alt={provider.profile.firstName}
-                  className={styles.providerPhoto}
-                />
-                <div className={styles.providerInfo}>
-                  <h3>{provider.profile.firstName} {provider.profile.lastName}</h3>
-                  <p className={styles.career}>{provider.career}</p>
-                  {renderRatingStars(provider.rating)}
-                  <p className={styles.experience}>Experience: {provider.profile.experience}</p>
-                  <p className={`${styles.certificate} ${provider.certificate.isCertified ? styles.verified : styles.notVerified}`}>
-                    {provider.certificate.isCertified ? (
-                      <FaCheckCircle className={styles.icon} />
+                  <img
+                    src={provider.profile.profileImage}
+                    alt={provider.profile.firstName}
+                    className={styles.providerPhoto}
+                  />
+                  <div className={styles.providerInfo}>
+                    <h3>{provider.profile.firstName} {provider.profile.lastName}</h3>
+                    <p className={styles.career}>{provider.career}</p>
+
+                    {/* Calculate average rating */}
+                    {provider.profile.ratings && provider.profile.ratings.length > 0 ? (
+                      (() => {
+                        const ratings = provider.profile.ratings;
+                        const ratingValues = ratings.map(ratingObj => ratingObj.rating);  // Assuming 'rating' is a key in ratingObj
+                        let averageRating = 0;
+
+                        if (ratingValues.length === 0) {
+                          console.log('No ratings available');
+                        } else {
+                          averageRating = ratingValues.reduce((sum, rating) => sum + rating, 0) / ratingValues.length;
+                          console.log(averageRating);
+                        }
+
+                        return renderRatingStars(averageRating);  // Use average rating in the renderRatingStars function
+                      })()
                     ) : (
-                      <FaTimesCircle className={styles.icon} />
+                      renderRatingStars(0)  // Optional: Message when no ratings are available
                     )}
-                    {provider.certificate.isCertified ? 'Verified by Practical Certificate' : 'Not Verified'}
-                  </p>
-                  {provider._id !== myId ? (
-                    <div className={styles.buttons}>
 
-                      <button
+                    <p className={styles.experience}>Experience: {provider.profile.experience}</p>
+                    <p className={`${styles.certificate} ${provider.certificate.isCertified ? styles.verified : styles.notVerified}`}>
+                      {provider.certificate.isCertified ? (
+                        <FaCheckCircle className={styles.icon} />
+                      ) : (
+                        <FaTimesCircle className={styles.icon} />
+                      )}
+                      {provider.certificate.isCertified ? 'Verified by Practical Certificate' : 'Not Verified'}
+                    </p>
+
+                    {provider._id !== myId ? (
+                      <div className={styles.buttons}>
+                        <button
+                          onClick={() => handleProfileClick(provider)}
+                          className={styles.profileButton}
+                        >
+                          View Profile
+                        </button>
+                        <button
+                          onClick={() => handleContactClick(provider.profile.firstName)}
+                          className={styles.contactButton}
+                        >
+                          <FaEnvelope className={styles.icon} /> Contact
+                        </button>
+                      </div>
+                    ) : (
+                      <button className={styles.myProfile}
                         onClick={() => handleProfileClick(provider)}
-                        className={styles.profileButton}
                       >
-                        View Profile
+                        Show Your Profile
                       </button>
-                      <button
-                        onClick={() => handleContactClick(provider.profile.firstName)}
-                        className={styles.contactButton}
-                      >
-                        <FaEnvelope className={styles.icon} /> Contact
-                      </button>
-                    </div>
-
-                  ) : (
-
-                    <button className={styles.myProfile}
-                      onClick={() => handleProfileClick(provider)}
-
-                    >show your profile</button>
-
-                  )}
+                    )}
+                  </div>
                 </div>
-              </div>
-
               )
-
-              
-
             ))
           ) : (
             <div className={styles.noProviders}>
@@ -187,6 +204,8 @@ const ServiceProvider = () => {
               </div>
             </div>
           )}
+
+
         </div>
       </div>
     </div>

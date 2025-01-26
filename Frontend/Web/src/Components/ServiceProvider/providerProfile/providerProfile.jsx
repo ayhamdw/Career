@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 import styles from './ProviderProfile.module.css';
 import { FaEnvelope, FaUserPlus, FaStar, FaCheckCircle, FaTimesCircle, FaExclamationTriangle } from 'react-icons/fa';
 import s3 from 'react-aws-s3-typescript'
+import { toast } from 'react-toastify';
+import { FaRegStar, FaStarHalfAlt } from 'react-icons/fa';
+
 
 const ProviderProfile = () => {
   const [provider, setProvider] = useState(null);
@@ -35,10 +38,22 @@ const ProviderProfile = () => {
   if (error) return <div className={styles.error}>{error}</div>;
   if (!provider) return <div className={styles.error}>Provider not found.</div>;
 
+
+
+  const ratings = provider.profile.ratings;
+  const ratingValues = ratings.map(ratingObj => ratingObj.rating);
+  let averageRating = 0;
+  if (ratingValues.length === 0) {
+    console.log('No ratings available');
+  } else {
+    averageRating = ratingValues.reduce((sum, rating) => sum + rating, 0) / ratingValues.length;
+    console.log(averageRating);
+  }
+  console.log(averageRating)
   return (
     <div className={styles.pageContainer}>
       <div className={styles.profileContainer}>
-        <Header provider={provider} />
+        <Header provider={provider} averageRating={averageRating} />
         <About bio={provider.profile.bio} />
         <Details provider={provider} />
         {provider._id !== myId && <Actions provider={provider} myId={myId} token={token} />}
@@ -48,28 +63,42 @@ const ProviderProfile = () => {
 };
 
 
+const Header = ({ provider, averageRating }) => {
+  const fullStars = Math.floor(averageRating);
+  const halfStar = averageRating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
+  return (
+    <div className={styles.header}>
+      <div className={styles.profileImageWrapper}>
+        <img
+          src={provider.profile.profileImage}
+          alt={`${provider.profile.firstName} ${provider.profile.lastName}`}
+          className={styles.profileImage}
+        />
+      </div>
+      <h1 className={styles.profileName}>
+        {provider.profile.firstName} {provider.profile.lastName}
+      </h1>
+      <p className={styles.profileJobTitle}>{provider.careerCategory}</p>
+      <p className={styles.profileLocation}>{provider.city}</p>
+      <div className={styles.profileRating}>
+        {[...Array(fullStars)].map((_, index) => (
+          <FaStar key={`full-${index}`} className={styles.ratingIcon} />
+        ))}
 
-const Header = ({ provider }) => (
-  <div className={styles.header}>
-    <div className={styles.profileImageWrapper}>
-      <img
-        src={provider.profile.profileImage}
-        alt={`${provider.profile.firstName} ${provider.profile.lastName}`}
-        className={styles.profileImage}
-      />
+        {halfStar && <FaStarHalfAlt className={styles.ratingIcon} />}
+
+        {[...Array(emptyStars)].map((_, index) => (
+          <FaRegStar key={`empty-${index}`} className={styles.ratingIcon} />
+        ))}
+
+        {/* Display the average rating */}
+        <span className={styles.ratingValue}> </span>
+      </div>
     </div>
-    <h1 className={styles.profileName}>
-      {provider.profile.firstName} {provider.profile.lastName}
-    </h1>
-    <p className={styles.profileJobTitle}>{provider.careerCategory}</p>
-    <p className={styles.profileLocation}>{provider.city}</p>
-    <div className={styles.profileRating}>
-      <FaStar className={styles.ratingIcon} />
-      <span className={styles.ratingValue}>{provider.rating.length || 0} Ratings</span>
-    </div>
-  </div>
-);
+  )
+};
 
 const About = ({ bio }) => (
   <section className={styles.aboutSection}>
@@ -313,14 +342,14 @@ const Actions = ({ provider, myId, token }) => {
     //   alert("Please provide a description, an image, and the person being reported.");
     //   return;
     // }
-  
+
     try {
       await handleUpload();
       if (!documentationImage) {
         alert('Image upload failed. Please try again.');
         return;
       }
-  
+
       const reportData = {
         userId: myId,  // The user who is reporting
         reportedUserId: provider._id,  // The person being reported
@@ -329,12 +358,12 @@ const Actions = ({ provider, myId, token }) => {
       };
 
       const response = await axios.post(`${import.meta.env.VITE_API}/Complaint/report`, reportData);
-  
-      console.log('Response:', response.data); 
-  
+
+      console.log('Response:', response.data);
+
       if (response.status === 201) {
         alert('Report submitted successfully!');
-        setIsReporting(false); 
+        setIsReporting(false);
       } else {
         alert('Failed to submit the report. Please try again.');
       }
@@ -343,7 +372,50 @@ const Actions = ({ provider, myId, token }) => {
       alert('An error occurred while submitting the report.');
     }
   };
-  
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [userData, setUserData] = useState(null);
+
+  const handleApplyForThisJop = async (proficientId, userId, requestDateTime, [longitude, latitude], city) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("You should sign in")
+        return;
+      }
+      const cityToSend = city || "Unknown City";
+
+
+      console.log("Before API request");
+      await axios.post(
+        `${import.meta.env.VITE_API}/proficient/booking-proficient`,
+        {
+          proficientId,
+          userId,
+          requestDateTime,
+          city: cityToSend,
+          location: {
+            latitude,
+            longitude
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Hello")
+      toast.success("Submited Successfully ");
+
+    } catch (error) {
+      console.log("Error applying for the job: ", error);
+    }
+  };
+
   return (
     <div className={styles.actionsSection}>
       <button className={styles.messageButton} onClick={() => alert('Messaging feature is under construction!')}>
@@ -373,10 +445,24 @@ const Actions = ({ provider, myId, token }) => {
         <FaExclamationTriangle className="mr-2" />
         Report
       </button>
+      <button
+        className={styles.applyBtn}
+        onClick={() => handleApplyForThisJop(
+          provider._id,
+          myId,
+
+          new Date().toISOString(),
+          provider.profile.location.coordinates,
+          provider.city,
+        )}
+      >
+        Request
+      </button>
 
       {isReporting && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg w-96">
+
             <h3 className="text-xl font-semibold mb-4">Report Provider</h3>
             <textarea
               className="w-full p-3 border border-gray-300 rounded-md mb-4"
@@ -403,6 +489,8 @@ const Actions = ({ provider, myId, token }) => {
               >
                 Cancel
               </button>
+
+
             </div>
           </div>
         </div>

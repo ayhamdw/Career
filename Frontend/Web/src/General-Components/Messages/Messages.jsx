@@ -203,7 +203,7 @@ const ChatSystem = () => {
                   />
                   <div className={styles.friendInfo}>
                     <span>{friend.profile.firstName} {friend.profile.lastName}</span>
-                    <p>{friend.profile.bio || "No bio available"}</p>
+                    <p>{friend.careerCategory || "No bio available"}</p>
                   </div>
                 </li>
               ))}
