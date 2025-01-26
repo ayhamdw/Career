@@ -5,6 +5,8 @@ import styles from './ProviderProfile.module.css';
 import { FaEnvelope, FaUserPlus, FaStar, FaCheckCircle, FaTimesCircle, FaExclamationTriangle } from 'react-icons/fa';
 import s3 from 'react-aws-s3-typescript'
 import { toast } from 'react-toastify';
+import { FaRegStar, FaStarHalfAlt } from 'react-icons/fa';
+
 
 const ProviderProfile = () => {
   const [provider, setProvider] = useState(null);
@@ -36,10 +38,22 @@ const ProviderProfile = () => {
   if (error) return <div className={styles.error}>{error}</div>;
   if (!provider) return <div className={styles.error}>Provider not found.</div>;
 
+
+
+  const ratings = provider.profile.ratings;
+  const ratingValues = ratings.map(ratingObj => ratingObj.rating);
+  let averageRating = 0;
+  if (ratingValues.length === 0) {
+    console.log('No ratings available');
+  } else {
+    averageRating = ratingValues.reduce((sum, rating) => sum + rating, 0) / ratingValues.length;
+    console.log(averageRating);
+  }
+  console.log(averageRating)
   return (
     <div className={styles.pageContainer}>
       <div className={styles.profileContainer}>
-        <Header provider={provider} />
+        <Header provider={provider} averageRating={averageRating} />
         <About bio={provider.profile.bio} />
         <Details provider={provider} />
         {provider._id !== myId && <Actions provider={provider} myId={myId} token={token} />}
@@ -49,28 +63,42 @@ const ProviderProfile = () => {
 };
 
 
+const Header = ({ provider, averageRating }) => {
+  const fullStars = Math.floor(averageRating);
+  const halfStar = averageRating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
+  return (
+    <div className={styles.header}>
+      <div className={styles.profileImageWrapper}>
+        <img
+          src={provider.profile.profileImage}
+          alt={`${provider.profile.firstName} ${provider.profile.lastName}`}
+          className={styles.profileImage}
+        />
+      </div>
+      <h1 className={styles.profileName}>
+        {provider.profile.firstName} {provider.profile.lastName}
+      </h1>
+      <p className={styles.profileJobTitle}>{provider.careerCategory}</p>
+      <p className={styles.profileLocation}>{provider.city}</p>
+      <div className={styles.profileRating}>
+        {[...Array(fullStars)].map((_, index) => (
+          <FaStar key={`full-${index}`} className={styles.ratingIcon} />
+        ))}
 
-const Header = ({ provider }) => (
-  <div className={styles.header}>
-    <div className={styles.profileImageWrapper}>
-      <img
-        src={provider.profile.profileImage}
-        alt={`${provider.profile.firstName} ${provider.profile.lastName}`}
-        className={styles.profileImage}
-      />
+        {halfStar && <FaStarHalfAlt className={styles.ratingIcon} />}
+
+        {[...Array(emptyStars)].map((_, index) => (
+          <FaRegStar key={`empty-${index}`} className={styles.ratingIcon} />
+        ))}
+
+        {/* Display the average rating */}
+        <span className={styles.ratingValue}> </span>
+      </div>
     </div>
-    <h1 className={styles.profileName}>
-      {provider.profile.firstName} {provider.profile.lastName}
-    </h1>
-    <p className={styles.profileJobTitle}>{provider.careerCategory}</p>
-    <p className={styles.profileLocation}>{provider.city}</p>
-    <div className={styles.profileRating}>
-      <FaStar className={styles.ratingIcon} />
-      <span className={styles.ratingValue}>{provider.rating.length || 0} Ratings</span>
-    </div>
-  </div>
-);
+  )
+};
 
 const About = ({ bio }) => (
   <section className={styles.aboutSection}>
@@ -354,27 +382,21 @@ const Actions = ({ provider, myId, token }) => {
     try {
       const token = localStorage.getItem("token");
 
-      // if (!isCertified) {
-      //   setUserData({ proficientId, userId, requestDateTime, location: { longitude, latitude }, isCertified });
-      //   setIsPopupVisible(true);
-      //   return;
-      // }
-
-      // if (!token) {
-      //   setIsModalVisible(true);
-      //   return;
-      // }
+      if (!token) {
+        toast.error("You should sign in")
+        return;
+      }
       const cityToSend = city || "Unknown City";
 
 
-        console.log("Before API request");
+      console.log("Before API request");
       await axios.post(
         `${import.meta.env.VITE_API}/proficient/booking-proficient`,
         {
           proficientId,
           userId,
           requestDateTime,
-          city:cityToSend,
+          city: cityToSend,
           location: {
             latitude,
             longitude
