@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import styles from './ProviderProfile.module.css';
 import { FaEnvelope, FaUserPlus, FaStar, FaCheckCircle, FaTimesCircle, FaExclamationTriangle } from 'react-icons/fa';
 import s3 from 'react-aws-s3-typescript'
+import { toast } from 'react-toastify';
 
 const ProviderProfile = () => {
   const [provider, setProvider] = useState(null);
@@ -313,14 +314,14 @@ const Actions = ({ provider, myId, token }) => {
     //   alert("Please provide a description, an image, and the person being reported.");
     //   return;
     // }
-  
+
     try {
       await handleUpload();
       if (!documentationImage) {
         alert('Image upload failed. Please try again.');
         return;
       }
-  
+
       const reportData = {
         userId: myId,  // The user who is reporting
         reportedUserId: provider._id,  // The person being reported
@@ -329,12 +330,12 @@ const Actions = ({ provider, myId, token }) => {
       };
 
       const response = await axios.post(`${import.meta.env.VITE_API}/Complaint/report`, reportData);
-  
-      console.log('Response:', response.data); 
-  
+
+      console.log('Response:', response.data);
+
       if (response.status === 201) {
         alert('Report submitted successfully!');
-        setIsReporting(false); 
+        setIsReporting(false);
       } else {
         alert('Failed to submit the report. Please try again.');
       }
@@ -343,7 +344,56 @@ const Actions = ({ provider, myId, token }) => {
       alert('An error occurred while submitting the report.');
     }
   };
-  
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [userData, setUserData] = useState(null);
+
+  const handleApplyForThisJop = async (proficientId, userId, requestDateTime, [longitude, latitude], city) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      // if (!isCertified) {
+      //   setUserData({ proficientId, userId, requestDateTime, location: { longitude, latitude }, isCertified });
+      //   setIsPopupVisible(true);
+      //   return;
+      // }
+
+      // if (!token) {
+      //   setIsModalVisible(true);
+      //   return;
+      // }
+      const cityToSend = city || "Unknown City";
+
+
+        console.log("Before API request");
+      await axios.post(
+        `${import.meta.env.VITE_API}/proficient/booking-proficient`,
+        {
+          proficientId,
+          userId,
+          requestDateTime,
+          city:cityToSend,
+          location: {
+            latitude,
+            longitude
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Hello")
+      toast.success("Submited Successfully ");
+
+    } catch (error) {
+      console.log("Error applying for the job: ", error);
+    }
+  };
+
   return (
     <div className={styles.actionsSection}>
       <button className={styles.messageButton} onClick={() => alert('Messaging feature is under construction!')}>
@@ -373,10 +423,24 @@ const Actions = ({ provider, myId, token }) => {
         <FaExclamationTriangle className="mr-2" />
         Report
       </button>
+      <button
+        className={styles.applyBtn}
+        onClick={() => handleApplyForThisJop(
+          provider._id,
+          myId,
+
+          new Date().toISOString(),
+          provider.profile.location.coordinates,
+          provider.city,
+        )}
+      >
+        Request
+      </button>
 
       {isReporting && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg w-96">
+
             <h3 className="text-xl font-semibold mb-4">Report Provider</h3>
             <textarea
               className="w-full p-3 border border-gray-300 rounded-md mb-4"
@@ -403,6 +467,8 @@ const Actions = ({ provider, myId, token }) => {
               >
                 Cancel
               </button>
+
+
             </div>
           </div>
         </div>
