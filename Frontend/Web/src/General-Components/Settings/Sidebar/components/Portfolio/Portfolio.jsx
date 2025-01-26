@@ -19,21 +19,21 @@ const Portfolio = ({userFirstName,userLastName,bio}) => {
 
       <div className={styles.projectGallery}>
         <div className={styles.projectItem}>
-          <img src="https://via.placeholder.com/400" alt="Project 1" />
+          <img src="https://placehold.co/400" alt="Project 1" />
           <div className={styles.projectOverlay}>
             <h3>Project 1</h3>
             <p>React, Node.js, MongoDB, and more.</p>
           </div>
         </div>
         <div className={styles.projectItem}>
-          <img src="https://via.placeholder.com/400" alt="Project 2" />
+          <img src="https://placehold.co/400" alt="Project 2" />
           <div className={styles.projectOverlay}>
             <h3>Project 2</h3>
             <p>AI-powered recommendation system with TensorFlow.</p>
           </div>
         </div>
         <div className={styles.projectItem}>
-          <img src="https://via.placeholder.com/400" alt="Project 3" />
+          <img src="https://placehold.co/400" alt="Project 3" />
           <div className={styles.projectOverlay}>
             <h3>Project 3</h3>
             <p>Business management system using MERN stack.</p>

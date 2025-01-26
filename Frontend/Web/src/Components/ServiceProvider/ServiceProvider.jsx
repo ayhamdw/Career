@@ -65,7 +65,8 @@ const ServiceProvider = () => {
   };
 
   const handleContactClick = (name) => {
-    alert(`Initiating contact with ${name}`);
+    // alert(`Initiating contact with ${name}`);
+    navigate('/messages')
   };
 
   const categories = [
