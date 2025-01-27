@@ -106,6 +106,7 @@ const jobAndProficientList = [
     "Cheesemaker",
     "Baker (Artisanal)",
     "Candle Dipper",
-    "Furniture Restorer"
+    "Furniture Restorer",
+    "Joiner",
   ];
   export default jobAndProficientList;

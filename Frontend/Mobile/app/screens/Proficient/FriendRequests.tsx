@@ -69,7 +69,6 @@ export default function FriendRequests({ user }: { user: any }) {
       );
       if (response.status === 200) {
         setSenderUserData(response.data.senderDetails);
-        console.log("Sender user data:", response.data.senderDetails);
       }
     } catch (error) {
       console.error("Error fetching sender user data:", error);
@@ -190,121 +189,133 @@ export default function FriendRequests({ user }: { user: any }) {
   const renderRequest = ({ item }: { item: any }) => {
     const { sender, status, bookId, dataRequested, city, postId } = item;
     const isProjectRequest = postId !== null;
+    console.log(senderUserData.length);
 
     return (
-      <View style={[styles.card, styles.shadow]}>
-        <View style={styles.header}>
-          <Image
-            source={{ uri: sender.profile.profileImage }}
-            style={styles.profileImage}
-          />
+      <View>
+        {senderUserData.length === 0 && (
           <View>
-            <View style={styles.nameContainer}>
-              <Text style={styles.name}>
-                {sender.profile.firstName} {sender.profile.lastName}
-              </Text>
-              <View
-                style={[
-                  styles.badge,
-                  isProjectRequest
-                    ? styles.projectBadge
-                    : styles.proficientBadge,
-                ]}
-              >
-                <Text style={styles.badgeText}>
-                  {isProjectRequest ? "Project Request" : "Proficient Request"}
+            <Text style={styles.noRequests}>No requests found</Text>
+          </View>
+        )}
+        : (
+        <View style={[styles.card, styles.shadow]}>
+          <View style={styles.header}>
+            <Image
+              source={{ uri: sender?.profile.profileImage }}
+              style={styles.profileImage}
+            />
+            <View>
+              <View style={styles.nameContainer}>
+                <Text style={styles.name}>
+                  {sender?.profile.firstName} {sender?.profile.lastName}
                 </Text>
+                <View
+                  style={[
+                    styles.badge,
+                    isProjectRequest
+                      ? styles.projectBadge
+                      : styles.proficientBadge,
+                  ]}
+                >
+                  <Text style={styles.badgeText}>
+                    {isProjectRequest
+                      ? "Project Request"
+                      : "Proficient Request"}
+                  </Text>
+                </View>
               </View>
+              <Text style={styles.profession}>{sender?.career}</Text>
             </View>
-            <Text style={styles.profession}>{sender.career}</Text>
+          </View>
+          <Text style={styles.email}>{sender?.email}</Text>
+          <View style={styles.row}>
+            <Ionicons name="location-outline" size={16} color="#888" />
+            <Text style={styles.location}>{city}</Text>
+          </View>
+          <View style={styles.row}>
+            <Ionicons name="time-outline" size={16} color="#888" />
+            <Text style={styles.time}>{formatTime(dataRequested)}</Text>
+          </View>
+          {isProjectRequest && (
+            <Text style={styles.projectInfo}>Post ID: {postId}</Text>
+          )}
+          <View style={styles.actions}>
+            {status === "Pending" && (
+              <>
+                <TouchableOpacity
+                  style={[styles.button, styles.acceptButton]}
+                  onPress={() =>
+                    requestAction(
+                      "Accepted",
+                      bookId,
+                      sender._id,
+                      postId,
+                      sender._id
+                    )
+                  }
+                >
+                  <Text style={styles.buttonText}>Accept</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.button, styles.rejectButton]}
+                  onPress={() =>
+                    requestAction(
+                      "Rejected",
+                      bookId,
+                      sender._id,
+                      postId,
+                      sender._id
+                    )
+                  }
+                >
+                  <Text style={styles.buttonText}>Reject</Text>
+                </TouchableOpacity>
+              </>
+            )}
+            {(status === "In Progress" || status === "Accepted") && (
+              <>
+                <TouchableOpacity
+                  style={[styles.button, styles.cancelButton]}
+                  onPress={() =>
+                    requestAction(
+                      "Cancelled",
+                      bookId,
+                      sender._id,
+                      postId,
+                      sender._id
+                    )
+                  }
+                >
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.button, styles.completeButton]}
+                  onPress={() =>
+                    requestAction(
+                      "Completed",
+                      bookId,
+                      sender._id,
+                      postId,
+                      sender._id
+                    )
+                  }
+                >
+                  <Text style={styles.buttonText}>Complete</Text>
+                </TouchableOpacity>
+                {!postId && (
+                  <TouchableOpacity
+                    style={[styles.button, styles.mapButton]}
+                    onPress={() => navigation.navigate("MapTracker", { item })}
+                  >
+                    <Text style={styles.buttonText}>Map</Text>
+                  </TouchableOpacity>
+                )}
+              </>
+            )}
           </View>
         </View>
-        <Text style={styles.email}>{sender.email}</Text>
-        <View style={styles.row}>
-          <Ionicons name="location-outline" size={16} color="#888" />
-          <Text style={styles.location}>{city}</Text>
-        </View>
-        <View style={styles.row}>
-          <Ionicons name="time-outline" size={16} color="#888" />
-          <Text style={styles.time}>{formatTime(dataRequested)}</Text>
-        </View>
-        {isProjectRequest && (
-          <Text style={styles.projectInfo}>Post ID: {postId}</Text>
-        )}
-        <View style={styles.actions}>
-          {status === "Pending" && (
-            <>
-              <TouchableOpacity
-                style={[styles.button, styles.acceptButton]}
-                onPress={() =>
-                  requestAction(
-                    "Accepted",
-                    bookId,
-                    sender._id,
-                    postId,
-                    sender._id
-                  )
-                }
-              >
-                <Text style={styles.buttonText}>Accept</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, styles.rejectButton]}
-                onPress={() =>
-                  requestAction(
-                    "Rejected",
-                    bookId,
-                    sender._id,
-                    postId,
-                    sender._id
-                  )
-                }
-              >
-                <Text style={styles.buttonText}>Reject</Text>
-              </TouchableOpacity>
-            </>
-          )}
-          {(status === "In Progress" || status === "Accepted") && (
-            <>
-              <TouchableOpacity
-                style={[styles.button, styles.cancelButton]}
-                onPress={() =>
-                  requestAction(
-                    "Cancelled",
-                    bookId,
-                    sender._id,
-                    postId,
-                    sender._id
-                  )
-                }
-              >
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, styles.completeButton]}
-                onPress={() =>
-                  requestAction(
-                    "Completed",
-                    bookId,
-                    sender._id,
-                    postId,
-                    sender._id
-                  )
-                }
-              >
-                <Text style={styles.buttonText}>Complete</Text>
-              </TouchableOpacity>
-              {!postId && (
-                <TouchableOpacity
-                  style={[styles.button, styles.mapButton]}
-                  onPress={() => navigation.navigate("MapTracker", { item })}
-                >
-                  <Text style={styles.buttonText}>Map</Text>
-                </TouchableOpacity>
-              )}
-            </>
-          )}
-        </View>
+        ) ,
       </View>
     );
   };
@@ -312,6 +323,7 @@ export default function FriendRequests({ user }: { user: any }) {
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Requests</Text>
+
       <View style={styles.radioContainer}>
         <TouchableOpacity
           style={[
@@ -346,14 +358,19 @@ export default function FriendRequests({ user }: { user: any }) {
           </Text>
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={filterData()}
-        keyExtractor={(item) => item.bookId}
-        renderItem={renderRequest}
-        contentContainerStyle={styles.list}
-      />
+
+      {filterData().length === 0 ? (
+        <View>
+          <Text style={styles.noRequests}>No requests found</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filterData()}
+          keyExtractor={(item) => item.bookId}
+          renderItem={renderRequest}
+          contentContainerStyle={styles.list}
+        />
+      )}
     </View>
   );
 }
-
-// Add updated styles for badges and shadows in the CSS file

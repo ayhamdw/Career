@@ -152,12 +152,11 @@ const userSchema = new mongoose.Schema(
       },
       verificationStatus: {
         type: String,
-        enum: ["pending", "verified", "rejected","noFile"],
+        enum: ["pending", "verified", "rejected", "noFile"],
         default: "noFile",
-
       },
     },
-    bannedUntil: { type: Date, default: null , required: false},
+    bannedUntil: { type: Date, default: null, required: false },
 
     tokens: [
       {
@@ -313,7 +312,6 @@ userSchema.statics.findByEmail = async (email) => {
 
   return user;
 };
-
 
 userSchema.pre("save", async function (next) {
   const user = this;

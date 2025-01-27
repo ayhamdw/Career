@@ -197,7 +197,6 @@ const HomePage = ({ user }: { user: User }) => {
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
-        {/* <Text>Token: {expoPushToken?.data ?? null} </Text> */}
         <Header
           name={`${user.profile.firstName} ${user.profile.lastName}`}
           navigation={navigation}

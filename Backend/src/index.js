@@ -8,12 +8,17 @@ const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: ["http://192.168.1.11:7777", "http://192.168.1.34:7777", "*"],
+    origin: [
+      "*",
+      "http://localhost:5173",
+      "http://192.168.1.21:8081",
+      "http://192.168.1.8:8081",
+    ],
     methods: ["GET", "POST"],
     credentials: true,
   },
   allowEIO3: true,
-  transports: ["websocket"],
+  transports: ["websocket", "polling"],
 });
 
 io.on("connection", (socket) => {
@@ -22,12 +27,12 @@ io.on("connection", (socket) => {
 
   socket.on("joinGroup", (data) => {
     const { groupId, userId } = data;
-    socket.join(groupId); // Join the specified group room
+    socket.join(groupId);
     console.log(`User ${userId} joined group: ${groupId}`);
   });
 
   socket.on("leaveGroup", (groupId) => {
-    socket.leave(groupId); // Leave the specified group room
+    socket.leave(groupId);
     console.log(`User ${socket.id} left group: ${groupId}`);
   });
 

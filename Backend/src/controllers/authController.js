@@ -48,10 +48,10 @@ const signinController = async (req, res, next) => {
       token,
       verificationStatus: user.verificationStatus,
     });
-    console.log(token);
   } catch (error) {
     console.log("Error inside the Login", error);
-    next(error);
+    // next(error);
+    res.status(404).send({ error: "Invalid email or password" });
   }
 };
 
@@ -127,9 +127,9 @@ const verifyCode = async (req, res) => {
 
 const signinWithGoogle = async (req, res, next) => {
   try {
-    const user = await User.findByEmail(req.body.email);  
+    const user = await User.findByEmail(req.body.email);
     const token = await user.generateAuthToken();
-    
+
     res.status(200).send({
       user,
       token,
@@ -141,15 +141,14 @@ const signinWithGoogle = async (req, res, next) => {
   }
 };
 
-
 const signupWithGoogle = async (req, res) => {
   try {
     const { isOAuth, email, firstName, lastName, profileImage } = req.body;
 
     let user;
-    let username = email.split('@')[0]; 
+    let username = email.split("@")[0];
     if (!username) {
-      username = `user${Date.now()}`; 
+      username = `user${Date.now()}`;
     }
 
     if (isOAuth) {
@@ -163,7 +162,7 @@ const signupWithGoogle = async (req, res) => {
             lastName,
             profileImage,
           },
-          verificationStatus: true, 
+          verificationStatus: true,
         });
         await user.save();
       }
@@ -180,31 +179,28 @@ const signupWithGoogle = async (req, res) => {
   }
 };
 
-
-
 const validateEmail = async (req, res) => {
   try {
     const { email } = req.body;
-
+    console.log(email);
     if (!email) {
-      return res.status(400).json({ message: 'Email is required.' });
+      return res.status(400).json({ message: "Email is required." });
     }
 
-    // Check if the email exists in the database
     const user = await User.findOne({ email });
 
     if (user) {
-      return res.status(200).json({ exists: true, message: 'Email exists.' });
+      return res.status(200).json({ exists: true, message: "Email exists." });
     } else {
-      return res.status(404).json({ exists: false, message: 'Email not found.' });
+      return res
+        .status(404)
+        .json({ exists: false, message: "Email not found." });
     }
   } catch (err) {
-    console.error('Error validating email:', err);
-    res.status(500).json({ message: 'Internal server error.' });
+    console.error("Error validating email:", err);
+    res.status(500).json({ message: "Internal server error." });
   }
 };
-
-
 
 module.exports = {
   signupController,

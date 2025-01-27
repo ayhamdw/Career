@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { useClerk, useOAuth, useUser } from "@clerk/clerk-expo";
 import * as WebBrowser from "expo-web-browser";
@@ -12,6 +12,7 @@ import facebook from "../../../assets/images/facebook.png";
 import apple from "../../../assets/images/apple.png";
 import { ayhamWifiUrl } from "@/constants/Urls";
 import { useFonts } from "expo-font";
+import Toast from "react-native-toast-message";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -114,10 +115,13 @@ const Login = () => {
 
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", JSON.stringify(user));
-
       navigation.replace("Main", { user });
     } catch (error) {
-      console.error("Login failed:", error);
+      Toast.show({
+        type: "error",
+        text1: "Login failed",
+        text2: "Please check your email and password",
+      });
     }
   };
 

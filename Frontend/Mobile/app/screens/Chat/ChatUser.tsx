@@ -20,8 +20,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
-import { io, Socket } from "socket.io-client";
-import { DefaultEventsMap } from "@socket.io/component-emitter";
+import { io } from "socket.io-client";
 
 import styles from "@/assets/styles/ChatUserStyle";
 import { ayhamWifiUrl } from "../../../constants/Urls";
@@ -30,7 +29,7 @@ const ChatUser = ({ user }) => {
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
   const [message, setMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
-  const [receiverDetails, setReceiverDetails] = useState();
+  const [receiverDetails, setReceiverDetails] = useState({});
   const [messages, setMessages] = useState([]);
   const socket = useRef(null);
   const scrollViewRef = useRef(null);
@@ -39,14 +38,13 @@ const ChatUser = ({ user }) => {
   const userId = user?._id;
   const senderId = me?._id || userId;
   const receiverId = route.params?.user._id ?? "";
-  const image = route.params?.user.profile.profileImage ?? "";
   const navigation = useNavigation();
   const handelEmojiPress = () => {
     setShowEmojiSelector(!showEmojiSelector);
   };
 
   useEffect(() => {
-    socket.current = io("http://192.168.1.13:7777", {
+    socket.current = io(ayhamWifiUrl, {
       transports: ["websocket", "polling"],
     });
     console.log("Socket instance:", socket.current);
@@ -102,6 +100,7 @@ const ChatUser = ({ user }) => {
         );
         if (receiverData.status === 200) {
           setReceiverDetails(receiverData.data);
+          console.log("receiverData", receiverData.data);
         }
       } catch (error) {
         console.log("error while fetching user details", error);
@@ -161,8 +160,6 @@ const ChatUser = ({ user }) => {
 
           socket.current.emit("sendMessage", newMessage);
 
-          // setMessages((prevMessages) => [...prevMessages, newMessage]);
-
           scrollViewRef.current?.scrollToEnd({ animated: true });
         }
       } catch (error) {
@@ -205,12 +202,19 @@ const ChatUser = ({ user }) => {
             color="black"
             onPress={() => navigation.goBack()}
           />
-          <Image style={styles.imageStyle} source={image} />
+          <Image
+            style={styles.imageStyle}
+            source={
+              receiverDetails.profile?.profileImage
+                ? { uri: receiverDetails.profile?.profileImage }
+                : "Loading..."
+            }
+          />
           <Text style={styles.nameStyle}>
             {receiverDetails
-              ? receiverDetails.profile.firstName +
+              ? receiverDetails.profile?.firstName +
                 " " +
-                receiverDetails.profile.lastName
+                receiverDetails.profile?.lastName
               : "Loading..."}
           </Text>
         </View>

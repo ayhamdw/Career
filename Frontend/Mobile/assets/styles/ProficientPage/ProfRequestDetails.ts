@@ -161,6 +161,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#fff",
   },
+  noRequests: {
+    fontSize: 16,
+    color: "#555",
+    textAlign: "center",
+    marginTop: 32,
+  }
 });
 
 export default styles;

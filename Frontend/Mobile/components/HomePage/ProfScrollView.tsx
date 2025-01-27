@@ -20,7 +20,7 @@ interface Prof {
       coordinates: [number, number];
     };
     ratings: {
-      ratings: number;
+      rating: number;
       review: string;
       userId: string;
       date: Date;
@@ -44,7 +44,7 @@ const ProfList: React.FC<ProfListProps> = ({ jobs, onCardPress }) => {
   const calcRating = (job: Prof) => {
     if (job.profile.ratings.length === 0) return 0;
     const totalRating = job.profile.ratings.reduce(
-      (sum, rating) => sum + rating.ratings,
+      (sum, rating) => sum + rating.rating,
       0
     );
     return Math.round(totalRating / job.profile.ratings.length);
